@@ -13,6 +13,15 @@
         android:theme="@style/Theme.DeliGOv2"
         tools:targetApi="31">
         <activity
+            android:name=".Administrador.AdministradorHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".LogIn.LoginRecuperarPasswordPrimerPaso"
             android:exported="false" />
         <activity
