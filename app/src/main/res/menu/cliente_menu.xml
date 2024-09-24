@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/historial"
+        android:enabled="true"
+        android:iconTintMode="multiply"
+        android:icon="@drawable/receipt_long"
+        android:title="Ordenes"
+        />
+
+    <item
+        android:id="@+id/restaurant"
+        android:enabled="true"
+        android:icon="@drawable/storefront"
+        android:title="Restaurantes"
+        />
+
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/iconoperfil"
+        android:title="Perfil"
+        />
+</menu>
