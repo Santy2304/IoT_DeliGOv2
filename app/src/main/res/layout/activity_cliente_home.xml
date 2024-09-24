@@ -38,7 +38,6 @@
             android:layout_marginTop="25sp"
             android:backgroundTint="@color/light_green"
             android:contentDescription="Notificaciones"
-            android:onClick="vistaNotificaciones"
             app:srcCompat="@drawable/notifications_24px"
             app:tint="@color/white" />
 
@@ -51,7 +50,6 @@
             android:layout_marginTop="25sp"
             android:backgroundTint="@color/light_green"
             android:contentDescription="Carrito"
-            android:onClick="vistaCarrito"
             app:srcCompat="@drawable/shopping_cart_24px"
             app:tint="@color/white" />
 
@@ -61,13 +59,62 @@
             android:layout_height="50sp"
             android:layout_marginStart="8sp"
             android:layout_marginTop="25sp"
-            android:onClick="vistaHistorial"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
             app:srcCompat="@drawable/hineilll" />
     </LinearLayout>
 
+
+
     <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="15sp"
+            android:hint="Buscar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/carousel_item_container"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:foreground="?attr/selectableItemBackground"
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+
+            <ImageView
+                android:id="@+id/carousel_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/comida_rapida" />
+        </com.google.android.material.carousel.MaskableFrameLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -86,11 +133,84 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <com.google.android.material.card.MaterialCardView
+            style="?attr/materialCardViewElevatedStyle"
+            android:layout_width="380sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100sp"
+                    android:contentDescription="banner"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/bembos2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5sp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:layout_marginStart="10dp"
+                            android:text="Bembos"
+                            android:textColor="@color/black"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2sp"
+                            android:layout_marginStart="10dp"
+                            android:textColor="@color/black"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="Horario de atención: 10:00 am - 22:00 pm "
+                            android:textAppearance="?attr/textAppearanceBodyMedium"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2sp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="45sp"
+                            android:text="Go"
+                            app:backgroundTint="@color/light_green" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
