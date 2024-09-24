@@ -8,10 +8,77 @@
     tools:context=".Cliente.ClienteHomeActivity">
 
     <LinearLayout
-        android:layout_width="381dp"
-        android:layout_height="141dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25sp"
+            android:layout_marginTop="15sp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:text="DeliGo"
+            android:textColor="@color/light_green"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/noti_button"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85sp"
+            android:layout_marginTop="25sp"
+            android:onClick="vistaNotificaciones"
+            android:backgroundTint="@color/light_green"
+            android:contentDescription="Notificaciones"
+            app:srcCompat="@drawable/notifications_24px"
+            app:tint="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cart_button"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:onClick="vistaCarrito"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5sp"
+            android:layout_marginTop="25sp"
+            android:backgroundTint="@color/light_green"
+            android:contentDescription="Carrito"
+            app:srcCompat="@drawable/shopping_cart_24px"
+            app:tint="@color/white" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView3"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_marginStart="8sp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="25sp"
+            android:onClick="vistaHistorial"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:srcCompat="@drawable/hineilll" />
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></LinearLayout>
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/cliente_menu" />
+
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
