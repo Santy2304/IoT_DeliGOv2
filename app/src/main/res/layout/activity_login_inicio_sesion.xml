@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LogIn.LoginInicioSesion">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="30sp">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="313dp"
+            android:layout_height="111dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="Bienvenido a DeliGO"
+            android:textColor="@color/light_green"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView3"
+            android:layout_gravity="center"
+            android:layout_width="118dp"
+            android:layout_height="117dp"
+            android:layout_marginTop="24dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintVertical_bias="0.062"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:srcCompat="@drawable/deligo" />
+
+        <LinearLayout
+            android:layout_marginTop="30sp"
+            android:id="@+id/linearLayout"
+            android:layout_width="348dp"
+            android:layout_height="379dp"
+            android:background="@drawable/border_form"
+            android:backgroundTint="#FBF5F0"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="308dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/correo"
+                android:layout_width="320sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20sp"
+                android:hint="Correo"
+                app:startIconDrawable="@drawable/mail_24px">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/contrasena"
+                android:layout_width="320sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="14sp"
+                android:hint="Contraseña"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/lock_24px">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10sp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿Olvidaste tu contraseña?"
+                    android:textColor="@color/md_theme_scrim"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5sp"
+                    android:text="Recupérala aquí"
+                    android:onClick="RecuperarPassword"
+                    android:textColor="@color/light_green"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/IniciarSesion"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:onClick="iniciarSesion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8sp"
+                android:backgroundTint="@color/light_green"
+                android:text="Iniciar Sesión"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/IniciarSesionGoogle"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8sp"
+                android:backgroundTint="@color/light_green"
+                android:backgroundTintMode="src_over"
+                android:text="Continuar con google"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:icon="@drawable/icons8_google_120"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10sp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="45sp"
+                    android:text="¿No tienes una cuenta?"
+                    android:textColor="@color/md_theme_scrim"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="5sp"
+                    android:layout_marginTop="8sp"
+                    android:text=" Crear una aquí"
+                    android:textColor="@color/light_green"
+                    android:textSize="15sp"
+                    android:onClick="CrearCuenta"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

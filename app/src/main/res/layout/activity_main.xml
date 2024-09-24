@@ -7,13 +7,64 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/Cliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cliente"
+            android:onClick="verCliente"
+            android:layout_marginTop="12sp"
+            android:layout_marginBottom="12sp"
+            />
+        <Button
+            android:id="@+id/Repartidor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Repartidor"
+            android:onClick="verRepartidor"
+            android:layout_marginTop="12sp"
+            android:layout_marginBottom="12sp"
+            />
+
+        <Button
+            android:id="@+id/Administrador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Administrador"
+            android:onClick="verAdministrador"
+            android:layout_marginTop="12sp"
+            android:layout_marginBottom="12sp"/>
+
+        <Button
+            android:id="@+id/Superadmin"
+            android:onClick="verSuperadministrador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Superadmin"
+            android:layout_marginTop="12sp"
+            android:layout_marginBottom="12sp"/>
+
+
+        <Button
+            android:id="@+id/login"
+            android:onClick="verLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login"
+            android:layout_marginTop="12sp"
+            android:layout_marginBottom="12sp"/>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

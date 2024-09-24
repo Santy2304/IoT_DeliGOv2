@@ -4,9 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Cliente.ClienteHomeActivity">
+    android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <com.google.android.material.carousel.MaskableFrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/carousel_item_container"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:foreground="?attr/selectableItemBackground"
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+
+            <ImageView
+                android:id="@+id/carousel_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/comida_rapida" />
+        </com.google.android.material.carousel.MaskableFrameLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -64,8 +92,6 @@
             app:srcCompat="@drawable/hineilll" />
     </LinearLayout>
 
-
-
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
@@ -82,36 +108,6 @@
             android:layout_marginTop="15sp"
             android:hint="Buscar" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        <com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/carousel_item_container"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:foreground="?attr/selectableItemBackground"
-            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
-
-            <ImageView
-                android:id="@+id/carousel_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/comida_rapida" />
-        </com.google.android.material.carousel.MaskableFrameLayout>
-    </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -213,4 +209,7 @@
 
 
     </LinearLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
