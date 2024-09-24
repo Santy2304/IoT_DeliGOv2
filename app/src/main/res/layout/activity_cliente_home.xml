@@ -7,10 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".Cliente.ClienteHomeActivity">
 
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView"
@@ -31,9 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="85sp"
             android:layout_marginTop="25sp"
-            android:onClick="vistaNotificaciones"
             android:backgroundTint="@color/light_green"
             android:contentDescription="Notificaciones"
+            android:onClick="vistaNotificaciones"
             app:srcCompat="@drawable/notifications_24px"
             app:tint="@color/white" />
 
@@ -41,12 +46,12 @@
             android:id="@+id/cart_button"
             style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
-            android:onClick="vistaCarrito"
             android:layout_height="wrap_content"
             android:layout_marginStart="5sp"
             android:layout_marginTop="25sp"
             android:backgroundTint="@color/light_green"
             android:contentDescription="Carrito"
+            android:onClick="vistaCarrito"
             app:srcCompat="@drawable/shopping_cart_24px"
             app:tint="@color/white" />
 
@@ -55,15 +60,12 @@
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:layout_marginStart="8sp"
-            android:scaleType="centerCrop"
             android:layout_marginTop="25sp"
             android:onClick="vistaHistorial"
+            android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
             app:srcCompat="@drawable/hineilll" />
     </LinearLayout>
-
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -79,6 +81,16 @@
             android:layout_height="wrap_content"
             app:menu="@menu/cliente_menu" />
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
