@@ -187,7 +187,7 @@
     <com.google.android.material.slider.Slider
         android:id="@+id/slider"
         android:layout_width="match_parent"
-        android:layout_height="20sp"
+        android:layout_height="18sp"
         android:contentDescription="estados"
         android:value="20.0"
         android:valueFrom="0.0"
@@ -212,6 +212,7 @@
 
             <ImageView
                 android:id="@+id/imageView8"
+                android:layout_marginTop="10dp"
                 android:layout_width="300dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
