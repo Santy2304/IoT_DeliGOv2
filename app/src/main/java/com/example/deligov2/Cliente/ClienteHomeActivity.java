@@ -27,6 +27,10 @@ public class ClienteHomeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_home);
 
+        notiButton = findViewById(R.id.noti_button);
+        carritoButton = findViewById(R.id.cart_button);
+        restaurantButton = findViewById(R.id.go_button);
+
         notiButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ClienteNotificacionesActivity.class);
             startActivity(intent);

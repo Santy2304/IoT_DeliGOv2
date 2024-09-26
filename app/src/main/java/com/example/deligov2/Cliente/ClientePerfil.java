@@ -12,14 +12,24 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClientePerfil extends AppCompatActivity {
 
+    FloatingActionButton goBackButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_perfil);
+
+        goBackButton = findViewById(R.id.goBackButtonPerfil);
+
+        goBackButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ClienteHomeActivity.class);
+            startActivity(intent);
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

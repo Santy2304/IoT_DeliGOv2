@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,13 +13,31 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClientePlatoActivity extends AppCompatActivity {
 
+    Button addButton;
+    FloatingActionButton backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        addButton = findViewById(R.id.addButton);
+        backButton = findViewById(R.id.backButtonPlato);
+
+        addButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteCarrito.class);
+            startActivity(intent);
+        });
+
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+            startActivity(intent);
+        });
+
+
         setContentView(R.layout.activity_cliente_plato);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,13 +14,40 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
 
+import javax.xml.transform.sax.TemplatesHandler;
+
 public class ClienteDetalleCompra extends AppCompatActivity {
+
+    Button verRepartidorButton;
+    Button qrButton;
+    Button goBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_detalle_compra);
+
+
+        verRepartidorButton = findViewById(R.id.repartidorButton);
+        qrButton = findViewById(R.id.qrButton);
+        goBackButton = findViewById(R.id.goBackButton);
+
+        verRepartidorButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteVeRepartidor.class);
+            startActivity(intent);
+        });
+
+        qrButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteQR.class);
+            startActivity(intent);
+        });
+
+        goBackButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteHistorialActivity.class);
+            startActivity(intent);
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

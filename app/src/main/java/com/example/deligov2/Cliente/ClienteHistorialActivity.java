@@ -12,14 +12,29 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClienteHistorialActivity extends AppCompatActivity {
-
+    FloatingActionButton notiButton;
+    FloatingActionButton carritoButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_historial);
+
+        notiButton = findViewById(R.id.noti_button);
+        carritoButton = findViewById(R.id.cart_button);
+
+        notiButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ClienteNotificacionesActivity.class);
+            startActivity(intent);
+        });
+
+        carritoButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ClienteCarrito.class);
+            startActivity(intent);
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

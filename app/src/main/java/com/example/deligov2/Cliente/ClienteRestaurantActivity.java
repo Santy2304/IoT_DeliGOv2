@@ -12,14 +12,32 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClienteRestaurantActivity extends AppCompatActivity {
 
+    FloatingActionButton cartButton;
+    FloatingActionButton backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_restaurant);
+
+        backButton = findViewById(R.id.atras);
+        cartButton = findViewById(R.id.cart_button);
+
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ClienteHomeActivity.class);
+            startActivity(intent);
+        });
+
+        cartButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ClienteCarrito.class);
+            startActivity(intent);
+        });
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

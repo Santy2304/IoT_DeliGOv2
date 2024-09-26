@@ -12,14 +12,23 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClienteVeRepartidor extends AppCompatActivity {
 
+    FloatingActionButton backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_ve_repartidor);
+
+        backButton = findViewById(R.id.salirRepartidor);
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteTrackingActivity.class);
+            startActivity(intent);
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

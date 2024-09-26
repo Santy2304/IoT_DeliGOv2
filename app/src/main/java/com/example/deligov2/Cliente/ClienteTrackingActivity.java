@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +13,40 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClienteTrackingActivity extends AppCompatActivity {
+
+    Button repartidorButton;
+    Button qrButton;
+    FloatingActionButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_tracking);
+
+        repartidorButton = findViewById(R.id.repartidorButton);
+        qrButton = findViewById(R.id.qrButton);
+        backButton = findViewById(R.id.atrasTracking);
+
+        repartidorButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteVeRepartidor.class);
+            startActivity(intent);
+        });
+
+        qrButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteQR.class);
+            startActivity(intent);
+        });
+
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this,ClienteHistorialActivity.class);
+            startActivity(intent);
+        });
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

@@ -59,7 +59,7 @@
             app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/goBackMenu"
+            android:id="@+id/comprarMas"
             style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -328,7 +328,6 @@
             android:layout_marginTop="15sp"
             android:orientation="horizontal">
             <Button
-                android:onClick="vistaConfirmaciónCompra"
                 android:id="@+id/orderButton"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
@@ -340,7 +339,7 @@
                 android:layout_marginStart="95sp"
                 android:textColor="@color/white"/>
             <Button
-                android:id="@+id/cancelButton"
+                android:id="@+id/vaciarButton"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_marginStart="30sp"
                 android:layout_width="wrap_content"
@@ -348,7 +347,7 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/red"
                 android:fontFamily="sans-serif-condensed"
-                android:text="Cancelar"
+                android:text="Vaciar"
                 android:textColor="@color/white"
                 />
         </LinearLayout>
