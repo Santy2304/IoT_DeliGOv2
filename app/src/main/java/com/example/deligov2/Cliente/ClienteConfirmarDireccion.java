@@ -13,13 +13,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
 
-public class ClienteTrackingActivity extends AppCompatActivity {
+public class ClienteConfirmarDireccion extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_cliente_tracking);
+        setContentView(R.layout.activity_cliente_confirmar_direccion);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
