@@ -13,6 +13,15 @@
         android:theme="@style/Theme.DeliGOv2"
         tools:targetApi="31">
         <activity
+            android:name=".LogIn.LoginRecuperarPasswordPasoFinal"
+            android:exported="false" />
+        <activity
+            android:name=".LogIn.LoginRecuperarPasswordTercerPaso"
+            android:exported="false" />
+        <activity
+            android:name=".LogIn.LoginRecuperarPasswordSegundoPaso"
+            android:exported="false" />
+        <activity
             android:name=".Cliente.ClienteConfirmarDireccion"
             android:exported="false" />
         <activity
