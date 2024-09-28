@@ -11,12 +11,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ClienteHomeActivity extends AppCompatActivity {
+
+    ArrayList<Restaurante> lista;
+    String[] nombresRestaurantes = {
+            "Bembos",
+            "KFC",
+            "Pardos",
+            "Comida Saludable",
+            "Rincón Italiano"
+    };
+    String[] horariosAtencion  = {
+                "10:00 am - 20:00 pm",
+                "11:00 am - 21:00 pm",
+                "09:00 am - 23:00 pm",
+                "10:00 am - 19:00 pm",
+                "11:00 am - 20:00 pm"
+    };
 
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
@@ -29,7 +52,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
 
         notiButton = findViewById(R.id.noti_button);
         carritoButton = findViewById(R.id.cart_button);
-        restaurantButton = findViewById(R.id.go_button);
+        //restaurantButton = findViewById(R.id.go_button);
 
         notiButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ClienteNotificacionesActivity.class);
@@ -41,10 +64,27 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        restaurantButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ClienteRestaurantActivity.class);
-            startActivity(intent);
-        });
+
+        for(int i=0;i<5;i++){
+            Restaurante restaurante = new Restaurante();
+            restaurante.setNombre(nombresRestaurantes[i]);
+            restaurante.setHorario(horariosAtencion[i]);
+            lista.add(restaurante);
+        }
+
+
+
+        RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
+        adapter.setContext(ClienteHomeActivity.this);
+        adapter.setListaRestaurantes(lista);
+
+        RecyclerView recyclerView = findViewById(R.id.reciclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ClienteHomeActivity.this));
+        //restaurantButton.setOnClickListener(view -> {
+          //  Intent intent = new Intent(this, ClienteRestaurantActivity.class);
+            //startActivity(intent);
+        //});
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
