@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/restaurant"
+        android:enabled="true"
+        android:icon="@drawable/storefront"
+        android:title="Registro"
+        />
+
+    <item
+        android:id="@+id/principal"
+        android:enabled="true"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Principal"
+        />
+
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/iconoperfil"
+        android:title="Perfil"
+        />
+</menu>

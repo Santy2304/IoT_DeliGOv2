@@ -7,20 +7,43 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
+import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.R;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class SuperAdminHomeActivity extends AppCompatActivity {
+
+    List<Cliente> clientes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        mostrarListaClientes();
+    }
+
+    public void mostrarListaClientes(){
+        clientes = new ArrayList<>();
+        clientes.add(new  Cliente(1,"Elizabeth","Del Lago","cliente1@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
+        clientes.add(new  Cliente(2,"Tule","Del Lago","cliente2@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
+        clientes.add(new  Cliente(3,"Pera","Del Lago","cliente3@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
+        clientes.add(new  Cliente(4,"Con la","Del Lago","cliente4@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
+        clientes.add(new  Cliente(5,"Papaya","Del Lago","cliente5@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
+
+        SuperAdminClienteListAdapter listAdapter = new SuperAdminClienteListAdapter(clientes,this);
+        RecyclerView recyclerView = findViewById(R.id.listClientesRecyler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(listAdapter);
     }
 }
