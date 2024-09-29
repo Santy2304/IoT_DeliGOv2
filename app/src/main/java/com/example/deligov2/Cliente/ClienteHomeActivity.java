@@ -64,7 +64,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
+        lista = new ArrayList<>();
         for(int i=0;i<5;i++){
             Restaurante restaurante = new Restaurante();
             restaurante.setNombre(nombresRestaurantes[i]);
