@@ -2,17 +2,25 @@ package com.example.deligov2.Beans;
 
 public class Restaurante {
 
-    private String nombbre;
+    private String nombre;
     private String horario;
     private String[] categorias;
+    private int id;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNombre() {
-        return nombbre;
+        return nombre;
     }
 
     public void setNombre(String nombbre) {
-        this.nombbre = nombbre;
+        this.nombre = nombbre;
     }
 
     public String getHorario() {

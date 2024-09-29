@@ -41,6 +41,10 @@ public class ClienteHomeActivity extends AppCompatActivity {
                 "11:00 am - 20:00 pm"
     };
 
+    int[] idsRestaurantes = {
+            1,2,3,4,5
+    };
+
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
     MaterialButton restaurantButton;
@@ -69,6 +73,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
             Restaurante restaurante = new Restaurante();
             restaurante.setNombre(nombresRestaurantes[i]);
             restaurante.setHorario(horariosAtencion[i]);
+            restaurante.setId(idsRestaurantes[i]);
             lista.add(restaurante);
         }
 
