@@ -13,6 +13,63 @@
         android:theme="@style/Theme.DeliGOv2"
         tools:targetApi="31">
         <activity
+            android:name=".SuperAdmin.SuperAdminVistaPerfilRepartidor"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminVistaPerfilCliente"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminVistaPerfilAdministrador"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminVistaLogEvent"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRestauranteUbicacion"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRestauranteResumen"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRestaurantePlatillos"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminResturanteHistorialVentas"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRegistroRestauranteCorrect"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRegistroRestaurante2"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRegistroRestaurante1"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRegistroAdministrador2"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRegistroAdministrador1"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRegistroAdminCorrect"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminPlatillosDescription"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRestaurante"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminHistorialVentasDetalles"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminAdministrador"
+            android:exported="false" />
+        <activity
+            android:name=".SuperAdmin.SuperAdminRepartidor"
+            android:exported="false" />
+        <activity
             android:name=".SuperAdmin.SuperAdminPerfil"
             android:exported="false"
             android:theme="@style/Theme.DeliGOv2" />
