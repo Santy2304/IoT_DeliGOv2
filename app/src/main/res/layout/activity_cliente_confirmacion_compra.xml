@@ -13,6 +13,7 @@
         <TextView
             android:layout_width="250sp"
             android:textAlignment="center"
+            android:fontFamily="sans-serif-condensed-medium"
             android:layout_height="wrap_content"
             android:layout_marginTop="50sp"
             android:layout_gravity="center_horizontal"
@@ -33,6 +34,7 @@
 
         <TextView
             android:id="@+id/textView8"
+            android:fontFamily="sans-serif-condensed-medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -52,12 +54,14 @@
             android:backgroundTint="@color/light_green"
             android:text="Volver al menú"
             android:textSize="20sp"
+            android:fontFamily="sans-serif-condensed-medium"
             android:textColor="@color/white"
             android:layout_marginTop="20sp"
             android:layout_gravity="center_horizontal"/>
 
         <Button
             android:id="@+id/followOrderButton"
+            android:fontFamily="sans-serif-condensed-medium"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

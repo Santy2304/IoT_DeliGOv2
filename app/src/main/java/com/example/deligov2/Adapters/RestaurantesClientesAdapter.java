@@ -1,6 +1,7 @@
 package com.example.deligov2.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.R;
 
 import java.util.List;
@@ -51,7 +53,9 @@ public class RestaurantesClientesAdapter extends RecyclerView.Adapter<Restaurant
             super(itemView);
             Button button = itemView.findViewById(R.id.go_button);
             button.setOnClickListener(view -> {
-
+                Intent intent = new Intent(itemView.getContext(), ClienteRestaurantActivity.class);
+                intent.putExtra("idRestaurante",restaurante.getId());
+                itemView.getContext().startActivity(intent);
             });
         }
 
