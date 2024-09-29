@@ -34,7 +34,7 @@ public class RestaurantesClientesAdapter extends RecyclerView.Adapter<Restaurant
         textViewName.setText(r.getNombre());
 
         TextView textViewHorario = holder.itemView.findViewById(R.id.textAtention);
-        textViewName.setText(r.getHorario());
+        textViewHorario.setText(r.getHorario());
     }
 
     @Override
