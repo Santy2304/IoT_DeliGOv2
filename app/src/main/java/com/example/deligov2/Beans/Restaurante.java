@@ -19,8 +19,8 @@ public class Restaurante {
         return nombre;
     }
 
-    public void setNombre(String nombbre) {
-        this.nombre = nombbre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getHorario() {

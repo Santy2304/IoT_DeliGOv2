@@ -78,7 +78,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
         }
 
 
-
         RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
         adapter.setContext(ClienteHomeActivity.this);
         adapter.setListaRestaurantes(lista);
