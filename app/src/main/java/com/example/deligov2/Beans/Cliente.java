@@ -16,6 +16,20 @@ public class Cliente {
     private Date fechaNacimiento;
     private String password;
 
+    public Cliente(int idCliente, String nombre, String apellido, String correo, String numDocument, String tipoDocumento, boolean estado, String numeroTelefono, String direccion, Date fechaNacimiento, String password) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.numDocument = numDocument;
+        this.tipoDocumento = tipoDocumento;
+        this.estado = estado;
+        this.numeroTelefono = numeroTelefono;
+        this.direccion = direccion;
+        this.fechaNacimiento = fechaNacimiento;
+        this.password = password;
+    }
+
     public int getIdCliente() {
         return idCliente;
     }

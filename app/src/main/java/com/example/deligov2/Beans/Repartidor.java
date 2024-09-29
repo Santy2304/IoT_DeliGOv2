@@ -12,6 +12,18 @@ public class Repartidor {
     private String domicilio;
     private String numTelefono;
 
+    public Repartidor(int idRepartidor, String nombre, String apellido, boolean estado, boolean estadoSolicitud, String numDocument, String correo, String domicilio, String numTelefono) {
+        this.idRepartidor = idRepartidor;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.estado = estado;
+        this.estadoSolicitud = estadoSolicitud;
+        this.numDocument = numDocument;
+        this.correo = correo;
+        this.domicilio = domicilio;
+        this.numTelefono = numTelefono;
+    }
+
     public int getIdRepartidor() {
         return idRepartidor;
     }

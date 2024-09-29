@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.LogIn.LoginVistaInicialApp;
+import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(new Intent(this, AdministradorActivity.class));
     }
     public void verSuperadministrador(View view) {
-        //startActivity(new Intent(this, SuperAdminActivity.class));
+        startActivity(new Intent(this, SuperAdminHomeActivity.class));
     }
     public void verLogin(View view) {
         startActivity(new Intent(this, LoginVistaInicialApp.class));

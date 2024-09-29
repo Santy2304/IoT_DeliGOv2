@@ -10,6 +10,17 @@ public class Administrador {
     private String ubicacionRestaurante;
     private String numDocumento;
 
+    public Administrador(int idAdmin, String nombre, String apellido, String correo, boolean estado, String restaurante, String ubicacionRestaurante, String numDocumento) {
+        this.idAdmin = idAdmin;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.estado = estado;
+        this.restaurante = restaurante;
+        this.ubicacionRestaurante = ubicacionRestaurante;
+        this.numDocumento = numDocumento;
+    }
+
     public int getIdAdmin() {
         return idAdmin;
     }
