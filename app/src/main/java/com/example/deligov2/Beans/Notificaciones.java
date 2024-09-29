@@ -1,5 +1,7 @@
 package com.example.deligov2.Beans;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -7,6 +9,8 @@ public class Notificaciones {
     private int id;
     private String contenido;
     private LocalDateTime fecha;
+    private int idCompra;
+
 
     public int getId() {
         return id;
@@ -30,5 +34,13 @@ public class Notificaciones {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+
+    public int getIdCompra() {
+        return idCompra;
+    }
+
+    public void setIdCompra(int idCompra) {
+        this.idCompra = idCompra;
     }
 }

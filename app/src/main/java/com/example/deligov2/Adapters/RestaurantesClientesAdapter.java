@@ -61,7 +61,7 @@ public class RestaurantesClientesAdapter extends RecyclerView.Adapter<Restaurant
 
     }
 
-        public List<Restaurante> getListaRestaurantes() {
+    public List<Restaurante> getListaRestaurantes() {
         return listaRestaurantes;
     }
 
