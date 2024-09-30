@@ -51,7 +51,7 @@ public class ClienteHistorialActivity extends AppCompatActivity {
 
 
         lista = new ArrayList<>();
-        for(int i=0;i<5;i++){
+        for(int i=0;i<7;i++){
             Ordenes ordenes = new Ordenes();
             ordenes.setIdOrder(idOrdes[i]);
             ordenes.setNombreRestaurante(nombreRestaurante[i]);

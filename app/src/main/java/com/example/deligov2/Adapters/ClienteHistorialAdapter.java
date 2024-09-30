@@ -63,7 +63,7 @@ public class ClienteHistorialAdapter extends RecyclerView.Adapter<ClienteHistori
         Ordenes ordenes;
         public HistorialViewHolder(@NonNull View itemView) {
             super(itemView);
-            Button button = itemView.findViewById(R.id.toDetails);
+            TextView button = itemView.findViewById(R.id.toDetails);
             button.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
                 intent.putExtra("idOrder",ordenes.getIdOrder());

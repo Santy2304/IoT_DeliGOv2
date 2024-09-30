@@ -104,127 +104,21 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout15"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recy"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearResumen"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout14">
 
-        <com.google.android.material.card.MaterialCardView
-            style="?attr/materialCardViewElevatedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="110sp"
-                    android:layout_height="120dp"
-                    android:contentDescription="imageFood"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/hamburguesa_royal" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hamburguesa Royal"
-                        android:textColor="@color/black"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ver detalle"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:textColor="@color/light_green"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <Button
-                            style="?attr/materialIconButtonStyle"
-                            android:id="@+id/removeButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:contentDescription="minusFood"
-                            app:icon="@drawable/remove_24px"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                        <Button
-                            style="?attr/materialIconButtonStyle"
-                            android:id="@+id/addButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:contentDescription="minusFood"
-                            app:icon="@drawable/add_24px"
-                            />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_width="20sp"
-                        android:layout_height="20sp"
-                        android:scaleType="centerCrop"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginStart="50sp"
-                        android:src="@drawable/delete_24px"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="20sp"
-                        android:text="S/8.00"
-                        android:textStyle="bold"
-                        android:gravity="center_horizontal"
-                        android:textColor="@color/black"
-                         />
-
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
+        android:id="@+id/linearResumen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"

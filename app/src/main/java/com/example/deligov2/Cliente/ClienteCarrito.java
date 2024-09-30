@@ -12,12 +12,45 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteCarritoAdapter;
+import com.example.deligov2.Adapters.ClienteHistorialAdapter;
+import com.example.deligov2.Beans.Ordenes;
+import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ClienteCarrito extends AppCompatActivity {
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+public class ClienteCarrito extends AppCompatActivity {
+    ArrayList<VentaPlatilloSA> lista;
+    String[] nombresPlatos = {
+            "Hamburguesa Royal",
+            "Americana",
+            "Tocino con Queso",
+            "La Peruana",
+
+    };
+    float[] Precios  = {
+            8,
+            13,
+            11,
+            15,
+    };
+    int[] idRestaurante ={
+            1,1,1,1
+    };
+
+    int[] cantidad = {
+            1,1,1,1
+    };
+    int[] idPlato = {
+            1,2,3,4
+    };
     FloatingActionButton notiButton;
     FloatingActionButton returnRestaurant;
     Button orderButton;
@@ -27,6 +60,21 @@ public class ClienteCarrito extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_carrito);
+
+
+
+        lista = new ArrayList<>();
+        for(int i=0;i<4;i++){
+            VentaPlatilloSA ventaPlatilloSA = new VentaPlatilloSA(idPlato[i],nombresPlatos[i],Precios[i],cantidad[i],idRestaurante[i]);
+            lista.add(ventaPlatilloSA);
+        }
+        ClienteCarritoAdapter adapter = new ClienteCarritoAdapter();
+        adapter.setContext(this);
+        adapter.setListaPlatosVentas(lista);
+
+        RecyclerView recyclerView = findViewById(R.id.recy);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         notiButton = findViewById(R.id.noti_button);
         vaciarButton = findViewById(R.id.vaciarButton);
