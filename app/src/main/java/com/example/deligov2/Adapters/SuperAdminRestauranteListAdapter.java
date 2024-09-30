@@ -1,6 +1,7 @@
 package com.example.deligov2.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.Beans.RestauranteSA;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
+import com.example.deligov2.SuperAdmin.SuperAdminRegistroAdministrador1;
+import com.example.deligov2.SuperAdmin.SuperAdminRestauranteResumen;
+import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -73,11 +77,29 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                 btDeshabilitar.setVisibility(View.INVISIBLE);
                 btVer.setImageResource(R.drawable.baseline_person_add_24);
 
+                btVer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent = new Intent(itemView.getContext(), SuperAdminRegistroAdministrador1.class);
+                        //intent.putExtra("id_cliente", cliente.getId());
+                        itemView.getContext().startActivity(intent);
+                    }
+                });
+
             }else{
                 iconImage.setImageResource(R.drawable.bembos_logo);
                 tvGanancia.setText("S/"+ restaurante.getMonto());
                 tvNombre.setText(restaurante.getNombre());
                 tvAdmin.setText("Admin ola");
+
+                btVer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(itemView.getContext(), SuperAdminRestauranteResumen.class);
+                        itemView.getContext().startActivity(intent);
+                    }
+                });
             }
 
         }
