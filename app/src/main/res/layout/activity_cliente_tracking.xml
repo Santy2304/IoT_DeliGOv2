@@ -201,8 +201,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/linearLayout4"
-        app:layout_constraintTop_toBottomOf="@id/slider"
-        >
+        app:layout_constraintTop_toBottomOf="@id/slider">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -241,73 +240,16 @@
                 android:fontFamily="sans-serif-condensed-medium"
                 android:layout_gravity="start" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card"
-                style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="390sp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="8dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="100sp"
-                        android:layout_height="100dp"
-                        android:contentDescription="imageFood"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/hamburguesa_royal" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hamburguesa Royal"
-                            android:textColor="@color/black"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="18sp"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="Cantidad: 1"
-                            android:textColor="@color/black"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8sp"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="S/8.00"
-                            android:textColor="@color/black"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
-
-
-
 
     </ScrollView>
 

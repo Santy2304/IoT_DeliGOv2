@@ -37,7 +37,7 @@ public class ClienteHistorialAdapter extends RecyclerView.Adapter<ClienteHistori
         holder.ordenes = o;
 
         TextView textViewOrder = holder.itemView.findViewById(R.id.idOrder);
-        textViewOrder.setText(o.getIdOrder());
+        textViewOrder.setText("#"+o.getIdOrder());
 
         LocalDateTime fechaHora = o.getFecha();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");

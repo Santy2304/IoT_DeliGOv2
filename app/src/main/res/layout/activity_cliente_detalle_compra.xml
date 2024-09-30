@@ -158,78 +158,21 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/linearLayout10"
         android:layout_width="match_parent"
-        android:layout_height="234dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/layoutResu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card"
-            style="?attr/materialCardViewElevatedStyle"
-            android:layout_width="400sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="100sp"
-                    android:layout_height="100dp"
-                    android:contentDescription="imageFood"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/hamburguesa_royal" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Hamburguesa Royal"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18sp"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Cantidad: 1"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8sp"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="S/8.00"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
+        android:id="@+id/layoutResu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
