@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".SuperAdminFragments.VistaLogEvent">
+    tools:context=".SuperAdmin.SuperAdminVistaLogEvent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -26,12 +26,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="739dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="624dp"
+                android:layout_height="739dp"
                 android:layout_marginTop="2dp"
                 android:orientation="vertical">
 
@@ -43,109 +43,40 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_marginLeft="32dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="32dp"
                         android:fontFamily="sans-serif-condensed"
                         android:text="Registro de eventos"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="40sp"/>
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
-                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="400sp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="10sp"
-                    android:layout_marginEnd="10sp">
 
-                    <LinearLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="669dp"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listLogs"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp" />
 
-                        <com.google.android.material.card.MaterialCardView
-                            style="?attr/materialCardViewElevatedStyle"
-                            android:layout_width="365sp"
-                            android:layout_height="130sp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.516"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="110sp"
-                                    android:layout_height="130sp"
-                                    android:scaleType="centerCrop"
-                                    app:srcCompat="@drawable/deligo" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:textColor="@color/black"
-                                    android:padding="10dp">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal"
-                                        android:padding="5sp">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:fontFamily="sans-serif-condensed"
-                                            android:text="#55"
-                                            android:textAppearance="?attr/textAppearanceTitleMedium"
-                                            android:textColor="@color/light_green" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-
-                                            android:textColor="@color/black"
-                                            android:fontFamily="sans-serif-condensed"
-                                            android:text="23/09/24 - 19:00"
-                                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-                                    </LinearLayout>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-
-                                        android:textColor="@color/black"
-                                        android:fontFamily="sans-serif-condensed"
-                                        android:text="Un restaurante ha sido creado"
-                                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="sans-serif-condensed"
-                                        android:text="Ver detalles"
-                                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                                        android:textColor="@color/light_green"
-                                        android:textColorHighlight="@color/light_green" />
-                                </LinearLayout>
-
-                            </LinearLayout>
-                        </com.google.android.material.card.MaterialCardView>
-
-
-                    </LinearLayout>
-
-
-                </ScrollView>
+                    <com.google.android.material.bottomnavigation.BottomNavigationView
+                        android:id="@+id/bottom_navigation"
+                        android:layout_width="425dp"
+                        android:layout_height="130dp"
+                        app:layout_anchorGravity="bottom|center"
+                        app:layout_constraintBottom_toBottomOf="@id/linearLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:menu="@menu/bottom_navigation_superadmin"
+                        tools:layout_editor_absoluteX="-14dp"
+                        tools:layout_editor_absoluteY="578dp" />
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(new Intent(this, AdministradorActivity.class));
     }
     public void verSuperadministrador(View view) {
-         //startActivity(new Intent(this, SuperAdminHomeActivity.class));
-        startActivity(new Intent(this, SuperAdminRepartidor.class));
+         startActivity(new Intent(this, SuperAdminHomeActivity.class));
 
     }
     public void verLogin(View view) {

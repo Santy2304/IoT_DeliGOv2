@@ -20,6 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/light_green"
             app:menu="@menu/top_app_bar_super_admin"
+            android:layout_marginTop="25dp"
             app:navigationIcon="@drawable/icons8_izquierda_circulo_48"
             app:title="@string/title"
             app:titleTextAppearance="@style/ToolbarTitleStyle"
@@ -33,7 +34,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="572dp"
+        android:layout_height="568dp"
         android:elevation="10dp"
         android:orientation="vertical"
         android:padding="16dp"
@@ -287,9 +288,9 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_width="425dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="610dp"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginTop="640dp"
         app:layout_anchorGravity="bottom|center"
         app:layout_constraintBottom_toBottomOf="@id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"

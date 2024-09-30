@@ -37,7 +37,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="713dp"
             android:orientation="vertical">
 
             <TextView
@@ -55,12 +55,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.4" />
 
+
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="411dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
                 android:layout_marginStart="2dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="2dp"
                 android:layout_marginBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +69,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
-                    android:layout_width="399dp"
+                    android:layout_width="386dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:gravity="center_horizontal"
@@ -92,8 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="9dp"
                             android:text="Cliente"
-                            android:textSize="12sp"
-                            />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -137,23 +137,22 @@
                             android:layout_marginTop="2dp"
                             android:text="Administrador"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="340dp"
+                android:layout_height="352dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="370dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
@@ -204,7 +203,7 @@
                         style="?attr/floatingActionButtonSmallStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="160sp"
+                        android:layout_marginStart="130sp"
                         android:backgroundTint="@color/light_green"
                         android:contentDescription="filtro"
                         app:srcCompat="@drawable/filterpx"
@@ -213,32 +212,29 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/listClientesRecyler"
+                    android:id="@+id/listAdmins"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="10dp" />
 
 
             </LinearLayout>
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                app:layout_constraintBottom_toBottomOf="@id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/bottom_navigation_superadmin"
+                tools:layout_editor_absoluteX="-14dp"
+                tools:layout_editor_absoluteY="578dp" />
+
         </LinearLayout>
 
 
     </com.google.android.material.appbar.AppBarLayout>
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="425dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="617dp"
-        app:layout_anchorGravity="bottom|center"
-        app:layout_constraintBottom_toBottomOf="@id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_superadmin"
-        tools:layout_editor_absoluteX="-14dp"
-        tools:layout_editor_absoluteY="578dp" />
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
