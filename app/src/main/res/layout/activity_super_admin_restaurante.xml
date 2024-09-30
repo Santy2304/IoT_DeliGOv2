@@ -59,7 +59,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="458dp"
+                android:layout_height="507dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -86,7 +86,7 @@
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/bt_agregar"
                         style="?attr/floatingActionButtonSmallStyle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="45dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12sp"
                         android:backgroundTint="@color/light_green"
@@ -111,7 +111,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listRestaurantesPanel"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="373dp"
                     android:layout_margin="10dp" />
 
             </LinearLayout>

@@ -145,7 +145,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="352dp"
+                android:layout_height="387dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -219,16 +219,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <!-- Aquí puedes incluir otros componentes y el RecyclerView -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/listClientesRecyler"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp" />
+                            android:layout_height="255dp"
+                            android:layout_margin="10dp"
+                            android:nestedScrollingEnabled="true" />
 
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
-
 
 
             </LinearLayout>

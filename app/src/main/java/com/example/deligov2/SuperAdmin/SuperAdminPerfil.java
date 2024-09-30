@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,6 +26,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+
 
         topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
             @Override
@@ -67,5 +69,12 @@ public class SuperAdminPerfil extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    //Manejo vistas
+    public void cerrarSesion(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

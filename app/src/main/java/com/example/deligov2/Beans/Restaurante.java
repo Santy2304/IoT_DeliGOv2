@@ -5,6 +5,8 @@ public class Restaurante {
     private String nombre;
     private String horario;
     private String[] categorias;
+    //private int idAdmin;
+    //private float monto;
     private int id;
 
     public int getId() {
