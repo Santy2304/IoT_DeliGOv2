@@ -23,8 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/cliente_menu" />
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -121,8 +119,10 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recicler"
         android:layout_width="match_parent"
+        android:padding="10dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
@@ -130,104 +130,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
 
-        <com.google.android.material.card.MaterialCardView
-            style="?attr/materialCardViewElevatedStyle"
-            android:layout_width="400sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="110sp"
-                    android:layout_height="130sp"
-                    app:srcCompat="@drawable/bembos_logo"
-                    android:scaleType="centerCrop"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5sp">
-                        <TextView
-                            android:layout_width="20sp"
-                            android:layout_height="wrap_content"
-                            android:text="#42"
-                            android:textSize="20sp"
-                            android:layout_marginEnd="20sp"
-                            android:fontFamily="sans-serif-condensed"
-                            android:textColor="@color/light_green"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
-                            android:textColor="@color/black"
-                            android:text="23/09/24 - 19:00"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:fontFamily="sans-serif-condensed"
-                        android:text="Bembos"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8sp"
-                        android:padding="5sp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
-                            android:text="S/50.00"
-                            android:textColor="@color/black"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textAppearance="?attr/textAppearanceTitleMedium"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
-                            android:text="Ver detalle"
-                            android:textStyle="bold"
-                            android:textColor="@color/light_green"
-                            android:textAppearance="?attr/textAppearanceTitleMedium"/>
-
-                    </LinearLayout>
-
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-        </com.google.android.material.card.MaterialCardView>
-
-    </LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

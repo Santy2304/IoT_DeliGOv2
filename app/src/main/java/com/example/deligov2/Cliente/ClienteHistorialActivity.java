@@ -10,18 +10,65 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteHistorialAdapter;
+import com.example.deligov2.Adapters.NotificacionesAdapter;
+import com.example.deligov2.Beans.Notificaciones;
+import com.example.deligov2.Beans.Ordenes;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class ClienteHistorialActivity extends AppCompatActivity {
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
+    ArrayList<Ordenes> lista;
+    String[] nombreRestaurante = {
+            "Bembos",
+            "KFC",
+            "Pardos",
+            "Comida Saludable",
+            "Rincón Italiano",
+            "Eco Suchi",
+            "Fridays"
+    };
+
+    float[] precios = {
+            50,20, 32.5F,40,60,23,19
+    };
+    int[] idOrdes={
+            42,36,56,78,90,23,88
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_historial);
+
+
+        lista = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            Ordenes ordenes = new Ordenes();
+            ordenes.setIdOrder(idOrdes[i]);
+            ordenes.setNombreRestaurante(nombreRestaurante[i]);
+            ordenes.setPrice(precios[i]);
+            ordenes.setFecha(LocalDateTime.now().plusMinutes(i*10));
+            lista.add(ordenes);
+        }
+
+
+        ClienteHistorialAdapter adapter = new ClienteHistorialAdapter();
+        adapter.setContext(this);
+        adapter.setListaOrdenes(lista);
+
+        RecyclerView recyclerView = findViewById(R.id.recicler);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         notiButton = findViewById(R.id.noti_button);
         carritoButton = findViewById(R.id.cart_button);

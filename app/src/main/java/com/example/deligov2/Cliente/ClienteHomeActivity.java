@@ -79,7 +79,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
 
 
         RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
-        adapter.setContext(ClienteHomeActivity.this);
+        adapter.setContext(this);
         adapter.setListaRestaurantes(lista);
 
         RecyclerView recyclerView = findViewById(R.id.reciclerView);
