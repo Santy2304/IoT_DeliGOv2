@@ -63,9 +63,9 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
         }
 
         public void bindData(final Administrador admin) {
-            tvNombre.setText("Nombre: " + admin.getNombre() + " " + admin.getApellido());
+            tvNombre.setText(admin.getNombre() + " " + admin.getApellido());
             tvDni.setText("DNI: " + admin.getNumDocumento());
-            tvCorreo.setText("Correo: " + admin.getCorreo());
+            tvCorreo.setText(admin.getCorreo());
 
             iconImage.setImageResource(R.drawable.costumer_green);
 

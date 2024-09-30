@@ -1,9 +1,13 @@
 package com.example.deligov2.SuperAdmin;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +20,8 @@ import com.github.mikephil.charting.data.BarEntry;
 
 import com.example.deligov2.R;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -80,5 +86,78 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 // Notifica al gráfico de barras que los datos han cambiado
         chartGanancias.invalidate();
         chartVentas.invalidate();
+
+
+
+
+        //Manejo del top app bar
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Esto de aquí te manda a la vista anterior
+                onBackPressed();
+            }
+        });
+
+        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                if(item.getItemId()==R.id.log_event){
+                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminVistaLogEvent.class);
+                    startActivity(intent);
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        });
+
+        //Manejo del botton_navbar
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.restaurant);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.restaurant){
+                    Intent intentRestaurant = new Intent(SuperAdminRestauranteResumen.this, SuperAdminRestaurante.class);
+                    startActivity(intentRestaurant);
+                    return true;
+                }else if(item.getItemId()==R.id.principal){
+                    Intent intentPrincipal = new Intent(SuperAdminRestauranteResumen.this, SuperAdminHomeActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(SuperAdminRestauranteResumen.this, SuperAdminPerfil.class);
+                    startActivity(intentProfile);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
+
+
+    }
+
+    //Cambio de vistas
+    //Cambio vista
+    public void vistaRestaurantePlatillos(View view) {
+        Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
+        startActivity(intent);
+    }
+
+    public void vistaRestauranteHistorialVentas(View view) {
+        Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
+        startActivity(intent);
+    }
+    public void vistaRestauranteUbicacion(){
+        Intent intent = new Intent(this, SuperAdminRestauranteUbicacion.class);
+        startActivity(intent);
     }
 }

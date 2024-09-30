@@ -66,9 +66,9 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
         }
 
         public void bindData(final Repartidor repartidor) {
-            tvNombre.setText("Nombre: " + repartidor.getNombre() + " " + repartidor.getApellido());
+            tvNombre.setText( repartidor.getNombre() + " " + repartidor.getApellido());
             tvDni.setText("DNI: " + repartidor.getNumDocument());
-            tvCorreo.setText("Correo: " + repartidor.getCorreo());
+            tvCorreo.setText(repartidor.getCorreo());
 
             iconImage.setImageResource(R.drawable.costumer_green);
 

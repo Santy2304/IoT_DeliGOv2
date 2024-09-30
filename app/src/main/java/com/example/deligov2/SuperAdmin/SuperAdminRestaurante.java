@@ -101,6 +101,8 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         restaurantes.add(new RestauranteSA("Bembos","9:00 - 21:00",categ,1,1450.20f,1,true));
         restaurantes.add(new RestauranteSA("Bembos2","9:00 - 21:00",categ,1,1450.20f,1,true));
         restaurantes.add(new RestauranteSA("Bembos3","9:00 - 21:00",categ,0,0.0f,0,true));
+        restaurantes.add(new RestauranteSA("Bembos4","9:00 - 21:00",categ,0,0.0f,0,true));
+        restaurantes.add(new RestauranteSA("Bembos5","9:00 - 21:00",categ,0,0.0f,0,true));
 
 
         SuperAdminRestauranteListAdapter listAdapter = new SuperAdminRestauranteListAdapter(restaurantes,this);

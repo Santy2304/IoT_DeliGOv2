@@ -67,9 +67,9 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
         }
 
         public void bindData(final Cliente cliente) {
-            tvNombre.setText("Nombre: " + cliente.getNombre() + " " + cliente.getApellido());
+            tvNombre.setText(cliente.getNombre() + " " + cliente.getApellido());
             tvDni.setText("DNI: " + cliente.getNumDocument());
-            tvCorreo.setText("Correo: " + cliente.getCorreo());
+            tvCorreo.setText(cliente.getCorreo());
 
             iconImage.setImageResource(R.drawable.elizabeth);
 
