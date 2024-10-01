@@ -1,6 +1,8 @@
 package com.example.deligov2.LogIn;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,4 +25,11 @@ public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
             return insets;
         });
     }
+    public void volverInicioCrearCuenta(View view){
+        Intent intent = new Intent(LoginCrearCuentaPasoFinal.this, LoginInicioSesion.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
 }

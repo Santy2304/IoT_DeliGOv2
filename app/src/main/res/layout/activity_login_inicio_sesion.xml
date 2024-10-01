@@ -166,7 +166,7 @@
                     android:text=" Crear una aquí"
                     android:textColor="@color/light_green"
                     android:textSize="15sp"
-                    android:onClick="CrearCuenta"
+                    android:onClick="crearCuenta"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

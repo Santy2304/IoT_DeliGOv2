@@ -61,7 +61,7 @@
             android:gravity="center"
             android:text="   Volver a inicio sesión "
             android:textColor="@color/white"
-            android:onClick="saltarInicioSesion"
+            android:onClick="volverInicioCrearCuenta"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

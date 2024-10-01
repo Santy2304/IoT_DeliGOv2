@@ -1,6 +1,8 @@
 package com.example.deligov2.LogIn;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +24,13 @@ public class LoginCrearCuentaSegundoPaso extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+    public void retroceder(View view) {
+        // Simular comportamiento de retroceso
+        onBackPressed();
+    }
+    public void verLoginCrearCuentaTercerPaso(View view){
+        Intent intent = new Intent(LoginCrearCuentaSegundoPaso.this, LoginCrearCuentaTercerPaso.class);
+        startActivity(intent);
     }
 }

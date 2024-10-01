@@ -1,6 +1,7 @@
 package com.example.deligov2.LogIn;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import android.content.Intent;
+
 
 public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
 
@@ -23,4 +26,10 @@ public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
             return insets;
         });
     }
+
+    public void verLoginCrearCuentaSegundoPaso(View view){
+        Intent intent = new Intent(LoginCrearCuentaPrimerPaso.this, LoginCrearCuentaSegundoPaso.class);
+        startActivity(intent);
+    }
+
 }

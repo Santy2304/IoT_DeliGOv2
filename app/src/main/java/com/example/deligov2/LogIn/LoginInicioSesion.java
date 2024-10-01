@@ -33,4 +33,10 @@ public class LoginInicioSesion extends AppCompatActivity {
         startActivity(intent);//Sin destruir el activity;
     }
 
+
+    public void crearCuenta(View view){
+        Intent intent = new Intent(LoginInicioSesion.this, LoginCrearCuentaPrimerPaso.class);
+        startActivity(intent);//Sin destruir el activity;
+    }
+
 }

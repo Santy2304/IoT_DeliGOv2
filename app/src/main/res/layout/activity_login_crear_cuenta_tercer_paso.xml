@@ -18,7 +18,7 @@
             android:layout_marginStart="5sp"
             android:layout_marginTop="40sp"
             android:src="@drawable/icons8_izquierda_circulo_48"
-            android:onClick="RegresarCrearCuenta2"
+            android:onClick="retroceder"
             />
 
         <TextView
@@ -68,7 +68,7 @@
 
             <Button
                 android:id="@+id/continuar1"
-                android:onClick="CrearCuenta4"
+                android:onClick="verLoginCrearCuentaCuartoPaso"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

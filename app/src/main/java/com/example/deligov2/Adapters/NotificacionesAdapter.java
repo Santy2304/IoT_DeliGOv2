@@ -81,7 +81,7 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
         Notificaciones notificaciones;
         public NotificacionesViewHolder(@NonNull View itemView) {
             super(itemView);
-            Button button = itemView.findViewById(R.id.goToDetails);
+            TextView button = itemView.findViewById(R.id.goToDetails);
             button.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
                 intent.putExtra("idCompra",notificaciones.getId());

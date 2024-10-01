@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="RegresarCrearCuenta"
+            android:onClick="retroceder"
             android:layout_marginStart="5sp"
             android:layout_marginTop="40sp"
             android:src="@drawable/icons8_izquierda_circulo_48"
@@ -92,7 +92,7 @@
 
             <Button
                 android:id="@+id/continuar2"
-                android:onClick="CrearCuenta3"
+                android:onClick="verLoginCrearCuentaTercerPaso"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

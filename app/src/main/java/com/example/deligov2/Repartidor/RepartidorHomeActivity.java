@@ -11,7 +11,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.R;
 
 public class RepartidorHomeActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
