@@ -10,12 +10,37 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteCarritoAdapter;
+import com.example.deligov2.Adapters.ClientePlatosAdapter;
+import com.example.deligov2.Beans.Plato;
+import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ClienteRestaurantActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class ClienteRestaurantActivity extends AppCompatActivity {
+    ArrayList<Plato> lista;
+    String[] nombresPlatos = {
+            "Hamburguesa Royal",
+            "Americana",
+            "Tocino con Queso",
+            "La Peruana",
+            "Cheese",
+            "Vegano"
+
+    };
+    float[] Precios  = {
+            8,
+            13,
+            11,
+            15,
+            12,
+            9
+    };
     FloatingActionButton cartButton;
     FloatingActionButton backButton;
     @Override
@@ -23,6 +48,23 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_restaurant);
+
+
+        lista = new ArrayList<>();
+        for (int i=0;i<6;i++){
+            Plato plato = new Plato();
+            plato.setNombre(nombresPlatos[i]);
+            plato.setPrecio(Precios[i]);
+            lista.add(plato);
+        }
+        ClientePlatosAdapter adapter = new ClientePlatosAdapter();
+        adapter.setContext(this);
+        adapter.setListaPlatos(lista);
+
+        RecyclerView recyclerView = findViewById(R.id.recycler2columnas);
+        recyclerView.setAdapter(adapter);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         backButton = findViewById(R.id.atras);
         cartButton = findViewById(R.id.cart_button);
