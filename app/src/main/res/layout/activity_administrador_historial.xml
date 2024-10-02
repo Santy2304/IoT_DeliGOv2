@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Administrador.AdministradorHistorialActivity">
+
+    <ImageView
+        android:id="@+id/banner"
+        android:layout_width="409dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bembos2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:onClick="vistaPrincipalCliente"
+        android:src="@drawable/icons8_izquierda_circulo_48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bembos_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Historial de solicitudes"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout17"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/banner"
+        app:layout_constraintVertical_bias="0.304">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="80sp"
+            android:layout_height="48dp"
+            android:layout_marginStart="18sp"
+            android:layout_marginTop="8sp"
+            android:backgroundTint="@color/light_green"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:paddingLeft="-5sp"
+            android:paddingRight="-5sp"
+            android:text="Más reciente"
+            android:textSize="10sp"
+            app:backgroundTint="@color/md_theme_secondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="80sp"
+            android:layout_height="48dp"
+            android:layout_marginStart="5sp"
+            android:layout_marginTop="8sp"
+            android:backgroundTint="@color/light_green"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:paddingLeft="-5sp"
+            android:paddingRight="-5sp"
+            android:text="Mayor precio"
+            android:textSize="10sp"
+            app:backgroundTint="@color/md_theme_secondary" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="160sp"
+            android:backgroundTint="@color/light_green"
+            android:contentDescription="filtro"
+            app:srcCompat="@drawable/filterpx"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="384dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout17"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="410sp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_admin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
