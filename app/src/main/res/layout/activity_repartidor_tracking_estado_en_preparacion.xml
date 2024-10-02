@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Repartidor.RepartidorTrackingEstadoEnPreparacion">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginTop="15sp"
+                android:src="@drawable/icons8_izquierda_circulo_48"
+                android:onClick="RegresarCrearCuenta2"
+                />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/noti_button"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="240sp"
+                android:layout_marginTop="15sp"
+                android:onClick="vistaNotificaciones"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Notificaciones"
+                app:srcCompat="@drawable/notifications_24px"
+                app:tint="@color/white" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView3"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginStart="8sp"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="15sp"
+                android:onClick="verRepartidorTrackingEstadoEnPreparacion"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:srcCompat="@drawable/hineilll" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_marginTop="5sp"
+                android:layout_marginStart="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pedido #32"
+                android:textColor="@color/black"
+                android:textSize="35sp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:layout_width="190sp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22sp"
+                android:layout_marginTop="1sp"
+                android:text="En preparación"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:backgroundTint="@color/md_theme_inversePrimary_highContrast"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+        <ImageView
+            android:layout_width="400sp"
+            android:layout_height="520sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20sp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/mapa" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200sp"
+            android:layout_marginTop="20sp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:backgroundTint="#FBF5F0"
+                android:layout_width="240sp"
+                android:layout_marginStart="18sp"
+                android:layout_height="75sp"
+                android:background="@drawable/border_form"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="220sp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_marginStart="5sp"
+                    android:textColor="@color/black"
+                    android:text="Dirección restaurante:"/>
+                <TextView
+                    android:layout_width="250sp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10sp"
+                    android:textSize="15sp"
+                    android:layout_marginStart="5sp"
+                    android:text=" Av. Antonio José de Sucre 499"/>
+
+
+            </LinearLayout>
+
+            <Button
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="132sp"
+                android:onClick="verRepartidorTrackingEstadoEnCamino"
+                android:layout_height="60sp"
+                android:layout_marginTop="10sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="5sp"
+                android:backgroundTint="@color/light_green"
+                android:text="Pedido recogido"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                app:iconSize="25sp"
+                app:icon="@drawable/intento"
+                />
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,11 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Repartidor.RepartidorAceptacionPedido">
-
-
+    tools:context=".Repartidor.RepartidorCancelacionPedido">
     <LinearLayout
-        android:id="@+id/padre"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -21,9 +18,9 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:textColor="@color/light_green"
+            android:textColor="@color/red"
             android:textSize="33sp"
-            android:text="Ahora te encuentras a cargo del pedido #32"
+            android:text="Lo sentimos este pedido ya fue tomado"
             />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -39,7 +36,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.442"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-            app:srcCompat="@drawable/exito_tomar_pedido" />
+            app:srcCompat="@drawable/alert" />
+
+        <TextView
+            android:layout_width="300sp"
+            android:layout_marginTop="20sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            android:text="Sigue buscando.."
+            />
 
 
         <Button
@@ -51,9 +60,9 @@
             android:textAlignment="center"
             android:backgroundTint="@color/light_green"
             android:gravity="center"
-            android:text="Continuar"
-            android:onClick="verTrackingPedidoRepartidor"
+            android:text="Volver al menú"
             android:textColor="@color/white"
+            android:onClick="verInicioRepartidor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

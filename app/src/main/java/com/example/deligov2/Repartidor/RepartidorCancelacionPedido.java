@@ -12,13 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
 
-public class RepartidorAceptacionPedido extends AppCompatActivity {
+public class RepartidorCancelacionPedido extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_repartidor_aceptacion_pedido);
+        setContentView(R.layout.activity_repartidor_cancelacion_pedido);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -26,9 +26,8 @@ public class RepartidorAceptacionPedido extends AppCompatActivity {
         });
     }
 
-    public void verTrackingPedidoRepartidor(View view){
-        Intent intent = new Intent(RepartidorAceptacionPedido.this, RepartidorTrackingEstadoRecibido.class);
+    public void verInicioRepartidor(View view){
+        Intent intent = new Intent(this, RepartidorVistaHome.class);
         startActivity(intent);
-
     }
 }

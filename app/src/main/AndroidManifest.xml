@@ -13,6 +13,30 @@
         android:theme="@style/Theme.DeliGOv2"
         tools:targetApi="31">
         <activity
+            android:name=".Repartidor.PerfilRepartidor"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorTrackingFinalizado"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorTrackingEstadoRecibido"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorTrackingEstadoEnPreparacion"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorTrackingEstadoEnCamino"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorEstadoTrackingEnCamino"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorCancelacionPedido"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorHistorial"
+            android:exported="false" />
+        <activity
             android:name=".Repartidor.RepartidorAceptacionPedido"
             android:exported="false" />
         <activity

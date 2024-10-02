@@ -37,7 +37,7 @@
                 android:layout_marginStart="82sp"
                 android:layout_marginTop="15sp"
                 android:backgroundTint="@color/light_green"
-                android:onClick="verRepartidorHistorialPedido"
+                android:onClick="verHistorialRepartidor"
                 app:srcCompat="@drawable/menu_book_24px"
                 app:tint="@color/white" />
 
