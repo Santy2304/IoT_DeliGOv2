@@ -194,11 +194,7 @@
                     android:textSize="12sp"
                     app:iconSize="35sp"
                     app:icon="@drawable/qr_icon"/>
-
             </LinearLayout>
-
-
-
 
         </LinearLayout>
 

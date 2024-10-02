@@ -29,6 +29,9 @@ public class RepartidorAceptacionPedido extends AppCompatActivity {
     public void verTrackingPedidoRepartidor(View view){
         Intent intent = new Intent(RepartidorAceptacionPedido.this, RepartidorTrackingEstadoRecibido.class);
         startActivity(intent);
+    }
+
+    public void verRepartidorConfirmacionTomarPedido(View view){
 
     }
 }

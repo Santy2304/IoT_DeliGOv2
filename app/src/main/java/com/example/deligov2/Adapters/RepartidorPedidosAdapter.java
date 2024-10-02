@@ -36,6 +36,7 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
         state.setText("Estado: " + e.getState());
         TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
         price.setText("Precio : S/."+ e.getPrice());
+        price.setId(e.getIdOrder());
     }
     @Override
     public int getItemCount() {

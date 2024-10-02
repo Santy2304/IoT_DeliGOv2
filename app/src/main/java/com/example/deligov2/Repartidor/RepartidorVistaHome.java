@@ -23,14 +23,17 @@ public class RepartidorVistaHome extends AppCompatActivity {
     ArrayList<PedidoPorSolicitar> lista;
 
     int[] listaId ={
-            32,21,12,12
+            12,15,30,35,50,70,80
     };
     String[] listaState = {
             "Recibido",
-            "Por entregar",
+            "En preparación",
             "Recibido",
-            "Recibido"};
-    float[]  listaPrice = {12.00F, 13.50F , 15.50F , 18.50F  };
+            "En preparación",
+            "En preparación",
+            "Recibido",
+            "En preparación"};
+    float[]  listaPrice = {12.00F, 13.50F , 15.50F , 18.50F , 13.50F , 15.50F , 18.50F };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
 
 
         lista  =  new  ArrayList<>() ;
-        for(int i = 0; i<4; i++){
+        for(int i = 0; i<listaState.length; i++){
             PedidoPorSolicitar pedido = new PedidoPorSolicitar();
             pedido.setIdOrder(listaId[i]);
             pedido.setState(listaState[i]);
@@ -62,6 +65,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
 
     public void verNotificacionesRepartidor(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
+        view.getId();
         startActivity(intent);
     }
 
@@ -79,6 +83,10 @@ public class RepartidorVistaHome extends AppCompatActivity {
     }
     public void aceptacionRepartidor2(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
+        startActivity(intent);
+    }
+    public void verPerfil(View view){
+        Intent intent = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
         startActivity(intent);
     }
 
