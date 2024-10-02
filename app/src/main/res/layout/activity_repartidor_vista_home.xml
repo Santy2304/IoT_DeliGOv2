@@ -130,7 +130,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lista"
-            android:layout_width="400sp"
+            android:layout_width="match_parent"
             android:layout_marginTop="15sp"
             android:layout_height="550sp"
             android:orientation="vertical"
