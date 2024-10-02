@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Repartidor.RepartidorVistaHome">
+
+    <LinearLayout
+        android:id="@+id/linearLayout16"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25sp"
+                android:layout_marginTop="8sp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="DeliGO"
+                android:textColor="@color/light_green"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/cart_button"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="82sp"
+                android:layout_marginTop="15sp"
+                android:backgroundTint="@color/light_green"
+                android:onClick="verRepartidorHistorialPedido"
+                app:srcCompat="@drawable/menu_book_24px"
+                app:tint="@color/white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1sp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Notificaciones"
+                android:onClick="vistaNotificaciones"
+                app:srcCompat="@drawable/notifications_24px"
+                app:tint="@color/white" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView3"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginStart="8sp"
+                android:layout_marginTop="15sp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:srcCompat="@drawable/hineilll" />
+
+        </LinearLayout>
+        <!-- <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/md_theme_onSecondaryContainer"
+             android:layout_marginStart="20sp"
+             android:layout_gravity="center_vertical"
+             android:textSize="30sp"
+             android:textStyle="bold"
+             android:text="Solicitudes"
+             /> -->
+        <TextView
+            android:layout_width="350sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="10sp"
+            android:text="Aquí podrás visualizar los posibles pedidos de los restaurantes que podrás atender"
+            android:textColor="@color/md_theme_onSecondaryContainer"
+            android:textSize="15sp"
+            android:textStyle="bold|italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11sp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="80sp"
+                android:layout_height="35sp"
+                android:layout_marginStart="18sp"
+                android:layout_marginTop="8sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Más reciente"
+                android:textSize="10sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="80sp"
+                android:layout_height="35sp"
+                android:layout_marginStart="5sp"
+                android:layout_marginTop="8sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Mayor precio"
+                android:textSize="10sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="160sp"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="filtro"
+                app:srcCompat="@drawable/filterpx"
+                app:tint="@color/white" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista"
+            android:layout_width="400sp"
+            android:layout_marginTop="15sp"
+            android:layout_height="550sp"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_marginTop="825sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout16"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout16"
+        app:menu="@menu/cliente_menu" />
+</androidx.constraintlayout.widget.ConstraintLayout>

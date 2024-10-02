@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.LogIn.LoginVistaInicialApp;
 import com.example.deligov2.Repartidor.RepartidorHomeActivity;
+import com.example.deligov2.Repartidor.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
 import com.example.deligov2.SuperAdmin.SuperAdminRepartidor;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, ClienteHomeActivity.class));
     }
     public void verRepartidor(View view) {
-        startActivity(new Intent(this, RepartidorHomeActivity.class));
+        startActivity(new Intent(this, RepartidorVistaHome.class));
     }
     public void verAdministrador(View view) {
         //startActivity(new Intent(this, AdministradorActivity.class));

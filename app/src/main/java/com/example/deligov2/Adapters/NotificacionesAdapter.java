@@ -57,9 +57,6 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
         return listaNotificaciones.size();
     }
 
-
-
-
     public List<Notificaciones> getListaNotificaciones() {
         return listaNotificaciones;
     }
@@ -75,8 +72,6 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
     public void setContext(Context context) {
         this.context = context;
     }
-
-
     public class NotificacionesViewHolder extends RecyclerView.ViewHolder{
         Notificaciones notificaciones;
         public NotificacionesViewHolder(@NonNull View itemView) {
