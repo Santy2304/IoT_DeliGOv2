@@ -1,6 +1,8 @@
 package com.example.deligov2.Repartidor;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,5 +60,9 @@ public class RepartidorVistaHome extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
     }
 
+    public void verNotificacionesRepartidor(View view ){
+        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
+        startActivity(intent);
+    }
 
 }
