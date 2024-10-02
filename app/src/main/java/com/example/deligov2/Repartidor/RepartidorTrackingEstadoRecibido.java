@@ -34,7 +34,7 @@ public class RepartidorTrackingEstadoRecibido extends AppCompatActivity {
                 startActivity(intent);                // Finalizar la actividad actual (opcional)
                 finish();
             }
-        }, 1000 * 20); //60 segundos
+        }, 1000 ); //60 segundos
 
 
 
@@ -42,7 +42,8 @@ public class RepartidorTrackingEstadoRecibido extends AppCompatActivity {
 
     public void  retroceder(View view)
     {
-        onBackPressed();
+        Intent intent = new Intent(this, RepartidorVistaHome.class);
+        startActivity(intent);
     }
 
     public void verNotificacionesRepartidor(View view){

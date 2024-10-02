@@ -29,4 +29,19 @@ public class RepartidorTrackingEstadoEnPreparacion extends AppCompatActivity {
         Intent intent = new Intent(this, RepartidorTrackingEstadoEnCamino.class);
         startActivity(intent);
     }
+
+    public void retroceder(View view){
+        Intent intent = new Intent(this, RepartidorVistaHome.class);
+        startActivity(intent);
+    }
+
+    public void verNotificacionesRepartidor(View view){
+        Intent intent = new Intent(this, RepartidorNotificaciones.class);
+        startActivity(intent);
+    }
+
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, PerfilRepartidor.class);
+        startActivity(intent);
+    }
 }
