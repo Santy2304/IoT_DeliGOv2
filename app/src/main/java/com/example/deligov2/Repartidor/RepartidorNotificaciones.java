@@ -26,5 +26,10 @@ public class RepartidorNotificaciones extends AppCompatActivity {
         });
     }
 
+    public void retroceder(View view ){
+        onBackPressed();
+    }
+
+
 
 }
