@@ -180,7 +180,7 @@
                     android:layout_marginTop="25sp"
                     android:text="Importante: Escánear el QR del cliente para terminar con el pedido"/>
                 <Button
-                    android:onClick="verRepartidorTrackingFinalizado"
+                    android:onClick="verSiguienteTracking"
                     style="@style/Widget.Material3.Button.ElevatedButton"
                     android:layout_width="150sp"
                     android:layout_height="60sp"

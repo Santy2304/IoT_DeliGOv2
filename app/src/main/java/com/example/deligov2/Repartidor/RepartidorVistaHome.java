@@ -77,7 +77,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorHistorial.class);
         startActivity(intent);
     }
-    public void aceptacionRepartidor(View view ){
+    public void aceptacionRepartidor2(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
         startActivity(intent);
     }

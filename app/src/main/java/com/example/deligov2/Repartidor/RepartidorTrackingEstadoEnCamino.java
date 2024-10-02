@@ -1,6 +1,8 @@
 package com.example.deligov2.Repartidor;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +24,10 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void verSiguienteTracking(View view) {
+        Intent intent = new Intent(this, RepartidorTrackingFinalizado.class);
+        startActivity(intent);
     }
 }
