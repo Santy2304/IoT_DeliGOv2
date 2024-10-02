@@ -13,6 +13,15 @@
         android:theme="@style/Theme.DeliGOv2"
         tools:targetApi="31">
         <activity
+            android:name=".Repartidor.RepartidorAceptacionPedido"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorDetalleMapaPedido"
+            android:exported="false" />
+        <activity
+            android:name=".Repartidor.RepartidorDetalleCompraDelivery"
+            android:exported="false" />
+        <activity
             android:name=".Repartidor.RepartidorNotificaciones"
             android:exported="false" />
         <activity

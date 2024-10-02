@@ -65,4 +65,13 @@ public class RepartidorVistaHome extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void verDetalleCompraDelivery(View view){
+        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleCompraDelivery.class);
+        startActivity(intent);
+    }
+    public void verDetalleMapaPedido(View view){
+        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleMapaPedido.class);
+        startActivity(intent);
+    }
+
 }
