@@ -32,6 +32,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/nombrePlato"
             android:layout_width="110sp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18sp"
@@ -43,6 +44,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/cantidad"
             android:layout_width="110sp"
             android:layout_height="match_parent"
             android:layout_marginStart="30sp"
