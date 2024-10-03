@@ -2,20 +2,30 @@ package com.example.deligov2.SuperAdmin;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.Manifest;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -37,6 +47,9 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private int hora, minuto;
     Button btContinuar;
     Button btCancelar;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
+    private static final int REQUEST_PERMISSIONS = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +146,18 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             }
         });
 
+        ImageView imageView = findViewById(R.id.imgLogo);
+        TextView tvLogo = findViewById(R.id.tv_logo);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermissions()) {
+                    openGalleryOrCamera();
+                }
+            }
+        });
+
     }
 
     //Manejo de los datos
@@ -169,6 +194,64 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     }
 
 
+    private boolean checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGalleryOrCamera();
+            } else {
+                //No sé ayuda
+            }
+        }
+    }
+
+    private void openGalleryOrCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
+        startActivityForResult(chooser, REQUEST_IMAGE_PICK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                ImageView imageView = findViewById(R.id.imgLogo);
+                TextView tvLogo = findViewById(R.id.tv_logo);
+                tvLogo.setVisibility(View.INVISIBLE);
+                imageView.setImageBitmap(imageBitmap);
+            } else if (requestCode == REQUEST_IMAGE_PICK) {
+                Uri selectedImageUri = data.getData();
+                ImageView imageView = findViewById(R.id.imgLogo);
+                TextView tvLogo = findViewById(R.id.tv_logo);
+                tvLogo.setVisibility(View.INVISIBLE);
+                imageView.setImageURI(selectedImageUri);
+            }
+        }
+    }
+
+
     //Cambiar vista
 
     public void vistaRegistroRestaurante2(){
@@ -180,4 +263,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         Intent intent = new Intent(this, SuperAdminRestaurante.class);
         startActivity(intent);
     }
+
+
 }

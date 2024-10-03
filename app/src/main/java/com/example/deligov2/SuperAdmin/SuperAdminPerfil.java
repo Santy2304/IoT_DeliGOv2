@@ -3,6 +3,7 @@ package com.example.deligov2.SuperAdmin;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -126,6 +127,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
         }
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -144,7 +146,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
 
         Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
-        startActivityForResult(chooser, REQUEST_IMAGE_CAPTURE);
+        startActivityForResult(chooser, REQUEST_IMAGE_PICK);
     }
 
     @Override
@@ -152,11 +154,12 @@ public class SuperAdminPerfil extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE && data != null) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
-                Uri imageUri = (Uri) extras.get("data");
-
-            } else if (requestCode == REQUEST_IMAGE_PICK && data != null) {
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                ImageView imageView = findViewById(R.id.imgSAperfil);
+                imageView.setImageBitmap(imageBitmap);
+            } else if (requestCode == REQUEST_IMAGE_PICK) {
                 Uri selectedImageUri = data.getData();
                 ImageView imageView = findViewById(R.id.imgSAperfil);
                 imageView.setImageURI(selectedImageUri);
