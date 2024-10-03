@@ -72,10 +72,14 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if(getIntent().getStringExtra("flag").equals("historial")){
-             //ocultamos el boton
-            findViewById(R.id.btn_rechazar).setClickable(false);
-            findViewById(R.id.btn_rechazar).setVisibility(View.INVISIBLE);
+        try {
+            if (getIntent().getStringExtra("flag").equals("historial")) {
+                //ocultamos el boton
+                findViewById(R.id.btn_rechazar).setClickable(false);
+                findViewById(R.id.btn_rechazar).setVisibility(View.INVISIBLE);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 

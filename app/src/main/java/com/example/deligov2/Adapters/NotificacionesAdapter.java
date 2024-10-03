@@ -39,7 +39,7 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
         holder.notificaciones = n;
 
         TextView textViewOrder = holder.itemView.findViewById(R.id.orderId);
-        textViewOrder.setText(n.getIdCompra());
+        textViewOrder.setText(n.getIdCompra() +"");
 
         LocalDateTime fechaHora = n.getFecha();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
