@@ -12,11 +12,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.RepartidorDetalleComidaAdapter;
+import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
 import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
 import com.example.deligov2.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,12 +53,24 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         TextView direccion =  findViewById(R.id.direccion);
         direccion.setText("Destino: " + pedido.getDireccionDelivery());
         TextView precio =  findViewById(R.id.ola);
-        precio.setText("Precio por delivery:: " + pedido.getDireccionDelivery());
+        precio.setText("Precio por delivery:: " + pedido.getPrecioDelivery());
         TextView costo =  findViewById(R.id.id_costo);
         costo.setText("Costo: " + ( pedido.getPrecioDelivery() +10));
-
-
-
+        //Usamos el adapter
+        RepartidorDetalleComidaAdapter adapter = new RepartidorDetalleComidaAdapter();
+        adapter.setContext(this);
+        ArrayList<PedidoRepartidor> lis = llenarDatos();
+        ArrayList<PedidoRepartidor> pedidosFiltrado = new ArrayList<>();
+        ArrayList<Comida> comidas =  new ArrayList<>();
+        for(PedidoRepartidor pes : lis) {
+            if(pes.getIdPedidoRepartidor() == pedido.getIdPedidoRepartidor()){
+                comidas =  pes.getComida();
+            }
+        }
+        adapter.setLista(comidas);
+        RecyclerView recyclerView = findViewById(R.id.lista);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void retroceder(View view) {

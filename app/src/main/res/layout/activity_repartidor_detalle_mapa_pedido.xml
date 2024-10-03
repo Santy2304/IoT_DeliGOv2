@@ -125,7 +125,7 @@
                 android:textSize="18sp"
                 app:iconSize="25sp"
                 app:icon="@drawable/intento"
-                android:onClick="verRepartidorRechazarTomarPedido"
+                android:onClick="aceptacionRepartidor2"
                 />
 
 

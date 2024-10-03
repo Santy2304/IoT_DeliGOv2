@@ -99,7 +99,7 @@
                 android:textSize="15sp"
                 android:textAlignment="center"
                 android:backgroundTint="@color/md_theme_secondary"
-                android:layout_width="70sp"
+                android:layout_width="130sp"
                 android:layout_height="wrap_content"
                 android:text="Estado Recibido"
                 app:backgroundTint="@color/md_theme_secondary" />
@@ -107,7 +107,6 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_marginStart="50sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
@@ -137,7 +136,7 @@
             </LinearLayout>
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/lista"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="400sp"
             android:layout_gravity="center_horizontal"

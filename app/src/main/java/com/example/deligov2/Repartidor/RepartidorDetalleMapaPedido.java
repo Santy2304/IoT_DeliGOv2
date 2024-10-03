@@ -37,4 +37,11 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity {
     public void retroceder(View view){
         onBackPressed();
     }
+
+    public void aceptacionRepartidor2(View view )
+    {
+        Intent intent = new Intent(this, RepartidorAceptacionPedido.class);
+        startActivity(intent);
+    }
+
 }

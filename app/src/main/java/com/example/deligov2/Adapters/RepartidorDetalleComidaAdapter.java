@@ -34,7 +34,6 @@ public class RepartidorDetalleComidaAdapter extends RecyclerView.Adapter<Reparti
         TextView cantidad = holder.itemView.findViewById(R.id.cantidad_comida);
         nombreComida.setText(e.getNombreComida());
         cantidad.setText( e.getCantidad() + " Unidades");
-
     }
     @Override
     public int getItemCount() {

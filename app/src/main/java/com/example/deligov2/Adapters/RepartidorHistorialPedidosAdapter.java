@@ -33,16 +33,22 @@ public class RepartidorHistorialPedidosAdapter extends RecyclerView.Adapter<Repa
         PedidoRepartidor e = listaPedidos.get(position) ;
         holder.pedidoRepartidor = e;
         //Acá seteamos los valores que iran en ls iterables de recyclerView
+        View ver = (View) holder.itemView;
         TextView idOrder = holder.itemView.findViewById(R.id.id_historial_pedido);
         TextView state = holder. itemView.findViewById(R.id.id_estado_pedido);
         TextView date = holder.itemView.findViewById(R.id.id_fecha_pedido);
         TextView price = holder.itemView.findViewById(R.id.id_costo);
-        idOrder.setText(e.getIdPedidoRepartidor());
-        state.setText(e.getEstado());
-
-
-        date.setText("" + e.getFecha().toString());
-        price.setText(""  + e.getPrecio());
+        idOrder.setText("#" + e.getIdPedidoRepartidor());
+        state.setText("Estado : " + e.getEstado());
+        date.setText("Fecha : " + e.getFecha().toString());
+        price.setText("Costo delivery : "  + e.getPrecio());
+        View mapa = ver.findViewById(R.id.id_mapa);
+        View detail = ver.findViewById(R.id.olaaaaa);
+        mapa.setId(e.getIdPedidoRepartidor());
+        detail.setId(e.getIdPedidoRepartidor());
+        //Ocultamos un lugar
+        mapa.setVisibility(View.INVISIBLE);
+        mapa.setClickable(false);
     }
 
     public class RepartidorHistorialPedidosViewHolder extends RecyclerView.ViewHolder {

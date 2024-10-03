@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5sp"
+    android:layout_marginBottom="5sp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="380sp"
+        android:layout_width="390sp"
         android:layout_height="100sp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/card_detalle_venta"
@@ -30,30 +32,42 @@
                 app:srcCompat="@drawable/hamburguesa_royal" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/nombreComida"
-            android:layout_width="110sp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18sp"
-            android:layout_marginTop="26sp"
-            android:text="Tocino con queso"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/cantidad_comida"
-            android:layout_width="110sp"
+        <LinearLayout
+            android:layout_width="150sp"
             android:layout_height="match_parent"
-            android:layout_marginStart="30sp"
+            android:orientation="vertical">
 
-            android:layout_marginTop="30sp"
-            android:text="5 unidades"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/nombreComida"
+                android:layout_width="120sp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18sp"
+                android:layout_marginTop="35sp"
+                android:text="Tocino con queso"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="150sp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cantidad_comida"
+                android:layout_width="120sp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="35sp"
+                android:text="5 unidades"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
 
 
     </LinearLayout>

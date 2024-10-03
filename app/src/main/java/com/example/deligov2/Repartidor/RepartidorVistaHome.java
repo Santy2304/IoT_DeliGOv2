@@ -58,7 +58,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
         startActivity(intent);
     }
     public void verHistorialRepartidor(View view){
-        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorHistorial.class);
+        Intent intent = new Intent(this, RepartidorHistorial.class);
         startActivity(intent);
     }
     public void verPerfil(View view){
