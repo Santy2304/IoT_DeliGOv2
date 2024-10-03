@@ -95,7 +95,7 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="80sp"
                 android:layout_height="35sp"
-                android:layout_marginStart="18sp"
+                android:layout_marginStart="24sp"
                 android:layout_gravity="center_vertical"
                 android:backgroundTint="@color/light_green"
                 android:fontFamily="sans-serif-condensed-medium"

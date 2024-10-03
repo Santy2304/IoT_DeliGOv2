@@ -21,7 +21,6 @@ import java.util.Arrays;
 
 public class RepartidorVistaHome extends AppCompatActivity {
     ArrayList<PedidoPorSolicitar> lista;
-
     int[] listaId ={
             12,15,30,35,50,70,80
     };
@@ -62,13 +61,22 @@ public class RepartidorVistaHome extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
     }
-
     public void verNotificacionesRepartidor(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
         view.getId();
         startActivity(intent);
     }
+    public void verHistorialRepartidor(View view){
+        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorHistorial.class);
+        startActivity(intent);
+    }
+    public void verPerfil(View view){
+        Intent intent = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
+        startActivity(intent);
+    }
 
+
+    //Metodos que redirigen apartir de los elementos del recyclerView
     public void verDetalleCompraDelivery(View view){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleCompraDelivery.class);
         startActivity(intent);
@@ -77,16 +85,8 @@ public class RepartidorVistaHome extends AppCompatActivity {
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleMapaPedido.class);
         startActivity(intent);
     }
-    public void verHistorialRepartidor(View view){
-        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorHistorial.class);
-        startActivity(intent);
-    }
     public void aceptacionRepartidor2(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
-        startActivity(intent);
-    }
-    public void verPerfil(View view){
-        Intent intent = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
         startActivity(intent);
     }
 
