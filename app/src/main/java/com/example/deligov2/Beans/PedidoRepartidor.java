@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class PedidoRepartidor {
     private Integer idPedidoRepartidor;
     private String estado;
-    private Float precio;
+    private float precio;
     private String direccionDelivery;
     private String direccionRestaurante;
-    private Float precioDelivery;
+    private float precioDelivery;
     private ArrayList<Comida> comida;
 
     public Integer getIdPedidoRepartidor() {
@@ -27,11 +27,11 @@ public class PedidoRepartidor {
         this.estado = estado;
     }
 
-    public Float getPrecio() {
+    public float getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Float precio) {
+    public void setPrecio(float precio) {
         this.precio = precio;
     }
 
@@ -51,11 +51,11 @@ public class PedidoRepartidor {
         this.direccionRestaurante = direccionRestaurante;
     }
 
-    public Float getPrecioDelivery() {
+    public float getPrecioDelivery() {
         return precioDelivery;
     }
 
-    public void setPrecioDelivery(Float precioDelivery) {
+    public void setPrecioDelivery(float precioDelivery) {
         this.precioDelivery = precioDelivery;
     }
 
@@ -66,4 +66,17 @@ public class PedidoRepartidor {
     public void setComida(ArrayList<Comida> comida) {
         this.comida = comida;
     }
+    // Constructor
+
+    public PedidoRepartidor(Integer idPedidoRepartidor, String estado, Float precio, String direccionDelivery, String direccionRestaurante, Float precioDelivery, ArrayList<Comida> comida) {
+        this.idPedidoRepartidor = idPedidoRepartidor;
+        this.estado = estado;
+        this.precio = precio;
+        this.direccionDelivery = direccionDelivery;
+        this.direccionRestaurante = direccionRestaurante;
+        this.precioDelivery = precioDelivery;
+        this.comida = comida;
+    }
+
+    public PedidoRepartidor(){};
 }

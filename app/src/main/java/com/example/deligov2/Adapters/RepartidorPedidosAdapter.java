@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.PedidoPorSolicitar;
+import com.example.deligov2.Beans.PedidoRepartidor;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPedidosAdapter.RepartidorPedidosViewHolder> {
 
-    private List<PedidoPorSolicitar> listaPedidosPorSolicitar;
+    private List<PedidoRepartidor> listaPedidos;
     private Context context;
 
     @NonNull
@@ -28,24 +29,25 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
     }
     @Override
     public void onBindViewHolder(@NonNull RepartidorPedidosViewHolder holder, int position) {
-        PedidoPorSolicitar e = listaPedidosPorSolicitar.get(position) ;
+        PedidoRepartidor e = listaPedidos.get(position) ;
         holder.pedido = e;
         TextView idOrder = holder.itemView.findViewById(R.id.orderIdPedidos);
-        idOrder.setText("#" + e.getIdOrder()) ;
+        idOrder.setText("#" + e.getIdPedidoRepartidor()) ;
         TextView state = holder. itemView.findViewById(R.id.statePedido);
-        state.setText("Estado: " + e.getState());
+        state.setText("Estado: " + e.getEstado());
         TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
-        price.setText("Precio : S/."+ e.getPrice());
-        price.setId(e.getIdOrder());
+        if(price!=null){
+            price.setText("Precio : S/."+ e.getPrecio());
+            price.setId(e.getIdPedidoRepartidor());
+        }
     }
     @Override
     public int getItemCount() {
-        return listaPedidosPorSolicitar.size();
+        return listaPedidos.size();
     }
 
     public class RepartidorPedidosViewHolder extends RecyclerView.ViewHolder {
-        PedidoPorSolicitar pedido;
-
+        PedidoRepartidor pedido;
         public RepartidorPedidosViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -60,11 +62,11 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
     }
 
 
-    public List<PedidoPorSolicitar> getListaPedidosPorSolicitar() {
-        return listaPedidosPorSolicitar;
+    public List<PedidoRepartidor> getListaPedidosRepartidor() {
+        return listaPedidos;
     }
 
-    public void setListaPedidosPorSolicitar(List<PedidoPorSolicitar> listaPedidosPorSolicitar) {
-        this.listaPedidosPorSolicitar = listaPedidosPorSolicitar;
+    public void setListaPedidosRepartidor(List<PedidoRepartidor> listaPedidosRepartidor) {
+        this.listaPedidos = listaPedidosRepartidor;
     }
 }

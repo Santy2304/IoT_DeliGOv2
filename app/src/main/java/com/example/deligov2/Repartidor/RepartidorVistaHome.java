@@ -13,26 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
+import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoPorSolicitar;
+import com.example.deligov2.Beans.PedidoRepartidor;
 import com.example.deligov2.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class RepartidorVistaHome extends AppCompatActivity {
-    ArrayList<PedidoPorSolicitar> lista;
-    int[] listaId ={
-            12,15,30,35,50,70,80
-    };
-    String[] listaState = {
-            "Recibido",
-            "En preparación",
-            "Recibido",
-            "En preparación",
-            "En preparación",
-            "Recibido",
-            "En preparación"};
-    float[]  listaPrice = {12.00F, 13.50F , 15.50F , 18.50F , 13.50F , 15.50F , 18.50F };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +36,9 @@ public class RepartidorVistaHome extends AppCompatActivity {
             return insets;
         });
 
-
-        lista  =  new  ArrayList<>() ;
-        for(int i = 0; i<listaState.length; i++){
-            PedidoPorSolicitar pedido = new PedidoPorSolicitar();
-            pedido.setIdOrder(listaId[i]);
-            pedido.setState(listaState[i]);
-            pedido.setPrice(listaPrice[i]);
-            lista.add(pedido);
-        }
         RepartidorPedidosAdapter adapter = new RepartidorPedidosAdapter();
         adapter.setContext(this);
-        adapter.setListaPedidosPorSolicitar(lista);
+        adapter.setListaPedidosRepartidor(llenarDatos());
         RecyclerView recyclerView = findViewById(R.id.lista);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
@@ -74,8 +56,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
         Intent intent = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
         startActivity(intent);
     }
-
-
     //Metodos que redirigen apartir de los elementos del recyclerView
     public void verDetalleCompraDelivery(View view){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleCompraDelivery.class);
@@ -89,5 +69,49 @@ public class RepartidorVistaHome extends AppCompatActivity {
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
         startActivity(intent);
     }
+    public ArrayList<PedidoRepartidor> llenarDatos(){
+        ArrayList<PedidoRepartidor> pedidos = new ArrayList<>();
 
+        for (int i = 30; i <= 48; i++) {
+            // Crear una lista de comidas para cada pedido
+            ArrayList<Comida> comidas = new ArrayList<>();
+
+            // Asignar comidas fijas
+            if (i % 2 == 0) {
+                // Para los pedidos pares
+                comidas.add(new Comida(1, "Pizza", 2));
+                comidas.add(new Comida(2, "Hamburguesa", 3));
+                comidas.add(new Comida(3, "Helado", 3));
+                comidas.add(new Comida(4, "Pollo", 3));
+                comidas.add(new Comida(5, "Postre", 3));
+                comidas.add(new Comida(6, "Chaufa", 3));
+                comidas.add(new Comida(7, "Cangreburger", 3));
+
+            } else {
+                // Para los pedidos impares
+                comidas.add(new Comida(10, "Tacos", 4));
+                comidas.add(new Comida(20, "Ensalada", 1));
+                comidas.add(new Comida(50, "Arraoz chaufa", 5));
+                comidas.add(new Comida(24, "Pescado frito", 3));
+                comidas.add(new Comida(34, "Pollo frito", 2));
+                comidas.add(new Comida(24, "Pescado frito", 3));
+                comidas.add(new Comida(34, "Pollo frito", 2));
+            }
+
+            String estado = (i % 2 == 0) ? "Recibido" : "En preparación";
+
+            PedidoRepartidor pedido = new PedidoRepartidor(
+                    i,  // id del pedido
+                    estado,  // estado
+                    150F + (i * 10),  // precio fijo (incrementa en 10 por cada pedido)
+                    "Direccion Delivery " + i,  // dirección de entrega fija
+                    "Direccion Restaurante " + i,  // dirección del restaurante fija
+                    20F,  // precio fijo del delivery
+                    comidas  // lista de comidas
+            );
+
+            pedidos.add(pedido);
+        }
+        return pedidos;
+    }
 }
