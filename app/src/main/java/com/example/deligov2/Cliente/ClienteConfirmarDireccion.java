@@ -71,6 +71,21 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
 
     }
 
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, ClientePerfil.class);
+        startActivity(intent);
+    }
+
+    public void verHistorial(View view){
+        Intent intent = new Intent(this, ClienteHistorialActivity.class);
+        startActivity(intent);
+    }
+
+    public void verHome(View view){
+        Intent intent = new Intent(this, ClienteHomeActivity.class);
+        startActivity(intent);
+    }
+
     public void verConfirmacion(View view) {
         startActivity(new Intent(this, ClienteConfirmacionCompra.class));
     }

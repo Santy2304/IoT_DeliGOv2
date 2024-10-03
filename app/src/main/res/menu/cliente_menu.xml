@@ -4,6 +4,7 @@
     <item
         android:id="@+id/historial"
         android:enabled="true"
+        android:onClick="verHistorial"
         android:iconTintMode="multiply"
         android:icon="@drawable/receipt_long"
         android:title="Ordenes"
@@ -12,6 +13,7 @@
     <item
         android:id="@+id/restaurant"
         android:enabled="true"
+        android:onClick="verHome"
         android:icon="@drawable/storefront"
         android:title="Restaurantes"
         />
@@ -19,6 +21,7 @@
     <item
         android:id="@+id/profile"
         android:enabled="true"
+        android:onClick="verPerfil"
         android:icon="@drawable/iconoperfil"
         android:title="Perfil"
         />
