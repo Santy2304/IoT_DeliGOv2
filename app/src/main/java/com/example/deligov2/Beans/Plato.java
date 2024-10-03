@@ -1,6 +1,8 @@
 package com.example.deligov2.Beans;
 
-public class Plato {
+import java.io.Serializable;
+
+public class Plato implements Serializable {
 
     private int id;
     private String nombre;

@@ -62,7 +62,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/button1"
+                    android:id="@+id/bt_viewPlato"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_margin="1dp"

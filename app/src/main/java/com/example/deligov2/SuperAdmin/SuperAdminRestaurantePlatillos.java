@@ -64,7 +64,7 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         for (int i=0;i<6;i++){
             Plato plato = new Plato();
             plato.setNombre(nombresPlatos[i]);
-            plato.setDescripcion("Probando probando probando xd");
+            plato.setDescripcion("Esta jugosa hamburguesa tiene todo para saciar tu hambre a un bajo precio. Un clásico en Bembos");
             plato.setIdRestaurante(1);
             plato.setId(i);
             plato.setPrecio(Precios[i]);
@@ -80,15 +80,6 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerCarta);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columna
-
-        /*
-        RecyclerView recyclerView = findViewById(R.id.recyclerCarta);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-         */
-
-
 
 
         //Manejo del top app bar

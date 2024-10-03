@@ -23,20 +23,21 @@
             app:title="@string/title"
             app:titleTextAppearance="@style/ToolbarTitleStyle"
             app:titleCentered="true"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_marginTop="90dp"
+            android:layout_height="160dp"
             android:orientation="vertical">
 
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
-                android:layout_width="411dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
                 android:layout_marginStart="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.075"
@@ -65,8 +66,9 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="209dp"
+                        android:layout_width="215dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
                         android:layout_marginEnd="80dp"
                         android:gravity="center_horizontal|center_vertical"
                         android:orientation="vertical">
@@ -82,10 +84,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
+                                android:fontFamily="sans-serif-condensed-medium"
                                 android:text="Restaurante Bembos"
                                 android:textColor="@color/black"
                                 android:textSize="22sp"
-                                android:fontFamily="sans-serif-condensed-medium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -93,25 +95,40 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="Horario de atención: "
-                                android:textSize="12sp"
+                                android:textSize="14sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tv_categorias"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="1dp"
-                                android:text="Categoría: "
-                                android:textSize="12sp"
+                                android:text="Categorías: "
+                                android:textSize="14sp"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="1dp"
-                                android:text="Activado"
-                                android:textColor="@color/light_green"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Administrador"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="65dp"
+                                    android:text="Activado"
+                                    android:textColor="@color/light_green"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -123,325 +140,260 @@
             </com.google.android.material.card.MaterialCardView>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_ganancias"
+                android:layout_width="80sp"
+                android:layout_height="35sp"
+                android:layout_marginStart="12sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:onClick="vistaRestauranteResumen"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Ganancias"
+                android:textSize="13sp"
+                app:backgroundTint="@color/light_green" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_carta"
+                android:layout_width="80sp"
+                android:layout_height="35sp"
+                android:layout_marginStart="5sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:onClick="vistaRestaurantePlatillos"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Carta"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:backgroundTint="@color/light_green" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_ventas"
+                android:layout_width="80sp"
+                android:layout_height="35sp"
+                android:layout_marginStart="5sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:onClick="vistaRestauranteHistorialVentas"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Ventas"
+                android:textSize="13sp"
+                app:backgroundTint="@color/light_green" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_ubicacion"
+                android:layout_width="80sp"
+                android:layout_height="35sp"
+                android:layout_marginStart="5sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:onClick="vistaRestauranteUbicacion"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Ubicación"
+                android:textSize="13sp"
+                app:backgroundTint="@color/light_green" />
+
+        </LinearLayout>
+     </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="437dp"
+        android:layout_marginTop="248dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="525dp"
-                android:layout_marginTop="2dp"
-                android:orientation="vertical">
+                android:layout_height="430dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20sp"
+                android:orientation="horizontal">
 
-
-
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
+                    style="?attr/materialCardViewElevatedStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/bt_ganancias"
-                        android:onClick="vistaRestauranteResumen"
-                        android:layout_width="80sp"
-                        android:layout_height="35sp"
-                        android:layout_marginStart="12sp"
-                        android:backgroundTint="@color/light_green"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:paddingLeft="-5sp"
-                        android:paddingRight="-5sp"
-                        android:text="Ganancias"
-                        android:textSize="13sp"
-                        app:backgroundTint="@color/light_green" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/bt_carta"
-                        android:onClick="vistaRestaurantePlatillos"
-                        android:layout_width="80sp"
-                        android:layout_height="35sp"
-                        android:layout_marginStart="5sp"
-                        android:backgroundTint="@color/light_green"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:paddingLeft="-5sp"
-                        android:paddingRight="-5sp"
-                        android:text="Carta"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        app:backgroundTint="@color/light_green" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/bt_ventas"
-                        android:onClick="vistaRestauranteHistorialVentas"
-                        android:layout_width="80sp"
-                        android:layout_height="35sp"
-                        android:layout_marginStart="5sp"
-                        android:backgroundTint="@color/light_green"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:paddingLeft="-5sp"
-                        android:paddingRight="-5sp"
-                        android:text="Ventas"
-                        android:textSize="13sp"
-                        app:backgroundTint="@color/light_green" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/bt_ubicacion"
-                        android:onClick="vistaRestauranteUbicacion"
-                        android:layout_width="80sp"
-                        android:layout_height="35sp"
-                        android:layout_marginStart="5sp"
-                        android:backgroundTint="@color/light_green"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:paddingLeft="-5sp"
-                        android:paddingRight="-5sp"
-                        android:text="Ubicación"
-                        android:textSize="13sp"
-                        app:backgroundTint="@color/light_green" />
-
-                </LinearLayout>
-
-                <ScrollView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="400sp"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="10sp"
-                    android:layout_marginEnd="10sp">
+                    android:layout_marginTop="24sp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <ImageView
+                            android:id="@+id/imgPlatillo"
+                            android:layout_width="match_parent"
+                            android:layout_height="200sp"
+                            android:contentDescription="banner"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/hamburguesa_royal" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="450dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20sp"
-                            android:orientation="horizontal">
+                            android:layout_height="220dp"
+                            android:layout_below="@id/imgPlatillo"
+                            android:orientation="vertical"
+                            android:padding="5sp">
 
-                            <com.google.android.material.card.MaterialCardView
-                                style="?attr/materialCardViewElevatedStyle"
-                                android:layout_width="match_parent"
+
+                            <TextView
+                                android:id="@+id/tv_platoNombre"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="24sp">
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:text="Queso con Tocino"
+                                android:textAppearance="?attr/textAppearanceTitleMedium"
+                                android:textColor="@color/light_yellow"
+                                android:textSize="40sp"
+                                android:textStyle="bold" />
 
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:id="@+id/imgPlatillo"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="200sp"
-                                        android:contentDescription="banner"
-                                        android:scaleType="centerCrop"
-                                        app:srcCompat="@drawable/hamburguesa_royal" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="228dp"
-                                        android:layout_below="@id/imgPlatillo"
-                                        android:orientation="vertical"
-                                        android:padding="5sp">
-
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center_vertical|center_horizontal"
-                                            android:fontFamily="sans-serif-condensed-medium"
-                                            android:text="Queso con Tocino"
-                                            android:textAppearance="?attr/textAppearanceTitleMedium"
-                                            android:textColor="@color/light_yellow"
-                                            android:textSize="45sp"
-                                            android:textStyle="bold" />
-
-                                        <TextView
-                                            android:layout_width="325dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center_horizontal|center_vertical"
-                                            android:layout_marginTop="2sp"
-                                            android:fontFamily="sans-serif-condensed-medium"
-                                            android:text="Esta jugosa hamburguesa tiene todo para saciar tu hambre a un bajo precio. Un clásico en Bembos"
-                                            android:textAppearance="?attr/textAppearanceBodyMedium"
-                                            android:textColor="@color/black"
-                                            android:textSize="16sp" />
-
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="40dp"
-                                            android:layout_gravity="center_horizontal"
-                                            android:orientation="horizontal"
-                                            android:padding="5sp">
-
-                                            <LinearLayout
-                                                android:layout_width="170dp"
-                                                android:layout_height="40dp"
-                                                android:layout_gravity="center_vertical"
-                                                android:orientation="vertical"
-                                                android:padding="5sp">
-                                                <TextView
-                                                    android:layout_width="120dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="Ingredientes"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/black"
-                                                    android:textSize="16sp" />
-
-                                            </LinearLayout>
-
-                                            <LinearLayout
-                                                android:layout_width="170dp"
-                                                android:layout_height="40dp"
-                                                android:layout_gravity="center_vertical"
-                                                android:orientation="vertical"
-                                                android:padding="5sp">
-                                                <TextView
-                                                    android:layout_width="120dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="Precio: S/16.90"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/black"
-                                                    android:textSize="16sp" />
-
-                                            </LinearLayout>
-
-                                        </LinearLayout>
-                                        <ScrollView
-                                            xmlns:android="http://schemas.android.com/apk/res/android"
-                                            android:layout_width="330sp"
-                                            android:layout_height="80dp"
-                                            android:layout_gravity="center_horizontal"
-                                            android:layout_marginStart="10sp"
-                                            android:layout_marginEnd="10sp">
-
-                                            <LinearLayout
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_gravity="center_vertical"
-                                                android:orientation="vertical">
-                                                <TextView
-                                                    android:layout_width="325dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="*Pan"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/md_theme_inverseSurface_highContrast"
-                                                    android:textSize="16sp" />
-                                                <TextView
-                                                    android:layout_width="325dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="*Queso"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/md_theme_inverseSurface_highContrast"
-                                                    android:textSize="16sp" />
-                                                <TextView
-                                                    android:layout_width="325dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="*Tocino"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/md_theme_inverseSurface_highContrast"
-                                                    android:textSize="16sp" />
-                                                <TextView
-                                                    android:layout_width="325dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="*Carne"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/md_theme_inverseSurface_highContrast"
-                                                    android:textSize="16sp" />
-                                                <TextView
-                                                    android:layout_width="325dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="*Tomate"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/md_theme_inverseSurface_highContrast"
-                                                    android:textSize="16sp" />
-                                                <TextView
-                                                    android:layout_width="325dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_gravity="center_horizontal|center_vertical"
-                                                    android:layout_marginTop="2sp"
-                                                    android:fontFamily="sans-serif-condensed-medium"
-                                                    android:text="*Lechuga"
-                                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                                    android:textColor="@color/md_theme_inverseSurface_highContrast"
-                                                    android:textSize="16sp" />
-
-
-                                            </LinearLayout>
-                                        </ScrollView>
-
-                                    </LinearLayout>
-                                </RelativeLayout>
-                            </com.google.android.material.card.MaterialCardView>
-
-
-                        </LinearLayout>
-                        <com.google.android.material.card.MaterialCardView
-                            style="?attr/materialCardViewElevatedStyle"
-                            android:layout_width="372dp"
-                            android:layout_height="200dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="0dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.075"
-                            app:layout_constraintStart_toStartOf="parent">
+                            <TextView
+                                android:id="@+id/tv_platoDescripcion"
+                                android:layout_width="325dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal|center_vertical"
+                                android:layout_marginTop="2sp"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:text="Esta jugosa hamburguesa tiene todo para saciar tu hambre a un bajo precio. Un clásico en Bembos"
+                                android:textAppearance="?attr/textAppearanceBodyMedium"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
 
                             <LinearLayout
-                                android:layout_width="357dp"
-                                android:layout_height="190dp"
-                                android:layout_marginStart="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_horizontal"
                                 android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="178dp"
+                                    android:layout_width="170dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="5sp"
+                                    android:layout_gravity="center_vertical"
                                     android:orientation="vertical">
-
                                     <TextView
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="120dp"
                                         android:layout_height="wrap_content"
-                                        android:text="Cantidad vendida mensualmente: "
-                                        android:textSize="16sp"
-                                        android:textStyle="bold" />
+                                        android:layout_gravity="center_horizontal|center_vertical"
+                                        android:layout_marginTop="2sp"
+                                        android:fontFamily="sans-serif-condensed-medium"
+                                        android:text="Ingredientes"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                                        android:textColor="@color/black"
+                                        android:textSize="16sp" />
 
-                                    <ImageView
-                                        android:id="@+id/imgGanancia1"
-                                        android:layout_width="254dp"
-                                        android:layout_height="178dp"
-                                        android:src="@drawable/ganancias1" />
                                 </LinearLayout>
-                            </LinearLayout>
-                        </com.google.android.material.card.MaterialCardView>
 
+                                <LinearLayout
+                                    android:layout_width="170dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="vertical"
+                                    android:padding="5sp">
+                                    <TextView
+                                        android:id="@+id/tv_platoPrecio"
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal|center_vertical"
+                                        android:layout_marginTop="2sp"
+                                        android:fontFamily="sans-serif-condensed-medium"
+                                        android:text="Precio: S/16.90"
+                                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                                        android:textColor="@color/black"
+                                        android:textSize="16sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <TextView
+                                    android:id="@+id/tv_platoIngredientes"
+                                    android:layout_width="326dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:layout_marginTop="2sp"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Tocino, Cebolla, Carne, Tomado, Queso,Pan"
+                                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+
+
+                        </LinearLayout>
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="372dp"
+                android:layout_height="157dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.075"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:layout_width="357dp"
+                    android:layout_height="147dp"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="144dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ventas mensuales: "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/chartVentasPlatos"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
 
                     </LinearLayout>
 
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                </ScrollView>
-
-            </LinearLayout>
         </LinearLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+    </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginTop="680dp"
+        app:layout_constraintBottom_toBottomOf="@id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_superadmin"
+        tools:layout_editor_absoluteX="-14dp"
+        tools:layout_editor_absoluteY="578dp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -61,7 +61,7 @@
             android:layout_gravity="center">
 
             <ImageView
-                android:id="@+id/imageView11"
+                android:id="@+id/imgSAperfil"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/circular_image_background"
@@ -71,7 +71,7 @@
 
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/bt_fotoSA"
                 style="?attr/materialIconButtonFilledStyle"
                 android:layout_width="55dp"
                 android:layout_height="55dp"

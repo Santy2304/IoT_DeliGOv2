@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Plato;
 import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Cliente.ClientePlatoActivity;
 import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminPlatillosDescription;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilRepartidor;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -44,6 +46,16 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
         TextView tvPrice1 = holder.itemView.findViewById(R.id.tv_priceR);
         tvPrice1.setText(String.format("S/ %.2f", carta.getPrecio()));
 
+        ExtendedFloatingActionButton btViewPlato = holder.itemView.findViewById(R.id.bt_viewPlato);
+        btViewPlato.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SuperAdminPlatillosDescription.class);
+                intent.putExtra("plato", carta);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -55,17 +67,6 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
         Plato plato;
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
-            /*
-            FloatingActionButton button1 = itemView.findViewById(R.id.button1);
-            button1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(itemView.getContext(), SuperAdminPlatillosDescription.class);
-                    itemView.getContext().startActivity(intent);
-                }
-            });
-
-             */
         }
     }
 
