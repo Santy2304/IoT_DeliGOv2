@@ -112,16 +112,7 @@
         </LinearLayout>
 
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="400sp"
-            android:layout_height="750sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="2sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -409,7 +400,6 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
-        </ScrollView>
     </LinearLayout>
 
 

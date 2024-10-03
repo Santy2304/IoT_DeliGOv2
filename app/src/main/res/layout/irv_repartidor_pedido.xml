@@ -78,6 +78,7 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="?attr/floatingActionButtonSmallStyle"
+                android:id="@+id/mapa2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"
@@ -96,6 +97,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/detalles"
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -116,6 +118,7 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="?attr/floatingActionButtonSmallStyle"
+                android:id="@+id/aceptar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"

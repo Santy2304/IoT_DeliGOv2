@@ -34,6 +34,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mapa de pedido #32"
@@ -46,7 +47,7 @@
             />
 
         <ImageView
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="18sp"
             android:scaleType="centerCrop"
             android:layout_gravity="center_horizontal"
             android:layout_width="370sp"
@@ -59,8 +60,8 @@
             android:layout_marginTop="20sp"
             android:orientation="horizontal">
             <LinearLayout
-                android:layout_marginStart="18sp"
-                android:layout_width="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_width="250sp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -77,6 +78,7 @@
                         android:textColor="@color/black"
                         />
                     <TextView
+                        android:id="@+id/destinoTienda"
                         android:textColor="@color/black"
                         android:layout_width="130sp"
                         android:layout_marginStart="5sp"
@@ -88,7 +90,7 @@
                 <LinearLayout
                     android:layout_marginTop="10sp"
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
+                    android:layout_width="250sp"
                     android:layout_height="match_parent">
                     <TextView
                         android:textSize="15sp"
@@ -99,6 +101,7 @@
                         android:textColor="@color/black"
                         />
                     <TextView
+                        android:id="@+id/destinoFinal"
                         android:layout_marginStart="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

@@ -13,6 +13,7 @@ import com.example.deligov2.Beans.PedidoPorSolicitar;
 import com.example.deligov2.Beans.PedidoRepartidor;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -36,10 +37,9 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
         TextView state = holder. itemView.findViewById(R.id.statePedido);
         state.setText("Estado: " + e.getEstado());
         TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
-        if(price!=null){
-            price.setText("Precio : S/."+ e.getPrecio());
-            price.setId(e.getIdPedidoRepartidor());
-        }
+        price.setText("Precio : S/."+ e.getPrecioDelivery());
+        //Ahora afectamos a los botones
+        holder.itemView.setId(e.getIdPedidoRepartidor());
     }
     @Override
     public int getItemCount() {

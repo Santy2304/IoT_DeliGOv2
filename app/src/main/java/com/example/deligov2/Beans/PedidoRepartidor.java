@@ -1,8 +1,10 @@
 package com.example.deligov2.Beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class PedidoRepartidor {
+public class PedidoRepartidor implements Serializable {
     private Integer idPedidoRepartidor;
     private String estado;
     private float precio;
@@ -10,6 +12,7 @@ public class PedidoRepartidor {
     private String direccionRestaurante;
     private float precioDelivery;
     private ArrayList<Comida> comida;
+    private Date fecha;
 
     public Integer getIdPedidoRepartidor() {
         return idPedidoRepartidor;
@@ -79,4 +82,11 @@ public class PedidoRepartidor {
     }
 
     public PedidoRepartidor(){};
+
+    public Date getFecha() {
+        return fecha;
+    }
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
 }
