@@ -28,4 +28,10 @@ public class Comida {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
+    //Constructor
+    public Comida(int idComida, String nombreComida, Integer cantidad) {
+        this.idComida = idComida;
+        this.nombreComida = nombreComida;
+        this.cantidad = cantidad;
+    }
 }
