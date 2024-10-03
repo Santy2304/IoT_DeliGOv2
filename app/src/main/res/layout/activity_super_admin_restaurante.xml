@@ -7,18 +7,6 @@
     android:background="@color/white"
     tools:context=".SuperAdmin.SuperAdminRestaurante">
 
-    <!--
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    </com.google.android.material.appbar.AppBarLayout>
-    -->
-
-
-    <!--android:onClick="saltarInicioSesion"-->
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,10 +23,12 @@
             app:title="@string/title"
             app:titleTextAppearance="@style/ToolbarTitleStyle"
             app:titleCentered="true"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="194dp"
+            android:layout_marginTop="90dp"
             android:orientation="vertical">
 
             <TextView
@@ -59,7 +49,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="507dp"
+                android:layout_height="115dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -108,31 +98,32 @@
                         app:tint="@color/white" />
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/listRestaurantesPanel"
-                    android:layout_width="match_parent"
-                    android:layout_height="373dp"
-                    android:layout_margin="10dp" />
 
             </LinearLayout>
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-
-                app:layout_anchorGravity="bottom|center"
-                app:layout_constraintBottom_toBottomOf="@id/linearLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:menu="@menu/bottom_navigation_superadmin"
-                tools:layout_editor_absoluteX="-14dp"
-                tools:layout_editor_absoluteY="578dp" />
-
         </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listRestaurantesPanel"
+        android:layout_marginTop="285dp"
+        android:layout_width="match_parent"
+        android:layout_height="394dp" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_marginTop="680dp"
+        android:layout_height="130dp"
+        app:layout_anchorGravity="bottom|center"
+        app:layout_constraintBottom_toBottomOf="@id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_superadmin"
+        tools:layout_editor_absoluteX="-14dp"
+        tools:layout_editor_absoluteY="578dp" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--
+
+-->

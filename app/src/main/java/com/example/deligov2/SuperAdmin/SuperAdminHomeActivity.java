@@ -3,6 +3,7 @@ package com.example.deligov2.SuperAdmin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -93,12 +94,30 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         clientes.add(new  Cliente(4,"Con la","Del Lago","cliente4@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
         clientes.add(new  Cliente(5,"Papaya","Del Lago","cliente5@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
 
+
         SuperAdminClienteListAdapter listAdapter = new SuperAdminClienteListAdapter(clientes,this);
         RecyclerView recyclerView = findViewById(R.id.listClientesRecyler);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
+
+        // Añade el OnTouchListener o OnClickListener aquí
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Aquí puedes detectar los eventos de tacto
+                return false;
+            }
+        });
+
+        // O añade el OnClickListener
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí puedes detectar los eventos de clic
+            }
+        });
     }
 
 

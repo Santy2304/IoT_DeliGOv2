@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 
@@ -32,7 +31,7 @@ public class SuperAdminRestauranteVentaAdapter extends RecyclerView.Adapter<Supe
 
     @Override
     public SuperAdminRestauranteVentaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View view = mInflater.inflate(R.layout.sup_admin_restaurante_ventas_list, null);
+        View view = mInflater.inflate(R.layout.irv_sup_admin_restaurante_detalles_ventas, null);
         return new SuperAdminRestauranteVentaAdapter.ViewHolder(view);
     }
 
@@ -61,7 +60,6 @@ public class SuperAdminRestauranteVentaAdapter extends RecyclerView.Adapter<Supe
             tvCantidad.setText("Cantidad:" + venta.getCantidad());
 
             iconImage.setImageResource(R.drawable.hamburguesa_royal);
-
         }
     }
 }

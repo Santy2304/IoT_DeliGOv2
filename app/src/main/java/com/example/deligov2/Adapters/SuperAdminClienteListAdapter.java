@@ -39,7 +39,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
 
     @Override
     public SuperAdminClienteListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View view = mInflater.inflate(R.layout.sup_admin_cliente_list, null);
+        View view = mInflater.inflate(R.layout.sup_admin_cliente_list, parent,false);
         return new SuperAdminClienteListAdapter.ViewHolder(view);
     }
 

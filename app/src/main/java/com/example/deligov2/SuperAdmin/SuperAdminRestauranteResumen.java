@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.example.deligov2.R;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -142,10 +144,37 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
             }
         });
 
+        //Manejo de los botones
+        Button btCarta = findViewById(R.id.bt_carta);
+
+        btCarta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vistaRestaurantePlatillos(v);
+            }
+        });
+
+        Button btVentas = findViewById(R.id.bt_ventas);
+
+        btVentas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vistaRestauranteHistorialVentas(v);
+            }
+        });
+
+        Button btUbicacion = findViewById(R.id.bt_ubicacion);
+
+        btUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vistaRestauranteUbicacion(v);
+            }
+        });
+
 
     }
 
-    //Cambio de vistas
     //Cambio vista
     public void vistaRestaurantePlatillos(View view) {
         Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
@@ -156,7 +185,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
         startActivity(intent);
     }
-    public void vistaRestauranteUbicacion(){
+    public void vistaRestauranteUbicacion(View view){
         Intent intent = new Intent(this, SuperAdminRestauranteUbicacion.class);
         startActivity(intent);
     }
