@@ -36,5 +36,7 @@ public class RepartidorHistorial extends AppCompatActivity {
         view.getId();
         startActivity(intent);
     }
-
+    public void retroceder(View view){
+        onBackPressed();
+    }
 }
