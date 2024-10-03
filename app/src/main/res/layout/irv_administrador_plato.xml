@@ -39,6 +39,7 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/platoRestaurante"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed-medium"
@@ -49,6 +50,7 @@
                         android:textSize="10sp" />
 
                     <TextView
+                        android:id="@+id/precioRestaurante"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20sp"
