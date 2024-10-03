@@ -152,6 +152,7 @@ public class RepartidorHistorial extends AppCompatActivity {
             }
         }
         intent.putExtra("id" ,pedido.getIdPedidoRepartidor().toString());
+        intent.putExtra("flag" , "historial");
         startActivity(intent);
     }
     public void verDetalleMapaPedido(View view){
@@ -168,6 +169,7 @@ public class RepartidorHistorial extends AppCompatActivity {
         intent.putExtra("idPedido",pedido.getIdPedidoRepartidor().toString());
         intent.putExtra("DestinoTienda" , pedido.getDireccionRestaurante());
         intent.putExtra("DestinoFinal",pedido.getDireccionDelivery());
+        intent.putExtra("flag" , "historial");
         startActivity(intent);
     }
 }

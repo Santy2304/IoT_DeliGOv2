@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5sp"
+    android:layout_marginBottom="5sp"
+    android:layout_marginStart="12sp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="380sp"
+        android:layout_width="400sp"
         android:layout_height="100sp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/card_repartidor"
@@ -33,7 +36,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="150sp"
+            android:layout_width="165sp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -67,7 +70,7 @@
 
             <TextView
                 android:id="@+id/id_costo"
-                android:layout_width="120sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1.5sp"
                 android:text="Costo delivery:S/.12.00"
@@ -77,6 +80,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_mapa"
             android:layout_width="70sp"
             android:layout_height="match_parent"
             android:layout_marginStart="5sp"
@@ -84,33 +88,34 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="?attr/floatingActionButtonSmallStyle"
-                android:id="@+id/id_mapa"
+                android:id="@+id/mapa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"
                 android:layout_marginTop="18sp"
                 android:contentDescription="Mapa"
-                android:onClick="verRepartidorVerMapaPedidoSinBoton"
+                android:onClick="verDetalleMapaPedido"
                 app:backgroundTint="@color/md_theme_secondary"
                 app:srcCompat="@drawable/mapa_icon_icon"
                 app:tint="@color/white" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_detail"
             android:layout_width="70sp"
             android:layout_height="match_parent"
             android:layout_marginStart="-15sp"
             android:orientation="vertical">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/olaaaaa"
+                android:id="@+id/detail"
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"
                 android:layout_marginTop="18sp"
                 android:contentDescription="Detalles"
-                android:onClick="verDetalleCompraDeliverySinBoton"
+                android:onClick="verDetalleCompraDelivery"
                 app:backgroundTint="@color/md_theme_secondary"
                 app:srcCompat="@drawable/details"
                 app:tint="@color/white" />

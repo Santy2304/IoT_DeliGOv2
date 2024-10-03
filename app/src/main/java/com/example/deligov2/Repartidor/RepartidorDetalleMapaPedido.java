@@ -33,6 +33,13 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity {
         destinoTienda.setText( intent.getStringExtra("DestinoTienda"));
         TextView destinoFinal = findViewById(R.id.destinoFinal);
         destinoFinal.setText( intent.getStringExtra("DestinoFinal"));
+
+
+        if(getIntent().getStringExtra("flag").equals("historial")){
+            //ocultamos el boton
+            findViewById(R.id.btn_aceptar).setVisibility(View.INVISIBLE);
+            findViewById(R.id.btn_aceptar).setClickable(false);
+        }
     }
     public void retroceder(View view){
         onBackPressed();
@@ -43,5 +50,6 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity {
         Intent intent = new Intent(this, RepartidorAceptacionPedido.class);
         startActivity(intent);
     }
+
 
 }
