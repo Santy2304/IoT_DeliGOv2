@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +20,11 @@ import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.PerfilRepartidor;
+import com.example.deligov2.SuperAdmin.SuperAdminAdministrador;
+import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
+import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
+import com.example.deligov2.SuperAdmin.SuperAdminRestaurante;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -56,6 +62,36 @@ public class ClienteHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_home);
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.principal);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.restaurant){
+                    Intent intentRestaurant = new Intent(ClienteHomeActivity.this, ClienteHomeActivity.class);
+                    startActivity(intentRestaurant);
+                    return true;
+                }else if(item.getItemId()==R.id.historial){
+                    Intent intentPrincipal = new Intent(ClienteHomeActivity.this, ClienteHistorialActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(ClienteHomeActivity.this, ClientePerfil.class);
+                    startActivity(intentProfile);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
+
+
 
         RecyclerView carouselRecyclerView;
         CarouselAdapter adapter2;
