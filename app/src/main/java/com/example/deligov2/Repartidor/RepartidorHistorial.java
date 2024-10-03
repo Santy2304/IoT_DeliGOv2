@@ -1,6 +1,8 @@
 package com.example.deligov2.Repartidor;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,4 +25,16 @@ public class RepartidorHistorial extends AppCompatActivity {
             return insets;
         });
     }
+
+
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, PerfilRepartidor.class);
+        startActivity(intent);
+    }
+    public void verNotificacionesRepartidor(View view ){
+        Intent intent = new Intent(this, RepartidorNotificaciones.class);
+        view.getId();
+        startActivity(intent);
+    }
+
 }
