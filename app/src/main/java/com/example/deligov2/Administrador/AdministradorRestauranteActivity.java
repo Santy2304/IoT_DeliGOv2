@@ -1,6 +1,9 @@
 package com.example.deligov2.Administrador;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.AdministradorRestauranteAdapter;
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
 import com.example.deligov2.Beans.Plato;
+import com.example.deligov2.Cliente.ClienteHistorialActivity;
+import com.example.deligov2.Cliente.ClientePerfil;
+import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.R;
 
 import java.util.ArrayList;
@@ -58,4 +64,33 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bottom_navigation_admin, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.reports){
+            startActivity(new Intent(this, AdministradorReporteClientesActivity.class));
+            return true;
+        } else if (item.getItemId()==R.id.information) {
+            startActivity(new Intent(this, AdministradorInfoRestauranteActivity.class));
+            return true;
+        } else if (item.getItemId()==R.id.principal) {
+            startActivity(new Intent(this, AdministradorRestauranteActivity.class));
+            return true;
+        } else if (item.getItemId()==R.id.profile) {
+            //startActivity(new Intent(this, AdministradorRestauranteActivity.class));
+            return true;
+        } else{
+            return super.onOptionsItemSelected(item);
+
+        }
+
+    }
+
 }

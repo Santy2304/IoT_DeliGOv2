@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/restaurant"
+        android:id="@+id/reports"
         android:enabled="true"
         android:icon="@drawable/storefront"
         android:title="Reportes"
         />
 
     <item
-        android:id="@+id/cocina"
+        android:id="@+id/information"
         android:enabled="true"
         android:icon="@drawable/baseline_fastfood_24"
         android:title="Información"
