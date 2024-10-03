@@ -59,23 +59,23 @@ public class ClienteHomeActivity extends AppCompatActivity {
 
         RecyclerView carouselRecyclerView;
         CarouselAdapter adapter2;
-        carouselRecyclerView = findViewById(R.id.carousel_recycler_view);
+//        carouselRecyclerView = findViewById(R.id.carousel_recycler_view);
 
-        List<Integer> imageList = Arrays.asList(
-                R.drawable.carrusel_1,
-                R.drawable.carrusel_2,
-                R.drawable.carrusel_3,
-                R.drawable.carrusel_4,
-                R.drawable.carrusel_5
-        );
-
-
-        adapter2 = new CarouselAdapter(this, imageList);
-        carouselRecyclerView.setAdapter(adapter2);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        carouselRecyclerView.setLayoutManager(layoutManager);
-
+//        List<Integer> imageList = Arrays.asList(
+//                R.drawable.carrusel_1,
+//                R.drawable.carrusel_2,
+//                R.drawable.carrusel_3,
+//                R.drawable.carrusel_4,
+//                R.drawable.carrusel_5
+//        );
+//
+//
+//        adapter2 = new CarouselAdapter(this, imageList);
+//        carouselRecyclerView.setAdapter(adapter2);
+//
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//        carouselRecyclerView.setLayoutManager(layoutManager);
+//
 
         notiButton = findViewById(R.id.noti_button);
         carritoButton = findViewById(R.id.cart_button);
