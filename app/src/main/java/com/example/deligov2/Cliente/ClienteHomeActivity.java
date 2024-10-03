@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.PerfilRepartidor;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -117,6 +119,23 @@ public class ClienteHomeActivity extends AppCompatActivity {
             return insets;
         });
     }
+
+
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, ClientePerfil.class);
+        startActivity(intent);
+    }
+
+    public void verHistorial(View view){
+        Intent intent = new Intent(this, ClienteHistorialActivity.class);
+        startActivity(intent);
+    }
+
+    public void verHome(View view){
+        Intent intent = new Intent(this, ClienteHomeActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

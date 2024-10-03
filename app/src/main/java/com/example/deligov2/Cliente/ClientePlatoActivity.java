@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -44,6 +45,21 @@ public class ClientePlatoActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, ClientePerfil.class);
+        startActivity(intent);
+    }
+
+    public void verHistorial(View view){
+        Intent intent = new Intent(this, ClienteHistorialActivity.class);
+        startActivity(intent);
+    }
+
+    public void verHome(View view){
+        Intent intent = new Intent(this, ClienteHomeActivity.class);
+        startActivity(intent);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
