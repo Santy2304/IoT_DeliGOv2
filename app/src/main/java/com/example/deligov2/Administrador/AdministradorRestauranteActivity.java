@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,6 +63,14 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerView.setLayoutManager(gridLayoutManager);
+
+        //Capturar el elemento de botón
+        Button historyButton = findViewById(R.id.buttonHistorial);
+
+        historyButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdministradorHistorialActivity.class);
+            startActivity(intent);
+        });
 
     }
 
