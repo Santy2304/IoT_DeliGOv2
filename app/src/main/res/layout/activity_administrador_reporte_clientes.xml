@@ -146,6 +146,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerReporteClientes"
         android:layout_width="407dp"
         android:layout_height="388dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"

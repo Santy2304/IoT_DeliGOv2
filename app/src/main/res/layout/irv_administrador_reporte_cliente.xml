@@ -39,6 +39,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/idReporteCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6sp"
@@ -48,6 +49,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/nombreCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Elizabeth Swann"
@@ -56,6 +58,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/fechaUltimoPedido"
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1.5sp"
@@ -73,6 +76,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/cantidadPedidos"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:layout_marginStart="10sp"
@@ -104,6 +108,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/gastoTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="50sp"
                 android:layout_marginStart="5sp"
