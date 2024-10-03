@@ -213,6 +213,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
     </androidx.recyclerview.widget.RecyclerView>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

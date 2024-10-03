@@ -8,6 +8,7 @@ public class PedidoPorSolicitar implements Serializable {
     private String nombreRestaurante;
     private String state;
     private float price;
+    //direccion a enviar
 
 
 

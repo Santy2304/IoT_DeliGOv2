@@ -5,21 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Ordenes;
-import com.example.deligov2.Beans.PlatilloSA;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.Cliente.ClientePlatoActivity;
-import com.example.deligov2.Cliente.ClienteTrackingActivity;
 import com.example.deligov2.R;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ClienteCarritoAdapter extends RecyclerView.Adapter<ClienteCarritoAdapter.CarritoViewHolder>{
@@ -58,7 +52,7 @@ public class ClienteCarritoAdapter extends RecyclerView.Adapter<ClienteCarritoAd
             TextView button = itemView.findViewById(R.id.foodDetails);
             button.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), ClientePlatoActivity.class);
-                intent.putExtra("idFood",platoCarrito.getIdPlatillo());
+                intent.putExtra("idFood",platoCarrito.getIdVentaPlatillo());
                 itemView.getContext().startActivity(intent);
             });
         }

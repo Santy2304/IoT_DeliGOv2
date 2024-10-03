@@ -30,7 +30,7 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
     @Override
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.irv_sup_admin_carta_list, parent, false);
-        return new RestaurantViewHolder(view);
+        return new SuperAdminRestauranteCartaAdapter.RestaurantViewHolder(view);
     }
 
     @Override
@@ -38,20 +38,11 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
         Plato carta = listaPlato.get(position);
         holder.plato = carta;
 
-        TextView tvName1 = holder.itemView.findViewById(R.id.tv_name1);
+        TextView tvName1 = holder.itemView.findViewById(R.id.tv_nameR);
         tvName1.setText(carta.getNombre());
 
-        TextView tvPrice1 = holder.itemView.findViewById(R.id.tv_price1);
-        tvPrice1.setText(carta.getNombre());
-
-        /*
-        TextView tvName2 = holder.itemView.findViewById(R.id.tv_name2);
-        tvName1.setText(carta.getNombre());
-
-        TextView tvPrice2 = holder.itemView.findViewById(R.id.tv_price2);
-        tvPrice2.setText(carta.getNombre());
-
-         */
+        TextView tvPrice1 = holder.itemView.findViewById(R.id.tv_priceR);
+        tvPrice1.setText(String.format("S/ %.2f", carta.getPrecio()));
 
     }
 
@@ -64,7 +55,7 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
         Plato plato;
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            /*
             FloatingActionButton button1 = itemView.findViewById(R.id.button1);
             button1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,6 +64,8 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
                     itemView.getContext().startActivity(intent);
                 }
             });
+
+             */
         }
     }
 

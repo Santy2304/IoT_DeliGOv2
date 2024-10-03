@@ -1,26 +1,27 @@
 package com.example.deligov2.Beans;
 
 public class VentaPlatilloSA {
-    private int idPlatillo;
+    private int idVentaPlatillo;
     private String nombre;
     private float price;
     private int cantidad;
-    private int idRestaurante;
+    private int idPlato;
 
-    public VentaPlatilloSA(int idPlatillo, String nombre, float price, int cantidad, int idRestaurante) {
-        this.idPlatillo = idPlatillo;
+    public VentaPlatilloSA(int idVentaPlatillo, String nombre, float price, int cantidad, int idPlato) {
+        this.idVentaPlatillo = idVentaPlatillo;
         this.nombre = nombre;
         this.price = price;
         this.cantidad = cantidad;
-        this.idRestaurante = idRestaurante;
+        this.idPlato = idPlato;
     }
 
-    public int getIdPlatillo() {
-        return idPlatillo;
+
+    public int getIdVentaPlatillo() {
+        return idVentaPlatillo;
     }
 
     public void setIdPlatillo(int idPlatillo) {
-        this.idPlatillo = idPlatillo;
+        this.idVentaPlatillo = idPlatillo;
     }
 
     public String getNombre() {
@@ -47,11 +48,11 @@ public class VentaPlatilloSA {
         this.cantidad = cantidad;
     }
 
-    public int getIdRestaurante() {
-        return idRestaurante;
+    public int getIdPlato() {
+        return idPlato;
     }
 
-    public void setIdRestaurante(int idRestaurante) {
-        this.idRestaurante = idRestaurante;
+    public void setIdPlato(int idRestaurante) {
+        this.idPlato = idRestaurante;
     }
 }

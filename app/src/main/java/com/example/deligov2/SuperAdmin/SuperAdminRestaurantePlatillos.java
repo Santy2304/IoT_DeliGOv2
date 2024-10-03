@@ -13,8 +13,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteCarritoAdapter;
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
 import com.example.deligov2.Adapters.SuperAdminRestauranteCartaAdapter;
 import com.example.deligov2.Beans.Cliente;
@@ -41,12 +43,12 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
     };
 
     float[] Precios  = {
-            8,
-            13,
-            11,
-            15,
-            12,
-            9
+            8.2f,
+            13.40f,
+            11.10f,
+            15.30f,
+            12.60f,
+            9.30f
     };
 
     @Override
@@ -55,12 +57,16 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_restaurante_platillos);
 
+
         //Manejo del adapter para los datos
         platos = new ArrayList<>();
 
         for (int i=0;i<6;i++){
             Plato plato = new Plato();
             plato.setNombre(nombresPlatos[i]);
+            plato.setDescripcion("Probando probando probando xd");
+            plato.setIdRestaurante(1);
+            plato.setId(i);
             plato.setPrecio(Precios[i]);
             platos.add(plato);
         }
@@ -70,10 +76,19 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         adapter.setContext(this);
         adapter.setListaPlato(platos);
 
+
         RecyclerView recyclerView = findViewById(R.id.recyclerCarta);
         recyclerView.setAdapter(adapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
-        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columna
+
+        /*
+        RecyclerView recyclerView = findViewById(R.id.recyclerCarta);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+         */
+
+
 
 
         //Manejo del top app bar

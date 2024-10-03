@@ -3,6 +3,8 @@ package com.example.deligov2.SuperAdmin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -66,6 +68,15 @@ public class SuperAdminPerfil extends AppCompatActivity {
                     return false;
                 }
 
+            }
+        });
+        //Manejo de los botones
+        Button btExit = findViewById(R.id.bt_exit);
+
+        btExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
             }
         });
 

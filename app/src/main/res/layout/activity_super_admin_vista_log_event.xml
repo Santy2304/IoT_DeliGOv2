@@ -48,7 +48,7 @@
                         android:text="Registro de eventos"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="@color/black"
-                        android:textSize="40sp"
+                        android:textSize="37sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 

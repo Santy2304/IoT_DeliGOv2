@@ -21,6 +21,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/imgPedido"
                 android:layout_width="110sp"
                 android:layout_height="130sp"
                 android:scaleType="centerCrop"
@@ -39,6 +40,7 @@
                     android:padding="5sp">
 
                     <TextView
+                        android:id="@+id/tv_idPedido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -56,6 +58,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_direccionPedido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/baseline_fmd_good_24"
@@ -64,6 +67,7 @@
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
                 <TextView
+                    android:id="@+id/tv_monto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/baseline_money_24"
@@ -72,6 +76,7 @@
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
                 <TextView
+                    android:id="@+id/link_detalle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
