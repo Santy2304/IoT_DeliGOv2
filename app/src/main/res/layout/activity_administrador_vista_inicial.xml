@@ -35,11 +35,23 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/buttonHistorial"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="90sp"
+                android:layout_marginTop="25sp"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Historial"
+                app:srcCompat="@drawable/baseline_history_24"
+                app:tint="@color/white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/noti_button"
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="140sp"
+                android:layout_marginStart="8sp"
                 android:layout_marginTop="25sp"
                 android:backgroundTint="@color/light_green"
                 android:contentDescription="Notificaciones"
