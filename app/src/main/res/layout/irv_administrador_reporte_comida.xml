@@ -39,6 +39,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/idReporteComida"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6sp"
@@ -48,6 +49,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/nombrePlatoReporte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cangreburger"
@@ -73,6 +75,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/cantidadVendida"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:layout_marginStart="10sp"
@@ -104,6 +107,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/ganancia"
                 android:layout_width="60sp"
                 android:layout_height="50sp"
                 android:layout_marginStart="5sp"
