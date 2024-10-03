@@ -106,6 +106,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerHistorialAdmin"
         android:layout_width="match_parent"
         android:layout_height="384dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"

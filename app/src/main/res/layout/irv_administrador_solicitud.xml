@@ -39,6 +39,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/idSolicitud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6sp"
@@ -48,6 +49,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/estadoSolicitud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Estado: Entregado"
@@ -56,6 +58,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/fechaSolicitud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fecha: 12/12/2024"
@@ -64,6 +67,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/costoDeliverySolicitud"
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1.5sp"

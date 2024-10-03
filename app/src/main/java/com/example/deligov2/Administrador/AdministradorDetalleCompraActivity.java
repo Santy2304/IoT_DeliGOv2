@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.AdministradorDetalleCompraAdapter;
@@ -46,8 +47,7 @@ public class AdministradorDetalleCompraActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerDetalleAdmin);
         recyclerView.setAdapter(adapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1); // 2 columnas
-        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 }
