@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +20,7 @@ import com.example.deligov2.Adapters.NotificacionesAdapter;
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Ordenes;
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
@@ -49,6 +51,34 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_historial);
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.historial);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.restaurant){
+                    Intent intentRestaurant = new Intent(ClienteHistorialActivity.this, ClienteHomeActivity.class);
+                    startActivity(intentRestaurant);
+                    return true;
+                }else if(item.getItemId()==R.id.historial){
+                    Intent intentPrincipal = new Intent(ClienteHistorialActivity.this, ClienteHistorialActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(ClienteHistorialActivity.this, ClientePerfil.class);
+                    startActivity(intentProfile);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
 
 
         lista = new ArrayList<>();
