@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void verSuperadministrador(View view) {
          startActivity(new Intent(this, SuperAdminHomeActivity.class));
-
     }
     public void verLogin(View view) {
         startActivity(new Intent(this, LoginVistaInicialApp.class));

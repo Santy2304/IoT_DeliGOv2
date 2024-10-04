@@ -12,7 +12,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.deligov2.Administrador.AdministradorHomeActivity;
+import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.RepartidorVistaHome;
+import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginInicioSesion extends AppCompatActivity {
@@ -49,10 +53,27 @@ public class LoginInicioSesion extends AppCompatActivity {
         TextInputEditText  password = findViewById(R.id.password);
         String emailEmail = email.getText().toString();
         String passwordPassword =  password.getText().toString();
-
-        if(emailEmail.equals(credenciales[0]) ){
-
+        if(passwordPassword == null || emailEmail ==null){
+        }else{
+            if(emailEmail.equals(credenciales[0])  && passwordPassword.equals(credenciales[0])){
+                Intent intent = new Intent(this, ClienteHomeActivity.class);
+                startActivity(intent);
+            }
+            if(emailEmail.equals(credenciales[1])  && passwordPassword.equals(credenciales[1])){
+                Intent intent = new Intent(this, RepartidorVistaHome.class);
+                startActivity(intent);
+            }
+            if(emailEmail.equals(credenciales[2])  && passwordPassword.equals(credenciales[2])){
+                Intent intent = new Intent(this, AdministradorHomeActivity.class);
+                startActivity(intent);
+            }
+            if(emailEmail.equals(credenciales[3])  && passwordPassword.equals(credenciales[3])){
+                Intent intent = new Intent(this, SuperAdminHomeActivity.class);
+                startActivity(intent);
+            }
         }
+
+
     }
 
 
