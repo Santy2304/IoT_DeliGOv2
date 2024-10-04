@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,6 +21,7 @@ import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,7 +63,30 @@ public class ClienteNotificacionesActivity extends AppCompatActivity {
             notificaciones.setFecha(LocalDateTime.now().plusMinutes(i*10));
             lista.add(notificaciones);
         }
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.restaurant){
+                    Intent intentRestaurant = new Intent(ClienteNotificacionesActivity.this, ClienteHomeActivity.class);
+                    startActivity(intentRestaurant);
+                    return true;
+                }else if(item.getItemId()==R.id.historial){
+                    Intent intentPrincipal = new Intent(ClienteNotificacionesActivity.this, ClienteHistorialActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(ClienteNotificacionesActivity.this, ClientePerfil.class);
+                    startActivity(intentProfile);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
         NotificacionesAdapter adapter = new NotificacionesAdapter();
         adapter.setContext(ClienteNotificacionesActivity.this);
         adapter.setListaNotificaciones(lista);

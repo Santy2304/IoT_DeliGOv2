@@ -7,12 +7,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ClientePerfil extends AppCompatActivity {
@@ -29,6 +31,34 @@ public class ClientePerfil extends AppCompatActivity {
         goBackButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ClienteHomeActivity.class);
             startActivity(intent);
+        });
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.profile);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.restaurant){
+                    Intent intentRestaurant = new Intent(ClientePerfil.this, ClienteHomeActivity.class);
+                    startActivity(intentRestaurant);
+                    return true;
+                }else if(item.getItemId()==R.id.historial){
+                    Intent intentPrincipal = new Intent(ClientePerfil.this, ClienteHistorialActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(ClientePerfil.this, ClientePerfil.class);
+                    startActivity(intentProfile);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
