@@ -69,17 +69,18 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/verPlato"
                         android:layout_width="30sp"
                         android:layout_height="30sp"
                         android:layout_marginStart="1sp"
                         android:layout_marginTop="2sp"
                         android:background="@color/light_yellow"
-                        android:onClick="verAdmiDetallePlato"
                         android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                         app:srcCompat="@drawable/baseline_eye_24" />
 
                     <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/editarPlato"
                         android:layout_width="30sp"
                         android:layout_height="30sp"
                         android:layout_marginStart="5sp"
