@@ -41,7 +41,6 @@
         android:layout_height="56dp"
         android:backgroundTint="@color/light_green"
         android:gravity="center"
-        android:onClick="saltarInicioSesion"
         android:text="Continuar"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

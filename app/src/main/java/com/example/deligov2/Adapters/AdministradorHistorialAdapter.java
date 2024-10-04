@@ -34,7 +34,7 @@ public class AdministradorHistorialAdapter extends RecyclerView.Adapter<Administ
         holder.solicitud = s;
 
         TextView textViewName = holder.itemView.findViewById(R.id.idSolicitud);
-        textViewName.setText(s.getId());
+        textViewName.setText(String.format("%d", s.getId()));
         TextView textViewEstado = holder.itemView.findViewById(R.id.estadoSolicitud);
         textViewEstado.setText(String.format("Estado: %s", s.getEstado()));
         TextView textViewFecha = holder.itemView.findViewById(R.id.fechaSolicitud);
