@@ -7,18 +7,6 @@
     android:background="@color/white"
     tools:context=".SuperAdmin.SuperAdminRegistroRestaurante1">
 
-    <!--
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    </com.google.android.material.appbar.AppBarLayout>
-    -->
-
-
-    <!--android:onClick="saltarInicioSesion"-->
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

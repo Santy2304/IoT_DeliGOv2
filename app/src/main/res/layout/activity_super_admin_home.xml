@@ -71,6 +71,7 @@
                     android:id="@+id/imgCostumer"
                     android:layout_width="80sp"
                     android:layout_height="80sp"
+                    android:onClick="vistaPanelCliente"
                     app:srcCompat="@drawable/costumer_green" />
 
                 <TextView
@@ -97,6 +98,7 @@
                     android:id="@+id/imgRepartidor"
                     android:layout_width="80sp"
                     android:layout_height="80sp"
+                    android:onClick="vistaPanelRepartidor"
                     app:srcCompat="@drawable/deliver_green2" />
 
                 <TextView
@@ -123,6 +125,7 @@
                     android:id="@+id/imgAdmin"
                     android:layout_width="80sp"
                     android:layout_height="80sp"
+                    android:onClick="vistaPanelAdmin"
                     app:srcCompat="@drawable/admin_green" />
 
                 <TextView
