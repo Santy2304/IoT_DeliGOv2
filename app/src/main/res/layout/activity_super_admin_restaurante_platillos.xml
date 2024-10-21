@@ -153,7 +153,6 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_green"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:onClick="vistaRestaurantePlatillos"
                 android:text="Carta"
                 android:textColor="@color/black"
                 android:textSize="12sp"

@@ -5,6 +5,8 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -25,6 +27,7 @@ import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +38,8 @@ public class SuperAdminAdministrador extends AppCompatActivity {
     List<Administrador> admins;
     private MaterialCardView cardAdmin;
     private GradientDrawable borderDrawable;
+    SuperAdminAdministradorListAdapter listAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,10 @@ public class SuperAdminAdministrador extends AppCompatActivity {
         setContentView(R.layout.activity_super_admin_administrador);
 
         mostrarListaAdmins();
+
+        //Para el buscador
+        TextInputEditText searchInput;
+        searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarAdmin);
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -96,6 +105,20 @@ public class SuperAdminAdministrador extends AppCompatActivity {
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
 
+        //Manejo del buscador
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                listAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
     }
 
     public void mostrarListaAdmins(){
@@ -104,7 +127,7 @@ public class SuperAdminAdministrador extends AppCompatActivity {
         admins.add(new Administrador(1,"Admin2","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
         admins.add(new Administrador(1,"Admin3","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
 
-        SuperAdminAdministradorListAdapter listAdapter = new SuperAdminAdministradorListAdapter(admins,this);
+        listAdapter = new SuperAdminAdministradorListAdapter(admins,this);
         RecyclerView recyclerView = findViewById(R.id.listAdmins);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

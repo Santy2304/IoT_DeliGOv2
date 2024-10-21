@@ -140,7 +140,6 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_green"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:onClick="vistaRestauranteResumen"
                 android:text="Ganancias"
                 android:textColor="@color/black"
                 android:textSize="12sp"
@@ -247,7 +246,6 @@
                                 android:layout_width="120dp"
                                 android:layout_height="60dp"
                                 android:contentDescription="foodImage"
-                                android:onClick="vistaUnPlato"
                                 android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/hamburguesa_royal" />
 
@@ -312,7 +310,6 @@
                                 android:layout_width="120dp"
                                 android:layout_height="60dp"
                                 android:contentDescription="foodImage"
-                                android:onClick="vistaUnPlato"
                                 android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/hamburguesa_royal" />
 
@@ -377,7 +374,6 @@
                                 android:layout_width="120dp"
                                 android:layout_height="60dp"
                                 android:contentDescription="foodImage"
-                                android:onClick="vistaUnPlato"
                                 android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/hamburguesa_royal" />
 

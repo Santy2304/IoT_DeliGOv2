@@ -2,6 +2,7 @@ package com.example.deligov2.Adapters;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,20 +10,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Cliente;
+import com.example.deligov2.Beans.RestauranteSA;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilCliente;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdminClienteListAdapter.ViewHolder>{
     private List<Cliente> mCliente;
+    private List<Cliente> mClienteS; //Esta es la listado con el filtro
     private LayoutInflater mInflater;
     private Context context;
 
@@ -31,7 +38,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mCliente = clienteList;
-
+        this.mClienteS = new ArrayList<>(clienteList);
     }
 
     @Override
@@ -50,10 +57,28 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
 
     public void setClientes(List<Cliente> clientes){mCliente = clientes;}
 
+    // Método para filtrar la lista
+    public void filter(String text) {
+        mCliente.clear();
+        if (text.isEmpty()) {
+            mCliente.addAll(mClienteS);
+        } else {
+            String filterPattern = text.toLowerCase().trim();
+            for (Cliente cliente : mClienteS) {
+                if (cliente.getNombre().toLowerCase().contains(filterPattern)) {
+                    mCliente.add(cliente);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
         TextView tvNombre, tvDni, tvCorreo;
-        FloatingActionButton btInfo;
+        FloatingActionButton btInfo,btHabilitar;
+        private boolean isClienteHabilitado;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,7 +87,8 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
             tvDni = itemView.findViewById(R.id.tv_dni);
             tvCorreo = itemView.findViewById(R.id.tv_correo);
             btInfo = itemView.findViewById(R.id.bt_info);
-
+            btHabilitar=itemView.findViewById(R.id.bt_activar);
+            isClienteHabilitado=true;
 
         }
 
@@ -70,7 +96,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
             tvNombre.setText(cliente.getNombre() + " " + cliente.getApellido());
             tvDni.setText("DNI: " + cliente.getNumDocument());
             tvCorreo.setText(cliente.getCorreo());
-
+            btHabilitar.setVisibility(View.VISIBLE);
             iconImage.setImageResource(R.drawable.elizabeth);
 
             //Posteriormente se podra hacer lo mismo con botones -- Añadir código para esa lógica
@@ -81,6 +107,56 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                     Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilCliente.class);
                     //intent.putExtra("id_cliente", cliente.getId());
                     itemView.getContext().startActivity(intent);
+                }
+            });
+
+            //Manejo de habilitar o deshabilitar cliente
+            if (!isClienteHabilitado) {
+                btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+            } else {
+                btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+            }
+
+            btHabilitar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isClienteHabilitado) {
+                        // Mostrar el diálogo para deshabilitar
+                        new MaterialAlertDialogBuilder(itemView.getContext())
+                                .setTitle("Confirmación")
+                                .setMessage("¿Estás seguro de deshabilitar?")
+                                .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        isClienteHabilitado = false;
+
+                                        btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                        Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("Cancelar", null)
+                                .show();
+                    } else {
+                        // Mostrar el diálogo para habilitar
+                        new MaterialAlertDialogBuilder(itemView.getContext())
+                                .setTitle("Confirmación")
+                                .setMessage("¿Estás seguro de habilitar?")
+                                .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        isClienteHabilitado = true; //restaurante.setHabilitado(true)
+
+                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                        Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("Cancelar", null)
+                                .show();
+                    }
                 }
             });
         }

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
     List<Cliente> clientes;
     private MaterialCardView cardCliente;
     private GradientDrawable borderDrawable;
-
+    SuperAdminClienteListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,9 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
 
         mostrarListaClientes();
 
+        //Para el buscador
+        TextInputEditText searchInput;
+        searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarCliente);
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -102,6 +108,20 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
 
+        //Manejo del buscador
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                listAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
     }
 
     //Colocar datos
@@ -114,7 +134,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         clientes.add(new  Cliente(5,"Papaya","Del Lago","cliente5@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
 
 
-        SuperAdminClienteListAdapter listAdapter = new SuperAdminClienteListAdapter(clientes,this);
+        listAdapter = new SuperAdminClienteListAdapter(clientes,this);
         RecyclerView recyclerView = findViewById(R.id.listClientesRecyler);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);

@@ -163,7 +163,6 @@
                 android:layout_marginStart="2sp"
                 android:backgroundTint="@color/light_green"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:onClick="vistaRestauranteHistorialVentas"
                 android:textColor="@color/black"
                 android:text="Ventas"
                 android:textSize="12sp"

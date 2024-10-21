@@ -64,12 +64,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgRepartidor"
+        app:boxCornerRadiusTopStart="23dp"
+        app:boxCornerRadiusTopEnd="23dp"
+        app:boxCornerRadiusBottomStart="23dp"
+        app:boxCornerRadiusBottomEnd="23dp"
         app:startIconDrawable="@drawable/baseline_search_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/buscarRestaurante"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:maxHeight="48dp"
+            android:padding="8dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 
