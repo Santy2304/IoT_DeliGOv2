@@ -21,7 +21,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             app:menu="@menu/top_app_bar_super_admin"
-            app:navigationIcon="@drawable/icons8_izquierda_circulo_48"
             app:title="@string/title"
             app:titleTextAppearance="@style/ToolbarTitleStyle"
             app:titleTextColor="@color/light_green" />

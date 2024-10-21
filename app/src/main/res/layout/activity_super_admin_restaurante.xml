@@ -33,7 +33,7 @@
         android:layout_height="40sp"
         android:text="Panel de restaurante"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/light_green"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

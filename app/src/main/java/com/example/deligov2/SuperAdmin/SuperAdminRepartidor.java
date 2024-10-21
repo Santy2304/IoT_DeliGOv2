@@ -5,6 +5,8 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -25,6 +27,7 @@ import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +38,8 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     List<Repartidor> repartidores;
     private MaterialCardView cardRepartidor;
     private GradientDrawable borderDrawable;
+    SuperAdminRepartidorListAdapter listAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,10 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         setContentView(R.layout.activity_super_admin_repartidor);
 
         mostrarListaRepartidores();
+
+        //Para el buscador
+        TextInputEditText searchInput;
+        searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarRepartidor);
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -95,6 +104,20 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
+
+        //Manejo del buscador
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                listAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
     }
 
     public void mostrarListaRepartidores(){
@@ -104,7 +127,7 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         repartidores.add(new Repartidor(1,"Sisifo","Star",true,true,"12345678","repartidor@gmail.com","Av.Urubamba","987654321"));
 
 
-        SuperAdminRepartidorListAdapter listAdapter = new SuperAdminRepartidorListAdapter(repartidores,this);
+        listAdapter = new SuperAdminRepartidorListAdapter(repartidores,this);
         RecyclerView recyclerView = findViewById(R.id.listRepartidor);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
