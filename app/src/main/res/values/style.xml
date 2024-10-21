@@ -17,8 +17,9 @@
 
     <!-- Para el titulo en los app - bar -->
     <style name="ToolbarTitleStyle">
-        <item name="android:textSize">35sp</item>
+        <item name="android:textSize">48sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
 
     <style name="activeIndicator">
