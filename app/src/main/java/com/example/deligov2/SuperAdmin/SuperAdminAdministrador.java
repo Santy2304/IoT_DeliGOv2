@@ -1,6 +1,9 @@
 package com.example.deligov2.SuperAdmin;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,7 @@ import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +33,8 @@ import java.util.List;
 public class SuperAdminAdministrador extends AppCompatActivity {
 
     List<Administrador> admins;
+    private MaterialCardView cardAdmin;
+    private GradientDrawable borderDrawable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +86,16 @@ public class SuperAdminAdministrador extends AppCompatActivity {
 
             }
         });
+
+        //Efectos
+        cardAdmin = findViewById(R.id.materialCardViewAdmin);
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(cardAdmin, "translationX", 0f, 10f);
+        animator.setDuration(500);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.start();
+
     }
 
     public void mostrarListaAdmins(){
