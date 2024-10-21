@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +25,8 @@ import com.example.deligov2.Beans.Logs;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,7 +67,7 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setSelectedItemId(R.id.restaurant);
+        //bottomNavigationView.setSelectedItemId(R.id.restaurant);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -89,6 +95,52 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
 
         //Manejo de mostrar datos
         mostrarListaLogs();
+
+        //Manejo del side bar
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        FloatingActionButton btFiltro = findViewById(R.id.bt_filtro);
+
+        btFiltro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.END);
+                }
+            }
+        });
+
+        // Manejar los botones dentro del sidebar
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Button btnLimpiar = navigationView.findViewById(R.id.btn_limpiar);
+        Button btnMostrar = navigationView.findViewById(R.id.btn_mostrar);
+
+        btnLimpiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox checkCliente = navigationView.findViewById(R.id.check_cliente);
+                CheckBox checkRepartidor = navigationView.findViewById(R.id.check_repartidor);
+                CheckBox checkAdministrador = navigationView.findViewById(R.id.check_administrador);
+                CheckBox checkRegistros = navigationView.findViewById(R.id.check_registros);
+                CheckBox checkPedidos = navigationView.findViewById(R.id.check_pedidos);
+                CheckBox checkRechazos = navigationView.findViewById(R.id.check_rechazos);
+
+                checkCliente.setChecked(false);
+                checkRepartidor.setChecked(false);
+                checkAdministrador.setChecked(false);
+                checkRegistros.setChecked(false);
+                checkPedidos.setChecked(false);
+                checkRechazos.setChecked(false);
+            }
+        });
+
+        btnMostrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //En el futuro irá la lógica para los filtros seleccionados
+            }
+        });
     }
 
 

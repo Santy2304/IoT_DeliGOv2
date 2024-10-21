@@ -1,14 +1,17 @@
 package com.example.deligov2.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Restaurante;
@@ -18,12 +21,15 @@ import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminRegistroAdministrador1;
 import com.example.deligov2.SuperAdmin.SuperAdminRestauranteResumen;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<SuperAdminRestauranteListAdapter.ViewHolder>{
     private List<RestauranteSA> mRestaurante;
+    private List<RestauranteSA> mRestauranteS; //Esta es la listado con el filtro
     private LayoutInflater mInflater;
     private Context context;
 
@@ -31,6 +37,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mRestaurante = restauranteList;
+        this.mRestauranteS = new ArrayList<>(restauranteList);
     }
 
     @Override
@@ -49,11 +56,28 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
 
     public void setRestaurante(List<RestauranteSA> restaurantes){mRestaurante = restaurantes;}
 
+    // Método para filtrar la lista
+    public void filter(String text) {
+        mRestaurante.clear();
+        if (text.isEmpty()) {
+            mRestaurante.addAll(mRestauranteS);
+        } else {
+            String filterPattern = text.toLowerCase().trim();
+            for (RestauranteSA restaurante : mRestauranteS) {
+                if (restaurante.getNombre().toLowerCase().contains(filterPattern)) {
+                    mRestaurante.add(restaurante);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
         TextView tvNombre, tvGanancia, tvAdmin;
         FloatingActionButton btVer,btHabilitar,btDeshabilitar;
 
+        private boolean isRestauranteHabilitado;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,10 +88,13 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
             btVer = itemView.findViewById(R.id.bt_info);
             btHabilitar=itemView.findViewById(R.id.bt_activar);
             btDeshabilitar=itemView.findViewById(R.id.bt_desactivar);
+
+            isRestauranteHabilitado = true; //restaurante.getHabilitado
         }
 
         public void bindData(final RestauranteSA restaurante) {
             int idAdmin = restaurante.getIdAdmin();
+
 
             if(idAdmin==0){
                 iconImage.setImageResource(R.drawable.bembos_logo);
@@ -88,11 +115,13 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                 });
 
             }else{
+
                 iconImage.setImageResource(R.drawable.bembos_logo);
                 tvGanancia.setText("S/"+ restaurante.getMonto());
                 tvNombre.setText(restaurante.getNombre());
                 tvAdmin.setText("Admin ola");
-
+                btHabilitar.setVisibility(View.VISIBLE);
+                btDeshabilitar.setVisibility(View.INVISIBLE);
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -100,6 +129,55 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                         itemView.getContext().startActivity(intent);
                     }
                 });
+                if (!isRestauranteHabilitado) {
+                    btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                } else {
+                    btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+
+                }
+                btHabilitar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isRestauranteHabilitado) {
+                            // Mostrar el diálogo para deshabilitar
+                            new MaterialAlertDialogBuilder(itemView.getContext())
+                                    .setTitle("Confirmación")
+                                    .setMessage("¿Estás seguro de deshabilitar?")
+                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            isRestauranteHabilitado = false;
+
+                                            btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                                            btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                            Toast.makeText(itemView.getContext(), "Restaurante deshabilitado", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancelar", null)
+                                    .show();
+                        } else {
+                            // Mostrar el diálogo para habilitar
+                            new MaterialAlertDialogBuilder(itemView.getContext())
+                                    .setTitle("Confirmación")
+                                    .setMessage("¿Estás seguro de habilitar?")
+                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            isRestauranteHabilitado = true; //restaurante.setHabilitado(true)
+
+                                            btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                                            btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                            Toast.makeText(itemView.getContext(), "Restaurante habilitado", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancelar", null)
+                                    .show();
+                        }
+                    }
+                });
+
             }
 
         }

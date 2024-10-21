@@ -60,19 +60,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="6dp"
             android:layout_marginStart="3sp"
             android:layout_marginEnd="3sp"
+            app:errorEnabled="true"
             android:hint="@string/email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/adminNombre"
+                android:id="@+id/adminCorreo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:text=" "
                 app:startIconDrawable="@drawable/baseline_person_outline_24" />
         </com.google.android.material.textfield.TextInputLayout>

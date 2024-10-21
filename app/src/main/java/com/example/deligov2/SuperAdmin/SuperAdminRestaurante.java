@@ -2,6 +2,8 @@ package com.example.deligov2.SuperAdmin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -22,6 +24,7 @@ import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,12 +32,18 @@ import java.util.List;
 
 public class SuperAdminRestaurante extends AppCompatActivity {
     List<RestauranteSA> restaurantes;
+    SuperAdminRestauranteListAdapter listAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_restaurante);
 
+
+        //Para el buscador
+        TextInputEditText searchInput;
+        searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarRestaurante);
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -93,19 +102,31 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         mostrarListaRestaurante();
 
 
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                listAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
     }
 
     public void mostrarListaRestaurante(){
         restaurantes = new ArrayList<>();
         String[] categ = {"ola", "ola"};
         restaurantes.add(new RestauranteSA("Bembos","9:00 - 21:00",categ,1,1450.20f,1,true));
-        restaurantes.add(new RestauranteSA("Bembos2","9:00 - 21:00",categ,1,1450.20f,1,true));
+        restaurantes.add(new RestauranteSA("Prueba2","9:00 - 21:00",categ,1,1450.20f,1,true));
         restaurantes.add(new RestauranteSA("Bembos3","9:00 - 21:00",categ,0,0.0f,0,true));
         restaurantes.add(new RestauranteSA("Bembos4","9:00 - 21:00",categ,0,0.0f,0,true));
         restaurantes.add(new RestauranteSA("Bembos5","9:00 - 21:00",categ,0,0.0f,0,true));
 
-
-        SuperAdminRestauranteListAdapter listAdapter = new SuperAdminRestauranteListAdapter(restaurantes,this);
+        listAdapter = new SuperAdminRestauranteListAdapter(restaurantes, this);
         RecyclerView recyclerView = findViewById(R.id.listRestaurantesPanel);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);

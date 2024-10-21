@@ -60,12 +60,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="6dp"
             android:layout_marginStart="3sp"
             android:layout_marginEnd="3sp"
+            app:errorEnabled="true"
             android:hint="@string/nombre">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -79,11 +81,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
+            android:id="@+id/apellidoLayout"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="2dp"
             android:layout_marginStart="3sp"
             android:layout_marginEnd="3sp"
+            app:errorEnabled="true"
             android:hint="@string/apellido">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -109,11 +113,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
+            android:id="@+id/dniLayout"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="2dp"
             android:layout_marginStart="3sp"
             android:layout_marginEnd="3sp"
+            app:errorEnabled="true"
             android:hint="@string/dni">
 
             <com.google.android.material.textfield.TextInputEditText

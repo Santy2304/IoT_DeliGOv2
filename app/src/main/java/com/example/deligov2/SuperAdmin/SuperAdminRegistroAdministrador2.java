@@ -1,6 +1,7 @@
 package com.example.deligov2.SuperAdmin;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
 
@@ -72,10 +75,27 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
 
         //Manejo de botones
         Button btContinuar = findViewById(R.id.aceptar);
+        TextInputEditText adminCorreo = findViewById(R.id.adminCorreo);
+        TextInputLayout emailLayout = findViewById(R.id.emailLayout);
 
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email = adminCorreo.getText().toString().trim();
+
+                if (email.isEmpty()) {
+                    emailLayout.setError("El correo no puede estar vacío");
+                    emailLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                    return;
+                }
+
+                if (!email.contains("@")) {
+                    emailLayout.setError("El correo debe contener un '@'");
+                    emailLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                    return;
+                }
+
+                emailLayout.setError(null);
                 vistaRegistroAdminCorrect();
             }
         });

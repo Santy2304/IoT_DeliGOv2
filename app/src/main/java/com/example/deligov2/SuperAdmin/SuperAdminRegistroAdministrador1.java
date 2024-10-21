@@ -3,6 +3,7 @@ package com.example.deligov2.SuperAdmin;
 import static android.app.PendingIntent.getActivity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
 
@@ -93,11 +96,60 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
 
         //Manejo de botones
         Button btContinuar = findViewById(R.id.continuar1);
+        TextInputEditText adminName = findViewById(R.id.adminNombre);
+        TextInputLayout nameLayout = findViewById(R.id.nameLayout);
+
+        TextInputEditText adminApellido = findViewById(R.id.adminApellido);
+        TextInputLayout apellidoLayout = findViewById(R.id.apellidoLayout);
+
+        TextInputEditText adminDni = findViewById(R.id.adminNumeroDocumento);
+        TextInputLayout dniLayout = findViewById(R.id.dniLayout);
 
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRegistroAdmin2();
+                String name = adminName.getText().toString().trim();
+                String apellido = adminApellido.getText().toString().trim();
+                String dni = adminDni.getText().toString().trim();
+
+                if (name.isEmpty()) {
+                    nameLayout.setError("Complete este campo");
+                    nameLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                    return;
+                }else{
+                    nameLayout.setError(null);
+                }
+
+                if (apellido.isEmpty()) {
+                    apellidoLayout.setError("Complete este campo");
+                    apellidoLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                    return;
+                }else{
+                    apellidoLayout.setError(null);
+
+                }
+
+                if (dni.isEmpty()) {
+                    dniLayout.setError("Complete este campo");
+                    dniLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                    return;
+                }else{
+                    dniLayout.setError(null);
+                    if (!(dni.length()==8)) {
+                        dniLayout.setError("El documento debe tener 8 digítos");
+                        dniLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                        return;
+                    }else{
+                        dniLayout.setError(null);
+                    }
+                }
+
+                if(!(name.isEmpty() && apellido.isEmpty() && dni.isEmpty() && dni.length()!=8)){
+                    nameLayout.setError(null);
+                    apellidoLayout.setError(null);
+                    dniLayout.setError(null);
+                    vistaRegistroAdmin2();
+                }
             }
         });
 
