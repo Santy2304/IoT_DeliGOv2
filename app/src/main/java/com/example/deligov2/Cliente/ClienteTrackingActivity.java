@@ -80,29 +80,32 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         String content;
 
 
-        if(slider.getValue()<50 && slider.getValue()>=35){
-            title="Tu pedido está en preparación";
-            content="Los cocineros ya leyeron tu pedido y lo estan cocinando";
-            lanzarNotificacion(title,content);
-        } else if (slider.getValue()<64 && slider.getValue()>=52) {
-            title="Tu pedido está listo";
-            content="El pedido ya esta cocinado y a la espera de un repartidor que lo recoja.";
-            lanzarNotificacion(title,content);
+        slider.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(Slider slider, float value, boolean fromUser) {
+                String title;
+                String content;
 
+                if(value < 50 && value >= 35){
+                    title = "Tu pedido está en preparación";
+                    content = "Los cocineros ya leyeron tu pedido y lo están cocinando";
+                    lanzarNotificacion(title, content);
+                } else if (value < 64 && value >= 52) {
+                    title = "Tu pedido está listo";
+                    content = "El pedido ya está cocinado y a la espera de un repartidor que lo recoja.";
+                    lanzarNotificacion(title, content);
+                } else if (value < 85 && value >= 70) {
+                    title = "Tu pedido está en camino";
+                    content = "El repartidor ha tomado tu pedido y está en camino al destino.";
+                    lanzarNotificacion(title, content);
+                } else if (value == 100) {
+                    title = "Tu pedido ha llegado";
+                    content = "El repartidor ha llegado al destino.";
+                    lanzarNotificacion(title, content);
+                }
+            }
+        });
 
-        } else if (slider.getValue()<85 && slider.getValue()>=70) {
-            title="Tu pedido está en camino";
-            content="El repartidor ha tomado tu pedido y esta en camino al destino";
-            lanzarNotificacion(title,content);
-
-
-        } else if (slider.getValue()==100) {
-            title="Tu pedido ha llegado";
-            content="El repartidor ha llegado al destino.";
-            lanzarNotificacion(title,content);
-
-
-        }
 
 
         lista = new ArrayList<>();
