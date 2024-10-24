@@ -106,7 +106,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     listoText.setTextColor(Color.BLACK);
                     caminoText.setTextColor(Color.BLACK);
                     entregadoTexT.setTextColor(Color.BLACK);
-                    preparacionText.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
+                    preparacionText.setTextColor(getResources().getColor(R.color.blue));
                     lanzarNotificacion(title, content);
                 } else if (value < 64 && value >= 52) {
                     title = "Tu pedido está listo";
@@ -115,12 +115,12 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     caminoText.setTextColor(Color.BLACK);
                     entregadoTexT.setTextColor(Color.BLACK);
                     content = "El pedido ya está cocinado y a la espera de un repartidor que lo recoja.";
-                    listoText.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
+                    listoText.setTextColor(getResources().getColor(R.color.blue));
                     lanzarNotificacion(title, content);
                 } else if (value < 85 && value >= 70) {
                     title = "Tu pedido está en camino";
                     content = "El repartidor ha tomado tu pedido y está en camino al destino.";
-                    caminoText.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
+                    caminoText.setTextColor(getResources().getColor(R.color.blue));
                     recibidoText.setTextColor(Color.BLACK);
                     listoText.setTextColor(Color.BLACK);
                     preparacionText.setTextColor(Color.BLACK);
@@ -129,7 +129,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                 } else if (value == 100) {
                     title = "Tu pedido ha llegado";
                     content = "El repartidor ha llegado al destino.";
-                    entregadoTexT.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
+                    entregadoTexT.setTextColor(getResources().getColor(R.color.blue));
                     recibidoText.setTextColor(Color.BLACK);
                     listoText.setTextColor(Color.BLACK);
                     caminoText.setTextColor(Color.BLACK);
