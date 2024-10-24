@@ -57,6 +57,50 @@
         app:layout_constraintTop_toBottomOf="@+id/banner" />
 
     <LinearLayout
+        android:id="@+id/linearLayout19"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-45sp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/banner"
+        app:layout_constraintVertical_bias="0.293">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/clientesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="100sp"
+            android:layout_marginTop="8sp"
+            android:backgroundTint="@color/light_green"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:paddingLeft="-5sp"
+            android:paddingRight="-5sp"
+            android:text="Clientes"
+            android:textSize="15sp"
+            app:backgroundTint="@color/md_theme_secondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/comidaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="30sp"
+            android:layout_marginTop="8sp"
+            android:layout_marginEnd="100sp"
+            android:backgroundTint="@color/light_green"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:paddingLeft="-5sp"
+            android:paddingRight="-5sp"
+            android:text="Comida"
+            android:textSize="15sp"
+            app:backgroundTint="@color/md_theme_secondary" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,78 +111,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/banner"
-        app:layout_constraintVertical_bias="0.304">
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="80sp"
-            android:layout_height="35sp"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-4sp"
-            android:paddingRight="-4sp"
-            android:text="Mayor cantidad"
-            android:textSize="10sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="80sp"
-            android:layout_height="35sp"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Mayor ganancia"
-            android:textSize="10sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="65sp"
-            android:layout_height="35sp"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Último mes"
-            android:textSize="10sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="40sp"
-            android:layout_height="35sp"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Hoy"
-            android:textSize="10sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="65sp"
-            android:layout_height="35sp"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Esta semana"
-            android:textSize="10sp"
-            app:backgroundTint="@color/md_theme_secondary" />
+        app:layout_constraintVertical_bias="0.327">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5sp"
+            android:layout_marginStart="350dp"
             android:backgroundTint="@color/light_green"
             android:contentDescription="filtro"
             app:srcCompat="@drawable/filterpx"
@@ -148,14 +127,16 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerReporteComida"
         android:layout_width="match_parent"
-        android:layout_height="409dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        android:layout_height="461dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_admin"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout20" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout20"
+        app:layout_constraintVertical_bias="0.171" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/bottom_navigation_admin"
         android:layout_width="410sp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

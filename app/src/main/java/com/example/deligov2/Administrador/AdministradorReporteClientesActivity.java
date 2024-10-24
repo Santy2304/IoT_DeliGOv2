@@ -1,8 +1,11 @@
 package com.example.deligov2.Administrador;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +15,7 @@ import com.example.deligov2.Adapters.AdministradorReporteClientesAdapter;
 import com.example.deligov2.Beans.ReporteCliente;
 import com.example.deligov2.Beans.Solicitud;
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -62,6 +66,38 @@ public class AdministradorReporteClientesActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerReporteClientes);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //Botones para cambiar entre reportes
+        findViewById(R.id.comidaButton).setOnClickListener(v -> {
+            Intent intent = new Intent(this, AdministradorReporteComidaActivity.class);
+            startActivity(intent);
+        });
+
+        //Navegación por el navigation bar
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_admin);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.reports){
+                    Intent intentReportes = new Intent(AdministradorReporteClientesActivity.this, AdministradorReporteClientesActivity.class);
+                    startActivity(intentReportes);
+                    return true;
+                }else if(item.getItemId()==R.id.information){
+                    Intent intentInformation = new Intent(AdministradorReporteClientesActivity.this, AdministradorInfoRestauranteActivity.class);
+                    startActivity(intentInformation);
+                    return true;
+                }else if(item.getItemId()==R.id.principal){
+                    Intent intentPrincipal = new Intent(AdministradorReporteClientesActivity.this, AdministradorRestauranteActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
 
     }
 }
