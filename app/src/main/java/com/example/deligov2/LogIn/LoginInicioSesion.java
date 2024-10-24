@@ -121,12 +121,10 @@ public class LoginInicioSesion extends AppCompatActivity {
         } else {
             contrasenaLayout.setError(null); // Limpiar error si es válida
         }
-
         return isValid;
     }
 
     public void crearCanalNotificacion(){
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
                     "Canal notificaciones default",
@@ -135,9 +133,7 @@ public class LoginInicioSesion extends AppCompatActivity {
             channel.enableVibration(true);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-
             askPermission();
-
         }
     }
 
