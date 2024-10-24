@@ -42,7 +42,7 @@ public class LoginVistaInicialApp extends AppCompatActivity {
                 // Finalizar la actividad actual
                 finish();
             }
-        }, 10000);  // 15000 milisegundos = 15 segundos
+        }, 3000);  // 15000 milisegundos = 15 segundos
     }
 
 
