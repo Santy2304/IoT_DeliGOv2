@@ -1,12 +1,19 @@
 package com.example.deligov2.LogIn;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.deligov2.Administrador.AdministradorHomeActivity;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
+import com.example.deligov2.Cliente.ClienteTrackingActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
@@ -21,6 +29,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginInicioSesion extends AppCompatActivity {
+    String channelId = "oli";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +41,7 @@ public class LoginInicioSesion extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        crearCanalNotificacion();
     }
 
 
@@ -114,6 +124,40 @@ public class LoginInicioSesion extends AppCompatActivity {
 
         return isValid;
     }
+
+    public void crearCanalNotificacion(){
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Canal notificaciones default",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Canal para notificaciones con prioridad default");
+            channel.enableVibration(true);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+            askPermission();
+
+        }
+    }
+
+
+    public void askPermission(){
+        //android.os.Build.VERSION_CODES.TIRAMISU == 33
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) ==
+                        PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{POST_NOTIFICATIONS},
+                    101);
+        }
+
+    }
+
+
+
+
 
 
 
