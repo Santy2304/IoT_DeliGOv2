@@ -28,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClienteCarrito extends AppCompatActivity {
     ArrayList<VentaPlatilloSA> lista;
@@ -171,4 +172,18 @@ public class ClienteCarrito extends AppCompatActivity {
         }
 
     }
+    // Mueve el método aquí
+    public void deleteFood(View view) {
+        // Necesitas obtener la posición del item que se clicó
+        RecyclerView recyclerView = findViewById(R.id.recy);
+        int position = recyclerView.getChildAdapterPosition(view);
+        ClienteCarritoAdapter adapter = new ClienteCarritoAdapter();
+
+        // Ahora elimina el ítem de la lista en tu Adapter
+        // Debes tener acceso a tu lista de datos
+        adapter.setListaPlatosVentas((List<VentaPlatilloSA>) adapter.getListaPlatosVentas().remove(position));
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position, adapter.getListaPlatosVentas().size());
+    }
+
 }
