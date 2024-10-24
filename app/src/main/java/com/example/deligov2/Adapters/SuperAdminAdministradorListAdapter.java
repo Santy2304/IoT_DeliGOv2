@@ -64,7 +64,7 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
             String filterPattern = text.toLowerCase().trim();
             for (Administrador admin : mAdminS) {
                 if (admin.getNombre().toLowerCase().contains(filterPattern)) {
-                    mAdminS.add(admin);
+                    mAdmin.add(admin);
                 }
             }
         }

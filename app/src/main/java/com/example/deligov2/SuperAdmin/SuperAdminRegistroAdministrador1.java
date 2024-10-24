@@ -5,6 +5,7 @@ import static android.app.PendingIntent.getActivity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Administrador;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,6 +31,9 @@ import com.google.android.material.textfield.TextInputLayout;
 public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
 
     Spinner tipoDocumento;
+    private TextInputEditText nameAdmin;
+    private TextInputEditText apellidoAdmin;
+    private TextInputEditText numDocumentAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,24 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
 
             }
         });
+        //Manejo de datos
+        nameAdmin = findViewById(R.id.adminNombre);
+        apellidoAdmin = findViewById(R.id.adminApellido);
+        numDocumentAdmin =findViewById(R.id.adminNumeroDocumento);
+
+        String nameA = nameAdmin.getText().toString().trim();
+        String apellidoA = apellidoAdmin.getText().toString().trim();
+        String numA = numDocumentAdmin.getText().toString().trim();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        String nameR = intent.getStringExtra("nr1");
+        Log.d("Registro Admin 1", "Nombre del restaurante: " + nameR);
+        String cNameR;
+        if(nameR != null){
+            cNameR = nameR;
+        }else{
+            cNameR = "Nombre no disponible";
+        }
 
         //Manejo de botones
         Button btContinuar = findViewById(R.id.continuar1);
@@ -116,17 +139,12 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
                     nameLayout.setError("Complete este campo");
                     nameLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
                     return;
-                }else{
-                    nameLayout.setError(null);
                 }
 
                 if (apellido.isEmpty()) {
                     apellidoLayout.setError("Complete este campo");
                     apellidoLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
                     return;
-                }else{
-                    apellidoLayout.setError(null);
-
                 }
 
                 if (dni.isEmpty()) {
@@ -139,17 +157,15 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
                         dniLayout.setError("El documento debe tener 8 digítos");
                         dniLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
                         return;
-                    }else{
-                        dniLayout.setError(null);
                     }
                 }
 
-                if(!(name.isEmpty() && apellido.isEmpty() && dni.isEmpty() && dni.length()!=8)){
-                    nameLayout.setError(null);
-                    apellidoLayout.setError(null);
-                    dniLayout.setError(null);
-                    vistaRegistroAdmin2();
-                }
+                nameLayout.setError(null);
+                apellidoLayout.setError(null);
+                dniLayout.setError(null);
+                vistaRegistroAdmin2(cNameR,nameA,apellidoA,numA);
+
+
             }
         });
 
@@ -163,8 +179,12 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
         });
     }
 
-    public void vistaRegistroAdmin2(){
+    public void vistaRegistroAdmin2(String nameR, String name, String apellido, String num){
         Intent intent = new Intent(this, SuperAdminRegistroAdministrador2.class);
+        intent.putExtra("nr2",nameR);
+        intent.putExtra("adminName",name);
+        intent.putExtra("adminApellido",apellido);
+        intent.putExtra("adminDoc",num);
         startActivity(intent);
     }
 

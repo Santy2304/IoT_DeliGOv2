@@ -14,11 +14,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class SuperAdminRestauranteUbicacion extends AppCompatActivity {
+public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements OnMapReadyCallback {
 
+    GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,8 +111,39 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity {
                 vistaRestaurantePlatillos(v);
             }
         });
+
+        //Manejo del mapa
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapRestaurant);
+        mapFragment.getMapAsync(this);
+
+    }
+    //Mapa
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap){
+        mMap = googleMap;
+        /*
+        this.mMap.setOnMapClickListener(this::onMapClick);
+        this.mMap.setOnMapLongClickListener(this::onMapLongClick);
+
+         */
+
+        LatLng ubicacion = new LatLng(-12.0748234,-77.092355);
+        mMap.addMarker(new MarkerOptions().position(ubicacion).title("Restaurante"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacion));
     }
 
+    /*
+    @Override
+    public void onMapClick(@NonNull LatLng latLng){
+
+    }
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng latLng){
+
+    }
+
+     */
     //Cambio vista
     public void vistaRestauranteResumen(View view) {
         Intent intent = new Intent(this, SuperAdminRestauranteResumen.class);
