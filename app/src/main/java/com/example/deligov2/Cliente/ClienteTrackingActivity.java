@@ -7,12 +7,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -40,6 +42,11 @@ public class ClienteTrackingActivity extends AppCompatActivity {
 
     String channelId = "noti";
     Button repartidorButton;
+    TextView recibidoText;
+    TextView preparacionText;
+    TextView listoText;
+    TextView caminoText;
+    TextView entregadoTexT;
     Button qrButton;
     Slider slider;
     FloatingActionButton backButton;
@@ -79,6 +86,12 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         String title;
         String content;
 
+        recibidoText = findViewById(R.id.recibido);
+        preparacionText = findViewById(R.id.preparacion);
+        listoText = findViewById(R.id.listo);
+        caminoText = findViewById(R.id.camino);
+        entregadoTexT = findViewById(R.id.entregado);
+
 
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
@@ -89,18 +102,38 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                 if(value < 50 && value >= 35){
                     title = "Tu pedido está en preparación";
                     content = "Los cocineros ya leyeron tu pedido y lo están cocinando";
+                    recibidoText.setTextColor(Color.BLACK);
+                    listoText.setTextColor(Color.BLACK);
+                    caminoText.setTextColor(Color.BLACK);
+                    entregadoTexT.setTextColor(Color.BLACK);
+                    preparacionText.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
                     lanzarNotificacion(title, content);
                 } else if (value < 64 && value >= 52) {
                     title = "Tu pedido está listo";
+                    recibidoText.setTextColor(Color.BLACK);
+                    preparacionText.setTextColor(Color.BLACK);
+                    caminoText.setTextColor(Color.BLACK);
+                    entregadoTexT.setTextColor(Color.BLACK);
                     content = "El pedido ya está cocinado y a la espera de un repartidor que lo recoja.";
+                    listoText.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
                     lanzarNotificacion(title, content);
                 } else if (value < 85 && value >= 70) {
                     title = "Tu pedido está en camino";
                     content = "El repartidor ha tomado tu pedido y está en camino al destino.";
+                    caminoText.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
+                    recibidoText.setTextColor(Color.BLACK);
+                    listoText.setTextColor(Color.BLACK);
+                    preparacionText.setTextColor(Color.BLACK);
+                    entregadoTexT.setTextColor(Color.BLACK);
                     lanzarNotificacion(title, content);
                 } else if (value == 100) {
                     title = "Tu pedido ha llegado";
                     content = "El repartidor ha llegado al destino.";
+                    entregadoTexT.setTextColor(getResources().getColor(R.color.colorCustomColor1Container));
+                    recibidoText.setTextColor(Color.BLACK);
+                    listoText.setTextColor(Color.BLACK);
+                    caminoText.setTextColor(Color.BLACK);
+                    preparacionText.setTextColor(Color.BLACK);
                     lanzarNotificacion(title, content);
                 }
             }
