@@ -1,6 +1,8 @@
 package com.example.deligov2.Beans;
 
-public class Administrador {
+import java.io.Serializable;
+
+public class Administrador implements Serializable {
     private int idAdmin;
     private String nombre;
     private String apellido;
@@ -83,5 +85,16 @@ public class Administrador {
 
     public void setNumDocumento(String numDocumento) {
         this.numDocumento = numDocumento;
+    }
+
+    //Para verificar que no esté vacío
+    public boolean isEmpty() {
+        return idAdmin <= 0 ||
+                (nombre == null || nombre.isEmpty()) ||
+                (apellido == null || apellido.isEmpty()) ||
+                (correo == null || correo.isEmpty()) ||
+                (restaurante == null || restaurante.isEmpty()) ||
+                (ubicacionRestaurante == null || ubicacionRestaurante.isEmpty()) ||
+                (numDocumento == null || numDocumento.isEmpty());
     }
 }

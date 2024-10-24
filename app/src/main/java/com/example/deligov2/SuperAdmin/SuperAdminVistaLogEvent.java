@@ -2,6 +2,7 @@ package com.example.deligov2.SuperAdmin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -92,9 +93,15 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
             }
         });
 
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        String nameR = intent.getStringExtra("restaurante"); //por ahora solo fue enviado el nombre
+        Log.d("Evento log", "Nombre del restaurante: " + nameR);
+
+        Administrador admin = (Administrador) intent.getSerializableExtra("admin");
 
         //Manejo de mostrar datos
-        mostrarListaLogs();
+        mostrarListaLogs(nameR, admin);
 
         //Manejo del side bar
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -145,8 +152,14 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
 
 
 
-    public void mostrarListaLogs(){
+    public void mostrarListaLogs(String name, Administrador admin){
         logs = new ArrayList<>();
+        if(name != null){
+            logs.add(new Logs(6,"Se ha registrado el restaurante "+name+".", new Date()));
+        }
+        if( admin != null){
+            logs.add(new Logs(7,"Se ha asignado el administrador "+ admin.getNombre()+"al restaurante "+admin.getRestaurante(), new Date()));
+        }
         logs.add(new Logs(5,"Un restaurante ha sido desahabilitado",new Date()));
         logs.add(new Logs(4,"Un nuevo cliente se ha sido registrado",new Date()));
         logs.add(new Logs(3,"Un nuevo restaurante ha sido registrado",new Date()));

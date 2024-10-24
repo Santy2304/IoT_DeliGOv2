@@ -6,10 +6,12 @@ import android.Manifest;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +36,7 @@ import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,6 +53,9 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
     private static final int REQUEST_PERMISSIONS = 100;
+
+    //Nombre del restaurante
+    private TextInputEditText restauranteNombre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,11 +136,23 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
 
         //Manejo de botones
+        restauranteNombre = findViewById(R.id.restauranteNombre); //Se obtiene el nombre
+        TextInputLayout nameLayout = findViewById(R.id.inputLayout);
+
         btContinuar = (Button) findViewById(R.id.continuar1);
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRegistroRestaurante2();
+                String nombre = restauranteNombre.getText().toString().trim();
+                Log.d("Registro", "Nombre del restaurante: " + nombre);
+                if(nombre.isEmpty()){
+                    nameLayout.setError("Complete este campo");
+                    nameLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
+                    return;
+                }else{
+                    nameLayout.setError(null);
+                    vistaRegistroRestaurante2(nombre);
+                }
             }
         });
 
@@ -254,8 +272,9 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
     //Cambiar vista
 
-    public void vistaRegistroRestaurante2(){
+    public void vistaRegistroRestaurante2(String nombreR){
         Intent intent = new Intent(this, SuperAdminRegistroRestaurante2.class);
+        intent.putExtra("nameR", nombreR);
         startActivity(intent);
     }
 
