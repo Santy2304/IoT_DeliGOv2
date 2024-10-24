@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     tools:context=".SuperAdmin.SuperAdminRestauranteUbicacion">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -178,7 +179,7 @@
                 android:layout_marginStart="2sp"
                 android:backgroundTint="@color/light_green"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text="Ubicación"
+                android:text="Local"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:backgroundTint="@color/light_green" />
@@ -241,22 +242,23 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="text"
+                                android:focusable="false"
+                                android:clickable="false"
                                 android:text="Av.Urubamba"
                                 app:startIconDrawable="@drawable/baseline_fmd_good_24"
                                 />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <ImageView
-                            android:id="@+id/fotoRepartidor"
+                        <fragment
+                            android:id="@+id/mapRestaurant"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
                             android:layout_height="0sp"
-                            android:layout_weight="9"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="10dp"
-                            android:src="@drawable/mapa"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_weight="8"
+                            map:cameraZoom="20"
+                            map:uiRotateGestures="true"
+                            map:uiZoomControls="true"
+                            />
 
                     </LinearLayout>
 

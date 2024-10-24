@@ -177,7 +177,7 @@
                 android:backgroundTint="@color/light_green"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:onClick="vistaRestauranteUbicacion"
-                android:text="Ubicación"
+                android:text="Local"
                 android:textSize="12sp"
                 app:backgroundTint="@color/light_green" />
 

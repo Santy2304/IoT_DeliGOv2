@@ -3,6 +3,7 @@ package com.example.deligov2.SuperAdmin;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -104,6 +106,22 @@ public class SuperAdminAdministrador extends AppCompatActivity {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
+
+        //-----
+
+        // Efecto de color (brillo)
+        ValueAnimator colorAnimator = ValueAnimator.ofArgb(
+                ContextCompat.getColor(this, R.color.light_green), // Usar ContextCompat para compatibilidad
+                Color.parseColor("#32CD32")); // Verde lima brillante
+
+        colorAnimator.setDuration(1000);
+        colorAnimator.
+                setRepeatCount(ValueAnimator.INFINITE);
+        colorAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        colorAnimator.addUpdateListener(animation -> {
+            cardAdmin.setStrokeColor((int) animation.getAnimatedValue()); // Aplicar el color animado al borde
+        });
+        colorAnimator.start();
 
         //Manejo del buscador
         searchInput.addTextChangedListener(new TextWatcher() {

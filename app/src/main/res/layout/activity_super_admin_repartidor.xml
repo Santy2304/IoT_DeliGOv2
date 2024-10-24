@@ -92,6 +92,7 @@
             android:id="@+id/materialCardViewRepartidor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_green"
             android:layout_margin="4dp"
             app:layout_constraintEnd_toStartOf="@+id/materialCardViewAdmin"
             app:layout_constraintStart_toEndOf="@+id/materialCardViewCliente"
