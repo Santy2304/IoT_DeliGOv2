@@ -75,8 +75,8 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
                     startActivity(intentInformation);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentProfile = new Intent(AdministradorRestauranteActivity.this, AdministradorRestauranteActivity.class);
-                    startActivity(intentProfile);
+                    Intent intentPrincipal = new Intent(AdministradorRestauranteActivity.this, AdministradorRestauranteActivity.class);
+                    startActivity(intentPrincipal);
                     return true;
                 }else{
                     return false;
@@ -99,6 +99,13 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
 
         historyButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, AdministradorHistorialActivity.class);
+            startActivity(intent);
+        });
+
+        Button newDishButton = findViewById(R.id.newDishButton);
+
+        newDishButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdministradorRegistroPlato1Activity.class);
             startActivity(intent);
         });
 

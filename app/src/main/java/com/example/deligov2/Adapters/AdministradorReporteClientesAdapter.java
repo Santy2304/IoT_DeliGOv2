@@ -39,7 +39,7 @@ public class AdministradorReporteClientesAdapter extends RecyclerView.Adapter<Ad
         TextView textViewName = holder.itemView.findViewById(R.id.nombreCliente);
         textViewName.setText(r.getNombre());
         TextView textViewFecha = holder.itemView.findViewById(R.id.fechaUltimoPedido);
-        textViewFecha.setText(String.format("Fecha: %s", r.getUltimoPedido()));
+        textViewFecha.setText(String.format("Último pedido: %s", r.getUltimoPedido()));
         MaterialButton buttonCantidad = holder.itemView.findViewById(R.id.cantidadPedidos);
         buttonCantidad.setText(String.format("%d",r.getCantidadPedidos()));
         MaterialButton buttonGasto = holder.itemView.findViewById(R.id.gastoTotal);

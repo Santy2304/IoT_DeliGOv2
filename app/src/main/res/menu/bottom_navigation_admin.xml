@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/reports"
+        android:id="@+id/principal"
         android:enabled="true"
-        android:icon="@drawable/storefront"
-        android:title="Reportes"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Principal"
         />
 
     <item
@@ -17,10 +17,10 @@
         />
 
     <item
-        android:id="@+id/principal"
+        android:id="@+id/reports"
         android:enabled="true"
-        android:icon="@drawable/baseline_home_24"
-        android:title="Principal"
+        android:icon="@drawable/storefront"
+        android:title="Reportes"
         />
 
     <item

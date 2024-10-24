@@ -101,6 +101,7 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/newDishButton"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="160sp"
                 android:layout_height="wrap_content"
@@ -111,7 +112,6 @@
                 android:backgroundTint="@color/light_green"
                 android:gravity="center_horizontal"
                 android:text="Nuevo plato"
-                android:onClick="verRegistroPlatosParte1"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -171,17 +171,32 @@
         </LinearLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerRestauranteAdmin"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="336dp" />
+            android:layout_height="match_parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation_admin"
-            android:layout_width="410sp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0sp"
-            app:menu="@menu/bottom_navigation_admin" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerRestauranteAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_admin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation_admin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/bottom_navigation_admin" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
