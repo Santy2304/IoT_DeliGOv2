@@ -20,6 +20,8 @@ public class ClienteCarritoAdapter extends RecyclerView.Adapter<ClienteCarritoAd
     private List<VentaPlatilloSA> listaPlatosVentas;
     private Context context;
 
+    private RecyclerView recyclerView;
+
     @NonNull
     @Override
     public CarritoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,4 +75,5 @@ public class ClienteCarritoAdapter extends RecyclerView.Adapter<ClienteCarritoAd
     public void setContext(Context context) {
         this.context = context;
     }
+
 }

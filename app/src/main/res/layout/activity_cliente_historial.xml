@@ -7,130 +7,125 @@
     android:layout_height="match_parent"
     tools:context=".Cliente.ClienteHistorialActivity">
 
-
-
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linearLayout19"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/linearLayout11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/cliente_menu" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="8sp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Historial de Pedidos"
+                android:textColor="@color/light_green"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/noti_button"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45sp"
+                android:layout_marginTop="25sp"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Notificaciones"
+                android:onClick="vistaNotificaciones"
+                app:srcCompat="@drawable/notifications_24px"
+                app:tint="@color/white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/cart_button"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginTop="25sp"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Carrito"
+                android:onClick="vistaCarrito"
+                app:srcCompat="@drawable/shopping_cart_24px"
+                app:tint="@color/white" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="23sp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:srcCompat="@drawable/hineilll" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18sp"
+                android:layout_marginTop="8sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="En camino"
+                android:textSize="13sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginTop="8sp"
+                android:backgroundTint="@color/dark_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Entregados"
+                android:textSize="13sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recicler"
+            android:layout_width="match_parent"
+            android:layout_height="620sp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout11"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_marginTop="835sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="180sp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15sp"
-            android:layout_marginTop="8sp"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:text="Historial de Pedidos"
-            android:textColor="@color/light_green"
-            android:textSize="35sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/noti_button"
-            style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="45sp"
-            android:layout_marginTop="25sp"
-            android:backgroundTint="@color/light_green"
-            android:contentDescription="Notificaciones"
-            android:onClick="vistaNotificaciones"
-            app:srcCompat="@drawable/notifications_24px"
-            app:tint="@color/white" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/cart_button"
-            style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="25sp"
-            android:backgroundTint="@color/light_green"
-            android:contentDescription="Carrito"
-            android:onClick="vistaCarrito"
-            app:srcCompat="@drawable/shopping_cart_24px"
-            app:tint="@color/white" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_marginStart="10sp"
-            android:layout_marginTop="23sp"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-            app:srcCompat="@drawable/hineilll" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout12"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="En camino"
-            android:textSize="13sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/dark_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Entregados"
-            android:textSize="13sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recicler"
-        android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
-
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout19"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/cliente_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@
             tools:layout_editor_absoluteY="308dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/correo"
+                android:id="@+id/correoLayout"
                 android:layout_width="320sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -67,13 +67,15 @@
                 app:startIconDrawable="@drawable/mail_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@id/correo"
+                    android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLength="20" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/contrasena"
+                android:id="@+id/passwordLayout"
                 android:layout_width="320sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -83,9 +85,11 @@
                 app:startIconDrawable="@drawable/lock_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:singleLine="true"
                     android:maxLength="20" />
             </com.google.android.material.textfield.TextInputLayout>
 

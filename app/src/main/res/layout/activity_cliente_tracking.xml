@@ -169,7 +169,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
         <TextView
-            android:id="@+id/encamino"
+            android:id="@+id/entregado"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -183,13 +183,13 @@
 
 
     </LinearLayout>
-
+<!--10 , 35 , 52 , 70  , 100-->
     <com.google.android.material.slider.Slider
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="18sp"
         android:contentDescription="estados"
-        android:value="20.0"
+        android:value="85.0"
         android:valueFrom="0.0"
         android:valueTo="100.0"
         app:layout_constraintEnd_toEndOf="parent"
@@ -200,7 +200,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout4"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintTop_toBottomOf="@id/slider">
 
         <LinearLayout
@@ -254,19 +254,15 @@
     </ScrollView>
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/cliente_menu" />
-    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

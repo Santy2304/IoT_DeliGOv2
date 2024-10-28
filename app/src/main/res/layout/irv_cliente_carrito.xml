@@ -72,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="1"
+                        android:textColor="@color/black"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -95,6 +96,7 @@
 
                 <ImageView
                     android:layout_width="20sp"
+                    android:onClick="deleteFood"
                     android:layout_height="20sp"
                     android:layout_marginStart="50sp"
                     android:layout_marginTop="7dp"
