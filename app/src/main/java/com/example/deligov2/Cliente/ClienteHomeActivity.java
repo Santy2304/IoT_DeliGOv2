@@ -3,6 +3,7 @@ package com.example.deligov2.Cliente;
 import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,8 @@ import com.example.deligov2.SuperAdmin.SuperAdminRestaurante;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +37,7 @@ import java.util.List;
 
 public class ClienteHomeActivity extends AppCompatActivity {
 
-    ArrayList<Restaurante> lista;
+    ArrayList<Restaurante> lista=new ArrayList<>();
     String[] nombresRestaurantes = {
             "Bembos",
             "KFC",
@@ -54,6 +57,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
             1,2,3,4,5
     };
 
+    FirebaseFirestore db;
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
     MaterialButton restaurantButton;
@@ -62,6 +66,9 @@ public class ClienteHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_home);
+
+        db = FirebaseFirestore.getInstance();
+
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -127,15 +134,14 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        lista = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            Restaurante restaurante = new Restaurante();
-            restaurante.setNombre(nombresRestaurantes[i]);
-            restaurante.setHorario(horariosAtencion[i]);
-            restaurante.setId(idsRestaurantes[i]);
-            lista.add(restaurante);
-        }
-
+        //lista = new ArrayList<>();
+        //for(int i=0;i<5;i++){
+          //  Restaurante restaurante = new Restaurante();
+           // restaurante.setNombre(nombresRestaurantes[i]);
+            //restaurante.setHorario(horariosAtencion[i]);
+           // restaurante.setId(idsRestaurantes[i]);
+           // lista.add(restaurante);
+       // }
 
         RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
         adapter.setContext(this);
@@ -144,6 +150,22 @@ public class ClienteHomeActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.reciclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ClienteHomeActivity.this));
+
+        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Restaurante restaurante = document.toObject(Restaurante.class);
+                    lista.add(restaurante);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         //restaurantButton.setOnClickListener(view -> {
           //  Intent intent = new Intent(this, ClienteRestaurantActivity.class);
             //startActivity(intent);
