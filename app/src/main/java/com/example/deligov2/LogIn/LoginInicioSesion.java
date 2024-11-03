@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -25,8 +27,14 @@ import com.example.deligov2.Cliente.ClienteTrackingActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Arrays;
 
 public class LoginInicioSesion extends AppCompatActivity {
     String channelId = "oli";
@@ -36,6 +44,19 @@ public class LoginInicioSesion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_inicio_sesion);
+
+
+        Intent intent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(Arrays.asList(
+                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                        new AuthUI.IdpConfig.GoogleBuilder().build()
+                ))
+                .build();
+
+        signInLauncher.launch(intent);
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -44,6 +65,18 @@ public class LoginInicioSesion extends AppCompatActivity {
         crearCanalNotificacion();
     }
 
+
+    ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    Log.d("msg-test", "Firebase uid: " + user.getUid());
+                } else {
+                    Log.d("msg-test", "Canceló el Log-in");
+                }
+            }
+    );
 
     public void RecuperarPassword(View view) {
         Intent intent = new Intent(LoginInicioSesion.this, LoginRecuperarPasswordPrimerPaso.class);

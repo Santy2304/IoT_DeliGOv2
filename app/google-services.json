@@ -12,7 +12,20 @@
           "package_name": "com.example.deligov2"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "218149797599-npicp9t6pjn33jimao3c90tedrtvrr43.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.deligov2",
+            "certificate_hash": "ea7dce9a3cfeeb8c594ea5b382c530bcee80fda7"
+          }
+        },
+        {
+          "client_id": "218149797599-2p0m5ugbasin5o5i2p7credmh4rjpp4g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyACzua5tOs5k7Ddif2fmMuETgbUKcL_WQU"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218149797599-2p0m5ugbasin5o5i2p7credmh4rjpp4g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
