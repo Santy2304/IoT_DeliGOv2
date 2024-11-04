@@ -2,6 +2,7 @@ package com.example.deligov2.Cliente;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,14 +37,12 @@ public class ClientePerfil extends AppCompatActivity {
 
         logout = findViewById(R.id.logOut);
         logout.setOnClickListener(view -> {
-            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if(user!=null){
-                firebaseAuth.signOut();
-                Intent intent = new Intent(ClientePerfil.this, LoginPrimeraVista.class);
-                startActivity(intent);
-                finish();
-            }
+            AuthUI.getInstance().signOut(ClientePerfil.this)
+                    .addOnCompleteListener(task ->  {
+                        Intent intent = new Intent(ClientePerfil.this,LoginPrimeraVista.class);
+                        startActivity(intent);
+                        finish();
+                        });
         });
 
         goBackButton = findViewById(R.id.goBackButtonPerfil);
