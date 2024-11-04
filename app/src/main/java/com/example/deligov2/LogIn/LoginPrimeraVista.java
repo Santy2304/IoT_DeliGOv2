@@ -75,7 +75,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
                                 Log.d("msg-test", "Firebase uid: " + user.getUid());
                                 go();
                             }else {
-                                user.sendEmailVerification().addOnCompleteListener(task -> {
+                                user.sendEmailVerification().addOnCompleteListener(task1 -> {
                                     Toast.makeText(LoginPrimeraVista.this,"Se le ha enviado un correo para validar la cuenta",Toast.LENGTH_SHORT).show();
 
                                 });
