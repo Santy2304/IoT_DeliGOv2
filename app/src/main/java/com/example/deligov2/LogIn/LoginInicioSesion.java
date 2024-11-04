@@ -45,18 +45,6 @@ public class LoginInicioSesion extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_inicio_sesion);
 
-
-        Intent intent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(Arrays.asList(
-                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                        new AuthUI.IdpConfig.GoogleBuilder().build()
-                ))
-                .build();
-
-        signInLauncher.launch(intent);
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -66,17 +54,7 @@ public class LoginInicioSesion extends AppCompatActivity {
     }
 
 
-    ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    Log.d("msg-test", "Firebase uid: " + user.getUid());
-                } else {
-                    Log.d("msg-test", "Canceló el Log-in");
-                }
-            }
-    );
+
 
     public void RecuperarPassword(View view) {
         Intent intent = new Intent(LoginInicioSesion.this, LoginRecuperarPasswordPrimerPaso.class);
