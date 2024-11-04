@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,8 +34,11 @@ public class LoginPrimeraVista extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user!=null){
-            Log.d("msg-test", "Firebase uid: " + user.getUid());
-            go();
+            if(user.isEmailVerified()){
+                Log.d("msg-test", "Firebase uid: " + user.getUid());
+                go();
+            }
+
         }
 
         comenzarButton = findViewById(R.id.comenzarButton);
@@ -43,6 +47,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
 
             Intent intent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
+                    .setTheme(R.style.Base_Theme_DeliGOv2)
                     .setAvailableProviders(Arrays.asList(
                             new AuthUI.IdpConfig.EmailBuilder().build(),
                             new AuthUI.IdpConfig.GoogleBuilder().build()
@@ -65,8 +70,18 @@ public class LoginPrimeraVista extends AppCompatActivity {
                     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if(user!=null){
-                        Log.d("msg-test", "Firebase uid: " + user.getUid());
-                        go();
+                        user.reload().addOnCompleteListener(task -> {
+                            if(user.isEmailVerified()){
+                                Log.d("msg-test", "Firebase uid: " + user.getUid());
+                                go();
+                            }else {
+                                user.sendEmailVerification().addOnCompleteListener(task -> {
+                                    Toast.makeText(LoginPrimeraVista.this,"Se le ha enviado un correo para validar la cuenta",Toast.LENGTH_SHORT).show();
+
+                                });
+                            }
+                        });
+
                     }else {
                         Log.d("msg-test", "user es nulo");
                     }
