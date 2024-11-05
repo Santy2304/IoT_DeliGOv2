@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     tools:context=".SuperAdmin.SuperAdminRegistroRestaurante2">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -51,6 +52,7 @@
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/layout_border"
+        android:backgroundTint="@color/white"
         android:orientation="vertical"
         app:layout_anchorGravity="center"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
@@ -59,38 +61,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <SearchView
+            android:id="@+id/mapSearch"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="3sp"
-            android:layout_marginEnd="3sp"
-            app:startIconDrawable="@drawable/baseline_fmd_good_24"
-            android:hint="Ubicación">
+            android:layout_height="wrap_content"
+            android:queryHint="Buscar"
+            android:elevation="5dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_search"
+            />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ubicacionRestaurante"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text=" "
-                />
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/fotoRepartidor"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:layout_marginStart="10sp"
-            android:layout_marginEnd="10sp"
-            android:layout_marginTop="6sp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/mapa"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="0sp"
+            android:layout_weight="8"
+            map:cameraZoom="20"
+            map:uiRotateGestures="true"
+            map:uiZoomControls="true"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

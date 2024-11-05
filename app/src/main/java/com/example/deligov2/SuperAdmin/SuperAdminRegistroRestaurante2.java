@@ -8,12 +8,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -26,14 +30,28 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class SuperAdminRegistroRestaurante2 extends AppCompatActivity {
+import java.io.IOException;
+import java.util.List;
+
+public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button btContinuar;
     private Button btCancelar;
     String canal1 = "importanteDefault";
+
+    private GoogleMap myMap;
+    private SearchView mapSearchView;
+    private Marker currentMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +113,57 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity {
         }else{
             cNameR = "Nombre no disponible";
         }
+        //Mapa
+        mapSearchView = findViewById(R.id.mapSearch);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        mapSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                //String location = mapSearchView.getQuery().toString();
+                String location = s.trim();
+                List<Address> addressList = null;
+                if(location != null && !location.isEmpty()){
+                    Geocoder geocoder = new Geocoder(SuperAdminRegistroRestaurante2.this);
+                    try{
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+
+                    if (addressList != null && !addressList.isEmpty()) {
+                        // Si hay un marcador anterior, lo eliminamos
+                        if (currentMarker != null) {
+                            currentMarker.remove();
+                        }
+
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        myMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+                        currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+                    } else {
+                        Toast.makeText(SuperAdminRegistroRestaurante2.this, "No se encontró ninguna dirección para: " + location, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(SuperAdminRegistroRestaurante2.this, "Por favor ingresa un lugar válido", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        mapFragment.getMapAsync( SuperAdminRegistroRestaurante2.this);
+
 
         //Notificaciones
         crearCanalesNotificacion();
@@ -180,6 +249,30 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity {
             notificationManager.notify(281, notification);
         }
 
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap){
+        myMap = googleMap;
+
+        myMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                // Si ya existe un marcador, eliminarlo
+                if (currentMarker != null) {
+                    currentMarker.remove();
+                }
+
+                // Crear y agregar un nuevo marcador en la ubicación donde el usuario ha hecho clic
+                currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title("Nueva ubicación"));
+
+                // Mover la cámara a la nueva ubicación
+                myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+                // Si deseas hacer algo adicional con la ubicación, como almacenar o mostrar en otro lugar:
+                Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);
+            }
+        });
     }
 
 }
