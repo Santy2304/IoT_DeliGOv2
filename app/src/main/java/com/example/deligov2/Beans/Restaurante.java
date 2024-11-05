@@ -1,6 +1,8 @@
 package com.example.deligov2.Beans;
 
-public class Restaurante {
+import java.io.Serializable;
+
+public class Restaurante implements Serializable {
 
     private String nombre;
     private String horario;

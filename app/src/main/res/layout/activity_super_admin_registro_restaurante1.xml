@@ -51,6 +51,7 @@
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/layout_border"
+        android:backgroundTint="@color/white"
         android:orientation="vertical"
         app:layout_anchorGravity="center"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
@@ -63,21 +64,29 @@
             android:id="@+id/inputLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="3sp"
             android:layout_weight="1"
-            android:layout_marginEnd="3sp"
-            android:hint="Nombre del restaurante">
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/restauranteNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text=""
-                app:startIconDrawable="@drawable/baseline_person_outline_24" />
+                android:hint="Restaurante"
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/activity_label"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:text="Categoría del restaurante"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp" />
 
         <Spinner
             android:id="@+id/spinner_categoria"
@@ -86,8 +95,7 @@
             android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:entries="@array/categoria_list"
-            android:popupBackground="@drawable/spinner_border"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"/>
 
 
         <LinearLayout

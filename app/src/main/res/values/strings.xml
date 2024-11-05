@@ -37,17 +37,19 @@
     <string name="descripcionBurger">Es la comida principal del Crustaceo Cascarudo,\nsu aspecto es similar a una hamburguesa</string>
 
     <string-array name="elementos">
-        <item>Tipo de Documento</item>
         <item>Documento Nacional de Identidad</item>
         <item>Pasaporte</item>
     </string-array>
 
     <string-array name="categoria_list">
-        <item>Categoría</item>
-        <item>Categoría 1</item>
-        <item>Categoría 2</item>
-        <item>Categoría 3</item>
-        <item>Categoría 4</item>
+        <item>Comida Rápida</item>
+        <item>Comida China</item>
+        <item>Pizzeria</item>
+        <item>Sushi</item>
+        <item>Pescados y Mariscos</item>
+        <item>Cafetería</item>
+        <item>Postres y Tortas</item>
+        <item>Sandwiches</item>
     </string-array>
 
 

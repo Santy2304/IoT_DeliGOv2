@@ -88,7 +88,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
             tvAdmin = itemView.findViewById(R.id.tv_admin);
             btVer = itemView.findViewById(R.id.bt_info);
             btHabilitar=itemView.findViewById(R.id.bt_activar);
-            btDeshabilitar=itemView.findViewById(R.id.bt_desactivar);
+            //btDeshabilitar=itemView.findViewById(R.id.bt_desactivar);
 
             //isRestauranteHabilitado = true; //restaurante.getHabilitado
         }
@@ -101,8 +101,8 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                 tvGanancia.setText("S/"+ restaurante.getMonto());
                 tvNombre.setText(restaurante.getNombre());
                 btHabilitar.setVisibility(View.INVISIBLE);
-                btDeshabilitar.setVisibility(View.INVISIBLE);
-                btVer.setImageResource(R.drawable.baseline_person_add_24);
+                //btDeshabilitar.setVisibility(View.INVISIBLE);
+                btVer.setImageResource(R.drawable.ic_admin2);
 
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,7 +121,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                 tvNombre.setText(restaurante.getNombre());
                 tvAdmin.setText("Admin: "+restaurante.getAdmin());
                 btHabilitar.setVisibility(View.VISIBLE);
-                btDeshabilitar.setVisibility(View.INVISIBLE);
+                //btDeshabilitar.setVisibility(View.INVISIBLE);
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -149,7 +149,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //isRestauranteHabilitado = false;
-                                            restaurante.setEstado(false);
+                                            //restaurante.setEstado(false);
 
                                             // Actualizar el estado en Firestore
                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -165,9 +165,8 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                                                         Toast.makeText(itemView.getContext(), "Error al actualizar el estado en Firestore", Toast.LENGTH_SHORT).show();
                                                     });
 
-                                            btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                            btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                            Toast.makeText(itemView.getContext(), "Restaurante deshabilitado", Toast.LENGTH_SHORT).show();
+                                            //btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                                            //btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
                                         }
                                     })
                                     .setNegativeButton("Cancelar", null)
@@ -181,28 +180,21 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //isRestauranteHabilitado = true; //restaurante.setHabilitado(true)
-                                            restaurante.setEstado(true);
+                                            //restaurante.setEstado(true);
 
                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                                             db.collection("restaurantes")
                                                     .document(restaurante.getId())
                                                     .update("estado", true)
                                                     .addOnSuccessListener(aVoid -> {
-                                                        btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
                                                         Toast.makeText(itemView.getContext(), "Restaurante habilitado", Toast.LENGTH_SHORT).show();
                                                     })
                                                     .addOnFailureListener(e -> {
                                                         Toast.makeText(itemView.getContext(), "Error al actualizar el estado en Firestore", Toast.LENGTH_SHORT).show();
                                                     });
 
-                                            btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                            btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                            Toast.makeText(itemView.getContext(), "Restaurante deshabilitado", Toast.LENGTH_SHORT).show();
-
-                                            btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                            btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                            Toast.makeText(itemView.getContext(), "Restaurante habilitado", Toast.LENGTH_SHORT).show();
                                         }
                                     })
                                     .setNegativeButton("Cancelar", null)

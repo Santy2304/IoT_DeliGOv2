@@ -12,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 
 public class SuperAdminRegistroRestauranteCorrect extends AppCompatActivity {
@@ -24,30 +25,25 @@ public class SuperAdminRegistroRestauranteCorrect extends AppCompatActivity {
 
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
-        String nameR = intent.getStringExtra("nr");
-        Log.d("Restaurante Correct", "Nombre del restaurante: " + nameR);
-        String cNameR;
-        if(nameR != null){
-            cNameR = nameR;
-        }else{
-            cNameR = "Nombre no disponible";
-        }
+        Restaurante nameR = (Restaurante) intent.getSerializableExtra("nr");
+        Log.d("Restaurante Correct", "Nombre del restaurante: " + nameR.getNombre());
+
 
         //Manejo de botones
         btContinuar = (Button) findViewById(R.id.button);
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRegistroAdmin1(cNameR);
+                vistaRegistroAdmin1(nameR);
             }
         });
     }
 
     //Cambio vistas
-    public void vistaRegistroAdmin1(String name){
+    public void vistaRegistroAdmin1(Restaurante res){
         Intent intent = new Intent(this, SuperAdminRegistroAdministrador1.class);
 
-        intent.putExtra("nr1",name); //por ahora solo se envía nombre
+        intent.putExtra("nr1",res); //por ahora solo se envía nombre
         startActivity(intent);
     }
 

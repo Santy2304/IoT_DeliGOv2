@@ -29,6 +29,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,9 +40,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -53,13 +57,15 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
     private SearchView mapSearchView;
     private Marker currentMarker;
 
+    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_restaurante2);
 
-
+        db = FirebaseFirestore.getInstance();
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
 
@@ -105,13 +111,14 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         });
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
-        String nameR = intent.getStringExtra("nameR");
-        Log.d("Registro restaurante 2", "Nombre del restaurante: " + nameR);
-        String cNameR;
-        if(nameR != null){
-            cNameR = nameR;
-        }else{
-            cNameR = "Nombre no disponible";
+        Restaurante nameR = (Restaurante) intent.getSerializableExtra("nameR");
+
+        if (nameR != null) {
+            String cNameR = nameR.getNombre();
+            String categoriaR = nameR.getCategorias();
+            Log.d("Registro restaurante 2", "Nombre del restaurante: " + cNameR);
+        } else {
+            Log.d("Registro restaurante 2", "Nombre del restaurante no disponible");
         }
         //Mapa
         mapSearchView = findViewById(R.id.mapSearch);
@@ -172,8 +179,9 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificarRestauranteCreado(cNameR);
-                vistaRegistroRestauranteCorrect(cNameR);
+                notificarRestauranteCreado(nameR.getNombre());
+                vistaRegistroRestauranteCorrect(nameR);
+                registrarRestauranteFirestore(nameR);
             }
         });
 
@@ -190,9 +198,9 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
 
     //Cambio vista
 
-    public void vistaRegistroRestauranteCorrect(String restaurante){
+    public void vistaRegistroRestauranteCorrect(Restaurante restaurante){
         Intent intent = new Intent(this, SuperAdminRegistroRestauranteCorrect.class);
-        intent.putExtra("nr",restaurante); //Se envía el nombre del restaurante
+        intent.putExtra("nr",restaurante); //Se envía el restaurante
         startActivity(intent);
     }
     public void vistaPanelRestaurante(){
@@ -273,6 +281,33 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                 Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);
             }
         });
+    }
+
+    private void registrarRestauranteFirestore(Restaurante restaurante) {
+
+        Restaurante newRestaurant = new Restaurante();
+        newRestaurant.setCategorias(restaurante.getCategorias());
+        newRestaurant.setNombre(restaurante.getNombre());
+        newRestaurant.setMonto(0.00f);
+        newRestaurant.setEstado(true);
+        newRestaurant.setHorario("9:00am - 22:00pm");
+
+        db.collection("restaurantes")
+                .add(newRestaurant)
+                .addOnSuccessListener(documentReference -> {
+                    String idRestaurante = documentReference.getId();
+                    newRestaurant.setId(idRestaurante);
+
+                    // Actualizar el campo 'id' en Firestore con el ID generado
+                    documentReference.update("id", idRestaurante)
+                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "ID actualizado correctamente en el documento."))
+                            .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
+
+                    Log.d("Firestore", "Restaurante registrado con ID: " + idRestaurante);
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error al registrar el restaurante", e);
+                });
     }
 
 }

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -32,6 +33,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -57,6 +59,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     //Nombre del restaurante
     private TextInputEditText restauranteNombre;
 
+    private String categoria;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,15 +114,48 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         //Para las categorías
         tipoCategoria = (Spinner) findViewById(R.id.spinner_categoria);
 
+        ArrayAdapter<CharSequence> activityAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.categoria_list,
+                android.R.layout.simple_spinner_item
+        );
+        activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipoCategoria.setAdapter(activityAdapter);
+
+
         tipoCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(SuperAdminRegistroRestaurante1.this, "Categoría: " + adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String activity = parent.getItemAtPosition(position).toString();
+
+                if (activity.equals("Comida Rápida")) {
+                    categoria = "Comida Rápida";
+                } else if (activity.equals("Comida China")) {
+                    categoria = "Comida China";
+
+                } else if (activity.equals("Pizzeria")) {
+                    categoria = "Pizzeria";
+                } else if (activity.equals("Pescados y Mariscos")) {
+                    categoria = "Pescados y Mariscos";
+                } else if (activity.equals("Sushi")) {
+                    categoria = "Sushi";
+                }else if (activity.equals("Cafetería")){
+                    categoria = "Cafeteria";
+
+                } else if(activity.equals("Postres y Tortas")){
+                    categoria = "Postres y Tortas";
+
+                }else if(activity.equals("Sandwiches")){
+                    categoria = "Sandwiches";
+
+                } else {
+                    categoria = "Comida Rápida";
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
+            public void onNothingSelected(AdapterView<?> parent) {
+                categoria = "Comida Rápida";
             }
         });
 
@@ -145,6 +181,25 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             public void onClick(View v) {
                 String nombre = restauranteNombre.getText().toString().trim();
                 Log.d("Registro", "Nombre del restaurante: " + nombre);
+                Restaurante restA = new Restaurante();
+                restA.setNombre(nombre);
+                restA.setCategorias(categoria);
+                boolean validInput = true;
+
+                try {
+                    if (!nombre.isEmpty()) {
+                        vistaRegistroRestaurante2(restA);
+                    } else {
+                        restauranteNombre.setError("Completar este campo");
+                        validInput = false;
+                    }
+
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
+                if (!validInput) return;
+                /*
                 if(nombre.isEmpty()){
                     nameLayout.setError("Complete este campo");
                     nameLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
@@ -153,8 +208,12 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
                     nameLayout.setError(null);
                     vistaRegistroRestaurante2(nombre);
                 }
+
+                 */
             }
         });
+
+
 
         btCancelar = (Button) findViewById(R.id.cancelar1);
         btCancelar.setOnClickListener(new View.OnClickListener() {
@@ -272,9 +331,9 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
     //Cambiar vista
 
-    public void vistaRegistroRestaurante2(String nombreR){
+    public void vistaRegistroRestaurante2(Restaurante restR){
         Intent intent = new Intent(this, SuperAdminRegistroRestaurante2.class);
-        intent.putExtra("nameR", nombreR);
+        intent.putExtra("nameR", restR);
         startActivity(intent);
     }
 
