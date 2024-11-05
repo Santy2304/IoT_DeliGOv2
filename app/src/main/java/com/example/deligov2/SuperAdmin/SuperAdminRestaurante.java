@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -19,26 +20,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
 import com.example.deligov2.Adapters.SuperAdminRestauranteListAdapter;
 import com.example.deligov2.Beans.Cliente;
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.Beans.RestauranteSA;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class SuperAdminRestaurante extends AppCompatActivity {
-    List<RestauranteSA> restaurantes;
+    List<Restaurante> restaurantes = new ArrayList<>();
     SuperAdminRestauranteListAdapter listAdapter;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_restaurante);
+
+        //Firebase
+        db = FirebaseFirestore.getInstance();
 
 
         //Para el buscador
@@ -99,7 +107,6 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         });
 
 
-        mostrarListaRestaurante();
 
         //Manejo del buscador
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -108,16 +115,18 @@ public class SuperAdminRestaurante extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listAdapter.filter(s.toString());
+                buscarRestaurantes(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) { }
         });
 
+        mostrarListaRestaurante();
     }
 
     public void mostrarListaRestaurante(){
+        /*
         restaurantes = new ArrayList<>();
         String[] categ = {"ola", "ola"};
         restaurantes.add(new RestauranteSA("Bembos","9:00 - 21:00",categ,1,1450.20f,1,true));
@@ -126,12 +135,56 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         restaurantes.add(new RestauranteSA("Bembos4","9:00 - 21:00",categ,0,0.0f,0,true));
         restaurantes.add(new RestauranteSA("Bembos5","9:00 - 21:00",categ,0,0.0f,0,true));
 
+         */
+
         listAdapter = new SuperAdminRestauranteListAdapter(restaurantes, this);
         RecyclerView recyclerView = findViewById(R.id.listRestaurantesPanel);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
+
+        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                restaurantes.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Restaurante restaurante = document.toObject(Restaurante.class);
+                    restaurantes.add(restaurante);
+                }
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void buscarRestaurantes(String query) {
+        if (query.isEmpty()) {
+            mostrarListaRestaurante();
+            return;
+        }
+
+        db.collection("restaurantes")
+                .whereGreaterThanOrEqualTo("nombre", query)
+                .whereLessThanOrEqualTo("nombre", query + "\uf8ff")
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null) {
+                        Log.w("msg-test", "Listen failed.", error);
+                        return;
+                    }
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        restaurantes.clear();
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                            Restaurante restaurante = document.toObject(Restaurante.class);
+                            if (restaurante != null) {
+                                restaurantes.add(restaurante);
+                            }
+                        }
+                        listAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
 

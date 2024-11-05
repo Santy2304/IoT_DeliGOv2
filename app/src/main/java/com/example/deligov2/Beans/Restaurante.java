@@ -6,13 +6,40 @@ public class Restaurante {
     private String horario;
     private String categorias;
     private String direccion;
-    private int id;
+    private String admin;
+    private float monto;
+    private boolean estado;
+    private String id;
 
-    public int getId() {
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    public float getMonto() {
+        return monto;
+    }
+
+    public void setMonto(float monto) {
+        this.monto = monto;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -47,4 +74,6 @@ public class Restaurante {
     public void setCategorias(String categorias) {
         this.categorias = categorias;
     }
+
+
 }

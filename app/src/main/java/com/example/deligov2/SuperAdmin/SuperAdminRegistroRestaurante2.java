@@ -234,8 +234,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         //
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal1)
                 .setSmallIcon(R.drawable.deligo)
-                .setContentTitle("DeliGO events")
-                .setContentText("Se ha creado un restaurante :D")
+                .setContentTitle("DeliGO")
+                .setContentText("Se ha creado el restaurante " + nameR)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
