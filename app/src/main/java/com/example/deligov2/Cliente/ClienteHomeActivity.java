@@ -160,6 +160,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
                 lista.clear();
                 for (DocumentSnapshot document : snapshot.getDocuments()) {
                     Restaurante restaurante = document.toObject(Restaurante.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
                     lista.add(restaurante);
                 }
                 adapter.notifyDataSetChanged();
