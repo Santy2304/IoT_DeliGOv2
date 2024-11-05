@@ -22,6 +22,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.LogIn.LoginInicioSesion;
 import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -110,7 +111,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
 
     //Manejo vistas
     public void cerrarSesion(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginInicioSesion.class);
         startActivity(intent);
     }
 

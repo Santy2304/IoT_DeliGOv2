@@ -7,11 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Cliente.ClienteHistorialActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout19"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/linearLayout11"
             android:layout_width="match_parent"
@@ -23,7 +19,8 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="180sp"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15sp"
                 android:layout_marginTop="8sp"
@@ -36,9 +33,8 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/noti_button"
                 style="?attr/floatingActionButtonSmallStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="45sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"                android:layout_height="wrap_content"
                 android:layout_marginTop="25sp"
                 android:backgroundTint="@color/light_green"
                 android:contentDescription="Notificaciones"
@@ -49,9 +45,8 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/cart_button"
                 style="?attr/floatingActionButtonSmallStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"                  android:layout_height="wrap_content"
                 android:layout_marginTop="25sp"
                 android:backgroundTint="@color/light_green"
                 android:contentDescription="Carrito"
@@ -60,9 +55,8 @@
                 app:tint="@color/white" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:layout_marginStart="10sp"
+                android:layout_width="0dp"
+                android:layout_weight="0.9"                  android:layout_height="50sp"
                 android:layout_marginTop="23sp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
@@ -104,28 +98,28 @@
                 app:backgroundTint="@color/md_theme_secondary" />
 
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recicler"
-            android:layout_width="match_parent"
-            android:layout_height="620sp"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
 
-
-        </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recicler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout12"
+        app:layout_constraintVertical_bias="0.0">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_marginTop="835sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout19"
+        android:layout_height="130sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/cliente_menu" />
+        app:layout_constraintVertical_bias="1.0"
+        app:menu="@menu/cliente_menu"
+        tools:layout_editor_absoluteX="6dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

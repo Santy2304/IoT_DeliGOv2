@@ -8,7 +8,6 @@
     tools:context=".Cliente.ClienteRestaurantActivity">
 
 
-
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
@@ -66,53 +65,36 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginTop="12dp"
-        app:tint="@color/white"
-        android:onClick="vistaCarrito"
         android:backgroundTint="@color/light_green"
         android:contentDescription="Carrito"
+        android:onClick="vistaCarrito"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.818"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/shopping_cart_24px" />
+        app:srcCompat="@drawable/shopping_cart_24px"
+        app:tint="@color/white" />
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout5"
+    <ImageView
+        android:id="@+id/ofertaImagen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="320dp"
-        android:gravity="center_horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="120dp"
+        android:layout_marginTop="8dp"
+        android:padding="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ofertabembos"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
-        <ImageView
-            android:id="@+id/ofertaImagen"
-            android:layout_width="330dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="0sp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ofertabembos" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:menu="@menu/cliente_menu" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:menu="@menu/cliente_menu"
+        tools:layout_editor_absoluteX="6dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
@@ -121,14 +103,15 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/ofertaImagen">
 
         <Button
             android:id="@+id/menuButton"
             style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30sp"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/light_green"
             android:fontFamily="sans-serif-condensed-medium"
@@ -143,9 +126,10 @@
 
         <Button
             style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_marginStart="2dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15sp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/light_green"
             android:fontFamily="sans-serif-condensed-medium"
@@ -157,14 +141,20 @@
             app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fiterButton"
             style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginStart="120sp"
             android:layout_marginTop="6sp"
             android:backgroundTint="@color/light_green"
             android:contentDescription="filtro"
@@ -176,12 +166,13 @@
             app:tint="@color/white" />
     </LinearLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler2columnas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
