@@ -10,26 +10,46 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5sp"
-            android:layout_marginTop="40sp"
-            android:src="@drawable/icons8_izquierda_circulo_48"
+
             android:onClick="retroceder"
-            />
+            android:src="@drawable/icons8_izquierda_circulo_48" />
 
         <TextView
-            android:layout_marginTop="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="¿Dónde vives?"
+            android:fontFamily="sans-serif-condensed"
             android:textColor="@color/light_green"
             android:textSize="40sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="320sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:hint="Dirección"
+            app:startIconDrawable="@drawable/location">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <ImageView
             android:layout_width="363dp"
@@ -37,49 +57,21 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20sp"
             android:src="@drawable/mapa" />
-        <LinearLayout
-            android:backgroundTint="#FBF5F0"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="348dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35sp"
-            android:background="@drawable/border_form"
-            android:orientation="vertical"
-            >
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="320sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
-                android:layout_gravity="center_horizontal"
-                android:hint="Dirección"
-                app:startIconDrawable="@drawable/location"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="20"
-                    android:inputType="text"
-                    android:singleLine="true"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
 
 
             <Button
                 android:id="@+id/continuar1"
-                android:onClick="verLoginCrearCuentaCuartoPaso"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="18sp"
+                android:layout_marginBottom="12sp"
                 android:backgroundTint="@color/light_green"
+                android:onClick="verLoginCrearCuentaCuartoPaso"
                 android:text="  Continuar  "
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginBottom="12sp"/>
-        </LinearLayout>
+                android:textStyle="bold" />
 
     </LinearLayout>
 
