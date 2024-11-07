@@ -19,11 +19,7 @@ public class RepartidorTrackingEstadoEnPreparacion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_tracking_estado_en_preparacion);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
     }
     public void verSiguienteTracking(View view) {
         Intent intent = new Intent(this, RepartidorTrackingEstadoEnCamino.class);

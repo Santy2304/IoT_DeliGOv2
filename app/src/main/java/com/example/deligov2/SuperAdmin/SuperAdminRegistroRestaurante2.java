@@ -266,18 +266,14 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         myMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                // Si ya existe un marcador, eliminarlo
                 if (currentMarker != null) {
                     currentMarker.remove();
                 }
 
-                // Crear y agregar un nuevo marcador en la ubicación donde el usuario ha hecho clic
                 currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title("Nueva ubicación"));
 
-                // Mover la cámara a la nueva ubicación
                 myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
-                // Si deseas hacer algo adicional con la ubicación, como almacenar o mostrar en otro lugar:
                 Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);
             }
         });
@@ -304,6 +300,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                             .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
 
                     Log.d("Firestore", "Restaurante registrado con ID: " + idRestaurante);
+
+
                 })
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error al registrar el restaurante", e);
