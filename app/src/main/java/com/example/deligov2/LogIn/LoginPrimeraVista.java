@@ -95,7 +95,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
     );
 
     public void go(){
-        Intent intent = new Intent(LoginPrimeraVista.this, MainActivity.class);
+        Intent intent = new Intent(LoginPrimeraVista.this, LoginCrearCuentaPrimerPaso.class);
         startActivity(intent);
         finish();
     }
