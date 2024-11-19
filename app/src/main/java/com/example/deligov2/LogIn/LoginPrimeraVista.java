@@ -54,6 +54,8 @@ public class LoginPrimeraVista extends AppCompatActivity {
 
             Intent intent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
+                    .setIsSmartLockEnabled(false)
+                    .setAuthMethodPickerLayout(authMethodPickerLayout)
                     .setTheme(R.style.Base_Theme_DeliGOv2)
                     .setAvailableProviders(Arrays.asList(
                             new AuthUI.IdpConfig.EmailBuilder().build(),
