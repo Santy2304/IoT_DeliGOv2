@@ -106,8 +106,8 @@ public class SuperAdminPerfil extends AppCompatActivity {
 
     //Manejo vistas
     public void cerrarSesion(){
-        Intent intent = new Intent(this, LoginInicioSesion.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, LoginInicioSesion.class);
+//        startActivity(intent);
     }
 
     private boolean checkPermissions() {

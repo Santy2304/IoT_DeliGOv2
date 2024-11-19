@@ -28,9 +28,6 @@ public class LoginRecuperarPasswordPasoFinal extends AppCompatActivity {
 
 
     public void volverInicio(View view){
-        Intent intent = new Intent(LoginRecuperarPasswordPasoFinal.this, LoginInicioSesion.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        
     }
 }

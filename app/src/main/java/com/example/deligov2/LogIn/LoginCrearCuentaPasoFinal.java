@@ -26,10 +26,7 @@ public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
         });
     }
     public void volverInicioCrearCuenta(View view){
-        Intent intent = new Intent(LoginCrearCuentaPasoFinal.this, LoginInicioSesion.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+
     }
 
 }

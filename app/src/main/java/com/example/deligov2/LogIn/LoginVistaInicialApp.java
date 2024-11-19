@@ -36,11 +36,11 @@ public class LoginVistaInicialApp extends AppCompatActivity {
             @Override
             public void run() {
                 // Cambiar a la nueva Activity
-                Intent intent = new Intent(LoginVistaInicialApp.this, LoginInicioSesion.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                // Finalizar la actividad actual
-                finish();
+//                Intent intent = new Intent(LoginVistaInicialApp.this, LoginInicioSesion.class);
+//                startActivity(intent);
+//                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//                // Finalizar la actividad actual
+//                finish();
             }
         }, 3000);  // 15000 milisegundos = 15 segundos
     }
