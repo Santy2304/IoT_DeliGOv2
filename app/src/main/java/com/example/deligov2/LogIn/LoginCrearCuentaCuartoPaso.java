@@ -32,7 +32,7 @@ public class LoginCrearCuentaCuartoPaso extends AppCompatActivity {
     }
 
     public void verLoginCrearCuentaQuintaPaso(View view){
-        Intent intent = new Intent(LoginCrearCuentaCuartoPaso.this, LoginCrearCuentaQuintoPaso.class);
+        Intent intent = new Intent(LoginCrearCuentaCuartoPaso.this, LoginCrearCuentaPasoFinal.class);
         startActivity(intent);
     }
 

@@ -88,7 +88,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30sp"
                 android:hint="Fecha de nacimiento"
-                app:startIconDrawable="@drawable/cake_24px">
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/birthday"

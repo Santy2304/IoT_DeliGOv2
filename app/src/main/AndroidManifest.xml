@@ -177,12 +177,7 @@
         <activity
             android:name=".LogIn.LoginCrearCuentaPasoFinal"
             android:exported="false" />
-        <activity
-            android:name=".LogIn.LoginCrearCuentaSextoPaso"
-            android:exported="false" />
-        <activity
-            android:name=".LogIn.LoginCrearCuentaQuintoPaso"
-            android:exported="false" />
+
         <activity
             android:name=".LogIn.LoginCrearCuentaCuartoPaso"
             android:exported="false" />
