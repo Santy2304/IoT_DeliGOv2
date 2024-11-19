@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +45,12 @@ public class LoginPrimeraVista extends AppCompatActivity {
         comenzarButton = findViewById(R.id.comenzarButton);
 
         comenzarButton.setOnClickListener(view -> {
+            AuthMethodPickerLayout authMethodPickerLayout = new AuthMethodPickerLayout.Builder(R.layout.login_layout)
+                    .setGoogleButtonId(R.id.IniciarSesionButton)
+                    .setEmailButtonId(R.id.IniciarSesionGoogle)
+                    .build();
+
+
 
             Intent intent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -57,11 +64,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
             signInLauncher.launch(intent);
         });
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
     }
     ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),

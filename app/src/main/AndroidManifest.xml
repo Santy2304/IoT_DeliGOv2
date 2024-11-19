@@ -241,9 +241,6 @@
             android:name=".LogIn.LoginRecuperarPasswordPrimerPaso"
             android:exported="false" />
         <activity
-            android:name=".LogIn.LoginInicioSesion"
-            android:exported="false" />
-        <activity
             android:name=".LogIn.LoginVistaInicialApp"
             android:exported="false"/>
 
