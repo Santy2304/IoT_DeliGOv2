@@ -101,7 +101,7 @@
                     android:inputType="none"
                     android:maxLength="20"
                     android:singleLine="true"
-                    android:text="01/01/2020" />
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
 
