@@ -34,7 +34,7 @@ public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
         });
 
         Button continuarButton = findViewById(R.id.continuar1);
-        continuarButton.setEnabled(false);
+       // continuarButton.setEnabled(false);
 
 
 

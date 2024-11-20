@@ -91,8 +91,8 @@ public class LoginPrimeraVista extends AppCompatActivity {
 
         comenzarButton.setOnClickListener(view -> {
             AuthMethodPickerLayout authMethodPickerLayout = new AuthMethodPickerLayout.Builder(R.layout.login_layout)
-                    .setGoogleButtonId(R.id.IniciarSesionButton)
-                    .setEmailButtonId(R.id.IniciarSesionGoogle)
+                    .setGoogleButtonId(R.id.IniciarSesionGoogle)
+                    .setEmailButtonId(R.id.IniciarSesionButton)
                     .build();
 
 
