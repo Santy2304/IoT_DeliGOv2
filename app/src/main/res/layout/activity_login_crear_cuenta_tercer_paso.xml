@@ -89,7 +89,7 @@
                 android:layout_marginTop="18sp"
                 android:layout_marginBottom="18dp"
                 android:backgroundTint="@color/light_green"
-                android:onClick="verLoginCrearCuentaSextoPaso"
+                android:onClick="verLoginCrearCuentaCuartoPaso"
                 android:text="  Continuar  "
                 android:textColor="@color/white"
                 android:textStyle="bold" />
