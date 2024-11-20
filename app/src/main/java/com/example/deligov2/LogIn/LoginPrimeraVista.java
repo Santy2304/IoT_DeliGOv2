@@ -36,9 +36,10 @@ public class LoginPrimeraVista extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_primera_vista);
-
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         if(user!=null){
@@ -94,8 +95,6 @@ public class LoginPrimeraVista extends AppCompatActivity {
                     .setGoogleButtonId(R.id.IniciarSesionGoogle)
                     .setEmailButtonId(R.id.IniciarSesionButton)
                     .build();
-
-
 
             Intent intent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
