@@ -38,12 +38,14 @@ public class ClientePerfil extends AppCompatActivity {
         logout = findViewById(R.id.logOut);
         logout.setOnClickListener(view -> {
             AuthUI.getInstance().signOut(ClientePerfil.this)
-                    .addOnCompleteListener(task ->  {
-                        Intent intent = new Intent(ClientePerfil.this,LoginPrimeraVista.class);
+                    .addOnCompleteListener(task -> {
+                        Intent intent = new Intent(ClientePerfil.this, LoginPrimeraVista.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
                         startActivity(intent);
                         finish();
-                        });
+                    });
         });
+
 
         goBackButton = findViewById(R.id.goBackButtonPerfil);
 

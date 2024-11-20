@@ -40,7 +40,7 @@
 
 
             <Spinner
-                android:id="@+id/minutosNotiPersonalizada"
+                android:id="@+id/spinnerDocs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -61,6 +61,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/numeroDocumentoId"
                     android:inputType="text"
                     android:maxLength="20"
                     android:singleLine="true" />
@@ -76,6 +77,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/telefonoText"
                     android:inputType="text"
                     android:maxLength="20"
                     android:singleLine="true" />
