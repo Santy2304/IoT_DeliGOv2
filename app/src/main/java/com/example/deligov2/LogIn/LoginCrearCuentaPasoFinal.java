@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
 
 public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
@@ -21,8 +22,11 @@ public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
         setContentView(R.layout.activity_login_crear_cuenta_paso_final);
 
     }
-    public void volverInicioCrearCuenta(View view){
-
+    public void iniciar(View view){
+        Intent intent = new Intent(LoginCrearCuentaPasoFinal.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
+        startActivity(intent);
+        finish();
     }
 
 }

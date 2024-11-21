@@ -33,7 +33,9 @@ public class LoginCrearCuentaCuartoPaso extends AppCompatActivity {
 
     public void verLoginCrearCuentaQuintaPaso(View view){
         Intent intent = new Intent(LoginCrearCuentaCuartoPaso.this, LoginCrearCuentaPasoFinal.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
         startActivity(intent);
+        finish();
     }
 
 }
