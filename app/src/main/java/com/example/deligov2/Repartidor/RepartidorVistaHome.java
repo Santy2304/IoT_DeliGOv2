@@ -40,8 +40,8 @@ public class RepartidorVistaHome extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore db;
     private Usuario usuario;
-    FirebaseStorage storage ;
-    StorageReference storageRef;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
