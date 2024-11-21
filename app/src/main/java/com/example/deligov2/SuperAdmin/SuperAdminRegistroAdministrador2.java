@@ -27,11 +27,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Beans.Administrador;
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
     private TextInputEditText adminRestaurante;
@@ -39,12 +41,15 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
     private Administrador adminN;
     String canal2 = "importante Otro";
 
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_administrador2);
+
+        db = FirebaseFirestore.getInstance();
 
 
         //Manejo del top app bar
@@ -94,10 +99,19 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         // Obtener los datos del intent anterior a este
 
         Intent intent = getIntent();
-        String nameR = intent.getStringExtra("nr2");
+
+        Restaurante resR = (Restaurante) intent.getSerializableExtra("nr2");
+        //String nameR = intent.getStringExtra("nr2");
+        Administrador ad = (Administrador) intent.getSerializableExtra("admin");
+        /*
         String nameAdmin = intent.getStringExtra("adminName");
         String apellidoAdmin = intent.getStringExtra("adminApellido");
         String numDocAdmin = intent.getStringExtra("adminDoc");
+
+         */
+        Log.d("PROBANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO", "Nombre ADMIN"+ad.getNombre()+ad.getApellido() + " _ " + ad.getRestaurante());
+
+        /*
 
         Log.d("Registro Admin 2", "Nombre del restaurante: " + nameR);
         String cNameR;
@@ -107,12 +121,12 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
             cNameR = "Nombre no disponible";
         }
 
+         */
+
 
         adminRestaurante = findViewById(R.id.adminRestaurante);
         adminCorreo = findViewById(R.id.adminCorreo);
-        adminRestaurante.setText(cNameR);
-
-        adminN = new Administrador(0,nameAdmin,apellidoAdmin,adminCorreo.getText().toString().trim(),true,cNameR,"Av.Urubamba",numDocAdmin);
+        adminRestaurante.setText(resR.getNombre());
 
 
         //Manejo de botones
@@ -139,20 +153,35 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                     return;
                 }
 
+
                 emailLayout.setError(null);
-                notificarAsignarAdminRestaurante(adminN,nameAdmin,nameR);
+                notificarAsignarAdminRestaurante(adminN,ad.getNombre(),resR.getNombre());
                 vistaRegistroAdminCorrect();
+
+                adminN = new Administrador();
+                adminN.setNombre(ad.getNombre());
+                adminN.setApellido(ad.getApellido());
+                adminN.setCorreo(email);
+                adminN.setEstado(true);
+                adminN.setRestaurante(resR.getId());
+                adminN.setUbicacionRestaurante(resR.getDireccion());
+                adminN.setNumDocumento(ad.getNumDocumento());
+
+                registrarAdministradorFirebase(adminN,resR.getId());
             }
         });
 
         Button btCancelar = findViewById(R.id.cancelar2);
-
+        btCancelar.setVisibility(View.INVISIBLE);
+        /*
         btCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 vistaPanelRestaurante();
             }
         });
+
+         */
     }
 
     public void vistaRegistroAdminCorrect(){
@@ -213,6 +242,46 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             notificationManager.notify(282, notification);
         }
+
+
+    }
+
+
+    private void registrarAdministradorFirebase(Administrador admin, String resId) {
+
+
+        db.collection("administradores")
+                .add(admin)
+                .addOnSuccessListener(documentReference -> {
+                    String idAdmin = documentReference.getId();
+                    admin.setIdAdmin(idAdmin);
+
+                    // Actualizar el campo id en Firestore con el ID generado
+                    documentReference.update("idAdmin", idAdmin)
+                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "ID actualizado correctamente en el documento."))
+                            .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
+
+                    Log.d("Firestore", "Administrador registrado con ID: " + idAdmin);
+
+                    // Buscar el restaurante por id en su colección y actualizar el campo admin
+                    db.collection("restaurantes").document(resId)
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    db.collection("restaurantes").document(resId)
+                                            .update("admin", idAdmin)
+                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Campo admin actualizado correctamente para el restaurante con ID: " + resId))
+                                            .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo admin del restaurante", e));
+                                } else {
+                                    Log.w("Firestore", "No se encontró el restaurante con ID: " + resId);
+                                }
+                            })
+                            .addOnFailureListener(e -> Log.w("Firestore", "Error al buscar el restaurante en Firestore", e));
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error al registrar el admin", e);
+                });
 
     }
 }

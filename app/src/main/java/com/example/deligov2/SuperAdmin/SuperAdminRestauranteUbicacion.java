@@ -1,6 +1,8 @@
 package com.example.deligov2.SuperAdmin;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
+import java.util.Locale;
 
 public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -117,7 +122,7 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
         mapFragment.getMapAsync(this);
 
     }
-    //Mapa
+    //Mapa esto lo sque de mi proyecto, lo hice mediante busqueda en google
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap){
         mMap = googleMap;
@@ -126,10 +131,27 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
         this.mMap.setOnMapLongClickListener(this::onMapLongClick);
 
          */
+        String userUbicacion = "San Borja";
+        LatLng ubicacion = obtenerUbicacion(userUbicacion);
+        if (ubicacion != null) {
+            mMap.addMarker(new MarkerOptions().position(ubicacion).title(userUbicacion));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 15));
+        }
+    }
 
-        LatLng ubicacion = new LatLng(-12.0748234,-77.092355);
-        mMap.addMarker(new MarkerOptions().position(ubicacion).title("Restaurante"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacion));
+    private LatLng obtenerUbicacion(String strAddress) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addressList;
+        try {
+            addressList = geocoder.getFromLocationName(strAddress, 1);
+            if (addressList != null && !addressList.isEmpty()) {
+                Address address = addressList.get(0);
+                return new LatLng(address.getLatitude(), address.getLongitude());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /*

@@ -153,6 +153,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
 
                         currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title(location));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                        nameR.setDireccion(location);
 
                     } else {
                         Toast.makeText(SuperAdminRegistroRestaurante2.this, "No se encontró ninguna dirección para: " + location, Toast.LENGTH_SHORT).show();
@@ -180,7 +181,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 notificarRestauranteCreado(nameR.getNombre());
-                vistaRegistroRestauranteCorrect(nameR);
+                //vistaRegistroRestauranteCorrect(nameR);
                 registrarRestauranteFirestore(nameR);
             }
         });
@@ -201,6 +202,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
     public void vistaRegistroRestauranteCorrect(Restaurante restaurante){
         Intent intent = new Intent(this, SuperAdminRegistroRestauranteCorrect.class);
         intent.putExtra("nr",restaurante); //Se envía el restaurante
+
+        Log.d("ID FIREBASE RESTAURANTE", "ID:" +restaurante.getId());
         startActivity(intent);
     }
     public void vistaPanelRestaurante(){
@@ -243,7 +246,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal1)
                 .setSmallIcon(R.drawable.deligo)
                 .setContentTitle("DeliGO")
-                .setContentText("Se ha creado el restaurante " + nameR)
+                .setContentText("Se ha creado el restaurante: " + nameR)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
@@ -272,7 +275,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
 
                 currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title("Nueva ubicación"));
 
-                myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                 Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);
             }
@@ -286,7 +289,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         newRestaurant.setNombre(restaurante.getNombre());
         newRestaurant.setMonto(0.00f);
         newRestaurant.setEstado(true);
-        newRestaurant.setHorario("9:00am - 22:00pm");
+        newRestaurant.setHorario(restaurante.getHorario());
+        newRestaurant.setDireccion(restaurante.getDireccion());
 
         db.collection("restaurantes")
                 .add(newRestaurant)
@@ -300,12 +304,13 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                             .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
 
                     Log.d("Firestore", "Restaurante registrado con ID: " + idRestaurante);
-
+                    vistaRegistroRestauranteCorrect(newRestaurant);
 
                 })
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error al registrar el restaurante", e);
                 });
+
     }
 
 }

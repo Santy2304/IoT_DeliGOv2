@@ -141,9 +141,12 @@ public class SuperAdminAdministrador extends AppCompatActivity {
 
     public void mostrarListaAdmins(){
         admins = new ArrayList<>();
+        /*
         admins.add(new Administrador(1,"Admin","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
         admins.add(new Administrador(1,"Admin2","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
         admins.add(new Administrador(1,"Admin3","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
+
+         */
 
         listAdapter = new SuperAdminAdministradorListAdapter(admins,this);
         RecyclerView recyclerView = findViewById(R.id.listAdmins);

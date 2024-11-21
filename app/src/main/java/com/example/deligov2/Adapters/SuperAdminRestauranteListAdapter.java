@@ -3,6 +3,7 @@ package com.example.deligov2.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +105,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                 //btDeshabilitar.setVisibility(View.INVISIBLE);
                 btVer.setImageResource(R.drawable.ic_admin2);
 
+
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -116,12 +118,34 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
 
             }else{
 
-                iconImage.setImageResource(R.drawable.bembos_logo);
-                tvGanancia.setText("S/"+ restaurante.getMonto());
-                tvNombre.setText(restaurante.getNombre());
-                tvAdmin.setText("Admin: "+restaurante.getAdmin());
-                btHabilitar.setVisibility(View.VISIBLE);
-                //btDeshabilitar.setVisibility(View.INVISIBLE);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("administradores")
+                        .document(restaurante.getAdmin())
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+
+                            iconImage.setImageResource(R.drawable.bembos_logo);
+                            tvGanancia.setText("S/"+ restaurante.getMonto());
+                            tvNombre.setText(restaurante.getNombre());
+                            btHabilitar.setVisibility(View.VISIBLE);
+                            //btDeshabilitar.setVisibility(View.INVISIBLE);
+
+                            if (documentSnapshot.exists()) {
+                                String admin = documentSnapshot.getString("nombre") + " "+ documentSnapshot.getString("apellido");
+                                if (admin != null && !admin.isEmpty()) {
+                                    tvAdmin.setText("Admin: " + admin);
+                                } else {
+                                    tvAdmin.setText("Admin: Sin nombre");
+                                }
+                            } else {
+                                tvAdmin.setText("Admin: No encontrado");
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            tvAdmin.setText("Admin: Error");
+                            Log.e("Firestore", "Error al obtener el administrador: ", e);
+                        });
+
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

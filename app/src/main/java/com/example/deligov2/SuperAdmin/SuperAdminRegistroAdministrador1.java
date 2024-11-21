@@ -21,12 +21,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Beans.Administrador;
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
 
@@ -108,6 +110,11 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
         String numA = numDocumentAdmin.getText().toString().trim();
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
+
+        Restaurante resR = (Restaurante) intent.getSerializableExtra("nr1");
+
+        Log.d("ID RESTAURANTEEE FIREBASEEE", "ID: "+resR.getId());
+        /*
         String nameR = intent.getStringExtra("nr1");
         Log.d("Registro Admin 1", "Nombre del restaurante: " + nameR);
         String cNameR;
@@ -116,6 +123,8 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
         }else{
             cNameR = "Nombre no disponible";
         }
+
+         */
 
         //Manejo de botones
         Button btContinuar = findViewById(R.id.continuar1);
@@ -163,28 +172,37 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
                 nameLayout.setError(null);
                 apellidoLayout.setError(null);
                 dniLayout.setError(null);
-                vistaRegistroAdmin2(cNameR,nameA,apellidoA,numA);
+                vistaRegistroAdmin2(resR,name,apellido,dni);
 
 
             }
         });
 
         Button btCancelar = findViewById(R.id.cancelar1);
-
+        btCancelar.setVisibility(View.INVISIBLE);
+        /*
         btCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 vistaPanelRestaurante();
             }
         });
+
+         */
     }
 
-    public void vistaRegistroAdmin2(String nameR, String name, String apellido, String num){
+    public void vistaRegistroAdmin2(Restaurante resR, String name, String apellido, String num){
+
+        Administrador ad = new Administrador();
+        ad.setNumDocumento(num);
+        ad.setNombre(name);
+        ad.setApellido(apellido);
+        ad.setRestaurante(resR.getId());
         Intent intent = new Intent(this, SuperAdminRegistroAdministrador2.class);
-        intent.putExtra("nr2",nameR);
-        intent.putExtra("adminName",name);
-        intent.putExtra("adminApellido",apellido);
-        intent.putExtra("adminDoc",num);
+        intent.putExtra("nr2",resR);
+        intent.putExtra("admin",ad);
+
+        Log.d("ADMINiSTRADORRR", "nombre: "+name+apellido+num);
         startActivity(intent);
     }
 

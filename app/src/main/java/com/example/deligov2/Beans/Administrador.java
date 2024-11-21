@@ -3,7 +3,7 @@ package com.example.deligov2.Beans;
 import java.io.Serializable;
 
 public class Administrador implements Serializable {
-    private int idAdmin;
+    private String idAdmin;
     private String nombre;
     private String apellido;
     private String correo;
@@ -12,6 +12,7 @@ public class Administrador implements Serializable {
     private String ubicacionRestaurante;
     private String numDocumento;
 
+    /*
     public Administrador(int idAdmin, String nombre, String apellido, String correo, boolean estado, String restaurante, String ubicacionRestaurante, String numDocumento) {
         this.idAdmin = idAdmin;
         this.nombre = nombre;
@@ -23,11 +24,14 @@ public class Administrador implements Serializable {
         this.numDocumento = numDocumento;
     }
 
-    public int getIdAdmin() {
+
+     */
+
+    public String getIdAdmin() {
         return idAdmin;
     }
 
-    public void setIdAdmin(int idAdmin) {
+    public void setIdAdmin(String idAdmin) {
         this.idAdmin = idAdmin;
     }
 
@@ -87,14 +91,5 @@ public class Administrador implements Serializable {
         this.numDocumento = numDocumento;
     }
 
-    //Para verificar que no esté vacío
-    public boolean isEmpty() {
-        return idAdmin <= 0 ||
-                (nombre == null || nombre.isEmpty()) ||
-                (apellido == null || apellido.isEmpty()) ||
-                (correo == null || correo.isEmpty()) ||
-                (restaurante == null || restaurante.isEmpty()) ||
-                (ubicacionRestaurante == null || ubicacionRestaurante.isEmpty()) ||
-                (numDocumento == null || numDocumento.isEmpty());
-    }
+
 }

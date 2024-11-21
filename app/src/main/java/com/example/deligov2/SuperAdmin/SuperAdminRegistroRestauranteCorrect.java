@@ -43,7 +43,7 @@ public class SuperAdminRegistroRestauranteCorrect extends AppCompatActivity {
     public void vistaRegistroAdmin1(Restaurante res){
         Intent intent = new Intent(this, SuperAdminRegistroAdministrador1.class);
 
-        intent.putExtra("nr1",res); //por ahora solo se envía nombre
+        intent.putExtra("nr1",res);
         startActivity(intent);
     }
 

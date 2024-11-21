@@ -40,6 +40,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -180,6 +181,8 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String nombre = restauranteNombre.getText().toString().trim();
+                String horaInicio = tiHinicio.getText().toString().trim();
+                String horaFin = tiHfin.getText().toString().trim();
                 Log.d("Registro", "Nombre del restaurante: " + nombre);
                 Restaurante restA = new Restaurante();
                 restA.setNombre(nombre);
@@ -187,29 +190,41 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
                 boolean validInput = true;
 
                 try {
-                    if (!nombre.isEmpty()) {
-                        vistaRegistroRestaurante2(restA);
-                    } else {
+                    if (nombre.isEmpty()) {
                         restauranteNombre.setError("Completar este campo");
                         validInput = false;
                     }
 
-                } catch (NumberFormatException e) {
+                    if (horaInicio.isEmpty()) {
+                        tiHinicio.setError("Completar este campo");
+                        validInput = false;
+                    }
+
+                    if (horaFin.isEmpty()) {
+                        tiHfin.setError("Completar este campo");
+                        validInput = false;
+                    }
+
+                    if (!horaInicio.isEmpty() && !horaFin.isEmpty()) {
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                        Date inicio = timeFormat.parse(horaInicio);
+                        Date fin = timeFormat.parse(horaFin);
+
+                        if (inicio != null && fin != null && !inicio.before(fin)) {
+                            tiHinicio.setError("La hora de apertura debe ser menor que la hora de cierre");
+                            validInput = false;
+                        }
+                    }
+
+                    if (validInput) {
+                        restA.setHorario(horaInicio+" - "+horaFin);
+                        vistaRegistroRestaurante2(restA);
+                    }
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
                 if (!validInput) return;
-                /*
-                if(nombre.isEmpty()){
-                    nameLayout.setError("Complete este campo");
-                    nameLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
-                    return;
-                }else{
-                    nameLayout.setError(null);
-                    vistaRegistroRestaurante2(nombre);
-                }
-
-                 */
             }
         });
 
