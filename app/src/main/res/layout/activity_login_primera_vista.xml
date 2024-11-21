@@ -15,6 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:layout_width="260dp"
             android:layout_marginTop="50dp"
@@ -25,8 +26,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Bienvenido a DeliGO"
             android:textColor="@color/light_green"
-            android:textSize="50sp"
-            />
+            android:textSize="50sp"/>
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -50,9 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
-            android:text="Comenzar"
-            />
+            android:text="Comenzar"/>
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
