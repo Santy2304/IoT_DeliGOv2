@@ -22,6 +22,7 @@ import com.example.deligov2.Adapters.SuperAdminRestauranteListAdapter;
 import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.Beans.RestauranteSA;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,6 +48,9 @@ public class SuperAdminRestaurante extends AppCompatActivity {
 
         //Firebase
         db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
 
         //Para el buscador
@@ -79,16 +83,22 @@ public class SuperAdminRestaurante extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminRestaurante.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminRestaurante.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminRestaurante.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;
@@ -102,7 +112,7 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         btAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRegistroRestaurante1();
+                vistaRegistroRestaurante1(sa);
             }
         });
 
@@ -190,8 +200,9 @@ public class SuperAdminRestaurante extends AppCompatActivity {
 
     //Cambiar vista
 
-    public void vistaRegistroRestaurante1(){
+    public void vistaRegistroRestaurante1(Usuario sa){
         Intent intent = new Intent(this, SuperAdminRegistroRestaurante1.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
     }
 }

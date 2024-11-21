@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Beans.Administrador;
 import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,12 +37,18 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
     private TextInputEditText nameAdmin;
     private TextInputEditText apellidoAdmin;
     private TextInputEditText numDocumentAdmin;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_administrador1);
+
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -69,16 +76,19 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminRegistroAdministrador1.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminRegistroAdministrador1.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminRegistroAdministrador1.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminRegistroAdministrador1.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminRegistroAdministrador1.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminRegistroAdministrador1.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
                     return true;
                 }else{
                     return false;
@@ -109,7 +119,6 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
         String apellidoA = apellidoAdmin.getText().toString().trim();
         String numA = numDocumentAdmin.getText().toString().trim();
         // Obtener los datos del intent anterior a este
-        Intent intent = getIntent();
 
         Restaurante resR = (Restaurante) intent.getSerializableExtra("nr1");
 

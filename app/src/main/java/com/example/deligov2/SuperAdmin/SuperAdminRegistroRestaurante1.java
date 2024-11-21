@@ -34,11 +34,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +59,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private static final int REQUEST_IMAGE_PICK = 2;
     private static final int REQUEST_PERMISSIONS = 100;
 
+    private FirebaseFirestore db;
     //Nombre del restaurante
     private TextInputEditText restauranteNombre;
 
@@ -67,6 +70,12 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_restaurante1);
 
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+
+
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
 
@@ -75,6 +84,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.log_event){
                     Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminVistaLogEvent.class);
+                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else{
@@ -93,16 +103,19 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
                     return true;
                 }else{
                     return false;
@@ -218,7 +231,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
                     if (validInput) {
                         restA.setHorario(horaInicio+" - "+horaFin);
-                        vistaRegistroRestaurante2(restA);
+                        vistaRegistroRestaurante2(restA,sa);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -234,7 +247,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         btCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaPanelRestaurante();
+                vistaPanelRestaurante(sa);
             }
         });
 
@@ -346,15 +359,19 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
     //Cambiar vista
 
-    public void vistaRegistroRestaurante2(Restaurante restR){
+    public void vistaRegistroRestaurante2(Restaurante restR, Usuario sa){
         Intent intent = new Intent(this, SuperAdminRegistroRestaurante2.class);
         intent.putExtra("nameR", restR);
+        intent.putExtra("sa",sa);
         startActivity(intent);
+        finish();
     }
 
-    public void vistaPanelRestaurante(){
+    public void vistaPanelRestaurante(Usuario sa){
         Intent intent = new Intent(this, SuperAdminRestaurante.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
+        finish();
     }
 
 

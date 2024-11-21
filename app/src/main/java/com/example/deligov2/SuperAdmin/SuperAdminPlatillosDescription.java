@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Beans.Plato;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -36,6 +37,11 @@ public class SuperAdminPlatillosDescription extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_platillos_description);
+
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -24,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
 import com.example.deligov2.Beans.Cliente;
+import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -45,11 +48,29 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
     SuperAdminClienteListAdapter listAdapter;
     private FirebaseFirestore db;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_home);
+
+
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+
+        ImageView repartidor = findViewById(R.id.imgRepartidor);
+        ImageView admin = findViewById(R.id.imgAdmin);
+
+        repartidor.setOnClickListener(v -> {
+            vistaPanelRepartidor(v,sa);
+        });
+
+        admin.setOnClickListener(v -> {
+            vistaPanelAdmin(v,sa);
+        });
 
         mostrarListaClientes();
 
@@ -65,6 +86,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.log_event){
                     Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);
+                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else{
@@ -72,6 +94,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -83,16 +106,22 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminHomeActivity.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminHomeActivity.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminHomeActivity.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;
@@ -163,14 +192,18 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
 
 
     //Cambio vista
-    public void vistaPanelRepartidor(View view) {
+    public void vistaPanelRepartidor(View view, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminRepartidor.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    public void vistaPanelAdmin(View view) {
+    public void vistaPanelAdmin(View view, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminAdministrador.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
 

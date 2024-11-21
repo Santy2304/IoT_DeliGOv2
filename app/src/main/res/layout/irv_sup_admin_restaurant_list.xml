@@ -1,90 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="14dp"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginBottom="14dp">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="225dp"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        android:background="@drawable/cardview_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imgRestauranteLarge"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/rounded_corner"
-            app:srcCompat="@drawable/bembos2" />
+            android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
+            <ImageView
+                android:id="@+id/imgRestauranteLarge"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/rounded_corner"
+                app:srcCompat="@drawable/bembos2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/imgRestaurante"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/rounded_corner"
                 android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgRestauranteLarge"
                 app:srcCompat="@drawable/bembos_logo" />
 
             <TextView
                 android:id="@+id/tv_nombre"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/imgRestaurante"
-                android:layout_alignTop="@id/imgRestaurante"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="La Panka - San Isidro"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@id/imgRestaurante"
+                app:layout_constraintTop_toTopOf="@id/imgRestaurante"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/tv_admin"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:layout_toEndOf="@id/imgRestaurante"
-                android:layout_below="@id/tv_nombre"
                 android:text="Admin: "
                 android:textSize="14sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/tv_nombre"
+                app:layout_constraintTop_toBottomOf="@id/tv_nombre"
+                app:layout_constraintEnd_toEndOf="@id/tv_nombre" />
 
             <TextView
                 android:id="@+id/tv_ganancia"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:layout_toEndOf="@id/imgRestaurante"
-                android:layout_below="@id/tv_admin"
                 android:text="Ganancia: S/."
                 android:textSize="14sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/tv_admin"
+                app:layout_constraintTop_toBottomOf="@id/tv_admin"
+                app:layout_constraintEnd_toEndOf="@id/tv_admin" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgRestaurante"
+                app:layout_constraintBottom_toBottomOf="@id/imgRestaurante">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/bt_info"
-                    android:onClick="vistaRestauranteResumen"
                     style="?attr/floatingActionButtonSmallStyle"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:visibility="visible"
                     android:contentDescription="Información"
+                    android:visibility="visible"
                     app:backgroundTint="@color/light_yellow"
                     app:srcCompat="@drawable/baseline_eye_24"
                     app:tint="@color/white" />
@@ -100,6 +111,6 @@
                     app:srcCompat="@drawable/baseline_check_circle_24"
                     app:tint="@color/white" />
             </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

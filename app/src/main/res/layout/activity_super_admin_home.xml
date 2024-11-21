@@ -79,7 +79,7 @@
                     android:id="@+id/imgCostumer"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    app:srcCompat="@drawable/costumer_green" />
+                    app:srcCompat="@drawable/icclient" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:onClick="vistaPanelRepartidor"
-                    app:srcCompat="@drawable/deliver_green2" />
+                    app:srcCompat="@drawable/icdealer" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:onClick="vistaPanelAdmin"
-                    app:srcCompat="@drawable/admin_green" />
+                    app:srcCompat="@drawable/icadmin" />
 
                 <TextView
                     android:layout_width="wrap_content"

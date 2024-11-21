@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
 import com.example.deligov2.Adapters.SuperAdminRestauranteVentaAdapter;
 import com.example.deligov2.Beans.Cliente;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -40,6 +41,10 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
         setContentView(R.layout.activity_super_admin_historial_ventas_detalles);
 
         db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+
         mostrarListaVentas();
 
         //Manejo del top app bar

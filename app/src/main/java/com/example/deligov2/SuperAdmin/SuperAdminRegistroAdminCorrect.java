@@ -11,9 +11,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminRegistroAdminCorrect extends AppCompatActivity {
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,19 +24,24 @@ public class SuperAdminRegistroAdminCorrect extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_admin_correct);
 
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
         //Manejo de botones
         Button btContinuar = findViewById(R.id.button);
 
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaPanelRestaurante();
+                vistaPanelRestaurante(sa);
             }
         });
     }
 
-    public void vistaPanelRestaurante(){
+    public void vistaPanelRestaurante(Usuario sa){
         Intent intent = new Intent(this, SuperAdminRestaurante.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
     }
 }

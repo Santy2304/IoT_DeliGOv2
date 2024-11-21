@@ -24,6 +24,7 @@ import com.example.deligov2.Adapters.SuperAdminRestauranteCartaAdapter;
 import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.Beans.Plato;
 import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -65,6 +66,9 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         setContentView(R.layout.activity_super_admin_restaurante_platillos);
 
         db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
 
         //Manejo del adapter para los datos
@@ -115,7 +119,6 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
             }
         });
         // Obtener los datos del intent anterior a este
-        Intent intent = getIntent();
         Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
 
         tvRestaurante = findViewById(R.id.tv_restaurante);
@@ -135,14 +138,17 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
 
                 if(item.getItemId()==R.id.restaurant){
                     Intent intent = new Intent(SuperAdminRestaurantePlatillos.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminRestaurantePlatillos.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminRestaurantePlatillos.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else{
@@ -162,7 +168,7 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         btResumen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteResumen(v, resR);
+                vistaRestauranteResumen(v, resR, sa);
             }
         });
 
@@ -171,7 +177,7 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         btVentas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteHistorialVentas(v, resR);
+                vistaRestauranteHistorialVentas(v, resR,sa);
             }
         });
 
@@ -180,7 +186,7 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
         btUbicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteUbicacion(v,resR);
+                vistaRestauranteUbicacion(v,resR,sa);
             }
         });
 
@@ -189,20 +195,23 @@ public class SuperAdminRestaurantePlatillos extends AppCompatActivity {
     }
 
     //Cambio vista
-    public void vistaRestauranteResumen(View view, Restaurante res) {
+    public void vistaRestauranteResumen(View view, Restaurante res, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminRestauranteResumen.class);
         intent.putExtra("res",res);
+        intent.putExtra("sa",sa);
         startActivity(intent);
     }
 
-    public void vistaRestauranteHistorialVentas(View view, Restaurante res) {
+    public void vistaRestauranteHistorialVentas(View view, Restaurante res, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
         intent.putExtra("res",res);
+        intent.putExtra("sa",sa);
         startActivity(intent);
     }
-    public void vistaRestauranteUbicacion(View view, Restaurante res){
+    public void vistaRestauranteUbicacion(View view, Restaurante res, Usuario sa){
         Intent intent = new Intent(this, SuperAdminRestauranteUbicacion.class);
         intent.putExtra("res",res);
+        intent.putExtra("sa",sa);
         startActivity(intent);
     }
 

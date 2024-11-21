@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,9 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.deligov2.Beans.Usuario;
+import com.example.deligov2.Cliente.ClientePerfil;
+import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminPerfil extends AppCompatActivity {
@@ -30,11 +36,49 @@ public class SuperAdminPerfil extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS = 100;
     private FirebaseFirestore db;
 
+    private MaterialTextView nombre,apellido, numDni,correo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_perfil);
+
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        /*
+        Intent intent = getIntent();
+
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+        Log.d("PERFIL SUPERA AMDID","SA PERFIL: "+sa.getId());
+
+         */
+        nombre = findViewById(R.id.name);
+        apellido = findViewById(R.id.apellido);
+        numDni = findViewById(R.id.n_dni);
+        correo = findViewById(R.id.correo);
+
+        db.collection("Usuarios")
+                .document("ClcUvl7d43Rz0aEqbLteSw22eH22") //sa.getId(), por las ... envie entre todos el sa
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String nombreUsuario = documentSnapshot.getString("nombre");
+                        String apellidoUsuario = documentSnapshot.getString("apellido");
+                        String dniUsuario = documentSnapshot.getString("numDocument");
+                        String correoUsuario = documentSnapshot.getString("correo");
+
+                        nombre.setText(nombreUsuario != null ? nombreUsuario : "---");
+                        apellido.setText(apellidoUsuario != null ? apellidoUsuario : "---");
+                        numDni.setText(dniUsuario != null ? dniUsuario : "---");
+                        correo.setText(correoUsuario != null ? correoUsuario : "---");
+                    } else {
+                        Log.d("Firestore", "No se encontró el usuario con ID: " +"ClcUvl7d43Rz0aEqbLteSw22eH22") ;
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener el usuario: ", e);
+                });
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -63,16 +107,19 @@ public class SuperAdminPerfil extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminPerfil.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminPerfil.this, SuperAdminRestaurante.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminPerfil.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminPerfil.this, SuperAdminHomeActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminPerfil.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminPerfil.this, SuperAdminPerfil.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;
@@ -100,16 +147,18 @@ public class SuperAdminPerfil extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
 
     //Manejo vistas
     public void cerrarSesion(){
-//        Intent intent = new Intent(this, LoginInicioSesion.class);
-//        startActivity(intent);
+        AuthUI.getInstance().signOut(SuperAdminPerfil.this)
+                .addOnCompleteListener(task -> {
+                    Intent intent = new Intent(SuperAdminPerfil.this, LoginPrimeraVista.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
+                    startActivity(intent);
+                    finish();
+                });
     }
 
     private boolean checkPermissions() {

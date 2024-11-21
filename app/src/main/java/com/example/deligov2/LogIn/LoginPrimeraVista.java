@@ -13,12 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Administrador.AdministradorHomeActivity;
 import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorHomeActivity;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
+import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -67,7 +69,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
                                                 } else if (usuario.getRol().equals("Administrador")) {
                                                     goAdmin();
                                                 }else {
-                                                    goSuper();
+                                                    goSuper(usuario);
                                                 }
                                             }else{
                                                 Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaCuartoPaso.class);
@@ -135,7 +137,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
                                                 } else if (usuario.getRol().equals("Administrador")) {
                                                     goAdmin();
                                                 }else if (usuario.getRol().equals("SuperAdmin")){
-                                                    goSuper();
+                                                    goSuper(usuario);
                                                 }
                                             } else {
                                                 Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaPrimerPaso.class);
@@ -171,12 +173,14 @@ public class LoginPrimeraVista extends AppCompatActivity {
         finish();
     }
     public void goAdmin(){
-        Intent intent = new Intent(LoginPrimeraVista.this, ClienteHomeActivity.class);
+        Intent intent = new Intent(LoginPrimeraVista.this, AdministradorHomeActivity.class);
         startActivity(intent);
         finish();
     }
-    public void goSuper(){
-        Intent intent = new Intent(LoginPrimeraVista.this, ClienteHomeActivity.class);
+    public void goSuper(Usuario user){
+        Intent intent = new Intent(LoginPrimeraVista.this, SuperAdminHomeActivity.class);
+        intent.putExtra("sa",user);
+        Log.d("PROBANDO 123","LOGIN OLA" + user.getId()+"-"+user.getNombre());
         startActivity(intent);
         finish();
     }

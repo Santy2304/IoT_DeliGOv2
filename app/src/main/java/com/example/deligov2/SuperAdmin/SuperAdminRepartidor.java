@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
 import com.example.deligov2.Adapters.SuperAdminRepartidorListAdapter;
 import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.Beans.Repartidor;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -48,7 +50,23 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_repartidor);
 
+        db = FirebaseFirestore.getInstance();
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
         mostrarListaRepartidores();
+
+        ImageView admin = findViewById(R.id.imgAdmin);
+        ImageView cliente = findViewById(R.id.imgCostumer);
+
+        admin.setOnClickListener(v -> {
+            vistaPanelAdmin(v,sa);
+        });
+
+        cliente.setOnClickListener(v -> {
+            vistaPanelCliente(v,sa);
+        });
+
 
         //Para el buscador
         TextInputEditText searchInput;
@@ -62,6 +80,7 @@ public class SuperAdminRepartidor extends AppCompatActivity {
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.log_event){
                     Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminVistaLogEvent.class);
+                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else{
@@ -80,16 +99,22 @@ public class SuperAdminRepartidor extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminRepartidor.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminRepartidor.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminRepartidor.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa",sa);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;
@@ -138,13 +163,17 @@ public class SuperAdminRepartidor extends AppCompatActivity {
 
     //Cambio de vista
 
-    public void vistaPanelCliente(View view) {
+    public void vistaPanelCliente(View view, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminHomeActivity.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    public void vistaPanelAdmin(View view) {
+    public void vistaPanelAdmin(View view, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminAdministrador.class);
+        intent.putExtra("sa",sa);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }
