@@ -18,6 +18,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:visibility="invisible"
+            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="retroceder"
@@ -167,7 +169,6 @@
             android:layout_marginBottom="12sp"
             android:fontFamily="sans-serif-condensed-medium"
             android:backgroundTint="@color/light_green"
-            android:onClick="verLoginCrearCuentaQuintaPaso"
             android:text="  Terminar  "
             android:textColor="@color/white"
             android:textStyle="bold" />

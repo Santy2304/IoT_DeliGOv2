@@ -43,7 +43,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 public class LoginCrearCuentaTercerPaso extends AppCompatActivity {
-
     private ImageView imageView;
     private Uri selectedImageUri;
     private FirebaseStorage storage;
@@ -51,7 +50,6 @@ public class LoginCrearCuentaTercerPaso extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore db;
     private Usuario usuario;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -135,7 +133,6 @@ public class LoginCrearCuentaTercerPaso extends AppCompatActivity {
             }
         });
     }
-
     public void uploadImage(Uri imageUri, String userId, UploadCallback listener) {
         if (imageUri != null) {
             // Crea una referencia para la imagen
@@ -161,13 +158,11 @@ public class LoginCrearCuentaTercerPaso extends AppCompatActivity {
             listener.onFailure(new Exception("La URI de la imagen es nula"));
         }
     }
-
     public interface UploadCallback {
         void onSuccess(String downloadUrl);
 
         void onFailure(Exception e);
     }
-
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -192,12 +187,10 @@ public class LoginCrearCuentaTercerPaso extends AppCompatActivity {
                     Toast.makeText(this, "Error al registrar usuario.", Toast.LENGTH_SHORT).show();
                 });
     }
-
     private void irAlSiguientePaso() {
         Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
         startActivity(intent);
     }
-
     private Uri saveBitmapToUri(Bitmap bitmap) {
         try {
             // Crear un archivo temporal en el almacenamiento interno de la aplicación
