@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ import java.util.List;
 
 public class SuperAdminAdministrador extends AppCompatActivity {
 
-    List<Administrador> admins;
+    List<Usuario> admins = new ArrayList<>();
     private MaterialCardView cardAdmin;
     private GradientDrawable borderDrawable;
     SuperAdminAdministradorListAdapter listAdapter;
@@ -167,19 +169,28 @@ public class SuperAdminAdministrador extends AppCompatActivity {
     }
 
     public void mostrarListaAdmins(){
-        admins = new ArrayList<>();
-        /*
-        admins.add(new Administrador(1,"Admin","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
-        admins.add(new Administrador(1,"Admin2","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
-        admins.add(new Administrador(1,"Admin3","Del Lago","admin@deligo.com",true,"Bembos","Av.universitaria","12345678"));
-
-         */
 
         listAdapter = new SuperAdminAdministradorListAdapter(admins,this);
         RecyclerView recyclerView = findViewById(R.id.listAdmins);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
+
+        db.collection("Usuarios")
+                .whereEqualTo("rol", "Administrador")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        Usuario admin = doc.toObject(Usuario.class);
+                        admins.add(admin);
+                    }
+
+                    listAdapter.setAdmin(admins);
+                    listAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener repartidores: ", e);
+                });
     }
 
 

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.Cliente.ClientePerfil;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
@@ -29,6 +30,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class SuperAdminPerfil extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -37,6 +40,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private MaterialTextView nombre,apellido, numDni,correo;
+    private ImageView imagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,27 @@ public class SuperAdminPerfil extends AppCompatActivity {
         apellido = findViewById(R.id.apellido);
         numDni = findViewById(R.id.n_dni);
         correo = findViewById(R.id.correo);
+        imagen = findViewById(R.id.imgSAperfil);
+
+
+        // Cargar imagen desde Firebase Storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference()
+                .child("users/" + "ClcUvl7d43Rz0aEqbLteSw22eH22" + "/profile.jpg");
+
+        storageRef.getDownloadUrl()
+                .addOnSuccessListener(uri -> {
+                    Glide.with(imagen.getContext())
+                            .load(uri)
+                            .placeholder(R.drawable.ic_loading)
+                            .error(R.drawable.ic_errorimg)
+                            .into(imagen);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                    imagen.setImageResource(R.drawable.ic_errorimg);
+                });
+
 
         db.collection("Usuarios")
                 .document("ClcUvl7d43Rz0aEqbLteSw22eH22") //sa.getId(), por las ... envie entre todos el sa

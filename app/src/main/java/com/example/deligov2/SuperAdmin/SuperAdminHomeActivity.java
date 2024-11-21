@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
@@ -42,7 +44,7 @@ import java.util.List;
 
 public class SuperAdminHomeActivity extends AppCompatActivity {
 
-    List<Cliente> clientes;
+    List<Usuario> clientes = new ArrayList<>();
     private MaterialCardView cardCliente;
     private GradientDrawable borderDrawable;
     SuperAdminClienteListAdapter listAdapter;
@@ -157,13 +159,6 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
 
     //Colocar datos
     public void mostrarListaClientes(){
-        clientes = new ArrayList<>();
-        clientes.add(new  Cliente(1,"Elizabeth","Del Lago","cliente1@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
-        clientes.add(new  Cliente(2,"Tule","Del Lago","cliente2@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
-        clientes.add(new  Cliente(3,"Pera","Del Lago","cliente3@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
-        clientes.add(new  Cliente(4,"Con la","Del Lago","cliente4@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
-        clientes.add(new  Cliente(5,"Papaya","Del Lago","cliente5@gmail.com","12345678","DNI",true,"987654321","Av.Ola", new Date(100000000000L),"ola1234"));
-
 
         listAdapter = new SuperAdminClienteListAdapter(clientes,this);
         RecyclerView recyclerView = findViewById(R.id.listClientesRecyler);
@@ -171,6 +166,22 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
+
+        db.collection("Usuarios")
+                .whereEqualTo("rol", "Cliente")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        Usuario cliente = doc.toObject(Usuario.class);
+                        clientes.add(cliente);
+                    }
+
+                    listAdapter.setClientes(clientes);
+                    listAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener repartidores: ", e);
+                });
 
         // Añade el OnTouchListener o OnClickListener aquí
         recyclerView.setOnTouchListener(new View.OnTouchListener() {

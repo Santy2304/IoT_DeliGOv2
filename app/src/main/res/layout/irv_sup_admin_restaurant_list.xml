@@ -42,7 +42,7 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imgRestauranteLarge"
-                app:srcCompat="@drawable/bembos_logo" />
+                app:srcCompat="@drawable/ic_loading" />
 
             <TextView
                 android:id="@+id/tv_nombre"

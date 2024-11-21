@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ import java.util.List;
 
 public class SuperAdminRepartidor extends AppCompatActivity {
 
-    List<Repartidor> repartidores;
+    List<Usuario> repartidores = new ArrayList<>();
     private MaterialCardView cardRepartidor;
     private GradientDrawable borderDrawable;
     SuperAdminRepartidorListAdapter listAdapter;
@@ -148,17 +150,30 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     }
 
     public void mostrarListaRepartidores(){
-        repartidores = new ArrayList<>();
-        repartidores.add(new Repartidor(1,"Repartidor","No me jale",true,true,"12345678","repartidor@gmail.com","Av.Urubamba","987654321"));
-        repartidores.add(new Repartidor(1,"August","Deli",true,true,"12345678","repartidor@gmail.com","Av.Urubamba","987654321"));
-        repartidores.add(new Repartidor(1,"Sisifo","Star",true,true,"12345678","repartidor@gmail.com","Av.Urubamba","987654321"));
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         listAdapter = new SuperAdminRepartidorListAdapter(repartidores,this);
         RecyclerView recyclerView = findViewById(R.id.listRepartidor);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
+
+        db.collection("Usuarios")
+                .whereEqualTo("rol", "Repartidor")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        Usuario repartidor = doc.toObject(Usuario.class);
+                        repartidores.add(repartidor);
+                    }
+
+                    listAdapter.setRepartidor(repartidores);
+                    listAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener repartidores: ", e);
+                });
     }
 
     //Cambio de vista

@@ -138,13 +138,6 @@ public class SuperAdminRestaurante extends AppCompatActivity {
     public void mostrarListaRestaurante(){
         /*
         restaurantes = new ArrayList<>();
-        String[] categ = {"ola", "ola"};
-        restaurantes.add(new RestauranteSA("Bembos","9:00 - 21:00",categ,1,1450.20f,1,true));
-        restaurantes.add(new RestauranteSA("Prueba2","9:00 - 21:00",categ,1,1450.20f,1,true));
-        restaurantes.add(new RestauranteSA("Bembos3","9:00 - 21:00",categ,0,0.0f,0,true));
-        restaurantes.add(new RestauranteSA("Bembos4","9:00 - 21:00",categ,0,0.0f,0,true));
-        restaurantes.add(new RestauranteSA("Bembos5","9:00 - 21:00",categ,0,0.0f,0,true));
-
          */
 
         listAdapter = new SuperAdminRestauranteListAdapter(restaurantes, this);
