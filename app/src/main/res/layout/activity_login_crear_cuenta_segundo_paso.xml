@@ -16,8 +16,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <ImageView
+            android:visibility="invisible"
+            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="retroceder"
@@ -35,7 +36,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/direccionLayout"
-            android:layout_width="320sp"
+            android:layout_width="365sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
@@ -43,17 +44,16 @@
             app:startIconDrawable="@drawable/location">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/direccionInput"
+                android:id="@+id/addressInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:maxLength="20"
+                android:maxLength="40"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Mapa Interactivo -->
         <fragment
-            android:id="@+id/mapa"
+            android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -69,7 +69,7 @@
             app:startIconDrawable="@drawable/location">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/referenciaInput"
+                android:id="@+id/referenceInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -86,7 +86,7 @@
             android:layout_marginTop="18sp"
             android:layout_marginBottom="12sp"
             android:backgroundTint="@color/light_green"
-            android:onClick="validarFormulario"
+            android:onClick="continuar"
             android:text="  Continuar  "
             android:textColor="@color/white"
             android:textStyle="bold" />

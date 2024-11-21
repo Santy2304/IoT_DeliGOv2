@@ -25,19 +25,26 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import kotlin.collections.ArrayDeque;
 
 public class LoginPrimeraVista extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     FirebaseFirestore db;
     Button comenzarButton;
+    private List<Usuario> userList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        userList = new ArrayList<>();
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
-
+        loadUsers();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_primera_vista);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -78,7 +85,6 @@ public class LoginPrimeraVista extends AppCompatActivity {
                                     Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaPrimerPaso.class);
                                     startActivity(intent);
                                 }
-
                             }
                         })
                         .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
@@ -87,9 +93,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
             }
 
         }
-
         comenzarButton = findViewById(R.id.comenzarButton);
-
         comenzarButton.setOnClickListener(view -> {
             AuthMethodPickerLayout authMethodPickerLayout = new AuthMethodPickerLayout.Builder(R.layout.login_layout)
                     .setGoogleButtonId(R.id.IniciarSesionGoogle)
@@ -106,11 +110,8 @@ public class LoginPrimeraVista extends AppCompatActivity {
                             new AuthUI.IdpConfig.GoogleBuilder().build()
                     ))
                     .build();
-
             signInLauncher.launch(intent);
         });
-
-
     }
     ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -126,16 +127,16 @@ public class LoginPrimeraVista extends AppCompatActivity {
                                         .addOnSuccessListener(documentSnapshot -> {
                                             if (documentSnapshot.exists()) {
                                                 Usuario usuario = documentSnapshot.toObject(Usuario.class);
+
                                                 if(usuario.getRol().equals("Cliente")){
                                                     goCliente();
                                                 } else if (usuario.getRol().equals("Repartidor")) {
                                                     goRepartidor();
                                                 } else if (usuario.getRol().equals("Administrador")) {
                                                     goAdmin();
-                                                }else {
+                                                }else if (usuario.getRol().equals("SuperAdmin")){
                                                     goSuper();
                                                 }
-
                                             } else {
                                                 Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaPrimerPaso.class);
                                                 startActivity(intent);
@@ -146,7 +147,6 @@ public class LoginPrimeraVista extends AppCompatActivity {
                             }else {
                                 user.sendEmailVerification().addOnCompleteListener(task1 -> {
                                     Toast.makeText(LoginPrimeraVista.this,"Se le ha enviado un correo para validar la cuenta",Toast.LENGTH_SHORT).show();
-
                                 });
                             }
                         });
@@ -170,7 +170,6 @@ public class LoginPrimeraVista extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
     public void goAdmin(){
         Intent intent = new Intent(LoginPrimeraVista.this, ClienteHomeActivity.class);
         startActivity(intent);
@@ -181,4 +180,25 @@ public class LoginPrimeraVista extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    public void loadUsers(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return;
+                    }
+                    if (value != null) {
+                        if(userList !=null){
+                            userList.clear();
+                        }
+                        // Limpiar la lista antes de agregar nuevos datos
+                        if(value != null){
+                            for (QueryDocumentSnapshot document : value) {
+                                Usuario user2 = document.toObject(Usuario.class);
+                                userList.add(user2); // Agregar usuario a la lista
+                            }
+                        }
+                    }
+                });
+    }
+
 }

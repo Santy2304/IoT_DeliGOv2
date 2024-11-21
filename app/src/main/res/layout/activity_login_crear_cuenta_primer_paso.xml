@@ -37,16 +37,16 @@
             android:background="@drawable/border_form"
             android:backgroundTint="#FBF5F0"
             android:orientation="vertical">
-
-
             <Spinner
+                android:outlineAmbientShadowColor="@color/black"
                 android:id="@+id/spinnerDocs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:entries="@array/docs"
+                android:textColor="#000000"
+                android:backgroundTint="#FBF5F0"
                 android:spinnerMode="dialog" />
-
 
 
             <!--app:startIconDrawable="@drawable/group_24px"-->
@@ -114,7 +114,7 @@
                 android:layout_marginTop="18sp"
                 android:layout_marginBottom="12sp"
                 android:backgroundTint="@color/light_green"
-                android:onClick="verLoginCrearCuentaSegundoPaso"
+                android:onClick="irAlSiguientePaso"
                 android:text="  Continuar  "
                 android:textColor="@color/white"
                 android:textStyle="bold" />

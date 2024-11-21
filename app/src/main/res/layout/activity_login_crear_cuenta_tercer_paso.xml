@@ -18,6 +18,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:visibility="invisible"
+            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="retroceder"
@@ -36,8 +38,9 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="190dp"
-            android:layout_height="180dp"
+            android:id="@+id/imageViewFoto"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="25dp"
             android:scaleType="centerCrop"
@@ -50,12 +53,13 @@
             android:layout_width="340sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30sp"
+            android:layout_marginTop="55sp"
             android:background="@drawable/border_form"
             android:backgroundTint="#FBF5F0"
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/btnElegirFoto"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,20 +67,7 @@
                 android:layout_marginTop="18sp"
                 android:layout_marginBottom="12sp"
                 android:backgroundTint="@color/md_theme_tertiary"
-                android:text="Tomar"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-
-            <Button
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="18sp"
-                android:layout_marginBottom="12sp"
-                android:backgroundTint="@color/md_theme_tertiary"
-                android:text="Elegir de la Galería"
+                android:text="Elegir una foto"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
