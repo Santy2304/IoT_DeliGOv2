@@ -12,6 +12,15 @@ public class Restaurante implements Serializable {
     private float monto;
     private boolean estado;
     private String id;
+    private String fotoUrl;
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
 
     public String getAdmin() {
         return admin;

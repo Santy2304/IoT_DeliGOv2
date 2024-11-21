@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.Beans.RestauranteSA;
 import com.example.deligov2.Beans.VentaPlatilloSA;
@@ -25,6 +26,8 @@ import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +127,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                         .get()
                         .addOnSuccessListener(documentSnapshot -> {
 
-                            iconImage.setImageResource(R.drawable.bembos_logo);
+                            //iconImage.setImageResource(R.drawable.bembos_logo);
                             tvGanancia.setText("S/"+ restaurante.getMonto());
                             tvNombre.setText(restaurante.getNombre());
                             btHabilitar.setVisibility(View.VISIBLE);
@@ -140,6 +143,26 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                             } else {
                                 tvAdmin.setText("Admin: No encontrado");
                             }
+
+                            Log.d("IMAGEN ADAPTER","AJUAAA0" + restaurante.getId());
+                            // Cargar imagen desde Firebase Storage
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageRef = storage.getReference()
+                                    .child("restaurantes/" + restaurante.getId() + "/logo.jpg");
+
+                            storageRef.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        Glide.with(iconImage.getContext())
+                                                .load(uri)
+                                                .placeholder(R.drawable.ic_loading)
+                                                .error(R.drawable.ic_errorimg)
+                                                .into(iconImage);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                                        iconImage.setImageResource(R.drawable.ic_errorimg);
+                                    });
+
                         })
                         .addOnFailureListener(e -> {
                             tvAdmin.setText("Admin: Error");

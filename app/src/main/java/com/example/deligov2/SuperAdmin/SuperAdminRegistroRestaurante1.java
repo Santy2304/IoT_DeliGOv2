@@ -41,7 +41,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,14 +65,22 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private FirebaseFirestore db;
     //Nombre del restaurante
     private TextInputEditText restauranteNombre;
-
+    private FirebaseStorage storage;
     private String categoria;
+    private StorageReference storageReference;
+
+    //para la foto
+    private Uri imageUri;
+    private Bitmap imageBitmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_restaurante1);
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         db = FirebaseFirestore.getInstance();
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
@@ -184,6 +195,17 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         String time = dateFormat.format(new Date());
 
+        ImageView imageView = findViewById(R.id.imgLogo);
+        TextView tvLogo = findViewById(R.id.tv_logo);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermissions()) {
+                    openGalleryOrCamera();
+                }
+            }
+        });
 
         //Manejo de botones
         restauranteNombre = findViewById(R.id.restauranteNombre); //Se obtiene el nombre
@@ -231,7 +253,24 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
                     if (validInput) {
                         restA.setHorario(horaInicio+" - "+horaFin);
-                        vistaRegistroRestaurante2(restA,sa);
+
+                        Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminRegistroRestaurante2.class);
+                        intent.putExtra("nameR", restA);
+
+                        // Enviar la imagen seleccionada o capturada
+                        if (imageUri != null) {
+                            intent.putExtra("imageUri", imageUri.toString());
+                            Log.d("DEBUG_IMAGE", "imageUri: " + imageUri.toString());
+                        } else if (imageBitmap != null) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] byteArray = baos.toByteArray();
+                            intent.putExtra("imageBitmap", byteArray);
+                            Log.d("DEBUG_IMAGE", "Bitmap enviado.");
+                        }
+                        startActivity(intent);
+
+                        //vistaRegistroRestaurante2(restA,sa);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -251,19 +290,96 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             }
         });
 
-        ImageView imageView = findViewById(R.id.imgLogo);
-        TextView tvLogo = findViewById(R.id.tv_logo);
+    }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkPermissions()) {
-                    openGalleryOrCamera();
+    private void openGalleryOrCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
+        startActivityForResult(chooser, REQUEST_IMAGE_PICK);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGalleryOrCamera();
+            } else {
+                //No sé ayuda
+            }
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /*
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                ImageView imageView = findViewById(R.id.imgLogo);
+                TextView tvLogo = findViewById(R.id.tv_logo);
+                tvLogo.setVisibility(View.INVISIBLE);
+                imageView.setImageBitmap(imageBitmap);
+            } else if (requestCode == REQUEST_IMAGE_PICK) {
+                Uri selectedImageUri = data.getData();
+                ImageView imageView = findViewById(R.id.imgLogo);
+                TextView tvLogo = findViewById(R.id.tv_logo);
+                tvLogo.setVisibility(View.INVISIBLE);
+                imageView.setImageURI(selectedImageUri);
+            }
+        }
+         */
+        if (resultCode == RESULT_OK && data != null) {
+            ImageView imageView = findViewById(R.id.imgLogo);
+            TextView tvLogo = findViewById(R.id.tv_logo);
+            tvLogo.setVisibility(View.INVISIBLE);
+
+            if (requestCode == REQUEST_IMAGE_CAPTURE) { // Cámara
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    imageBitmap = (Bitmap) extras.get("data");
+                    imageView.setImageBitmap(imageBitmap);
+                    imageUri = null;
+                    Log.d("DEBUG_IMAGE", "Imagen capturada desde la cámara.");
+                } else {
+                    Log.e("DEBUG_IMAGE", "Extras nulos al capturar imagen.");
+                }
+            } else if (requestCode == REQUEST_IMAGE_PICK) { // Galería
+                imageUri = data.getData();
+                if (imageUri != null) {
+                    imageView.setImageURI(imageUri);
+                    imageBitmap = null;
+                    Log.d("DEBUG_IMAGE", "Imagen seleccionada de la galería: " + imageUri.toString());
+                } else {
+                    Log.e("DEBUG_IMAGE", "Uri nulo al seleccionar imagen.");
                 }
             }
-        });
-
+        } else {
+            Log.e("DEBUG_IMAGE", "onActivityResult recibió un código de resultado no OK o data nula.");
+        }
     }
+
+
+    private boolean checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     //Manejo de los datos
     public void onClick(View v){
@@ -297,65 +413,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             timePickerDialog.show();
         }
     }
-
-
-    private boolean checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_PERMISSIONS);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGalleryOrCamera();
-            } else {
-                //No sé ayuda
-            }
-        }
-    }
-
-    private void openGalleryOrCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
-        startActivityForResult(chooser, REQUEST_IMAGE_PICK);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                ImageView imageView = findViewById(R.id.imgLogo);
-                TextView tvLogo = findViewById(R.id.tv_logo);
-                tvLogo.setVisibility(View.INVISIBLE);
-                imageView.setImageBitmap(imageBitmap);
-            } else if (requestCode == REQUEST_IMAGE_PICK) {
-                Uri selectedImageUri = data.getData();
-                ImageView imageView = findViewById(R.id.imgLogo);
-                TextView tvLogo = findViewById(R.id.tv_logo);
-                tvLogo.setVisibility(View.INVISIBLE);
-                imageView.setImageURI(selectedImageUri);
-            }
-        }
-    }
-
 
     //Cambiar vista
 

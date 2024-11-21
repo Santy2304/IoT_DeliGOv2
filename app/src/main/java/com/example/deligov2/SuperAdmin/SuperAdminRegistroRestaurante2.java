@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -58,6 +61,9 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
     private Marker currentMarker;
 
     private FirebaseFirestore db;
+    //Para guardar la foto
+    private StorageReference storageReference;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         setContentView(R.layout.activity_super_admin_registro_restaurante2);
 
         db = FirebaseFirestore.getInstance();
+
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
 
@@ -112,6 +119,13 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         Restaurante nameR = (Restaurante) intent.getSerializableExtra("nameR");
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        // Procesar la imagen
+        String imageUriString = intent.getStringExtra("imageUri");
+        byte[] imageByteArray = intent.getByteArrayExtra("imageBitmap");
+        Log.d("IMAGEN GOOD","GOOO: "+imageUriString+ "-"+ imageByteArray);
 
         if (nameR != null) {
             String cNameR = nameR.getNombre();
@@ -182,7 +196,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
             public void onClick(View v) {
                 notificarRestauranteCreado(nameR.getNombre());
                 //vistaRegistroRestauranteCorrect(nameR);
-                registrarRestauranteFirestore(nameR);
+                registrarRestauranteFirestore(nameR, imageUriString, imageByteArray);
+
             }
         });
 
@@ -282,7 +297,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         });
     }
 
-    private void registrarRestauranteFirestore(Restaurante restaurante) {
+    private void registrarRestauranteFirestore(Restaurante restaurante, String imageUriString, byte[] imageByteArray) {
 
         Restaurante newRestaurant = new Restaurante();
         newRestaurant.setCategorias(restaurante.getCategorias());
@@ -304,6 +319,10 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                             .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
 
                     Log.d("Firestore", "Restaurante registrado con ID: " + idRestaurante);
+
+                    // Subir imagen a Firebase Storage
+                    subirImagenAFirebaseStorage(idRestaurante, imageUriString, imageByteArray);
+
                     vistaRegistroRestauranteCorrect(newRestaurant);
 
                 })
@@ -311,6 +330,37 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                     Log.w("Firestore", "Error al registrar el restaurante", e);
                 });
 
+    }
+
+    private void subirImagenAFirebaseStorage(String idRestaurante, String imageUriString, byte[] imageByteArray) {
+        if (imageUriString != null) {
+            // Subir desde Uri
+            Uri imageUri = Uri.parse(imageUriString);
+            StorageReference imageRef = storageReference.child("restaurantes/" + idRestaurante + "/logo.jpg");
+
+            imageRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d("Firebase Storage", "Imagen subida correctamente desde Uri.");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firebase Storage", "Error al subir la imagen desde Uri", e);
+                    });
+
+        } else if (imageByteArray != null) {
+            // Subir desde byte[]
+            StorageReference imageRef = storageReference.child("restaurantes/" + idRestaurante + "/logo.jpg");
+
+            imageRef.putBytes(imageByteArray)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d("Firebase Storage", "Imagen subida correctamente desde byte[].");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firebase Storage", "Error al subir la imagen desde byte[]", e);
+                    });
+
+        } else {
+            Log.w("Firebase Storage", "No se encontró una imagen para subir.");
+        }
     }
 
 }
