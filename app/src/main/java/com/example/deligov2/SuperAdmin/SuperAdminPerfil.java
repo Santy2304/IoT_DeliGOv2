@@ -33,6 +33,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class SuperAdminPerfil extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
@@ -225,17 +229,62 @@ public class SuperAdminPerfil extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                ImageView imageView = findViewById(R.id.imgSAperfil);
-                imageView.setImageBitmap(imageBitmap);
+                // Guarda el Bitmap como archivo temporal y obtiene su URI
+                Uri tempUri = guardarBitmapComoUri(imageBitmap);
+                if (tempUri != null) {
+                    subirImagenAFirebase(tempUri);
+                }
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 Uri selectedImageUri = data.getData();
-                ImageView imageView = findViewById(R.id.imgSAperfil);
-                imageView.setImageURI(selectedImageUri);
+                if (selectedImageUri != null) {
+                    subirImagenAFirebase(selectedImageUri);
+                }
             }
+        }
+    }
+
+    private void subirImagenAFirebase(Uri imagenUri) {
+        String userId = "ClcUvl7d43Rz0aEqbLteSw22eH22";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("users/" + userId + "/profile.jpg");
+
+        // Eliminar imagen anterior si existe
+        storageRef.delete()
+                .addOnSuccessListener(aVoid -> Log.d("FirebaseStorage", "Imagen anterior eliminada."))
+                .addOnFailureListener(e -> Log.d("FirebaseStorage", "No se encontró imagen previa, continuando."));
+
+        // Subir nueva imagen
+        storageRef.putFile(imagenUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    Log.d("FirebaseStorage", "Imagen subida exitosamente.");
+                    storageRef.getDownloadUrl()
+                            .addOnSuccessListener(uri -> {
+                                ImageView imageView = findViewById(R.id.imgSAperfil);
+                                Glide.with(imageView.getContext())
+                                        .load(uri)
+                                        .placeholder(R.drawable.ic_loading)
+                                        .error(R.drawable.ic_errorimg)
+                                        .into(imageView);
+                            });
+                })
+                .addOnFailureListener(e -> Log.e("FirebaseStorage", "Error al subir la imagen: ", e));
+    }
+
+    private Uri guardarBitmapComoUri(Bitmap bitmap) {
+        try {
+            File tempFile = File.createTempFile("temp_image", ".jpg", getCacheDir());
+            FileOutputStream out = new FileOutputStream(tempFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.close();
+            return Uri.fromFile(tempFile);
+        } catch (IOException e) {
+            Log.e("BitmapToUri", "Error al guardar Bitmap temporalmente", e);
+            return null;
         }
     }
 }

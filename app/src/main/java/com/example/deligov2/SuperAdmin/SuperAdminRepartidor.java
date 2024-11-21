@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +26,7 @@ import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
 import com.example.deligov2.Adapters.SuperAdminRepartidorListAdapter;
 import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.Beans.Repartidor;
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -56,7 +58,6 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
-        mostrarListaRepartidores();
 
         ImageView admin = findViewById(R.id.imgAdmin);
         ImageView cliente = findViewById(R.id.imgCostumer);
@@ -134,6 +135,8 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
 
+        mostrarListaRepartidores();
+
         //Manejo del buscador
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -141,12 +144,24 @@ public class SuperAdminRepartidor extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listAdapter.filter(s.toString());
+                buscarRepartidor(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) { }
         });
+        /*
+        searchInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                String query = searchInput.getText().toString().trim();
+                buscarRepartidor(query);
+                return true;
+            }
+            return false;
+        });
+
+         */
+
     }
 
     public void mostrarListaRepartidores(){
@@ -177,7 +192,6 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     }
 
     //Cambio de vista
-
     public void vistaPanelCliente(View view, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminHomeActivity.class);
         intent.putExtra("sa",sa);
@@ -190,5 +204,42 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         intent.putExtra("sa",sa);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    public void buscarRepartidor(String query) {
+
+        List<Usuario> repartidores2 = new ArrayList<>();
+        SuperAdminRepartidorListAdapter listAdapter2 = new SuperAdminRepartidorListAdapter(repartidores2,this);
+        RecyclerView recyclerView = findViewById(R.id.listRepartidor);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(listAdapter2);
+
+        if (query.isEmpty()) {
+            mostrarListaRepartidores();
+            return;
+        }
+
+        db.collection("Usuarios")
+                .whereEqualTo("rol","Repartidor")
+                .whereGreaterThanOrEqualTo("nombre", query)
+                .whereLessThanOrEqualTo("nombre", query + "\uf8ff")
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null) {
+                        Log.w("msg-test", "Listen failed.", error);
+                        return;
+                    }
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        repartidores2.clear();
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                            Usuario repartidor = document.toObject(Usuario.class);
+                            if (repartidor != null) {
+                                repartidores2.add(repartidor);
+                            }
+                        }
+                        //listAdapter.setRepartidor(repartidores);
+                        listAdapter2.notifyDataSetChanged();
+                    }
+                });
     }
 }
