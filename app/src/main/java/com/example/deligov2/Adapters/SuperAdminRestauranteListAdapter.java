@@ -150,6 +150,9 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(itemView.getContext(), SuperAdminRestauranteResumen.class);
+                        intent.putExtra("res",restaurante);
+
+                        Log.d("RESTAURANTE LIST ADAPTER0","FUNCIONA: "+restaurante.getId()+"-"+restaurante.getAdmin());
                         itemView.getContext().startActivity(intent);
                     }
                 });

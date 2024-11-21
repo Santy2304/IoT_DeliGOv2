@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 import java.util.Locale;
@@ -31,11 +36,17 @@ import java.util.Locale;
 public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap mMap;
+    private FirebaseFirestore db;
+    private TextView tvRestaurante, tvHorario, tvCategorias, tvAdminRes, tvEstado;
+    private TextInputEditText ubicacionRestaurante;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_restaurante_ubicacion);
+
+        db = FirebaseFirestore.getInstance();
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -61,6 +72,19 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
             }
         });
 
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
+        Log.d("RESTAURANTE IDDDD RESUMEN", "OLA: "+resR.getId()+"-"+ resR.getAdmin());
+
+        // Obtener las referencias para los datos
+        tvRestaurante = findViewById(R.id.tv_restaurante);
+        tvHorario = findViewById(R.id.tv_horario);
+        tvCategorias = findViewById(R.id.tv_categorias);
+        tvAdminRes = findViewById(R.id.tv_adminRes);
+        tvEstado = findViewById(R.id.tv_estado);
+        ubicacionRestaurante = findViewById(R.id.ubicacionRestaurante);
+
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -71,16 +95,16 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminRestauranteUbicacion.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminRestauranteUbicacion.this, SuperAdminRestaurante.class);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminRestauranteUbicacion.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminRestauranteUbicacion.this, SuperAdminHomeActivity.class);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminRestauranteUbicacion.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminRestauranteUbicacion.this, SuperAdminPerfil.class);
+                    startActivity(intent);
                     return true;
                 }else{
                     return false;
@@ -89,13 +113,14 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
             }
         });
 
+        mostrarDatosRestauranteFirebase(resR.getId());
         //Manejo de los botones
         Button btResumen = findViewById(R.id.bt_ganancias);
 
         btResumen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteResumen(v);
+                vistaRestauranteResumen(v, resR);
             }
         });
 
@@ -104,7 +129,7 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
         btVentas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteHistorialVentas(v);
+                vistaRestauranteHistorialVentas(v, resR);
             }
         });
 
@@ -113,7 +138,7 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
         btCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestaurantePlatillos(v);
+                vistaRestaurantePlatillos(v, resR);
             }
         });
 
@@ -131,10 +156,13 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
         this.mMap.setOnMapLongClickListener(this::onMapLongClick);
 
          */
-        String userUbicacion = "San Borja";
-        LatLng ubicacion = obtenerUbicacion(userUbicacion);
+        Intent intent = getIntent();
+        Restaurante resRc = (Restaurante) intent.getSerializableExtra("res");
+
+        String resUbi = resRc.getDireccion();
+        LatLng ubicacion = obtenerUbicacion(resUbi);
         if (ubicacion != null) {
-            mMap.addMarker(new MarkerOptions().position(ubicacion).title(userUbicacion));
+            mMap.addMarker(new MarkerOptions().position(ubicacion).title(resUbi));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 15));
         }
     }
@@ -167,17 +195,81 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
 
      */
     //Cambio vista
-    public void vistaRestauranteResumen(View view) {
+    public void vistaRestauranteResumen(View view, Restaurante res) {
         Intent intent = new Intent(this, SuperAdminRestauranteResumen.class);
+        intent.putExtra("res",res);
         startActivity(intent);
     }
 
-    public void vistaRestauranteHistorialVentas(View view) {
+    public void vistaRestauranteHistorialVentas(View view, Restaurante res) {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
+        intent.putExtra("res",res);
         startActivity(intent);
     }
-    public void vistaRestaurantePlatillos(View view) {
+    public void vistaRestaurantePlatillos(View view, Restaurante res) {
         Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
+        intent.putExtra("res",res);
         startActivity(intent);
+    }
+
+    private void mostrarDatosRestauranteFirebase(String resID){
+        db.collection("restaurantes")
+                .document(resID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String nombreRestaurante = documentSnapshot.getString("nombre");
+                        String horario = documentSnapshot.getString("horario");
+                        String categorias = documentSnapshot.getString("categorias");
+                        String adminRes = documentSnapshot.getString("admin");
+                        String direccionRes = documentSnapshot.getString("direccion");
+
+                        Log.d("ID ADMINISTRADOR PT2", "OLA2" + adminRes);
+                        boolean estado = documentSnapshot.getBoolean("estado");
+
+
+                        db.collection("administradores")
+                                .document(adminRes)
+                                .get()
+                                .addOnSuccessListener(documentSnapshotAdmin -> {
+                                    if (documentSnapshotAdmin.exists()) {
+                                        tvRestaurante.setText(nombreRestaurante != null ? nombreRestaurante : "---");
+                                        tvHorario.setText(horario != null ? "Horario de atención: " + horario : "---");
+                                        tvCategorias.setText(categorias != null ? "Categorías: " + categorias : "---");
+
+                                        if (estado) {
+                                            tvEstado.setText("Activado");
+                                            tvEstado.setTextColor(getResources().getColor(R.color.light_green));
+                                        } else {
+                                            tvEstado.setText("Desactivado");
+                                            tvEstado.setTextColor(getResources().getColor(R.color.md_theme_error));
+                                        }
+
+                                        String adminNombre = documentSnapshotAdmin.getString("nombre");
+                                        String adminApellido = documentSnapshotAdmin.getString("apellido");
+                                        String adminCompleto = (adminNombre != null ? adminNombre : "---") +
+                                                " " + (adminApellido != null ? adminApellido : "---");
+                                        tvAdminRes.setText("Administrador: " + adminCompleto);
+
+                                        ubicacionRestaurante.setText(direccionRes);
+                                    } else {
+                                        tvAdminRes.setText("Administrador no encontrado");
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    tvAdminRes.setText("Error al obtener el administrador");
+                                    Log.e("Firestore", "Error al obtener el administrador: ", e);
+                                });
+
+                    } else {
+                        Log.d("Firestore", "El documento no existe.");
+                        tvRestaurante.setText("Restaurante no encontrado");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener los datos del restaurante: ", e);
+                    tvRestaurante.setText("Error al cargar datos");
+                });
+
     }
 }

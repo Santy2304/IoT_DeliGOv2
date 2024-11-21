@@ -30,6 +30,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
     private MaterialCardView cardCliente;
     private GradientDrawable borderDrawable;
     SuperAdminClienteListAdapter listAdapter;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

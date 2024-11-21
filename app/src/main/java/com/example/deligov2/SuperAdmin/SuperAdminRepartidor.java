@@ -28,6 +28,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     private MaterialCardView cardRepartidor;
     private GradientDrawable borderDrawable;
     SuperAdminRepartidorListAdapter listAdapter;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

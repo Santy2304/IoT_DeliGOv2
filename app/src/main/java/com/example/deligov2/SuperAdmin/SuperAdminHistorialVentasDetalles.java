@@ -22,6 +22,7 @@ import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +31,7 @@ import java.util.List;
 public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
 
     List<VentaPlatilloSA> ventas;
-
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_historial_ventas_detalles);
 
+        db = FirebaseFirestore.getInstance();
         mostrarListaVentas();
 
         //Manejo del top app bar

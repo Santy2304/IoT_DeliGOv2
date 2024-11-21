@@ -3,9 +3,11 @@ package com.example.deligov2.SuperAdmin;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Beans.Restaurante;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -24,16 +27,22 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class SuperAdminRestauranteResumen extends AppCompatActivity {
+
+    private TextView tvRestaurante, tvHorario, tvCategorias, tvAdminRes, tvEstado;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_restaurante_resumen);
+
+        db = FirebaseFirestore.getInstance();
 
         //Para las estadísticas
         BarChart chartGanancias = findViewById(R.id.chartGanancias);
@@ -89,7 +98,17 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         chartGanancias.invalidate();
         chartVentas.invalidate();
 
+        // Obtener las referencias para los datos
+        tvRestaurante = findViewById(R.id.tv_restaurante);
+        tvHorario = findViewById(R.id.tv_horario);
+        tvCategorias = findViewById(R.id.tv_categorias);
+        tvAdminRes = findViewById(R.id.tv_adminRes);
+        tvEstado = findViewById(R.id.tv_estado);
 
+        // Obtener los datos del intent anterior a este
+        Intent intent = getIntent();
+        Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
+        Log.d("RESTAURANTE IDDDD RESUMEN", "OLA: "+resR.getId()+ resR.getAdmin());
 
 
         //Manejo del top app bar
@@ -126,16 +145,16 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminRestauranteResumen.this, SuperAdminRestaurante.class);
-                    startActivity(intentRestaurant);
+                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminRestaurante.class);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminRestauranteResumen.this, SuperAdminHomeActivity.class);
-                    startActivity(intentPrincipal);
+                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminHomeActivity.class);
+                    startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminRestauranteResumen.this, SuperAdminPerfil.class);
-                    startActivity(intentProfile);
+                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminPerfil.class);
+                    startActivity(intent);
                     return true;
                 }else{
                     return false;
@@ -150,7 +169,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         btCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestaurantePlatillos(v);
+                vistaRestaurantePlatillos(v, resR);
             }
         });
 
@@ -159,7 +178,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         btVentas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteHistorialVentas(v);
+                vistaRestauranteHistorialVentas(v, resR);
             }
         });
 
@@ -168,25 +187,89 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         btUbicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestauranteUbicacion(v);
+                vistaRestauranteUbicacion(v, resR);
             }
         });
+
+
+        //Mostrar los datos
+        mostrarDatosRestauranteFirebase(resR.getId());
 
 
     }
 
     //Cambio vista
-    public void vistaRestaurantePlatillos(View view) {
+    public void vistaRestaurantePlatillos(View view, Restaurante res) {
         Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
+        intent.putExtra("res",res);
         startActivity(intent);
     }
 
-    public void vistaRestauranteHistorialVentas(View view) {
+    public void vistaRestauranteHistorialVentas(View view, Restaurante res) {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
+        intent.putExtra("res",res);
         startActivity(intent);
     }
-    public void vistaRestauranteUbicacion(View view){
+    public void vistaRestauranteUbicacion(View view, Restaurante res){
         Intent intent = new Intent(this, SuperAdminRestauranteUbicacion.class);
+        intent.putExtra("res",res);
         startActivity(intent);
+    }
+
+    private void mostrarDatosRestauranteFirebase(String resID){
+        db.collection("restaurantes")
+                .document(resID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String nombreRestaurante = documentSnapshot.getString("nombre");
+                        String horario = documentSnapshot.getString("horario");
+                        String categorias = documentSnapshot.getString("categorias");
+                        String adminRes = documentSnapshot.getString("admin");
+
+                        Log.d("ID ADMINISTRADOR PT2", "OLA2" + adminRes);
+                        boolean estado = documentSnapshot.getBoolean("estado");
+
+                        tvRestaurante.setText(nombreRestaurante != null ? nombreRestaurante : "---");
+                        tvHorario.setText(horario != null ? "Horario de atención: " + horario : "---");
+                        tvCategorias.setText(categorias != null ? "Categorías: " + categorias : "---");
+
+                        if (estado) {
+                            tvEstado.setText("Activado");
+                            tvEstado.setTextColor(getResources().getColor(R.color.light_green));
+                        } else {
+                            tvEstado.setText("Desactivado");
+                            tvEstado.setTextColor(getResources().getColor(R.color.md_theme_error));
+                        }
+
+                        db.collection("administradores")
+                                .document(adminRes)
+                                .get()
+                                .addOnSuccessListener(documentSnapshotAdmin -> {
+                                    if (documentSnapshotAdmin.exists()) {
+                                        String adminNombre = documentSnapshotAdmin.getString("nombre");
+                                        String adminApellido = documentSnapshotAdmin.getString("apellido");
+                                        String adminCompleto = (adminNombre != null ? adminNombre : "---") +
+                                                " " + (adminApellido != null ? adminApellido : "---");
+                                        tvAdminRes.setText("Administrador: " + adminCompleto);
+                                    } else {
+                                        tvAdminRes.setText("Administrador no encontrado");
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    tvAdminRes.setText("Error al obtener el administrador");
+                                    Log.e("Firestore", "Error al obtener el administrador: ", e);
+                                });
+
+                    } else {
+                        Log.d("Firestore", "El documento no existe.");
+                        tvRestaurante.setText("Restaurante no encontrado");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener los datos del restaurante: ", e);
+                    tvRestaurante.setText("Error al cargar datos");
+                });
+
     }
 }

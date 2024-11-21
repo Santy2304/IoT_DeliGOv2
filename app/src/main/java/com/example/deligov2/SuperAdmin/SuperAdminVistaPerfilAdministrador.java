@@ -15,8 +15,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
+
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_vista_perfil_administrador);
 
+        db = FirebaseFirestore.getInstance();
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
