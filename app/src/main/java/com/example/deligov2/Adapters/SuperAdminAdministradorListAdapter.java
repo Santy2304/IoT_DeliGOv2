@@ -3,6 +3,7 @@ package com.example.deligov2.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +15,29 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Administrador;
 import com.example.deligov2.Beans.Cliente;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilCliente;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<SuperAdminAdministradorListAdapter.ViewHolder> {
 
-    private List<Administrador> mAdmin;
-    private List<Administrador> mAdminS; //Esta es la listado con el filtro
+    private List<Usuario> mAdmin;
+    private List<Usuario> mAdminS; //Esta es la listado con el filtro
     private LayoutInflater mInflater;
     private Context context;
 
-    public SuperAdminAdministradorListAdapter(List<Administrador> adminList, Context context){
+    public SuperAdminAdministradorListAdapter(List<Usuario> adminList, Context context){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mAdmin = adminList;
@@ -53,7 +58,7 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
         holder.bindData(mAdmin.get(position));
     }
 
-    public void setAdmin(List<Administrador> admins){mAdmin = admins;}
+    public void setAdmin(List<Usuario> admins){mAdmin = admins;}
 
     // Método para filtrar la lista
     public void filter(String text) {
@@ -62,7 +67,7 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
             mAdmin.addAll(mAdminS);
         } else {
             String filterPattern = text.toLowerCase().trim();
-            for (Administrador admin : mAdminS) {
+            for (Usuario admin : mAdminS) {
                 if (admin.getNombre().toLowerCase().contains(filterPattern)) {
                     mAdmin.add(admin);
                 }
@@ -86,12 +91,29 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
             isAdminHabilitado = true;
         }
 
-        public void bindData(final Administrador admin) {
+        public void bindData(final Usuario admin) {
             tvNombre.setText(admin.getNombre() + " " + admin.getApellido());
-            tvDni.setText("DNI: " + admin.getNumDocumento());
+            tvDni.setText("DNI: " + admin.getNumDocument());
             tvCorreo.setText(admin.getCorreo());
             btHabilitar.setVisibility(View.VISIBLE);
-            iconImage.setImageResource(R.drawable.costumer_green);
+
+            // Cargar imagen desde Firebase Storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference()
+                    .child("users/" + admin.getId() + "/profile.jpg");
+
+            storageRef.getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        Glide.with(iconImage.getContext())
+                                .load(uri)
+                                .placeholder(R.drawable.ic_loading)
+                                .error(R.drawable.ic_errorimg)
+                                .into(iconImage);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                        iconImage.setImageResource(R.drawable.ic_errorimg);
+                    });
 
             btInfo.setOnClickListener(new View.OnClickListener() {
                 @Override

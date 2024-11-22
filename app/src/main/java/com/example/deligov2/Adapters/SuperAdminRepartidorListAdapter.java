@@ -3,6 +3,7 @@ package com.example.deligov2.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +15,28 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Cliente;
 import com.example.deligov2.Beans.Repartidor;
+import com.example.deligov2.Beans.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilCliente;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilRepartidor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperAdminRepartidorListAdapter.ViewHolder> {
-    private List<Repartidor> mRepartidor;
-    private List<Repartidor> mRepartidorS; //Lista de filtros
+    private List<Usuario> mRepartidor;
+    private List<Usuario> mRepartidorS; //Lista de filtros
     private LayoutInflater mInflater;
     private Context context;
 
-    public SuperAdminRepartidorListAdapter(List<Repartidor> repartidorList, Context context){
+    public SuperAdminRepartidorListAdapter(List<Usuario> repartidorList, Context context){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mRepartidor = repartidorList;
@@ -52,7 +57,7 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
         holder.bindData(mRepartidor.get(position));
     }
 
-    public void setRepartidor(List<Repartidor> repartidores){mRepartidor = repartidores;}
+    public void setRepartidor(List<Usuario> repartidores){mRepartidor = repartidores;}
 
     // Método para filtrar la lista
     public void filter(String text) {
@@ -61,7 +66,7 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
             mRepartidor.addAll(mRepartidorS);
         } else {
             String filterPattern = text.toLowerCase().trim();
-            for (Repartidor repartidor : mRepartidorS) {
+            for (Usuario repartidor : mRepartidorS) {
                 if (repartidor.getNombre().toLowerCase().contains(filterPattern)) {
                     mRepartidor.add(repartidor);
                 }
@@ -90,13 +95,30 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
 
         }
 
-        public void bindData(final Repartidor repartidor) {
+        public void bindData(final Usuario repartidor) {
             tvNombre.setText( repartidor.getNombre() + " " + repartidor.getApellido());
             tvDni.setText("DNI: " + repartidor.getNumDocument());
             tvCorreo.setText(repartidor.getCorreo());
             btHabilitar.setVisibility(View.VISIBLE);
             btRechazar.setVisibility(View.VISIBLE);
-            iconImage.setImageResource(R.drawable.costumer_green);
+
+            // Cargar imagen desde Firebase Storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference()
+                    .child("users/" + repartidor.getId() + "/profile.jpg");
+
+            storageRef.getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        Glide.with(iconImage.getContext())
+                                .load(uri)
+                                .placeholder(R.drawable.ic_loading)
+                                .error(R.drawable.ic_errorimg)
+                                .into(iconImage);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                        iconImage.setImageResource(R.drawable.ic_errorimg);
+                    });
 
             btInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
