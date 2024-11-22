@@ -58,9 +58,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
         ArrayList<PedidoRepartidor> pedidosFiltrado = new ArrayList<>();
         for(PedidoRepartidor pes : lis) {
             if(pes.getEstado().equals("Recibido") || pes.getEstado().equals("En preparacion") ){
-                pedidosFiltrado.add(pes);
-            }
-        }
+                pedidosFiltrado.add(pes);}}
         adapter.setListaPedidosRepartidor(pedidosFiltrado);
         RecyclerView recyclerView = findViewById(R.id.lista);
         recyclerView.setAdapter(adapter);

@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/colorOnCustomColor1Container_highContrast"/> <!-- Color de fondo -->
     <corners android:radius="16dp"/> <!-- Radio del borde redondeado -->
-    <stroke android:width="1dp" android:color="#3C3939"/> <!-- Borde con un color específico y grosor -->
+    <stroke android:width="0dp" android:color="#3C3939"/> <!-- Borde con un color específico y grosor -->
     <solid android:elevation="1000000dp"/> <!-- Sombra inferior -->
 </shape>
