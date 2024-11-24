@@ -16,13 +16,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.deligov2.Beans.Restaurante;
-import com.example.deligov2.Beans.RestauranteSA;
-import com.example.deligov2.Beans.VentaPlatilloSA;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminRegistroAdministrador1;
 import com.example.deligov2.SuperAdmin.SuperAdminRestauranteResumen;
-import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="6dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -141,7 +141,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/linearLayout10"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="270dp"
             android:orientation="vertical">
 
         </androidx.recyclerview.widget.RecyclerView>

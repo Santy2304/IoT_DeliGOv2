@@ -8,11 +8,8 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 
 public class SuperAdminRegistroRestauranteCorrect extends AppCompatActivity {

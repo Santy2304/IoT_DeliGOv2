@@ -1,6 +1,5 @@
 package com.example.deligov2.Cliente;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,23 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
-import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
-import com.example.deligov2.Repartidor.PerfilRepartidor;
-import com.example.deligov2.SuperAdmin.SuperAdminAdministrador;
-import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
-import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
-import com.example.deligov2.SuperAdmin.SuperAdminRestaurante;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,8 +22,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ClienteHomeActivity extends AppCompatActivity {
 

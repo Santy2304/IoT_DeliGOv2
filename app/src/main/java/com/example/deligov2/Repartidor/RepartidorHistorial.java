@@ -16,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.RepartidorHistorialPedidosAdapter;
-import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
 import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
-import com.example.deligov2.Beans.Usuario;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;

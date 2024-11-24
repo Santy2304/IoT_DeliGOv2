@@ -17,17 +17,11 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.SuperAdminAdministradorListAdapter;
-import com.example.deligov2.Adapters.SuperAdminClienteListAdapter;
-import com.example.deligov2.Beans.Administrador;
-import com.example.deligov2.Beans.Cliente;
-import com.example.deligov2.Beans.Usuario;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,7 +31,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SuperAdminAdministrador extends AppCompatActivity {

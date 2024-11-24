@@ -6,14 +6,10 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Administrador.AdministradorHomeActivity;
-import com.example.deligov2.Beans.Usuario;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
-import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;

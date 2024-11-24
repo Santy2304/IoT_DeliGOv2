@@ -21,8 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.deligov2.Beans.Usuario;
-import com.example.deligov2.Cliente.ClientePerfil;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
 import com.firebase.ui.auth.AuthUI;

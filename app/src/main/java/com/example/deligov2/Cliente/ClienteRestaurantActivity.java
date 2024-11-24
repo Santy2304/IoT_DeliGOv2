@@ -2,25 +2,19 @@ package com.example.deligov2.Cliente;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Adapters.ClienteCarritoAdapter;
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
-import com.example.deligov2.Beans.Platillo;
-import com.example.deligov2.Beans.Plato;
-import com.example.deligov2.Beans.VentaPlatilloSA;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,27 +29,8 @@ import java.util.List;
 
 public class ClienteRestaurantActivity extends AppCompatActivity {
     ArrayList<Platillo> lista;
-    String[] nombresPlatos = {
-            "Hamburguesa Royal",
-            "Americana",
-            "Tocino con Queso",
-            "La Peruana",
-            "Cheese",
-            "Vegano"
-
-    };
-    float[] Precios  = {
-            8,
-            13,
-            11,
-            15,
-            12,
-            9
-    };
     private List<Platillo> listaPlatosSeleccionados = new ArrayList<>();
-    private ClientePlatosAdapter adapter;
-
-
+    ClientePlatosAdapter adapter;
     String idRestaurante;
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
@@ -71,22 +46,13 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         idRestaurante = getIntent().getStringExtra("idRestaurante");
 
-        CollectionReference platosRef = db.collection("restaurantes")
-                .document(idRestaurante)
-                .collection("platos");
 
-        platosRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                if (task.getResult() != null) {
-                    task.getResult().forEach(document -> {
-                        Platillo plato = document.toObject(Platillo.class);
-                        lista.add(plato);
-                    });
-                }
-            } else {
-                System.err.println("Error al obtener platos: " + task.getException());
-            }
-        });
+
+
+
+
+
+
 
         adapter = new ClientePlatosAdapter();
         adapter.setContext(this);

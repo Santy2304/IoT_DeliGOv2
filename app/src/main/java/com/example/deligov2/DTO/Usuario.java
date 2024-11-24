@@ -1,4 +1,4 @@
-package com.example.deligov2.Beans;
+package com.example.deligov2.DTO;
 
 import java.io.Serializable;
 
@@ -19,6 +19,7 @@ public class Usuario implements Serializable {
     private String latitud;
     private String date;
     private String fotoUrl;
+    private String restaurante;
 
 
     public String getId() {
@@ -139,5 +140,13 @@ public class Usuario implements Serializable {
 
     public void setFotoUrl(String fotoUrl) {
         this.fotoUrl = fotoUrl;
+    }
+
+    public String getRestaurante() {
+        return restaurante;
+    }
+
+    public void setRestaurante(String restaurante) {
+        this.restaurante = restaurante;
     }
 }

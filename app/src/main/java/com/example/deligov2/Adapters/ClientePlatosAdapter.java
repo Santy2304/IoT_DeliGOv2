@@ -9,15 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Cliente;
-import com.example.deligov2.Beans.Notificaciones;
-import com.example.deligov2.Beans.Platillo;
-import com.example.deligov2.Beans.Plato;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdapter.ClientePlatosViewHolder> {

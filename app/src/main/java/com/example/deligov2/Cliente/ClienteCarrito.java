@@ -1,29 +1,19 @@
 package com.example.deligov2.Cliente;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.ClienteCarritoAdapter;
-import com.example.deligov2.Adapters.ClienteHistorialAdapter;
-import com.example.deligov2.Beans.Ordenes;
-import com.example.deligov2.Beans.Platillo;
-import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

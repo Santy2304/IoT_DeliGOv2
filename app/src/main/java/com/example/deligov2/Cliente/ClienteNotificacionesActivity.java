@@ -5,21 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.NotificacionesAdapter;
-import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
 import com.example.deligov2.Beans.Notificaciones;
-import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

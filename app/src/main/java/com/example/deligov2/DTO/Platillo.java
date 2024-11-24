@@ -1,4 +1,4 @@
-package com.example.deligov2.Beans;
+package com.example.deligov2.DTO;
 
 import java.io.Serializable;
 
@@ -8,6 +8,9 @@ public class Platillo implements Serializable {
     private String nombre;
     private String descripcion;
     private float precio;
+    private String idRestaurante;
+    private int cantVentaTotal;
+
 
     public String getId() {
         return id;
