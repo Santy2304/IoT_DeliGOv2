@@ -38,24 +38,6 @@ import java.util.List;
 public class ClienteHomeActivity extends AppCompatActivity {
 
     ArrayList<Restaurante> lista=new ArrayList<>();
-    String[] nombresRestaurantes = {
-            "Bembos",
-            "KFC",
-            "Pardos",
-            "Comida Saludable",
-            "Rincón Italiano"
-    };
-    String[] horariosAtencion  = {
-                "10:00 am - 20:00 pm",
-                "11:00 am - 21:00 pm",
-                "09:00 am - 23:00 pm",
-                "10:00 am - 19:00 pm",
-                "11:00 am - 20:00 pm"
-    };
-
-    int[] idsRestaurantes = {
-            1,2,3,4,5
-    };
 
     FirebaseFirestore db;
     FloatingActionButton notiButton;
@@ -64,7 +46,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_home);
 
         db = FirebaseFirestore.getInstance();
@@ -134,14 +115,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //lista = new ArrayList<>();
-        //for(int i=0;i<5;i++){
-          //  Restaurante restaurante = new Restaurante();
-           // restaurante.setNombre(nombresRestaurantes[i]);
-            //restaurante.setHorario(horariosAtencion[i]);
-           // restaurante.setId(idsRestaurantes[i]);
-           // lista.add(restaurante);
-       // }
+
 
         RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
         adapter.setContext(this);

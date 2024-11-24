@@ -66,8 +66,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginTop="12dp"
         android:backgroundTint="@color/light_green"
-        android:contentDescription="Carrito"
-        android:onClick="vistaCarrito"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.818"
         app:layout_constraintStart_toEndOf="@+id/textView3"

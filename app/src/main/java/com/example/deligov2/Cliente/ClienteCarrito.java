@@ -3,10 +3,12 @@ package com.example.deligov2.Cliente;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -20,11 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.ClienteCarritoAdapter;
 import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Beans.Ordenes;
+import com.example.deligov2.Beans.Platillo;
 import com.example.deligov2.Beans.Restaurante;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -55,16 +61,21 @@ public class ClienteCarrito extends AppCompatActivity {
     int[] idPlato = {
             1,2,3,4
     };
+    FirebaseFirestore db;
     FloatingActionButton notiButton;
     FloatingActionButton returnRestaurant;
     Button orderButton;
     Button vaciarButton;
+    private List<Platillo> listaPlatosSeleccionados;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_carrito);
-
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -90,11 +101,22 @@ public class ClienteCarrito extends AppCompatActivity {
             }
         });
 
-        lista = new ArrayList<>();
-        for(int i=0;i<4;i++){
-            VentaPlatilloSA ventaPlatilloSA = new VentaPlatilloSA(idPlato[i],nombresPlatos[i],Precios[i],cantidad[i],idRestaurante[i]);
-            lista.add(ventaPlatilloSA);
+        listaPlatosSeleccionados = (List<Platillo>) getIntent().getSerializableExtra("listaPlatillos");
+
+        if (listaPlatosSeleccionados != null) {
+            for (Platillo plato : listaPlatosSeleccionados) {
+                VentaPlatilloSA ventaPlatilloSA = new VentaPlatilloSA(1,plato.getNombre(),plato.getPrecio(),1,1);
+                lista.add(ventaPlatilloSA);
+
+            }
         }
+
+//
+//        lista = new ArrayList<>();
+//        for(int i=0;i<4;i++){
+//            VentaPlatilloSA ventaPlatilloSA = new VentaPlatilloSA(idPlato[i],nombresPlatos[i],Precios[i],cantidad[i],idRestaurante[i]);
+//            lista.add(ventaPlatilloSA);
+//        }
         ClienteCarritoAdapter adapter = new ClienteCarritoAdapter();
         adapter.setContext(this);
         adapter.setListaPlatosVentas(lista);
@@ -118,10 +140,21 @@ public class ClienteCarrito extends AppCompatActivity {
             startActivity(intent);
         });
 
-        orderButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ClienteConfirmarDireccion.class);
-            startActivity(intent);
-        });
+//        orderButton.setOnClickListener(view -> {
+//            db.collection("Pedidos")
+//                    .document(usuario.getId())
+//                    .set(usuario)
+//                    .addOnSuccessListener(unused -> {
+//                        irAlSiguientePaso(usuario);
+//                    })
+//                    .addOnFailureListener(e -> {
+//                        Log.e("Firestore", "Error al registrar usuario", e);
+//                        Toast.makeText(this, "Error al registrar usuario.", Toast.LENGTH_SHORT).show();
+//                    });
+//            Intent intent = new Intent(this, ClienteConfirmarDireccion.class);
+//            startActivity(intent);
+//
+//        });
 
         vaciarButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteHomeActivity.class);
