@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +31,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,7 +52,8 @@ public class LoginInicioActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 1001; // Código de solicitud para Google Sign-In
     private static final String TAG = "GoogleSignIn";
-
+    private TextInputEditText emailInput, passwordInput;
+    private TextInputLayout emailLayout, passwordLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         userList = new ArrayList<>();
@@ -72,6 +76,10 @@ public class LoginInicioActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, gso);
         Button googleSignInButton = findViewById(R.id.IniciarSesionGoogle);
         googleSignInButton.setOnClickListener(v -> signInWithGoogle());
+        emailInput = findViewById(R.id.email);
+        passwordInput = findViewById(R.id.password);
+        emailLayout = findViewById(R.id.correo);
+        passwordLayout = findViewById(R.id.contrasena);
     }
 
     private void signInWithGoogle() {
@@ -197,5 +205,59 @@ public class LoginInicioActivity extends AppCompatActivity {
     public void forgotPassword(View view){
         startActivity(new Intent(this, LoginRecuperarPasswordPrimerPaso.class));
     }
+
+    public void iniciarSesion(View view) {
+        // Obtén los valores de los campos de texto
+        String email = emailInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
+
+        // Limpia errores previos
+        emailLayout.setError(null);
+        passwordLayout.setError(null);
+
+        // Validación de campos
+        if (email.isEmpty()) {
+            emailLayout.setError("Por favor, ingresa tu correo electrónico.");
+            return;
+        }
+
+        if (password.isEmpty()) {
+            passwordLayout.setError("Por favor, ingresa tu contraseña.");
+            return;
+        }
+        // Autenticar usuario con Firebase
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Inicio de sesión exitoso
+                        user = firebaseAuth.getCurrentUser();
+                        redireccion();
+                    } else {
+                        // Fallo en el inicio de sesión
+                        handleFirebaseAuthError(task.getException());
+                    }
+                });
+    }
+
+    private void handleFirebaseAuthError(Exception exception) {
+        if (exception == null) {
+            emailLayout.setError("Ocurrió un error desconocido.");
+            return;
+        }
+
+        String errorMessage = exception.getMessage();
+        if (errorMessage != null) {
+            if (errorMessage.contains("There is no user record")) {
+                emailLayout.setError("No existe una cuenta con este correo.");
+            } else if (errorMessage.contains("The password is invalid")) {
+                passwordLayout.setError("Contraseña incorrecta.");
+            } else if (errorMessage.contains("A network error")) {
+                emailLayout.setError("Error de red. Verifica tu conexión.");
+            } else {
+                emailLayout.setError("Error: " + errorMessage);
+            }
+        }
+    }
+
 
 }
