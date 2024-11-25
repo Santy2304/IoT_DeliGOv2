@@ -139,6 +139,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/precioProdcutos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8sp"
@@ -167,6 +168,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/costoEnvio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8sp"
@@ -194,6 +196,7 @@
                     android:textColor="@color/light_green" />
 
                 <TextView
+                    android:id="@+id/costoTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8sp"

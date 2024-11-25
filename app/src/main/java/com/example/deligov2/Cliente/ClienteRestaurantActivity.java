@@ -92,7 +92,6 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
             // Agregar plato al arreglo
             listaPlatosSeleccionados.add(plato);
             listaIdPlatos.add(plato.getId());
-
             Toast.makeText(this, "Plato agregado: " + plato.getNombre(), Toast.LENGTH_SHORT).show();
         });
 
@@ -117,7 +116,6 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
                 actualizarCarrito();
             }
             Intent intent = new Intent(this, ClienteCarrito.class);
-            intent.putExtra("listaPlatillos",listaPlatosSeleccionados);
             startActivity(intent);
         });
 
@@ -128,14 +126,23 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
+                    if(!listaPlatosSeleccionados.isEmpty()){
+                        actualizarCarrito();
+                    }
                     Intent intentRestaurant = new Intent(ClienteRestaurantActivity.this, ClienteHomeActivity.class);
                     startActivity(intentRestaurant);
                     return true;
                 }else if(item.getItemId()==R.id.historial){
+                    if(!listaPlatosSeleccionados.isEmpty()){
+                        actualizarCarrito();
+                    }
                     Intent intentPrincipal = new Intent(ClienteRestaurantActivity.this, ClienteHistorialActivity.class);
                     startActivity(intentPrincipal);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
+                    if(!listaPlatosSeleccionados.isEmpty()){
+                        actualizarCarrito();
+                    }
                     Intent intentProfile = new Intent(ClienteRestaurantActivity.this, ClientePerfil.class);
                     startActivity(intentProfile);
                     return true;
@@ -147,69 +154,6 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         });
 
     }
-
-//    public void verPerfil(View view){
-//
-//        if(!listaPlatosSeleccionados.isEmpty()){
-//            carrito.setIdRestaurante(idRestaurante);
-//            carrito.setIdUsuario(user.getUid());
-//            carrito.setIdListaPlatos(listaIdPlatos);
-//
-//            db.collection("Carritos")
-//                    .document(user.getUid())
-//                    .set(carrito)
-//                    .addOnSuccessListener(unused -> {
-//                        Log.d("msg-test","Data guardada exitosamente");
-//                    })
-//                    .addOnFailureListener(e -> e.printStackTrace());
-//
-//
-//        }
-//
-//        Intent intent = new Intent(this, ClientePerfil.class);
-//        startActivity(intent);
-//    }
-//
-//    public void verHistorial(View view){
-//        if(!listaPlatosSeleccionados.isEmpty()){
-//            carrito.setIdRestaurante(idRestaurante);
-//            carrito.setIdUsuario(user.getUid());
-//            carrito.setIdListaPlatos(listaIdPlatos);
-//
-//            db.collection("Carritos")
-//                    .document(user.getUid())
-//                    .set(carrito)
-//                    .addOnSuccessListener(unused -> {
-//                        Log.d("msg-test","Data guardada exitosamente");
-//                    })
-//                    .addOnFailureListener(e -> e.printStackTrace());
-//
-//
-//        }
-//        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-//        startActivity(intent);
-//    }
-//
-//    public void verHome(View view){
-//        if(!listaPlatosSeleccionados.isEmpty()){
-//            carrito.setIdRestaurante(idRestaurante);
-//            carrito.setIdUsuario(user.getUid());
-//            carrito.setIdListaPlatos(listaIdPlatos);
-//
-//            db.collection("Carritos")
-//                    .document(user.getUid())
-//                    .set(carrito)
-//                    .addOnSuccessListener(unused -> {
-//                        Log.d("msg-test","Data guardada exitosamente");
-//                    })
-//                    .addOnFailureListener(e -> e.printStackTrace());
-//
-//
-//        }
-//        Intent intent = new Intent(this, ClienteHomeActivity.class);
-//        startActivity(intent);
-//    }
-
 
     public void actualizarCarrito(){
         carrito.setIdRestaurante(idRestaurante);
