@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.deligov2.DTO.Usuario;
+import com.example.deligov2.LogIn.InicioSesion.LoginInicioActivity;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -147,7 +148,7 @@ public class PerfilRepartidor extends AppCompatActivity {
 
     public void salir(View view){
         firebaseAuth.signOut();
-        Intent intent = new Intent(this, LoginPrimeraVista.class);
+        Intent intent = new Intent(this, LoginInicioActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         Toast.makeText(this, "Sesión cerrada exitosamente", Toast.LENGTH_SHORT).show();
