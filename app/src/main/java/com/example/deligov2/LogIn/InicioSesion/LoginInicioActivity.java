@@ -3,6 +3,7 @@ package com.example.deligov2.LogIn.InicioSesion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.example.deligov2.Administrador.AdministradorHomeActivity;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
+import com.example.deligov2.LogIn.RecuperarContra.LoginRecuperarPasswordPrimerPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaCuartoPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaPrimerPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
@@ -134,7 +136,6 @@ public class LoginInicioActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
     public void loadUsers(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -155,7 +156,6 @@ public class LoginInicioActivity extends AppCompatActivity {
                     }
                 });
     }
-
     public void redireccion(){
         if(user!=null){
             user.reload().addOnCompleteListener(task -> {
@@ -193,4 +193,9 @@ public class LoginInicioActivity extends AppCompatActivity {
             Log.d("msg-test", "user es nulo");
         }
     }
+
+    public void forgotPassword(View view){
+        startActivity(new Intent(this, LoginRecuperarPasswordPrimerPaso.class));
+    }
+
 }

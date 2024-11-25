@@ -109,9 +109,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5sp"
                     android:text="Recupérala aquí"
-                    android:onClick="RecuperarPassword"
                     android:textColor="@color/light_green"
                     android:textSize="15sp"
+                    android:onClick="forgotPassword"
                     android:textStyle="bold"/>
             </LinearLayout>
 
