@@ -102,13 +102,12 @@ public class LoginInicioActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
                         Log.d(TAG, "signInWithCredential:success");
-                        user = firebaseAuth.getCurrentUser();
+                        user = FirebaseAuth.getInstance().getCurrentUser();
                         redireccion();
                     } else {
                         // Falló el inicio de sesión
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(this, "Error en la autenticación", Toast.LENGTH_SHORT).show();
-                        //Creamos cuenta de google en firebase
                     }
                 });
     }
@@ -159,48 +158,39 @@ public class LoginInicioActivity extends AppCompatActivity {
 
     public void redireccion(){
         if(user!=null){
-            if(user.isEmailVerified()){
-                db.collection("Usuarios").document(user.getUid()).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.exists()) {
-                                Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                assert usuario != null;
-                                if (usuario.getNumeroTelefono()!=null){
-                                    if(usuario.getDireccion()!=null){
-                                        if(usuario.getFotoUrl()!=null){
-                                            if(usuario.getRol()!=null){
-                                                if(usuario.getRol().equals("Cliente")){
-                                                    goCliente();
-                                                } else if (usuario.getRol().equals("Repartidor")) {
-                                                    goRepartidor();
-                                                } else if (usuario.getRol().equals("Administrador")) {
-                                                    goAdmin();
-                                                }else {
-                                                    goSuper(usuario);
-                                                }
-                                            }else{
-                                                Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
-                                                startActivity(intent);
-                                            }
-                                        }else {
-                                            Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
-                                            startActivity(intent);
-                                        }
-                                    }else {
-                                        Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
-                                        startActivity(intent);
+            user.reload().addOnCompleteListener(task -> {
+                if(user.isEmailVerified()){
+                    Log.d("msg-test", "Firebase uid: " + user.getUid());
+                    db.collection("Usuarios").document(user.getUid()).get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
+
+                                    if(usuario.getRol().equals("Cliente")){
+                                        goCliente();
+                                    } else if (usuario.getRol().equals("Repartidor")) {
+                                        goRepartidor();
+                                    } else if (usuario.getRol().equals("Administrador")) {
+                                        goAdmin();
+                                    }else if (usuario.getRol().equals("SuperAdmin")){
+                                        goSuper(usuario);
                                     }
-                                }else{
-                                    Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
+                                } else {
+                                    Intent intent = new Intent(this,LoginCrearCuentaPrimerPaso.class);
                                     startActivity(intent);
+                                    finish();
                                 }
-                            }
-                        })
-                        .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+                            })
+                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+                }else {
+                    user.sendEmailVerification().addOnCompleteListener(task1 -> {
+                        Toast.makeText(this,"Se le ha enviado un correo para validar la cuenta",Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
 
-                Log.d("msg-test", "Firebase uid: " + user.getUid());
-            }
-
+        }else {
+            Log.d("msg-test", "user es nulo");
         }
     }
 }
