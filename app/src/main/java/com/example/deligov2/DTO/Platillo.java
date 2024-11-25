@@ -43,4 +43,20 @@ public class Platillo implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public String getIdRestaurante() {
+        return idRestaurante;
+    }
+
+    public void setIdRestaurante(String idRestaurante) {
+        this.idRestaurante = idRestaurante;
+    }
+
+    public int getCantVentaTotal() {
+        return cantVentaTotal;
+    }
+
+    public void setCantVentaTotal(int cantVentaTotal) {
+        this.cantVentaTotal = cantVentaTotal;
+    }
 }

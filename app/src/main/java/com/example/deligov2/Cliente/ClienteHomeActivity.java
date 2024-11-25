@@ -13,11 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
+import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -26,18 +29,28 @@ import java.util.ArrayList;
 public class ClienteHomeActivity extends AppCompatActivity {
 
     ArrayList<Restaurante> lista=new ArrayList<>();
-
     FirebaseFirestore db;
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
     MaterialButton restaurantButton;
+    Carrito carrito;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_home);
-
         db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
+        db.collection("Carrito").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        carrito = documentSnapshot.toObject(Carrito.class);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

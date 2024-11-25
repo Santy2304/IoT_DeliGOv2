@@ -1,6 +1,7 @@
 package com.example.deligov2.Cliente;
 
 import android.content.Intent;
+import android.hardware.camera2.CameraExtensionSession;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
+import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,15 +23,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ClienteRestaurantActivity extends AppCompatActivity {
-    ArrayList<Platillo> lista;
-    private List<Platillo> listaPlatosSeleccionados = new ArrayList<>();
+    ArrayList<Platillo> lista = new ArrayList<>();
+    List<Platillo> listaPlatosSeleccionados = new ArrayList<>();
     ClientePlatosAdapter adapter;
     String idRestaurante;
     FirebaseFirestore db;
@@ -37,6 +45,7 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
     FirebaseUser user;
     FloatingActionButton cartButton;
     FloatingActionButton backButton;
+    Carrito carrito;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +56,32 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         idRestaurante = getIntent().getStringExtra("idRestaurante");
 
 
+        db.collection("Carrito").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                       carrito  = documentSnapshot.toObject(Carrito.class);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
+        db.collection("Platos").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Platillo platillo = document.toObject(Platillo.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
+                    if (platillo.getIdRestaurante().equals(idRestaurante)){
+                        lista.add(platillo);
+                    }
 
-
-
-
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
 
 
         adapter = new ClientePlatosAdapter();
@@ -60,8 +90,11 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         adapter.setOnPlatoClickListener(plato -> {
             // Agregar plato al arreglo
             listaPlatosSeleccionados.add(plato);
+
+
             Toast.makeText(this, "Plato agregado: " + plato.getNombre(), Toast.LENGTH_SHORT).show();
         });
+
         RecyclerView recyclerView = findViewById(R.id.recycler2columnas);
         recyclerView.setAdapter(adapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
@@ -71,14 +104,19 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         cartButton = findViewById(R.id.cart_button);
 
         backButton.setOnClickListener(view -> {
+
+
+
             Intent intent = new Intent(this, ClienteHomeActivity.class);
             startActivity(intent);
         });
 
         cartButton.setOnClickListener(view -> {
+
+
+
             Intent intent = new Intent(this, ClienteCarrito.class);
             intent.putExtra("listaPlatillos",(Serializable) listaPlatosSeleccionados);
-
             startActivity(intent);
         });
 
@@ -110,6 +148,11 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
     }
 
     public void verPerfil(View view){
+
+        if(!listaPlatosSeleccionados.isEmpty()){
+
+        }
+
         Intent intent = new Intent(this, ClientePerfil.class);
         startActivity(intent);
     }

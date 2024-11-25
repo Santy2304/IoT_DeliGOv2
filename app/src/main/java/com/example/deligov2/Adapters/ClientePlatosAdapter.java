@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -37,6 +40,19 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
         TextView textViewPrice = holder.itemView.findViewById(R.id.foodPrecio);
         textViewPrice.setText(String.format("S/ %.2f", p.getPrecio()));
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+p.getIdRestaurante()+"/"+p.getId()+"/plato.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.ImageView);
+        }).addOnFailureListener(e -> {
+            holder.ImageView.setImageResource(R.drawable.camara_icon);
+        });
+
         ExtendedFloatingActionButton btnAgregar = holder.itemView.findViewById(R.id.btnAgregar);
         btnAgregar.setOnClickListener(v -> {
             if (onPlatoClickListener != null) {
@@ -53,8 +69,12 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
     public class ClientePlatosViewHolder extends RecyclerView.ViewHolder{
         Platillo plato;
+        android.widget.ImageView ImageView;
+
         public ClientePlatosViewHolder(@NonNull View itemView) {
             super(itemView);
+            ImageView = itemView.findViewById(R.id.foodImage);
+
         }
     }
 
