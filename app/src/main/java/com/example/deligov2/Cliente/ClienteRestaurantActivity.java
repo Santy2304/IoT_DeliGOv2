@@ -37,8 +37,8 @@ import java.util.Objects;
 
 public class ClienteRestaurantActivity extends AppCompatActivity {
     ArrayList<Platillo> lista = new ArrayList<>();
-    List<Platillo> listaPlatosSeleccionados = new ArrayList<>();
-    List<String> listaIdPlatos = new ArrayList<>();
+    ArrayList<Platillo> listaPlatosSeleccionados = new ArrayList<>();
+    ArrayList<String> listaIdPlatos = new ArrayList<>();
     ClientePlatosAdapter adapter;
     String idRestaurante;
     FirebaseFirestore db;
@@ -91,7 +91,7 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         adapter.setOnPlatoClickListener(plato -> {
             // Agregar plato al arreglo
             listaPlatosSeleccionados.add(plato);
-
+            listaIdPlatos.add(plato.getId());
 
             Toast.makeText(this, "Plato agregado: " + plato.getNombre(), Toast.LENGTH_SHORT).show();
         });
@@ -105,19 +105,19 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         cartButton = findViewById(R.id.cart_button);
 
         backButton.setOnClickListener(view -> {
-
-
-
+            if(!listaPlatosSeleccionados.isEmpty()){
+                actualizarCarrito();
+            }
             Intent intent = new Intent(this, ClienteHomeActivity.class);
             startActivity(intent);
         });
 
         cartButton.setOnClickListener(view -> {
-
-
-
+            if(!listaPlatosSeleccionados.isEmpty()){
+                actualizarCarrito();
+            }
             Intent intent = new Intent(this, ClienteCarrito.class);
-            intent.putExtra("listaPlatillos",(Serializable) listaPlatosSeleccionados);
+            intent.putExtra("listaPlatillos",listaPlatosSeleccionados);
             startActivity(intent);
         });
 
@@ -148,51 +148,81 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
 
     }
 
-    public void verPerfil(View view){
+//    public void verPerfil(View view){
+//
+//        if(!listaPlatosSeleccionados.isEmpty()){
+//            carrito.setIdRestaurante(idRestaurante);
+//            carrito.setIdUsuario(user.getUid());
+//            carrito.setIdListaPlatos(listaIdPlatos);
+//
+//            db.collection("Carritos")
+//                    .document(user.getUid())
+//                    .set(carrito)
+//                    .addOnSuccessListener(unused -> {
+//                        Log.d("msg-test","Data guardada exitosamente");
+//                    })
+//                    .addOnFailureListener(e -> e.printStackTrace());
+//
+//
+//        }
+//
+//        Intent intent = new Intent(this, ClientePerfil.class);
+//        startActivity(intent);
+//    }
+//
+//    public void verHistorial(View view){
+//        if(!listaPlatosSeleccionados.isEmpty()){
+//            carrito.setIdRestaurante(idRestaurante);
+//            carrito.setIdUsuario(user.getUid());
+//            carrito.setIdListaPlatos(listaIdPlatos);
+//
+//            db.collection("Carritos")
+//                    .document(user.getUid())
+//                    .set(carrito)
+//                    .addOnSuccessListener(unused -> {
+//                        Log.d("msg-test","Data guardada exitosamente");
+//                    })
+//                    .addOnFailureListener(e -> e.printStackTrace());
+//
+//
+//        }
+//        Intent intent = new Intent(this, ClienteHistorialActivity.class);
+//        startActivity(intent);
+//    }
+//
+//    public void verHome(View view){
+//        if(!listaPlatosSeleccionados.isEmpty()){
+//            carrito.setIdRestaurante(idRestaurante);
+//            carrito.setIdUsuario(user.getUid());
+//            carrito.setIdListaPlatos(listaIdPlatos);
+//
+//            db.collection("Carritos")
+//                    .document(user.getUid())
+//                    .set(carrito)
+//                    .addOnSuccessListener(unused -> {
+//                        Log.d("msg-test","Data guardada exitosamente");
+//                    })
+//                    .addOnFailureListener(e -> e.printStackTrace());
+//
+//
+//        }
+//        Intent intent = new Intent(this, ClienteHomeActivity.class);
+//        startActivity(intent);
+//    }
 
-        if(!listaPlatosSeleccionados.isEmpty()){
 
-            carrito.setIdRestaurante(idRestaurante);
-            carrito.setIdUsuario(user.getUid());
+    public void actualizarCarrito(){
+        carrito.setIdRestaurante(idRestaurante);
+        carrito.setIdUsuario(user.getUid());
+        carrito.setIdListaPlatos(listaIdPlatos);
 
-
-
-        }
-
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
+        db.collection("Carritos")
+                .document(user.getUid())
+                .set(carrito)
+                .addOnSuccessListener(unused -> {
+                    Log.d("msg-test","Data guardada exitosamente");
+                })
+                .addOnFailureListener(e -> e.printStackTrace());
     }
 
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.cliente_menu, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId()==R.id.historial){
-            startActivity(new Intent(this, ClienteHistorialActivity.class));
-            return true;
-        } else if (item.getItemId()==R.id.restaurant) {
-            startActivity(new Intent(this, ClienteRestaurantActivity.class));
-            return true;
-        } else if (item.getItemId()==R.id.profile) {
-            startActivity(new Intent(this, ClientePerfil.class));
-            return true;
-        }else{
-            return super.onOptionsItemSelected(item);
-
-        }
-
-    }
 }

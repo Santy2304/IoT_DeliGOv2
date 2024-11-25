@@ -7,7 +7,6 @@ public class Carrito implements Serializable {
 
     private String idUsuario;
     private ArrayList<String> idListaPlatos;
-    private ArrayList<Float> preciosActuales;
     private ArrayList<Integer> listaCantidades;
     private String idRestaurante;
 
@@ -35,13 +34,6 @@ public class Carrito implements Serializable {
         this.idListaPlatos = idListaPlatos;
     }
 
-    public ArrayList<Float> getPreciosActuales() {
-        return preciosActuales;
-    }
-
-    public void setPreciosActuales(ArrayList<Float> preciosActuales) {
-        this.preciosActuales = preciosActuales;
-    }
 
     public ArrayList<Integer> getListaCantidades() {
         return listaCantidades;
