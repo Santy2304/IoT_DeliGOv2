@@ -2,12 +2,14 @@ package com.example.deligov2.LogIn.Registro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deligov2.Administrador.AdministradorHomeActivity;
+import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.R;
@@ -36,6 +38,16 @@ public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
     public void iniciar(View view){
         Intent intent;
         if(usuario.getRol().equals("Cliente")){
+            Carrito carrito = new Carrito();
+            carrito.setIdUsuario(user.getUid());
+            db.collection("Carritos")
+                    .document(usuario.getId())
+                    .set(carrito)
+                    .addOnSuccessListener(unused -> {
+                        Log.d("msg-test","Data guardada exitosamente");
+                    })
+                    .addOnFailureListener(e -> e.printStackTrace());
+
              intent = new Intent(LoginCrearCuentaPasoFinal.this, ClienteHomeActivity.class);
 
         } else if (usuario.getRol().equals("Repartidor")){

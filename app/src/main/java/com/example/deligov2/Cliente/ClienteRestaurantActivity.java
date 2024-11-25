@@ -38,6 +38,7 @@ import java.util.Objects;
 public class ClienteRestaurantActivity extends AppCompatActivity {
     ArrayList<Platillo> lista = new ArrayList<>();
     List<Platillo> listaPlatosSeleccionados = new ArrayList<>();
+    List<String> listaIdPlatos = new ArrayList<>();
     ClientePlatosAdapter adapter;
     String idRestaurante;
     FirebaseFirestore db;
@@ -150,6 +151,11 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
     public void verPerfil(View view){
 
         if(!listaPlatosSeleccionados.isEmpty()){
+
+            carrito.setIdRestaurante(idRestaurante);
+            carrito.setIdUsuario(user.getUid());
+
+
 
         }
 
