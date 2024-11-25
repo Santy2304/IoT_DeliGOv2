@@ -40,9 +40,7 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_administrador1);
-
         db = FirebaseFirestore.getInstance();
-        // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
@@ -130,7 +128,6 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
         }
 
          */
-
         //Manejo de botones
         Button btContinuar = findViewById(R.id.continuar1);
         TextInputEditText adminName = findViewById(R.id.adminNombre);
@@ -197,16 +194,15 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
     }
 
     public void vistaRegistroAdmin2(Restaurante resR, String name, String apellido, String num){
-
-        Administrador ad = new Administrador();
-        ad.setNumDocumento(num);
+        Usuario ad = new Usuario();
+        ad.setNumDocument(num);
         ad.setNombre(name);
         ad.setApellido(apellido);
         ad.setRestaurante(resR.getId());
+        ad.setTipoDocumento("DNI");//POR CORREGIR
         Intent intent = new Intent(this, SuperAdminRegistroAdministrador2.class);
         intent.putExtra("nr2",resR);
         intent.putExtra("admin",ad);
-
         Log.d("ADMINiSTRADORRR", "nombre: "+name+apellido+num);
         startActivity(intent);
     }

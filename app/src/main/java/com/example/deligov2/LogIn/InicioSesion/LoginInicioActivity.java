@@ -228,6 +228,8 @@ public class LoginInicioActivity extends AppCompatActivity {
                                                         } else if (usuario.getRol().equals("Repartidor")) {
                                                             goRepartidor();
                                                         } else if (usuario.getRol().equals("Administrador")) {
+                                                            //update de su id con su uid
+
                                                             goAdmin();
                                                         } else {
                                                             goSuper(usuario);

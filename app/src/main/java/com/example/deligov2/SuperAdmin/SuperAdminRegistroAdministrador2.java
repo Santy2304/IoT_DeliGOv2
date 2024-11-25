@@ -25,6 +25,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.deligov2.Beans.Administrador;
 import com.example.deligov2.DTO.Restaurante;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,10 +33,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
     private TextInputEditText adminRestaurante;
     private TextInputEditText adminCorreo;
-    private Administrador adminN;
+    private Usuario adminN;
     String canal2 = "importante Otro";
 
     private FirebaseFirestore db;
@@ -99,7 +103,7 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
 
         Restaurante resR = (Restaurante) intent.getSerializableExtra("nr2");
         //String nameR = intent.getStringExtra("nr2");
-        Administrador ad = (Administrador) intent.getSerializableExtra("admin");
+        Usuario ad = (Usuario) intent.getSerializableExtra("admin");
         /*
         String nameAdmin = intent.getStringExtra("adminName");
         String apellidoAdmin = intent.getStringExtra("adminApellido");
@@ -155,14 +159,14 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                 notificarAsignarAdminRestaurante(adminN,ad.getNombre(),resR.getNombre());
                 vistaRegistroAdminCorrect();
 
-                adminN = new Administrador();
+                adminN = new Usuario();
                 adminN.setNombre(ad.getNombre());
                 adminN.setApellido(ad.getApellido());
                 adminN.setCorreo(email);
                 adminN.setEstado(true);
                 adminN.setRestaurante(resR.getId());
-                adminN.setUbicacionRestaurante(resR.getDireccion());
-                adminN.setNumDocumento(ad.getNumDocumento());
+                //adminN.setUbicacionRestaurante(resR.getDireccion());
+                adminN.setNumDocument(ad.getNumDocument());
 
                 registrarAdministradorFirebase(adminN,resR.getId());
             }
@@ -215,14 +219,13 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         }
     }
 
-    public void notificarAsignarAdminRestaurante(Administrador admin, String name, String nameR){
+    public void notificarAsignarAdminRestaurante(Usuario admin, String name, String nameR){
 
         //Crear notificación
         //Agregar información a la notificación que luego sea enviada a la actividad que se abre
         Intent intent = new Intent(this, SuperAdminVistaLogEvent.class);
         intent.putExtra("admin",admin);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        //
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canal2)
                 .setSmallIcon(R.drawable.deligo)
                 .setContentTitle("Deligo events")
@@ -239,22 +242,27 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             notificationManager.notify(282, notification);
         }
-
-
     }
 
 
-    private void registrarAdministradorFirebase(Administrador admin, String resId) {
+    private void registrarAdministradorFirebase(Usuario admin, String resId) {
+        admin.setDate("_");
+        admin.setDireccion("_");
+        //Falta setear foto po default
+        admin.setNumeroTelefono("_");
+        admin.setReferencia("_");
+        admin.setRol("Administrador");
 
-
-        db.collection("administradores")
+        db.collection("Usuarios")
                 .add(admin)
                 .addOnSuccessListener(documentReference -> {
                     String idAdmin = documentReference.getId();
-                    admin.setIdAdmin(idAdmin);
-
+                    //admin.setIdAdmin(idAdmin);
                     // Actualizar el campo id en Firestore con el ID generado
-                    documentReference.update("idAdmin", idAdmin)
+                    Map<String , Object> data = new HashMap<>();
+                    data.put("id", idAdmin);
+                    data.put("correo", admin.getCorreo());
+                    documentReference.update(data)
                             .addOnSuccessListener(aVoid -> Log.d("Firestore", "ID actualizado correctamente en el documento."))
                             .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
 
