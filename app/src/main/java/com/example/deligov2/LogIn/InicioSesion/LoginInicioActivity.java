@@ -1,0 +1,206 @@
+package com.example.deligov2.LogIn.InicioSesion;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.deligov2.Administrador.AdministradorHomeActivity;
+import com.example.deligov2.Cliente.ClienteHomeActivity;
+import com.example.deligov2.DTO.Usuario;
+import com.example.deligov2.LogIn.LoginPrimeraVista;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaCuartoPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaPrimerPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaTercerPaso;
+import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.RepartidorVistaHome;
+import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LoginInicioActivity extends AppCompatActivity {
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    FirebaseFirestore db;
+    Button comenzarButton;
+    private List<Usuario> userList;
+    private GoogleSignInClient googleSignInClient;
+    private static final int RC_SIGN_IN = 1001; // Código de solicitud para Google Sign-In
+    private static final String TAG = "GoogleSignIn";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        userList = new ArrayList<>();
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_login_inicio);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        redireccion();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Obtén el ID del cliente desde google-services.json
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        Button googleSignInButton = findViewById(R.id.IniciarSesionGoogle);
+        googleSignInButton.setOnClickListener(v -> signInWithGoogle());
+    }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            try {
+                // Obtén la cuenta de Google desde el intent
+                GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class);
+                if (account != null) {
+                    firebaseAuthWithGoogle(account);
+                }
+            } catch (ApiException e) {
+                Log.w(TAG, "Google sign in failed", e);
+                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Inicio de sesión exitoso
+                        Log.d(TAG, "signInWithCredential:success");
+                        user = firebaseAuth.getCurrentUser();
+                        redireccion();
+                    } else {
+                        // Falló el inicio de sesión
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(this, "Error en la autenticación", Toast.LENGTH_SHORT).show();
+                        //Creamos cuenta de google en firebase
+                    }
+                });
+    }
+
+    public void goCliente(){
+        Intent intent = new Intent(this, ClienteHomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public void goRepartidor(){
+        Intent intent = new Intent(this, RepartidorVistaHome.class);
+        startActivity(intent);
+        finish();
+    }
+    public void goAdmin(){
+        Intent intent = new Intent(this, AdministradorHomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public void goSuper(Usuario user){
+        Intent intent = new Intent(this, SuperAdminHomeActivity.class);
+        intent.putExtra("sa",user);
+        Log.d("PROBANDO 123","LOGIN OLA" + user.getId()+"-"+user.getNombre());
+        startActivity(intent);
+        finish();
+    }
+
+    public void loadUsers(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return;
+                    }
+                    if (value != null) {
+                        if(userList !=null){
+                            userList.clear();
+                        }
+                        // Limpiar la lista antes de agregar nuevos datos
+                        if(value != null){
+                            for (QueryDocumentSnapshot document : value) {
+                                Usuario user2 = document.toObject(Usuario.class);
+                                userList.add(user2); // Agregar usuario a la lista
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void redireccion(){
+        if(user!=null){
+            if(user.isEmailVerified()){
+                db.collection("Usuarios").document(user.getUid()).get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                                assert usuario != null;
+                                if (usuario.getNumeroTelefono()!=null){
+                                    if(usuario.getDireccion()!=null){
+                                        if(usuario.getFotoUrl()!=null){
+                                            if(usuario.getRol()!=null){
+                                                if(usuario.getRol().equals("Cliente")){
+                                                    goCliente();
+                                                } else if (usuario.getRol().equals("Repartidor")) {
+                                                    goRepartidor();
+                                                } else if (usuario.getRol().equals("Administrador")) {
+                                                    goAdmin();
+                                                }else {
+                                                    goSuper(usuario);
+                                                }
+                                            }else{
+                                                Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                startActivity(intent);
+                                            }
+                                        }else {
+                                            Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                            startActivity(intent);
+                                        }
+                                    }else {
+                                        Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                        startActivity(intent);
+                                    }
+                                }else{
+                                    Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+                Log.d("msg-test", "Firebase uid: " + user.getUid());
+            }
+
+        }
+    }
+}

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogIn.LoginCrearCuentaPasoFinal">
+    tools:context=".LogIn.Registro.LoginCrearCuentaPasoFinal">
 
     <LinearLayout
         android:layout_width="match_parent"

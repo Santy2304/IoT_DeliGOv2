@@ -9,11 +9,20 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.Administrador.AdministradorHomeActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaCuartoPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaPrimerPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaTercerPaso;
+import com.example.deligov2.MainActivity;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.RepartidorHomeActivity;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
@@ -27,6 +36,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import kotlin.collections.ArrayDeque;
 
 public class LoginPrimeraVista extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
@@ -65,19 +76,19 @@ public class LoginPrimeraVista extends AppCompatActivity {
                                                     goSuper(usuario);
                                                 }
                                             }else{
-                                                Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaCuartoPaso.class);
+                                                Intent intent = new Intent(LoginPrimeraVista.this, LoginCrearCuentaCuartoPaso.class);
                                                 startActivity(intent);
                                             }
                                         }else {
-                                            Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaTercerPaso.class);
+                                            Intent intent = new Intent(LoginPrimeraVista.this, LoginCrearCuentaTercerPaso.class);
                                             startActivity(intent);
                                         }
                                     }else {
-                                        Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaSegundoPaso.class);
+                                        Intent intent = new Intent(LoginPrimeraVista.this, LoginCrearCuentaSegundoPaso.class);
                                         startActivity(intent);
                                     }
                                 }else{
-                                    Intent intent = new Intent(LoginPrimeraVista.this,LoginCrearCuentaPrimerPaso.class);
+                                    Intent intent = new Intent(LoginPrimeraVista.this, LoginCrearCuentaPrimerPaso.class);
                                     startActivity(intent);
                                 }
                             }

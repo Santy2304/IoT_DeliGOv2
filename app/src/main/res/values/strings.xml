@@ -94,7 +94,7 @@
 
 
     <string-array name="docs">
-        <item >Seleccione tipo de documento</item>
+        <item>Seleccione tipo de documento</item>
         <item>DNI</item>
         <item>Pasaporte</item>
         <item>Carnet de extranjería</item>

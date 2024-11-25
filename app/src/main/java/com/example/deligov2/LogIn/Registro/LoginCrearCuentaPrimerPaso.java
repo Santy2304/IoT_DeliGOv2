@@ -1,4 +1,4 @@
-package com.example.deligov2.LogIn;
+package com.example.deligov2.LogIn.Registro;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;

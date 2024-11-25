@@ -1,4 +1,4 @@
-package com.example.deligov2.LogIn;
+package com.example.deligov2.LogIn.Registro;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Address;
