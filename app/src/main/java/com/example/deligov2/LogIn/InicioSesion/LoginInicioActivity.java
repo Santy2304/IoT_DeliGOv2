@@ -1,5 +1,7 @@
 package com.example.deligov2.LogIn.InicioSesion;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,9 +15,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.Administrador.AdministradorHomeActivity;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.DTO.Usuario;
+import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.LogIn.RecuperarContra.LoginRecuperarPasswordPrimerPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaCuartoPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaEmailPassword;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaPrimerPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
+import com.example.deligov2.LogIn.Registro.LoginCrearCuentaTercerPaso;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
@@ -38,7 +44,6 @@ public class LoginInicioActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     FirebaseFirestore db;
-    Button comenzarButton;
     private List<Usuario> userList;
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 1001; // Código de solicitud para Google Sign-In
@@ -79,7 +84,6 @@ public class LoginInicioActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             try {
                 // Obtén la cuenta de Google desde el intent
@@ -102,7 +106,59 @@ public class LoginInicioActivity extends AppCompatActivity {
                         // Inicio de sesión exitoso
                         Log.d(TAG, "signInWithCredential:success");
                         user = FirebaseAuth.getInstance().getCurrentUser();
-                        redireccion();
+                        //Una vez autenticado
+                        if(user!=null){
+                            user.reload().addOnCompleteListener(task2 -> {
+                                if (user.isEmailVerified()) {
+                                    db.collection("Usuarios").document(user.getUid()).get()
+                                            .addOnSuccessListener(documentSnapshot -> {
+                                                if (documentSnapshot.exists()) {
+                                                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                                                    assert usuario != null;
+                                                    if (usuario.getNumeroTelefono() != null) {
+                                                        if (usuario.getDireccion() != null) {
+                                                            if (usuario.getFotoUrl() != null) {
+                                                                if (usuario.getRol() != null) {
+                                                                    if(usuario.isEstado()){
+                                                                        if (usuario.getRol().equals("Cliente")) {
+                                                                            goCliente();
+                                                                        } else if (usuario.getRol().equals("Repartidor")) {
+                                                                            goRepartidor();
+                                                                        } else if (usuario.getRol().equals("Administrador")) {
+                                                                            goAdmin();
+                                                                        } else {
+                                                                            goSuper(usuario);
+                                                                        }
+                                                                    }else{
+                                                                        //ESTAS BANEADO
+                                                                        showBannedUserAlert();
+                                                                    }
+                                                                } else {
+                                                                    Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                                    startActivity(intent);
+                                                                }
+                                                            } else {
+                                                                Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                                                startActivity(intent);
+                                                            }
+                                                        } else {
+                                                            Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                                            startActivity(intent);
+                                                        }
+                                                    } else {
+                                                        Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
+                                                        startActivity(intent);
+                                                    }
+                                                }else{
+                                                    guardarUsuarioEnBaseDeDatos(user);
+                                                }
+                                            })
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+                                    Log.d("msg-test", "Firebase uid: " + user.getUid());
+                                }
+                            });
+                        }
                     } else {
                         // Falló el inicio de sesión
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -161,20 +217,41 @@ public class LoginInicioActivity extends AppCompatActivity {
                             .addOnSuccessListener(documentSnapshot -> {
                                 if (documentSnapshot.exists()) {
                                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
-
-                                    if(usuario.getRol().equals("Cliente")){
-                                        goCliente();
-                                    } else if (usuario.getRol().equals("Repartidor")) {
-                                        goRepartidor();
-                                    } else if (usuario.getRol().equals("Administrador")) {
-                                        goAdmin();
-                                    }else if (usuario.getRol().equals("SuperAdmin")){
-                                        goSuper(usuario);
+                                    assert usuario != null;
+                                    if (usuario.getNumeroTelefono() != null) {
+                                        if (usuario.getDireccion() != null) {
+                                            if (usuario.getFotoUrl() != null) {
+                                                if (usuario.getRol() != null) {
+                                                    if(usuario.isEstado()){
+                                                        if (usuario.getRol().equals("Cliente")) {
+                                                            goCliente();
+                                                        } else if (usuario.getRol().equals("Repartidor")) {
+                                                            goRepartidor();
+                                                        } else if (usuario.getRol().equals("Administrador")) {
+                                                            goAdmin();
+                                                        } else {
+                                                            goSuper(usuario);
+                                                        }
+                                                    }else{
+                                                        //ESTAS BANEADO
+                                                        showBannedUserAlert();
+                                                    }
+                                                } else {
+                                                    Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                    startActivity(intent);
+                                                }
+                                            } else {
+                                                Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                                startActivity(intent);
+                                            }
+                                        } else {
+                                            Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                            startActivity(intent);
+                                        }
+                                    } else {
+                                        Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
+                                        startActivity(intent);
                                     }
-                                } else {
-                                    Intent intent = new Intent(this,LoginCrearCuentaPrimerPaso.class);
-                                    startActivity(intent);
-                                    finish();
                                 }
                             })
                             .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
@@ -196,11 +273,9 @@ public class LoginInicioActivity extends AppCompatActivity {
         // Obtén los valores de los campos de texto
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
-
         // Limpia errores previos
         emailLayout.setError(null);
         passwordLayout.setError(null);
-
         // Validación de campos
         if (email.isEmpty()) {
             emailLayout.setError("Por favor, ingresa tu correo electrónico.");
@@ -217,7 +292,56 @@ public class LoginInicioActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
                         user = firebaseAuth.getCurrentUser();
-                        redireccion();
+                        if(user!=null){
+                            user.reload().addOnCompleteListener(task2 -> {
+                                if (user.isEmailVerified()) {
+                                    db.collection("Usuarios").document(user.getUid()).get()
+                                            .addOnSuccessListener(documentSnapshot -> {
+                                                if (documentSnapshot.exists()) {
+                                                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                                                    assert usuario != null;
+                                                    if (usuario.getNumeroTelefono() != null) {
+                                                        if (usuario.getDireccion() != null) {
+                                                            if (usuario.getFotoUrl() != null) {
+                                                                if (usuario.getRol() != null) {
+                                                                    if(usuario.isEstado()){
+                                                                        if (usuario.getRol().equals("Cliente")) {
+                                                                            goCliente();
+                                                                        } else if (usuario.getRol().equals("Repartidor")) {
+                                                                            goRepartidor();
+                                                                        } else if (usuario.getRol().equals("Administrador")) {
+                                                                            goAdmin();
+                                                                        } else {
+                                                                            goSuper(usuario);
+                                                                        }
+                                                                    }else{
+                                                                        //ESTAS BANEADO
+                                                                        showBannedUserAlert();
+                                                                    }
+                                                                } else {
+                                                                    Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                                    startActivity(intent);
+                                                                }
+                                                            } else {
+                                                                Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                                                startActivity(intent);
+                                                            }
+                                                        } else {
+                                                            Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                                            startActivity(intent);
+                                                        }
+                                                    } else {
+                                                        Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                                            })
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+                                    Log.d("msg-test", "Firebase uid: " + user.getUid());
+                                }
+                            });
+                        }
                     } else {
                         // Fallo en el inicio de sesión
                         handleFirebaseAuthError(task.getException());
@@ -245,5 +369,58 @@ public class LoginInicioActivity extends AppCompatActivity {
     }
     public void CrearCuenta(View view){
         startActivity(new Intent( this , LoginCrearCuentaEmailPassword.class));
+    }
+    private void guardarUsuarioEnBaseDeDatos(FirebaseUser user) {
+        // Obtener una referencia a Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Usuario usu = new Usuario();
+        usu.setId(user.getUid());
+        usu.setCorreo(user.getEmail());
+        String[] nombresApellidos = user.getDisplayName().split(" ");
+        usu.setNombre(nombresApellidos[0]);
+        usu.setApellido(nombresApellidos.length > 1 ? nombresApellidos[1] : "");
+        usu.setEstado(true);
+        // Crear un objeto para guardar en Firestore
+        // Guardar el usuario en la colección "users"
+        db.collection("Usuarios").document(user.getUid())
+                .set(usu)
+                .addOnSuccessListener(aVoid -> {
+                    // Usuario guardado exitosamente
+                    Toast.makeText(this, "Registro exitoso. ¡Bienvenido!", Toast.LENGTH_SHORT).show();
+                    // Redirigir al usuario a otra pantalla
+                    Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class); // Cambia HomeActivity a tu actividad principal
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    // Manejar errores al guardar en Firestore
+                    Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+    private void showBannedUserAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Configura el título y el mensaje
+        builder.setTitle("Cuenta Suspendida");
+        builder.setMessage("Tu cuenta ha sido baneada. Por favor, contacta al soporte para más información.");
+
+        // Botón para cerrar el diálogo
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
+            dialog.dismiss();
+            finish(); // Opcional: Finaliza el Activity actual
+        });
+
+        // Botón adicional (opcional), como "Contacto"
+        builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
+            // Redirige al usuario a un soporte externo (correo, página, etc.)
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
+            startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+        });
+
+        // Crear y mostrar el diálogo
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
+        dialog.show();
     }
 }

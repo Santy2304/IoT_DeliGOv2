@@ -15,6 +15,7 @@ import com.example.deligov2.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Calendar;
 
@@ -27,27 +28,24 @@ public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
     private Button continuarButton;
     private FirebaseFirestore db;
     private FirebaseUser user;
-
+    private Usuario usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_crear_cuenta_primer_paso);
-
         // Inicializar Firebase
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-
+        loadUser();
         // Referencias a vistas
         numeroDocumento = findViewById(R.id.numeroDocumentoId);
         telefono = findViewById(R.id.telefonoText);
         birthdayField = findViewById(R.id.birthday);
         spinnerDocs = findViewById(R.id.spinnerDocs);
         continuarButton = findViewById(R.id.continuar1);
-
         // Configurar el selector de fecha
         birthdayField.setOnClickListener(v -> showDatePicker());
-
         // Configurar el botón continuar
         continuarButton.setOnClickListener(v -> {
             if (validarFormulario()) {
@@ -137,16 +135,10 @@ public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
 
     // Guardar datos en Firestore
     private void guardarDatosEnFirestore() {
-        Usuario usuario = new Usuario();
-        usuario.setCorreo(user.getEmail());
-        String[] nombresApellidos = user.getDisplayName().split(" ");
-        usuario.setNombre(nombresApellidos[0]);
-        usuario.setApellido(nombresApellidos.length > 1 ? nombresApellidos[1] : "");
         usuario.setTipoDocumento(spinnerDocs.getSelectedItem().toString());
         usuario.setNumDocument(numeroDocumento.getText().toString());
         usuario.setNumeroTelefono(telefono.getText().toString());
         usuario.setDate(birthdayField.getText().toString());
-        usuario.setId(user.getUid());
         db.collection("Usuarios")
                 .document(usuario.getId())
                 .set(usuario)
@@ -164,6 +156,19 @@ public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
         Intent intent = new Intent(LoginCrearCuentaPrimerPaso.this, LoginCrearCuentaSegundoPaso.class);
         intent.putExtra("usuario", usuario);
         startActivity(intent);
+    }
+
+    public void loadUser(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                            }
+                        }
+                    }
+                });
     }
 }
 
