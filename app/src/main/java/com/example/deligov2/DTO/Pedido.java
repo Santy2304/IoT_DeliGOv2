@@ -17,7 +17,7 @@ public class Pedido implements Serializable {
     private String idRepartidor;
     private String idUsuario;
     private String estado;
-    private ZonedDateTime hora;
+    private String hora;
 
 
     public String getIdRestaurante() {
@@ -61,11 +61,11 @@ public class Pedido implements Serializable {
         this.preciosActuales = preciosActuales;
     }
 
-    public ZonedDateTime getHora() {
+    public String getHora() {
         return hora;
     }
 
-    public void setHora(ZonedDateTime hora) {
+    public void setHora(String hora) {
         this.hora = hora;
     }
 

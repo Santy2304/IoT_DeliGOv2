@@ -71,7 +71,7 @@ public class ClienteCarrito extends AppCompatActivity {
         costoEnvio = Math.random() * 5 + 1;
         costoEnvioText.setText(String.format("S/%.2f", costoEnvio));
 
-        db.collection("Carrito").document(user.getUid()).get()
+        db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         carrito = documentSnapshot.toObject(Carrito.class);
@@ -95,6 +95,15 @@ public class ClienteCarrito extends AppCompatActivity {
                                     cantidades.add(1); // Cada platillo comienza con cantidad 1
                                 }
 
+                                adapter = new ClienteCarritoAdapter();
+                                adapter.setContext(this);
+                                adapter.setListaPlatosCarrito(lista);
+                                adapter.setCantidades(cantidades);
+                                adapter.setOnDataChangeListener(() -> recalcularMontos());
+
+                                RecyclerView recyclerView = findViewById(R.id.recy);
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(ClienteCarrito.this));
                                 adapter.notifyDataSetChanged();
                             }
                         });
@@ -104,15 +113,7 @@ public class ClienteCarrito extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
 
-        adapter = new ClienteCarritoAdapter();
-        adapter.setContext(this);
-        adapter.setListaPlatosCarrito(lista);
-        adapter.setCantidades(cantidades);
-        adapter.setOnDataChangeListener(() -> recalcularMontos());
 
-        RecyclerView recyclerView = findViewById(R.id.recy);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ClienteCarrito.this));
 
 
         orderButton.setOnClickListener(view -> {
@@ -139,7 +140,7 @@ public class ClienteCarrito extends AppCompatActivity {
             pedido.setListaCantidades(new ArrayList<>(listaActualizadaCantidades));
             pedido.setIdUsuario(user.getUid());
             pedido.setEstado("Recibido");
-            pedido.setHora(ZonedDateTime.now());
+            pedido.setHora("" + ZonedDateTime.now().toString());
 
             db.collection("Pedidos").document(pedido.getId())
                     .set(pedido)
@@ -151,6 +152,15 @@ public class ClienteCarrito extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+
+            carrito.setIdListaPlatos(new ArrayList<>());
+            carrito.setListaCantidades(new ArrayList<>());
+            carrito.setIdRestaurante("");
+            db.collection("Carritos").document(user.getUid())
+                    .set(carrito)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
                     });
         });
 
@@ -169,10 +179,14 @@ public class ClienteCarrito extends AppCompatActivity {
             cantidades.clear();
             adapter.notifyDataSetChanged();
             recalcularMontos();
-            db.collection("Carrito").document(user.getUid())
-                    .update("idListaPlatos", new ArrayList<>())
-                    .addOnSuccessListener(aVoid -> Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> Toast.makeText(this, "Error al vaciar el carrito.", Toast.LENGTH_SHORT).show());
+            carrito.setIdListaPlatos(new ArrayList<>());
+            carrito.setListaCantidades(new ArrayList<>());
+            carrito.setIdRestaurante("");
+            db.collection("Carritos").document(user.getUid())
+                    .set(carrito)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
+                    });
         });
 
 
