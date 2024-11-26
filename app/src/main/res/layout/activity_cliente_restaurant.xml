@@ -74,15 +74,38 @@
         app:tint="@color/white" />
 
 
-    <ImageView
-        android:id="@+id/ofertaImagen"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ofertabembos"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="6dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fiterButton"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6sp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_green"
+            app:srcCompat="@drawable/filterpx"
+            app:tint="@color/white" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler2columnas"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:orientation="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -93,87 +116,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/cliente_menu" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ofertaImagen">
-
-        <Button
-            android:id="@+id/menuButton"
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:minWidth="70dp"
-            android:minHeight="36dp"
-            android:text="Menú"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/fiterButton"
-            app:layout_constraintHorizontal_bias="0.078"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-
-        <Button
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_marginStart="2dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:minWidth="70dp"
-            android:minHeight="36dp"
-            android:text="Bebidas"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/fiterButton"
-            app:layout_constraintHorizontal_bias="0.487"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent">
-
-        </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fiterButton"
-            style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginTop="6sp"
-            android:backgroundTint="@color/light_green"
-            android:contentDescription="filtro"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.925"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cart_button"
-            app:srcCompat="@drawable/filterpx"
-            app:tint="@color/white" />
-    </LinearLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler2columnas"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
-
-    </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
