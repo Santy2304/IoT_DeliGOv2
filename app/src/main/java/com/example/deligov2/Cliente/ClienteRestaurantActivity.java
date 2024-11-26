@@ -36,14 +36,14 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ClienteRestaurantActivity extends AppCompatActivity {
-    ArrayList<Platillo> lista = new ArrayList<>();
-    ArrayList<Platillo> listaPlatosSeleccionados = new ArrayList<>();
-    ArrayList<String> listaIdPlatos = new ArrayList<>();
-    ClientePlatosAdapter adapter;
-    String idRestaurante;
-    FirebaseFirestore db;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
+    private ArrayList<Platillo> lista = new ArrayList<>();
+    private ArrayList<Platillo> listaPlatosSeleccionados = new ArrayList<>();
+    private ArrayList<String> listaIdPlatos = new ArrayList<>();
+    private ClientePlatosAdapter adapter;
+    private String idRestaurante;
+    private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     FloatingActionButton cartButton;
     FloatingActionButton backButton;
     Carrito carrito;
@@ -56,8 +56,7 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         idRestaurante = getIntent().getStringExtra("idRestaurante");
 
-
-        db.collection("Carrito").document(user.getUid()).get()
+        db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                        carrito  = documentSnapshot.toObject(Carrito.class);
@@ -152,14 +151,12 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    public void actualizarCarrito(){
+    public void actualizarCarrito( ){
         carrito.setIdRestaurante(idRestaurante);
         carrito.setIdUsuario(user.getUid());
         carrito.setIdListaPlatos(listaIdPlatos);
-
         db.collection("Carritos")
                 .document(user.getUid())
                 .set(carrito)
