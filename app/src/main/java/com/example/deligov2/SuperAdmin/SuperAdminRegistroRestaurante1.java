@@ -35,7 +35,10 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -53,38 +56,38 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private int hora, minuto;
     Button btContinuar;
     Button btCancelar;
+    private Usuario usuario;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
     private static final int REQUEST_PERMISSIONS = 100;
-
     private FirebaseFirestore db;
     //Nombre del restaurante
+    private FirebaseUser user;
     private TextInputEditText restauranteNombre;
     private FirebaseStorage storage;
     private String categoria;
     private StorageReference storageReference;
-
+    private FirebaseAuth firebaseAuth;
     //para la foto
     private Uri imageUri;
     private Bitmap imageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        loadUser();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_restaurante1);
-
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-        db = FirebaseFirestore.getInstance();
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
-
-
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
         topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -107,7 +110,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 if(item.getItemId()==R.id.restaurant){
                     Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminRestaurante.class);
                     intent.putExtra("sa",sa);
@@ -134,14 +136,9 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         //Para las categorías
         tipoCategoria = (Spinner) findViewById(R.id.spinner_categoria);
 
-        ArrayAdapter<CharSequence> activityAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.categoria_list,
-                android.R.layout.simple_spinner_item
-        );
-        activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> activityAdapter = ArrayAdapter.createFromResource(this, R.array.categoria_list, R.layout.spinner_item);
+        activityAdapter.setDropDownViewResource(R.layout.spinner_item);
         tipoCategoria.setAdapter(activityAdapter);
-
 
         tipoCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -180,19 +177,14 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         });
 
         //Para la hora inicio y fin pista1:"El tercer perro de un castillo de espadas"
-
         tiHinicio = (TextInputEditText) findViewById(R.id.hora_inicio);
         tiHfin = (TextInputEditText) findViewById(R.id.hora_fin);
-
         tiHinicio.setOnClickListener(this::onClick);
         tiHfin.setOnClickListener(this::onClick);
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         String time = dateFormat.format(new Date());
-
         ImageView imageView = findViewById(R.id.imgLogo);
         TextView tvLogo = findViewById(R.id.tv_logo);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +197,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         //Manejo de botones
         restauranteNombre = findViewById(R.id.restauranteNombre); //Se obtiene el nombre
         TextInputLayout nameLayout = findViewById(R.id.inputLayout);
-
         btContinuar = (Button) findViewById(R.id.continuar1);
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,7 +272,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         btCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaPanelRestaurante(sa);
+                vistaPanelRestaurante();
             }
         });
 
@@ -307,7 +298,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -361,7 +351,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         }
     }
 
-
     private boolean checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -374,7 +363,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             return true;
         }
     }
-
 
     //Manejo de los datos
     public void onClick(View v){
@@ -408,9 +396,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             timePickerDialog.show();
         }
     }
-
     //Cambiar vista
-
     public void vistaRegistroRestaurante2(Restaurante restR, Usuario sa){
         Intent intent = new Intent(this, SuperAdminRegistroRestaurante2.class);
         intent.putExtra("nameR", restR);
@@ -419,12 +405,23 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         finish();
     }
 
-    public void vistaPanelRestaurante(Usuario sa){
+    public void vistaPanelRestaurante(){
         Intent intent = new Intent(this, SuperAdminRestaurante.class);
-        intent.putExtra("sa",sa);
         startActivity(intent);
         finish();
     }
 
+    public void loadUser(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                            }
+                        }
+                    }
+                });
+    }
 
 }

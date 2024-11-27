@@ -116,8 +116,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
         RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
         adapter.setContext(this);
         adapter.setListaRestaurantes(lista);

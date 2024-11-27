@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.LogIn.InicioSesion.LoginInicioActivity;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
 import com.firebase.ui.auth.AuthUI;
@@ -181,7 +182,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
     public void cerrarSesion(){
         AuthUI.getInstance().signOut(SuperAdminPerfil.this)
                 .addOnCompleteListener(task -> {
-                    Intent intent = new Intent(SuperAdminPerfil.this, LoginPrimeraVista.class);
+                    Intent intent = new Intent(SuperAdminPerfil.this, LoginInicioActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
                     startActivity(intent);
                     finish();
