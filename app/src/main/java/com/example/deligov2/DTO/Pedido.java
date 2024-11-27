@@ -1,5 +1,6 @@
 package com.example.deligov2.DTO;
 
+import com.google.firebase.Timestamp;
 import com.google.type.DateTime;
 
 import java.io.Serializable;
@@ -17,11 +18,11 @@ public class Pedido implements Serializable {
     private String idRepartidor;
     private String idUsuario;
     private String estado;
-    private String hora;
     private String direccion;
     private String referencia;
     private String longitud;
     private String latitud;
+    private Timestamp hora;
 
     public String getIdRestaurante() {
         return idRestaurante;
@@ -64,11 +65,11 @@ public class Pedido implements Serializable {
         this.preciosActuales = preciosActuales;
     }
 
-    public String getHora() {
+    public Timestamp getHora() {
         return hora;
     }
 
-    public void setHora(String hora) {
+    public void setHora(Timestamp hora) {
         this.hora = hora;
     }
 

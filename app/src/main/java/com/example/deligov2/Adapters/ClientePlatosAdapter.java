@@ -1,6 +1,7 @@
 package com.example.deligov2.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.Cliente.ClientePlatoActivity;
+import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -94,6 +97,11 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
         public ClientePlatosViewHolder(@NonNull View itemView) {
             super(itemView);
             ImageView = itemView.findViewById(R.id.foodImage);
+            ImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(itemView.getContext(), ClientePlatoActivity.class);
+                intent.putExtra("idRestaurante",plato.getId());
+                itemView.getContext().startActivity(intent);
+            });
 
         }
     }

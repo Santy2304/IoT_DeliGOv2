@@ -19,6 +19,7 @@ import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Adapters.NotificacionesAdapter;
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Ordenes;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,23 +30,8 @@ import java.util.ArrayList;
 public class ClienteHistorialActivity extends AppCompatActivity {
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
-    ArrayList<Ordenes> lista;
-    String[] nombreRestaurante = {
-            "Bembos",
-            "KFC",
-            "Pardos",
-            "Comida Saludable",
-            "Rincón Italiano",
-            "Eco Suchi",
-            "Fridays"
-    };
+    ArrayList<Pedido> lista;
 
-    float[] precios = {
-            50,20, 32.5F,40,60,23,19
-    };
-    int[] idOrdes={
-            42,36,56,78,90,23,88
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,17 +66,6 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         });
 
 
-        lista = new ArrayList<>();
-        for(int i=0;i<7;i++){
-            Ordenes ordenes = new Ordenes();
-            ordenes.setIdOrder(idOrdes[i]);
-            ordenes.setNombreRestaurante(nombreRestaurante[i]);
-            ordenes.setPrice(precios[i]);
-            ordenes.setFecha(LocalDateTime.now().plusMinutes(i*10));
-            lista.add(ordenes);
-        }
-
-
         ClienteHistorialAdapter adapter = new ClienteHistorialAdapter();
         adapter.setContext(this);
         adapter.setListaOrdenes(lista);
@@ -115,20 +90,6 @@ public class ClienteHistorialActivity extends AppCompatActivity {
 
     }
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cliente_menu, menu);

@@ -23,6 +23,7 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,7 +71,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
                             pedido.setListaCantidades(carrito.getListaCantidades());
                             pedido.setIdUsuario(user.getUid());
                             pedido.setEstado("Pendiente");
-                            pedido.setHora("" + ZonedDateTime.now().toString());
+                            pedido.setHora(Timestamp.now());
 
                             db.collection("Pedidos").document(pedido.getId())
                                     .set(pedido)
