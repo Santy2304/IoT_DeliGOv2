@@ -18,7 +18,10 @@ public class Pedido implements Serializable {
     private String idUsuario;
     private String estado;
     private String hora;
-
+    private String direccion;
+    private String referencia;
+    private String longitud;
+    private String latitud;
 
     public String getIdRestaurante() {
         return idRestaurante;
@@ -91,5 +94,37 @@ public class Pedido implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
     }
 }

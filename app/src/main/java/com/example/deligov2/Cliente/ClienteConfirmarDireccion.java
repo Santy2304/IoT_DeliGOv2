@@ -2,11 +2,14 @@ package com.example.deligov2.Cliente;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,25 +18,93 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.Pedido;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class ClienteConfirmarDireccion extends AppCompatActivity {
-
-
-    ArrayList<String> direcciones = new ArrayList<>();
-    String[] nombresRestaurantes = {
-            "Av. Los Alamos 123",
-            "Av. Ciro Alegría",
-            "Av. Universitaria",
-            "Av. El Olivar",
-    };
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    FirebaseFirestore db;
+    Button confirmarButton;
+    Carrito carrito;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_confirmar_direccion);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        confirmarButton = findViewById(R.id.confirm_Button);
+
+        Intent intent = getIntent();
+        List<Platillo> listaPlatillos = (List<Platillo>) intent.getSerializableExtra("listaPlatillos");
+
+        db.collection("Carrito").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        carrito = documentSnapshot.toObject(Carrito.class);
+                        confirmarButton.setOnClickListener(view -> {
+                            Pedido pedido = new Pedido();
+                            pedido.setIdRestaurante(carrito.getIdRestaurante());
+                            pedido.setId(UUID.randomUUID().toString());
+                            pedido.setIdListaPlatos(carrito.getIdListaPlatos());
+                            ArrayList<Float> preciosActuales = new ArrayList<>();
+
+                            for (Platillo platillo : listaPlatillos) {
+                                preciosActuales.add(platillo.getPrecio());
+                            }
+
+                            pedido.setId(generarIdAleatorio());
+                            pedido.setListaCantidades(carrito.getListaCantidades());
+                            pedido.setIdUsuario(user.getUid());
+                            pedido.setEstado("Pendiente");
+                            pedido.setHora("" + ZonedDateTime.now().toString());
+
+                            db.collection("Pedidos").document(pedido.getId())
+                                    .set(pedido)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
+
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    });
+
+                            carrito.setIdListaPlatos(new ArrayList<>());
+                            carrito.setListaCantidades(new ArrayList<>());
+                            carrito.setIdRestaurante("");
+                            db.collection("Carritos").document(user.getUid())
+                                    .set(carrito)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
+                                    });
+
+                            Intent intent1 = new Intent(this,ClienteConfirmacionCompra.class);
+                            intent1.putExtra("id",pedido.getId());
+                            startActivity(intent1);
+                            finish();
+
+                        });
+
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+
+
+
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -61,11 +132,6 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
             }
         });
 
-        nombresRestaurantes = direcciones.toArray(new String[0]);
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nombresRestaurantes
-        );
-        spinner.setAdapter(adapter);
 
     }
     @Override
@@ -92,26 +158,28 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
 
     }
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
+    public static String generarIdAleatorio() {
+        Random random = new Random();
+        String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Letras mayúsculas
+        String numeros = "0123456789"; // Números
 
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
+        // Generar 2 letras aleatorias
+        char letra1 = letras.charAt(random.nextInt(letras.length()));
+        char letra2 = letras.charAt(random.nextInt(letras.length()));
 
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
+        // Generar 2 números aleatorios
+        char numero1 = numeros.charAt(random.nextInt(numeros.length()));
+        char numero2 = numeros.charAt(random.nextInt(numeros.length()));
 
-    public void verConfirmacion(View view) {
-        startActivity(new Intent(this, ClienteConfirmacionCompra.class));
-    }
+        // Mezclar aleatoriamente el orden de letras y números
+        char[] idArray = {letra1, letra2, numero1, numero2};
+        for (int i = idArray.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+            char temp = idArray[index];
+            idArray[index] = idArray[i];
+            idArray[i] = temp;
+        }
 
-    public void regresarCarrito(View view) {
-        startActivity(new Intent(this, ClienteCarrito.class));
+        return new String(idArray);
     }
 }

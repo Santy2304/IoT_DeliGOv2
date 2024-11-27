@@ -16,12 +16,20 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdapter.ClientePlatosViewHolder> {
     private List<Platillo> listaPlatos;
     private Context context;
     private OnPlatoClickListener onPlatoClickListener;
+    private List<Boolean> estadoBotones;
+
+    public ClientePlatosAdapter() {
+        // Inicializar la lista de estados vacía
+        this.estadoBotones = new ArrayList<>();
+    }
+
 
     @NonNull
     @Override
@@ -53,10 +61,22 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
             holder.ImageView.setImageResource(R.drawable.camara_icon);
         });
 
+
+
         ExtendedFloatingActionButton btnAgregar = holder.itemView.findViewById(R.id.btnAgregar);
+
+        if (estadoBotones.get(position)) {
+            btnAgregar.setEnabled(false);
+        } else {
+            btnAgregar.setEnabled(true);
+        }
+
         btnAgregar.setOnClickListener(v -> {
             if (onPlatoClickListener != null) {
                 onPlatoClickListener.onPlatoClick(p); // Notifica el click a la actividad
+
+                estadoBotones.set(position, true);
+                btnAgregar.setEnabled(false);
             }
         });
     }
@@ -91,6 +111,11 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
     public void setListaPlatos(List<Platillo> listaPlatos) {
         this.listaPlatos = listaPlatos;
+
+        this.estadoBotones.clear();
+        for (int i = 0; i < listaPlatos.size(); i++) {
+            this.estadoBotones.add(false);
+        }
     }
 
     public Context getContext() {

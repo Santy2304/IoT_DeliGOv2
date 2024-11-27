@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,46 +133,50 @@ public class ClienteCarrito extends AppCompatActivity {
                 preciosActuales.add(platillo.getPrecio());
             }
 
-            Pedido pedido = new Pedido();
-            pedido.setIdRestaurante(carrito.getIdRestaurante());
-            pedido.setId(UUID.randomUUID().toString());
-            pedido.setIdListaPlatos(idListaPlatos);
-            pedido.setPreciosActuales(preciosActuales);
-            pedido.setListaCantidades(new ArrayList<>(listaActualizadaCantidades));
-            pedido.setIdUsuario(user.getUid());
-            pedido.setEstado("Recibido");
-            pedido.setHora("" + ZonedDateTime.now().toString());
+            carrito.setListaCantidades(new ArrayList<>(listaActualizadaCantidades));
+            carrito.setIdListaPlatos(idListaPlatos);
 
-            db.collection("Pedidos").document(pedido.getId())
-                    .set(pedido)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
-                        adapter.getListaPlatosCarrito().clear();
-                        adapter.getCantidades().clear();
-                        adapter.notifyDataSetChanged();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    });
-
-            carrito.setIdListaPlatos(new ArrayList<>());
-            carrito.setListaCantidades(new ArrayList<>());
-            carrito.setIdRestaurante("");
-            db.collection("Carritos").document(user.getUid())
+            db.collection("Carritos")
+                    .document(user.getUid())
                     .set(carrito)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
-                    });
+                    .addOnSuccessListener(unused -> {
+                        Log.d("msg-test","Data guardada exitosamente");
+                        Intent intent = new Intent(this, ClienteConfirmarDireccion.class);
+                        intent.putExtra("listaPlatillos", (Serializable) listaActualizadaPlatos);
+                        startActivity(intent);
+                    })
+                    .addOnFailureListener(e -> e.printStackTrace());
+
+//            adapter.getListaPlatosCarrito().clear();
+//            adapter.getCantidades().clear();
+//            adapter.notifyDataSetChanged();
         });
 
         notiButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this,ClienteNotificacionesActivity.class);
-            startActivity(intent);
+            List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
+            if(listaActualizadaPlatos.isEmpty()){
+                Intent intent = new Intent(this,ClienteNotificacionesActivity.class);
+                startActivity(intent);
+            }else{
+                actualizarCarrito();
+                Intent intent = new Intent(this,ClienteNotificacionesActivity.class);
+                startActivity(intent);
+
+            }
+
         });
 
         returnRestaurant.setOnClickListener(view -> {
-            Intent intent = new Intent(this,ClienteRestaurantActivity.class);
-            startActivity(intent);
+            List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
+            if(listaActualizadaPlatos.isEmpty()){
+                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+                startActivity(intent);
+            }else{
+                actualizarCarrito();
+                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+                startActivity(intent);
+
+            }
         });
 
         vaciarButton.setOnClickListener(view -> {
@@ -196,16 +201,37 @@ public class ClienteCarrito extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHomeActivity.class);
-                    startActivity(intentRestaurant);
+                    List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
+                    if(listaActualizadaPlatos.isEmpty()){
+                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHomeActivity.class);
+                        startActivity(intentRestaurant);
+                    }else{
+                        actualizarCarrito();
+                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHomeActivity.class);
+                        startActivity(intentRestaurant);
+                    }
                     return true;
                 }else if(item.getItemId()==R.id.historial){
-                    Intent intentPrincipal = new Intent(ClienteCarrito.this, ClienteHistorialActivity.class);
-                    startActivity(intentPrincipal);
+                    List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
+                    if(listaActualizadaPlatos.isEmpty()){
+                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHistorialActivity.class);
+                        startActivity(intentRestaurant);
+                    }else{
+                        actualizarCarrito();
+                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHistorialActivity.class);
+                        startActivity(intentRestaurant);
+                    }
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(ClienteCarrito.this, ClientePerfil.class);
-                    startActivity(intentProfile);
+                    List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
+                    if(listaActualizadaPlatos.isEmpty()){
+                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClientePerfil.class);
+                        startActivity(intentRestaurant);
+                    }else{
+                        actualizarCarrito();
+                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClientePerfil.class);
+                        startActivity(intentRestaurant);
+                    }
                     return true;
                 }else{
                     return false;
@@ -240,14 +266,7 @@ public class ClienteCarrito extends AppCompatActivity {
         }
 
     }
-    // Mueve el método aquí
-    public void deleteFood(View view) {
-        // Necesitas obtener la posición del item que se clicó
-        RecyclerView recyclerView = findViewById(R.id.recy);
-        int position = recyclerView.getChildAdapterPosition(view);
-        ClienteCarritoAdapter adapter = new ClienteCarritoAdapter();
 
-    }
 
     private void recalcularMontos() {
         List<Platillo> listaPlatos = adapter.getListaPlatosCarrito();
@@ -262,6 +281,24 @@ public class ClienteCarrito extends AppCompatActivity {
         costoProductosText.setText(String.format("S/%.2f", total));
         total += costoEnvio;
         totalTextView.setText(String.format("S/%.2f", total));
+    }
+    public void actualizarCarrito( ){
+        List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
+        List<Integer> listaActualizadaCantidades = adapter.getCantidades();
+        ArrayList<String> idListaPlatos = new ArrayList<>();
+        for (Platillo platillo : listaActualizadaPlatos) {
+            idListaPlatos = new ArrayList<>();
+            idListaPlatos.add(platillo.getId());
+        }
+        carrito.setIdListaPlatos(idListaPlatos);
+        carrito.setListaCantidades(new ArrayList<>(listaActualizadaCantidades));
+        db.collection("Carritos")
+                .document(user.getUid())
+                .set(carrito)
+                .addOnSuccessListener(unused -> {
+                    Log.d("msg-test","Data guardada exitosamente");
+                })
+                .addOnFailureListener(e -> e.printStackTrace());
     }
 
 }
