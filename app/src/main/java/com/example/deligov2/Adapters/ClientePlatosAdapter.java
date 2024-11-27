@@ -26,12 +26,7 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
     private List<Platillo> listaPlatos;
     private Context context;
     private OnPlatoClickListener onPlatoClickListener;
-    private List<Boolean> estadoBotones;
 
-    public ClientePlatosAdapter() {
-        // Inicializar la lista de estados vacía
-        this.estadoBotones = new ArrayList<>();
-    }
 
 
     @NonNull
@@ -43,14 +38,17 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
     @Override
     public void onBindViewHolder(@NonNull ClientePlatosViewHolder holder, int position) {
+
+        if (listaPlatos == null || listaPlatos.isEmpty()) {
+            return; // No hacer nada si la lista está vacía
+        }
+
         Platillo p = listaPlatos.get(position);
         holder.plato = p;
-
         TextView textViewName = holder.itemView.findViewById(R.id.foodName);
         textViewName.setText(p.getNombre());
         TextView textViewPrice = holder.itemView.findViewById(R.id.foodPrecio);
         textViewPrice.setText(String.format("S/ %.2f", p.getPrecio()));
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference().child("restaurantes/"+p.getIdRestaurante()+"/"+p.getId()+"/plato.jpg");
 
@@ -68,18 +66,12 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
         ExtendedFloatingActionButton btnAgregar = holder.itemView.findViewById(R.id.btnAgregar);
 
-        if (estadoBotones.get(position)) {
-            btnAgregar.setEnabled(false);
-        } else {
-            btnAgregar.setEnabled(true);
-        }
 
         btnAgregar.setOnClickListener(v -> {
             if (onPlatoClickListener != null) {
-                onPlatoClickListener.onPlatoClick(p); // Notifica el click a la actividad
-
-                estadoBotones.set(position, true);
-                btnAgregar.setEnabled(false);
+                onPlatoClickListener.onPlatoClick(p);
+                btnAgregar.setEnabled(false); // Deshabilita el botón después de hacer clic
+                // Notifica el click a la actividad
             }
         });
     }
@@ -93,7 +85,6 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
     public class ClientePlatosViewHolder extends RecyclerView.ViewHolder{
         Platillo plato;
         android.widget.ImageView ImageView;
-
         public ClientePlatosViewHolder(@NonNull View itemView) {
             super(itemView);
             ImageView = itemView.findViewById(R.id.foodImage);
@@ -119,11 +110,6 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
     public void setListaPlatos(List<Platillo> listaPlatos) {
         this.listaPlatos = listaPlatos;
-
-        this.estadoBotones.clear();
-        for (int i = 0; i < listaPlatos.size(); i++) {
-            this.estadoBotones.add(false);
-        }
     }
 
     public Context getContext() {

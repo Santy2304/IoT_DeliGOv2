@@ -52,7 +52,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
         Intent intent = getIntent();
         List<Platillo> listaPlatillos = (List<Platillo>) intent.getSerializableExtra("listaPlatillos");
 
-        db.collection("Carrito").document(user.getUid()).get()
+        db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         carrito = documentSnapshot.toObject(Carrito.class);

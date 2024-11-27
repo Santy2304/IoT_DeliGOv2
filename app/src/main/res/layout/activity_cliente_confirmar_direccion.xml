@@ -110,7 +110,6 @@
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/light_green"
             android:fontFamily="sans-serif-condensed"
-            android:onClick="verConfirmacion"
             android:text="Confirmar"
             android:textColor="@color/white" />
     </LinearLayout>

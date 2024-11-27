@@ -158,10 +158,9 @@ public class ClienteCarrito extends AppCompatActivity {
                 Intent intent = new Intent(this,ClienteNotificacionesActivity.class);
                 startActivity(intent);
             }else{
-                actualizarCarrito();
-                Intent intent = new Intent(this,ClienteNotificacionesActivity.class);
-                startActivity(intent);
-
+                actualizarCarrito(new Intent(this,ClienteNotificacionesActivity.class));
+//                Intent intent = new Intent(this,ClienteNotificacionesActivity.class);
+//                startActivity(intent);
             }
 
         });
@@ -172,9 +171,9 @@ public class ClienteCarrito extends AppCompatActivity {
                 Intent intent = new Intent(this,ClienteRestaurantActivity.class);
                 startActivity(intent);
             }else{
-                actualizarCarrito();
-                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
-                startActivity(intent);
+                actualizarCarrito(new Intent(this,ClienteRestaurantActivity.class));
+//                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+//                startActivity(intent);
 
             }
         });
@@ -206,9 +205,9 @@ public class ClienteCarrito extends AppCompatActivity {
                         Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHomeActivity.class);
                         startActivity(intentRestaurant);
                     }else{
-                        actualizarCarrito();
-                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHomeActivity.class);
-                        startActivity(intentRestaurant);
+                        actualizarCarrito(new Intent(ClienteCarrito.this, ClienteHomeActivity.class));
+//                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHomeActivity.class);
+//                        startActivity(intentRestaurant);
                     }
                     return true;
                 }else if(item.getItemId()==R.id.historial){
@@ -217,9 +216,9 @@ public class ClienteCarrito extends AppCompatActivity {
                         Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHistorialActivity.class);
                         startActivity(intentRestaurant);
                     }else{
-                        actualizarCarrito();
-                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHistorialActivity.class);
-                        startActivity(intentRestaurant);
+                        actualizarCarrito(new Intent(ClienteCarrito.this, ClienteHistorialActivity.class));
+//                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClienteHistorialActivity.class);
+//                        startActivity(intentRestaurant);
                     }
                     return true;
                 }else if(item.getItemId()==R.id.profile){
@@ -228,9 +227,9 @@ public class ClienteCarrito extends AppCompatActivity {
                         Intent intentRestaurant = new Intent(ClienteCarrito.this, ClientePerfil.class);
                         startActivity(intentRestaurant);
                     }else{
-                        actualizarCarrito();
-                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClientePerfil.class);
-                        startActivity(intentRestaurant);
+                        actualizarCarrito(new Intent(ClienteCarrito.this, ClientePerfil.class));
+//                        Intent intentRestaurant = new Intent(ClienteCarrito.this, ClientePerfil.class);
+//                        startActivity(intentRestaurant);
                     }
                     return true;
                 }else{
@@ -241,8 +240,6 @@ public class ClienteCarrito extends AppCompatActivity {
         });
 
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cliente_menu, menu);
@@ -266,8 +263,6 @@ public class ClienteCarrito extends AppCompatActivity {
         }
 
     }
-
-
     private void recalcularMontos() {
         List<Platillo> listaPlatos = adapter.getListaPlatosCarrito();
         List<Integer> cantidades = adapter.getCantidades();
@@ -282,7 +277,7 @@ public class ClienteCarrito extends AppCompatActivity {
         total += costoEnvio;
         totalTextView.setText(String.format("S/%.2f", total));
     }
-    public void actualizarCarrito( ){
+    public void actualizarCarrito(Intent intent){
         List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
         List<Integer> listaActualizadaCantidades = adapter.getCantidades();
         ArrayList<String> idListaPlatos = new ArrayList<>();
@@ -297,6 +292,7 @@ public class ClienteCarrito extends AppCompatActivity {
                 .set(carrito)
                 .addOnSuccessListener(unused -> {
                     Log.d("msg-test","Data guardada exitosamente");
+                    startActivity(intent);
                 })
                 .addOnFailureListener(e -> e.printStackTrace());
     }
