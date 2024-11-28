@@ -14,7 +14,7 @@ import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
-import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
+import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;

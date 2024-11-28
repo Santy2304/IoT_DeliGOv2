@@ -169,10 +169,10 @@
             android:name=".SuperAdmin.SuperAdminHistorialVentasDetalles"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminAdministrador"
+            android:name=".SuperAdmin.Home.SuperAdminAdministrador"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRepartidor"
+            android:name=".SuperAdmin.Home.SuperAdminRepartidor"
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.SuperAdminPerfil"
@@ -230,7 +230,7 @@
             android:name=".Administrador.AdministradorHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminHomeActivity"
+            android:name=".SuperAdmin.Home.SuperAdminHomeActivity"
             android:exported="false" />
         <activity
             android:name=".Repartidor.RepartidorHomeActivity"

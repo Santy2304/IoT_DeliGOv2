@@ -1,4 +1,4 @@
-package com.example.deligov2.SuperAdmin;
+package com.example.deligov2.SuperAdmin.Home;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -21,12 +21,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.SuperAdminRepartidorListAdapter;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
+import com.example.deligov2.SuperAdmin.SuperAdminRestaurante;
+import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,28 +45,35 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     private MaterialCardView cardRepartidor;
     private GradientDrawable borderDrawable;
     SuperAdminRepartidorListAdapter listAdapter;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     private FirebaseFirestore db;
-
+    private Usuario usuario;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_repartidor);
 
+
+
         db = FirebaseFirestore.getInstance();
-        // Obtener los datos del intent anterior a este
-        Intent intent = getIntent();
-        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        storage = FirebaseStorage.getInstance();        // Obtener los datos del intent anterior a este
+        loadUser();
 
         ImageView admin = findViewById(R.id.imgAdmin);
         ImageView cliente = findViewById(R.id.imgCostumer);
 
         admin.setOnClickListener(v -> {
-            vistaPanelAdmin(v,sa);
+            vistaPanelAdmin();
         });
 
         cliente.setOnClickListener(v -> {
-            vistaPanelCliente(v,sa);
+            vistaPanelCliente();
         });
 
 
@@ -74,7 +89,6 @@ public class SuperAdminRepartidor extends AppCompatActivity {
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.log_event){
                     Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminVistaLogEvent.class);
-                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     return true;
                 }else{
@@ -94,19 +108,16 @@ public class SuperAdminRepartidor extends AppCompatActivity {
 
                 if(item.getItemId()==R.id.restaurant){
                     Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminRestaurante.class);
-                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminHomeActivity.class);
-                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminPerfil.class);
-                    intent.putExtra("sa",sa);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
@@ -141,18 +152,6 @@ public class SuperAdminRepartidor extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) { }
         });
-        /*
-        searchInput.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                String query = searchInput.getText().toString().trim();
-                buscarRepartidor(query);
-                return true;
-            }
-            return false;
-        });
-
-         */
-
     }
 
     public void mostrarListaRepartidores(){
@@ -183,16 +182,14 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     }
 
     //Cambio de vista
-    public void vistaPanelCliente(View view, Usuario sa) {
+    public void vistaPanelCliente() {
         Intent intent = new Intent(this, SuperAdminHomeActivity.class);
-        intent.putExtra("sa",sa);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    public void vistaPanelAdmin(View view, Usuario sa) {
+    public void vistaPanelAdmin() {
         Intent intent = new Intent(this, SuperAdminAdministrador.class);
-        intent.putExtra("sa",sa);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -230,6 +227,19 @@ public class SuperAdminRepartidor extends AppCompatActivity {
                         }
                         //listAdapter.setRepartidor(repartidores);
                         listAdapter2.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    public void loadUser(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                            }
+                        }
                     }
                 });
     }

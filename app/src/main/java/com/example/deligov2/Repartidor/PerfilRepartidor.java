@@ -55,7 +55,7 @@ public class PerfilRepartidor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
-         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);

@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.Administrador.AdministradorHomeActivity;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.DTO.Usuario;
-import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.LogIn.RecuperarContra.LoginRecuperarPasswordPrimerPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaCuartoPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaEmailPassword;
@@ -24,7 +23,7 @@ import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaTercerPaso;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.RepartidorVistaHome;
-import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
+import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -409,7 +408,7 @@ public class LoginInicioActivity extends AppCompatActivity {
         builder.setPositiveButton("Aceptar", (dialog, which) -> {
             // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
             dialog.dismiss();
-            finish(); // Opcional: Finaliza el Activity actual
+
         });
 
         // Botón adicional (opcional), como "Contacto"

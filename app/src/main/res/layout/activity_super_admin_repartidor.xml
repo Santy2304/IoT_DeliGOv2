@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".SuperAdmin.SuperAdminRepartidor">
+    tools:context=".SuperAdmin.Home.SuperAdminRepartidor">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -83,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Cliente"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -120,6 +121,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
+
                     android:text="Repartidor"
                     android:textStyle="bold"
                     android:textSize="14sp" />
@@ -149,6 +152,7 @@
                     android:id="@+id/imgAdmin"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:textColor="@color/black"
                     android:onClick="vistaPanelAdmin"
                     app:srcCompat="@drawable/icadmin" />
 
@@ -156,6 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Administrador"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -194,7 +199,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_alfabetico"
         android:layout_width="wrap_content"
-        android:layout_marginTop="6sp"
+        android:layout_marginTop="15sp"
         android:layout_height="40sp"
         android:backgroundTint="@color/light_green"
         android:fontFamily="sans-serif-condensed-medium"
@@ -212,7 +217,7 @@
         android:id="@+id/bt_reciente"
         android:layout_width="wrap_content"
         android:layout_height="40sp"
-        android:layout_marginTop="6sp"
+        android:layout_marginTop="15sp"
         android:backgroundTint="@color/light_green"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Más reciente"
@@ -230,7 +235,7 @@
         style="?attr/floatingActionButtonSmallStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4sp"
+        android:layout_marginTop="15sp"
         android:backgroundTint="@color/light_green"
         android:contentDescription="filtro"
         app:layout_constraintBottom_toBottomOf="parent"

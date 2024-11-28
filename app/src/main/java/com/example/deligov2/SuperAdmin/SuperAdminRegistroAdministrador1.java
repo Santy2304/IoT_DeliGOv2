@@ -17,10 +17,10 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.deligov2.Beans.Administrador;
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;

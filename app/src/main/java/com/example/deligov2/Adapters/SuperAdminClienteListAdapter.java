@@ -22,19 +22,20 @@ import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilCliente;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdminClienteListAdapter.ViewHolder>{
     private List<Usuario> mCliente;
     private List<Usuario> mClienteS; //Esta es la listado con el filtro
     private LayoutInflater mInflater;
     private Context context;
-
-
     public SuperAdminClienteListAdapter(List<Usuario> clienteList, Context context){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
@@ -98,7 +99,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
             tvDni.setText("DNI: " + cliente.getNumDocument());
             tvCorreo.setText(cliente.getCorreo());
             btHabilitar.setVisibility(View.VISIBLE);
-
+            isClienteHabilitado = cliente.isEstado();
             // Cargar imagen desde Firebase Storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference()
@@ -136,7 +137,15 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                 btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
                 btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
             }
-
+            btInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilCliente.class);
+                    intent.putExtra("cliente_detail", cliente);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+            btInfo.setContentDescription(cliente.getId());
             btHabilitar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -148,11 +157,17 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                                 .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        isClienteHabilitado = false;
+                                        Map<String, Object> updates = new HashMap<>();
+                                        updates.put("estado", false);
+                                        FirebaseFirestore.getInstance().collection("Usuarios").document(cliente.getId())
+                                                .update(updates)
+                                                .addOnCompleteListener(task ->{
+                                                    isClienteHabilitado = false;
+                                                    btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                    Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                                });
 
-                                        btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                        Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("Cancelar", null)
@@ -165,11 +180,16 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                                 .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        isClienteHabilitado = true; //restaurante.setHabilitado(true)
-
-                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                        Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                        Map<String, Object> updates = new HashMap<>();
+                                        updates.put("estado", true);
+                                        FirebaseFirestore.getInstance().collection("Usuarios").document(cliente.getId())
+                                                .update(updates)
+                                                .addOnCompleteListener(task -> {
+                                                    isClienteHabilitado = true; //restaurante.setHabilitado(true)
+                                                    btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                                    Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                                });
                                     }
                                 })
                                 .setNegativeButton("Cancelar", null)
