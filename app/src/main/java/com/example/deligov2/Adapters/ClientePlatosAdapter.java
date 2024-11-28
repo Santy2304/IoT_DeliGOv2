@@ -2,6 +2,7 @@ package com.example.deligov2.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,8 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
         btnAgregar.setOnClickListener(v -> {
             if (onPlatoClickListener != null) {
                 onPlatoClickListener.onPlatoClick(p);
-                btnAgregar.setEnabled(false); // Deshabilita el botón después de hacer clic
+                btnAgregar.setEnabled(false);
+                btnAgregar.setBackgroundColor(Color.GRAY);
                 // Notifica el click a la actividad
             }
         });
@@ -90,7 +92,7 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
             ImageView = itemView.findViewById(R.id.foodImage);
             ImageView.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), ClientePlatoActivity.class);
-                intent.putExtra("idRestaurante",plato.getId());
+                intent.putExtra("idPlato",plato.getId());
                 itemView.getContext().startActivity(intent);
             });
 

@@ -44,7 +44,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
 
-        db.collection("Carrito").document(user.getUid()).get()
+        db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         carrito = documentSnapshot.toObject(Carrito.class);
