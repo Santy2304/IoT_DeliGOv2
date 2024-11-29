@@ -49,9 +49,6 @@
             android:name=".Administrador.AdministradorRestauranteActivity"
             android:exported="false" />
         <activity
-            android:name=".Administrador.AdministradorDetalleCompraActivity"
-            android:exported="false" />
-        <activity
             android:name=".Administrador.AdministradorEditarPlatoActivity"
             android:exported="false" />
         <activity
