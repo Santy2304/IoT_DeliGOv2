@@ -105,8 +105,7 @@
                 android:id="@+id/newDishButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="40dp"
                 android:layout_gravity="center_vertical"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Agregar"
@@ -120,7 +119,7 @@
             android:layout_width="380sp"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:hint="Buscar" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -135,7 +134,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerRestauranteAdmin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp" />
 
 

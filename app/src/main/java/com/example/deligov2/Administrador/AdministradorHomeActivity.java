@@ -17,7 +17,6 @@ public class AdministradorHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_administrador_home);
 
         //Capturar el elemento de botón

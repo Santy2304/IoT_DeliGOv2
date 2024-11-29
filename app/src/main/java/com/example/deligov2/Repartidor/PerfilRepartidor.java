@@ -59,13 +59,8 @@ public class PerfilRepartidor extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_perfil_repartidor);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         ShapeableImageView image = findViewById(R.id.shapeableImageView);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
         // Usa Glide para cargar la imagen
