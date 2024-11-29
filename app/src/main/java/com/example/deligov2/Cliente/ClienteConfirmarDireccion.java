@@ -1,6 +1,7 @@
 package com.example.deligov2.Cliente;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,7 +29,14 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.QRCodeWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +68,6 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
                         confirmarButton.setOnClickListener(view -> {
                             Pedido pedido = new Pedido();
                             pedido.setIdRestaurante(carrito.getIdRestaurante());
-                            pedido.setId(UUID.randomUUID().toString());
                             pedido.setIdListaPlatos(carrito.getIdListaPlatos());
                             ArrayList<Float> preciosActuales = new ArrayList<>();
 
@@ -72,6 +80,9 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
                             pedido.setIdUsuario(user.getUid());
                             pedido.setEstado("Pendiente");
                             pedido.setHora(Timestamp.now());
+
+                            Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
+                            guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
 
                             db.collection("Pedidos").document(pedido.getId())
                                     .set(pedido)
@@ -164,15 +175,12 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
         String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Letras mayúsculas
         String numeros = "0123456789"; // Números
 
-        // Generar 2 letras aleatorias
         char letra1 = letras.charAt(random.nextInt(letras.length()));
         char letra2 = letras.charAt(random.nextInt(letras.length()));
 
-        // Generar 2 números aleatorios
         char numero1 = numeros.charAt(random.nextInt(numeros.length()));
         char numero2 = numeros.charAt(random.nextInt(numeros.length()));
 
-        // Mezclar aleatoriamente el orden de letras y números
         char[] idArray = {letra1, letra2, numero1, numero2};
         for (int i = idArray.length - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
@@ -183,4 +191,46 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
 
         return new String(idArray);
     }
+
+    public void guardarQRCodeEnFirebase(Bitmap qrBitmap, String idPedido) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        qrBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        String nombreArchivo = "pedidos/" + idPedido + "/qr.jpg";
+        StorageReference qrCodeRef = storageRef.child(nombreArchivo);
+
+        UploadTask uploadTask = qrCodeRef.putBytes(data);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            qrCodeRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                String downloadUrl = uri.toString();
+                Log.d("FirebaseStorage", "QR Code guardado: " + downloadUrl);
+            });
+        }).addOnFailureListener(e -> {
+            e.printStackTrace();
+            Log.e("FirebaseStorage", "Error al guardar el QR Code en Firebase Storage");
+        });
+    }
+
+    public Bitmap generarQRCode(String texto) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            int tamaño = 500;
+            com.google.zxing.common.BitMatrix bitMatrix = qrCodeWriter.encode(texto, BarcodeFormat.QR_CODE, tamaño, tamaño);
+            Bitmap bitmap = Bitmap.createBitmap(tamaño, tamaño, Bitmap.Config.RGB_565);
+            for (int x = 0; x < tamaño; x++) {
+                for (int y = 0; y < tamaño; y++) {
+                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? android.graphics.Color.BLACK : android.graphics.Color.WHITE);
+                }
+            }
+            return bitmap;
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

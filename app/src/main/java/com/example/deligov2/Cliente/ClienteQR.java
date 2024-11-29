@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -13,19 +14,44 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class ClienteQR extends AppCompatActivity {
-
+    FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
     FloatingActionButton backButton;
+    ImageView qr;
+    String idPedido;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_qr);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
         backButton = findViewById(R.id.backButtonQR);
+        qr = findViewById(R.id.imageView);
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("pedidos/"+idPedido+"qr.jpg");
+
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .into(qr);
+        }).addOnFailureListener(e -> {
+            e.printStackTrace();
+        });
+
         backButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteTrackingActivity.class);
             startActivity(intent);
@@ -58,20 +84,6 @@ public class ClienteQR extends AppCompatActivity {
 
     }
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cliente_menu, menu);
