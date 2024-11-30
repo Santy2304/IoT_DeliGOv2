@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.deligov2.Administrador.AdministradorHomeActivity;
+import com.example.deligov2.Administrador.AdministradorRestauranteActivity;
 import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
@@ -54,7 +54,7 @@ public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
              intent = new Intent(LoginCrearCuentaPasoFinal.this, RepartidorVistaHome.class);
 
         } else if (usuario.getRol().equals("Administrador")){
-             intent = new Intent(LoginCrearCuentaPasoFinal.this, AdministradorHomeActivity.class);
+             intent = new Intent(LoginCrearCuentaPasoFinal.this, AdministradorRestauranteActivity.class);
 
         }else {
             intent = new Intent(LoginCrearCuentaPasoFinal.this, SuperAdminHomeActivity.class);

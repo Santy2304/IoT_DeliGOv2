@@ -6,138 +6,118 @@
     android:layout_height="match_parent"
     tools:context=".Administrador.AdministradorReporteClientesActivity">
 
-    <ImageView
-        android:id="@+id/banner"
-        android:layout_width="409dp"
-        android:layout_height="129dp"
-        android:layout_marginTop="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bembos2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:onClick="vistaPrincipalCliente"
-        android:src="@drawable/icons8_izquierda_circulo_48"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="100dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bembos_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/titulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Reporte clientes"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.131"
-        app:layout_constraintStart_toEndOf="@+id/logo"
-        app:layout_constraintTop_toBottomOf="@+id/banner" />
 
     <LinearLayout
-        android:id="@+id/linearLayout19"
+        android:id="@+id/linearLayout25"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-45sp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/banner"
-        app:layout_constraintVertical_bias="0.293">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/clientesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="100sp"
-            android:layout_marginTop="8sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Clientes"
-            android:textSize="15sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/comidaButton"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="30sp"
-            android:layout_marginTop="8sp"
-            android:layout_marginEnd="100sp"
-            android:backgroundTint="@color/light_green"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:paddingLeft="-5sp"
-            android:paddingRight="-5sp"
-            android:text="Comida"
-            android:textSize="15sp"
-            app:backgroundTint="@color/md_theme_secondary" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout18"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-45sp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/banner"
-        app:layout_constraintVertical_bias="0.367">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="350dp"
-            android:layout_marginEnd="10sp"
-            android:backgroundTint="@color/light_green"
-            android:contentDescription="filtro"
-            app:srcCompat="@drawable/filterpx"
-            app:tint="@color/white" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerReporteClientes"
-        android:layout_width="match_parent"
-        android:layout_height="451dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="6dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_admin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout18"
-        app:layout_constraintVertical_bias="0.187" />
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:id="@+id/linearLayout11"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Reportes"
+                android:textColor="@color/light_green"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/buttonHistorial"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="116dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Notificaciones"
+                app:srcCompat="@drawable/baseline_history_24"
+                app:tint="@color/white" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView3"
+                android:layout_width="0dp"
+                android:layout_height="50sp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.9"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:srcCompat="@drawable/hineilll" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout12"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clientesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Clientes"
+                android:textSize="13sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/comidaButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/dark_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Platos"
+                android:textSize="13sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerReporteClientes"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
+
+
+
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_admin"
-        android:layout_width="410sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

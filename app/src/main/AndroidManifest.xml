@@ -224,9 +224,6 @@
             android:name=".Cliente.ClientePlatoActivity"
             android:exported="false" />
         <activity
-            android:name=".Administrador.AdministradorHomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".SuperAdmin.Home.SuperAdminHomeActivity"
             android:exported="false" />
         <activity

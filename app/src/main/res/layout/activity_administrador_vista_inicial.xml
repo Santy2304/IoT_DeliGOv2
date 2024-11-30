@@ -39,25 +39,12 @@
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
+                android:layout_marginStart="120dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_green"
                 android:contentDescription="Notificaciones"
                 app:srcCompat="@drawable/baseline_history_24"
-                app:tint="@color/white" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/cart_button"
-                style="?attr/floatingActionButtonSmallStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/light_green"
-                android:contentDescription="Carrito"
-                app:srcCompat="@drawable/notifications_24px"
                 app:tint="@color/white" />
 
             <com.google.android.material.imageview.ShapeableImageView

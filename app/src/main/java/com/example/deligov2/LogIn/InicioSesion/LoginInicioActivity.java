@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.example.deligov2.Administrador.AdministradorHomeActivity;
+
+import com.example.deligov2.Administrador.AdministradorRestauranteActivity;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.LogIn.RecuperarContra.LoginRecuperarPasswordPrimerPaso;
@@ -178,7 +179,7 @@ public class LoginInicioActivity extends AppCompatActivity {
         finish();
     }
     public void goAdmin(){
-        Intent intent = new Intent(this, AdministradorHomeActivity.class);
+        Intent intent = new Intent(this, AdministradorRestauranteActivity.class);
         startActivity(intent);
         finish();
     }

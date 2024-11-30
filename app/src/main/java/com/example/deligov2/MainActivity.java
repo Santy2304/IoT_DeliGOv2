@@ -10,7 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.deligov2.Administrador.AdministradorHomeActivity;
+import com.example.deligov2.Administrador.AdministradorRestauranteActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.LogIn.InicioSesion.LoginVistaInicialApp;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, RepartidorVistaHome.class));
     }
     public void verAdministrador(View view) {
-        startActivity(new Intent(this, AdministradorHomeActivity.class));
+        startActivity(new Intent(this, AdministradorRestauranteActivity.class));
     }
     public void verSuperadministrador(View view) {
          startActivity(new Intent(this, SuperAdminHomeActivity.class));

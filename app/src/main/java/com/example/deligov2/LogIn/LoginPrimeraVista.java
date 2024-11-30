@@ -10,7 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.deligov2.Administrador.AdministradorHomeActivity;
+import com.example.deligov2.Administrador.AdministradorRestauranteActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaCuartoPaso;
@@ -170,7 +170,7 @@ public class LoginPrimeraVista extends AppCompatActivity {
         finish();
     }
     public void goAdmin(){
-        Intent intent = new Intent(LoginPrimeraVista.this, AdministradorHomeActivity.class);
+        Intent intent = new Intent(LoginPrimeraVista.this, AdministradorRestauranteActivity.class);
         startActivity(intent);
         finish();
     }

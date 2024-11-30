@@ -6,10 +6,9 @@
 
     <com.google.android.material.card.MaterialCardView
         style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="187dp"
-        android:layout_height="145dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="175dp"
+        android:layout_height="212dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +22,6 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:contentDescription="foodImage"
                 android:onClick="vistaUnPlato"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/hamburguesa_royal" />
@@ -34,9 +32,8 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="110sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="3sp"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -46,53 +43,47 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="Hamburguesa Royal"
-                        android:textAlignment="center"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="@color/black"
-                        android:textSize="10sp" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/precioRestaurante"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20sp"
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="S/12.00"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="@color/black"
-                        android:textSize="10sp" />
+                        />
                 </LinearLayout>
 
-                <LinearLayout
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:id="@+id/verPlato"
+                    android:layout_marginStart="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
-                    android:orientation="horizontal">
+                    app:icon="@drawable/baseline_eye_24"
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/verPlato"
-                        android:layout_width="30sp"
-                        android:layout_height="30sp"
-                        android:layout_marginStart="1sp"
-                        android:layout_marginTop="2sp"
-                        android:background="@color/light_yellow"
-                        android:scaleType="centerCrop"
-                        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                        app:srcCompat="@drawable/baseline_eye_24" />
+                    />
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/editarPlato"
-                        android:layout_width="30sp"
-                        android:layout_height="30sp"
-                        android:layout_marginStart="5sp"
-                        android:layout_marginTop="2sp"
-                        android:background="@color/light_green"
-                        android:onClick="de"
-                        android:scaleType="centerCrop"
-                        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                        app:srcCompat="@drawable/baseline_edit_24" />
-                </LinearLayout>
+                <Button
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:id="@+id/editarPlato"
+                    android:layout_marginStart="70dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/baseline_edit_24"
+                    />
 
             </LinearLayout>
 
