@@ -10,6 +10,7 @@ public class Platillo implements Serializable {
     private float precio;
     private String idRestaurante;
     private int cantVentaTotal;
+    private boolean visibilidad;
 
 
     public String getId() {
@@ -58,5 +59,13 @@ public class Platillo implements Serializable {
 
     public void setCantVentaTotal(int cantVentaTotal) {
         this.cantVentaTotal = cantVentaTotal;
+    }
+
+    public boolean isVisibilidad() {
+        return visibilidad;
+    }
+
+    public void setVisibilidad(boolean visibilidad) {
+        this.visibilidad = visibilidad;
     }
 }
