@@ -80,7 +80,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
                             pedido.setIdUsuario(user.getUid());
                             pedido.setEstado("Pendiente");
                             pedido.setHora(Timestamp.now());
-
+                            pedido.setCostoEnvio(carrito.getCostoEnvio());
                             Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
                             guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
 

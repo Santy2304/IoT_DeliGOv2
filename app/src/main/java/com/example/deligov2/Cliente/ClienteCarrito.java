@@ -292,6 +292,9 @@ public class ClienteCarrito extends AppCompatActivity {
         }
         carrito.setIdListaPlatos(idListaPlatos);
         carrito.setListaCantidades(new ArrayList<>(listaActualizadaCantidades));
+        if(carrito.getCostoEnvio()==0.0f){
+            carrito.setCostoEnvio(Float.valueOf(String.valueOf(costoEnvio)));
+        }
         db.collection("Carritos")
                 .document(user.getUid())
                 .set(carrito)

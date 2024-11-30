@@ -9,6 +9,7 @@ public class Carrito implements Serializable {
     private ArrayList<String> idListaPlatos;
     private ArrayList<Integer> listaCantidades;
     private String idRestaurante;
+    private float costoEnvio;
 
     public String getIdRestaurante() {
         return idRestaurante;
@@ -34,6 +35,13 @@ public class Carrito implements Serializable {
         this.idListaPlatos = idListaPlatos;
     }
 
+    public float getCostoEnvio() {
+        return costoEnvio;
+    }
+
+    public void setCostoEnvio(float costoEnvio) {
+        this.costoEnvio = costoEnvio;
+    }
 
     public ArrayList<Integer> getListaCantidades() {
         return listaCantidades;
