@@ -1,8 +1,13 @@
 package com.example.deligov2.Cliente;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,12 +29,21 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,18 +52,28 @@ import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
-public class ClienteConfirmarDireccion extends AppCompatActivity {
+public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMapReadyCallback {
     FirebaseAuth firebaseAuth;
+    private LatLng selectedLocation;
+    private boolean direccionValida = false;
     FirebaseUser user;
     FirebaseFirestore db;
     Button confirmarButton;
     Carrito carrito;
+    private Usuario usuario;
+    private GoogleMap mMap;
+    private TextInputEditText address;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,67 +82,108 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         confirmarButton = findViewById(R.id.confirm_Button);
-
+        address =  findViewById(R.id.address);
         Intent intent = getIntent();
         List<Platillo> listaPlatillos = (List<Platillo>) intent.getSerializableExtra("listaPlatillos");
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+        address.addTextChangedListener(new TextWatcher() {
+            private Timer timer = new Timer();
+            private final long DELAY = 1000;
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        db.collection("Carritos").document(user.getUid()).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        carrito = documentSnapshot.toObject(Carrito.class);
-                        confirmarButton.setOnClickListener(view -> {
-                            Pedido pedido = new Pedido();
-                            pedido.setIdRestaurante(carrito.getIdRestaurante());
-                            pedido.setIdListaPlatos(carrito.getIdListaPlatos());
-                            ArrayList<Float> preciosActuales = new ArrayList<>();
+            }
 
-                            for (Platillo platillo : listaPlatillos) {
-                                preciosActuales.add(platillo.getPrecio());
-                            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                timer.cancel(); // Reinicia el temporizador si el usuario sigue escribiendo
+            }
 
-                            pedido.setId(generarIdAleatorio());
-                            pedido.setListaCantidades(carrito.getListaCantidades());
-                            pedido.setIdUsuario(user.getUid());
-                            pedido.setEstado("Pendiente");
-                            pedido.setHora(Timestamp.now());
-                            pedido.setCostoEnvio(carrito.getCostoEnvio());
-                            Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
-                            guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
-
-                            db.collection("Pedidos").document(pedido.getId())
-                                    .set(pedido)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
-
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                    });
-
-                            carrito.setIdListaPlatos(new ArrayList<>());
-                            carrito.setListaCantidades(new ArrayList<>());
-                            carrito.setIdRestaurante("");
-                            db.collection("Carritos").document(user.getUid())
-                                    .set(carrito)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
-                                    });
-
-                            Intent intent1 = new Intent(this,ClienteConfirmacionCompra.class);
-                            intent1.putExtra("id",pedido.getId());
-                            startActivity(intent1);
-                            finish();
-
+            @Override
+            public void afterTextChanged(Editable editable) {
+                timer.cancel(); // Reinicia el temporizador si el usuario sigue escribiendo
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // Aquí se ejecuta la acción cuando el usuario deja de escribir
+                        runOnUiThread(() -> {
+                            // Código a ejecutar en el hilo principal
+                            searchAddress(address.getText().toString());
+                            Log.d("Input", "El usuario dejó de escribir. Texto actual: " + address.getText().toString());
                         });
-
                     }
-                })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+                }, DELAY); // Ejecuta después del tiempo definido en DELAY
+            }
+        });
+        loadUser(()->{
+            ((TextView)findViewById(R.id.ubi)).setText(usuario.getDireccion());
+            db.collection("Carritos").document(user.getUid()).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            carrito = documentSnapshot.toObject(Carrito.class);
+                            confirmarButton.setOnClickListener(view -> {
+                                Pedido pedido = new Pedido();
+                                if(direccionValida  && address.getText().toString().trim()!=null){
+                                    pedido.setDireccion(address.getText().toString());
+                                    pedido.setLatitud("" + selectedLocation.latitude);
+                                    pedido.setLongitud("" + selectedLocation.longitude);
+                                }else{
+                                 pedido.setDireccion(usuario.getDireccion());
+                                 pedido.setLongitud(usuario.getLongitud());
+                                 pedido.setLatitud(usuario.getLatitud());
+                                }
+                                pedido.setIdRestaurante(carrito.getIdRestaurante());
+                                pedido.setIdListaPlatos(carrito.getIdListaPlatos());
+                                ArrayList<Float> preciosActuales = new ArrayList<>();
 
+                                for (Platillo platillo : listaPlatillos) {
+                                    preciosActuales.add(platillo.getPrecio());
+                                }
 
+                                pedido.setId(generarIdAleatorio());
+                                pedido.setListaCantidades(carrito.getListaCantidades());
+                                pedido.setIdUsuario(user.getUid());
+                                pedido.setEstado("Pendiente");
+                                pedido.setHora(Timestamp.now());
+                                pedido.setCostoEnvio(carrito.getCostoEnvio());
+                                Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
+                                guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
 
+                                db.collection("Pedidos").document(pedido.getId())
+                                        .set(pedido)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
 
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        });
 
+                                carrito.setIdListaPlatos(new ArrayList<>());
+                                carrito.setListaCantidades(new ArrayList<>());
+                                carrito.setIdRestaurante("");
+                                db.collection("Carritos").document(user.getUid())
+                                        .set(carrito)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
+                                        });
+
+                                Intent intent1 = new Intent(this,ClienteConfirmacionCompra.class);
+                                intent1.putExtra("id",pedido.getId());
+                                startActivity(intent1);
+                                finish();
+
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -143,8 +209,6 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
 
             }
         });
-
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,9 +229,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
             return true;
         }else{
             return super.onOptionsItemSelected(item);
-
         }
-
     }
 
     public static String generarIdAleatorio() {
@@ -232,5 +294,69 @@ public class ClienteConfirmarDireccion extends AppCompatActivity {
             return null;
         }
     }
+    public void loadUser(Runnable onSuccess){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                            }
+                        }
+                        onSuccess.run();
+                    }
+                });
+    }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng defaultLocation = new LatLng(-12.0464, -77.0428); // Lima, Perú
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15));
+        mMap.setOnMapClickListener(latLng -> {
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicación seleccionada"));
+            selectedLocation = latLng;
+            address.setText(obtenerDireccionDesdeLatLng(selectedLocation));
+        });
+    }
+    private String obtenerDireccionDesdeLatLng(LatLng latLng) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> direcciones = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (direcciones != null && !direcciones.isEmpty()) {
+                Address direccion = direcciones.get(0);
+                direccionValida =true;
+                return direccion.getAddressLine(0);
+            }
+        } catch (IOException e) {
+            Log.e("GeocoderError", "No se pudo obtener la dirección", e);
+            direccionValida =false;
+        }
+        return null;
+    }
+    public void searchAddress(String  address) {
+        if (!address.isEmpty()) {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(address, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address location = addresses.get(0);
+                    selectedLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(selectedLocation).title("Ubicación encontrada"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 15));
+                    direccionValida =true;
+                } else {
+                    direccionValida =false;
+                    Toast.makeText(this, "No se encontró la dirección", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Error al buscar la dirección", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Por favor, ingresa una dirección", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

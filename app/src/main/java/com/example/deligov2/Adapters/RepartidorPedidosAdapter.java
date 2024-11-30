@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Beans.PedidoRepartidor;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
 
     private List<Pedido> listaPedidos;
     private Context context;
-
     @NonNull
     @Override
     public RepartidorPedidosViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,7 +35,12 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
         TextView state = holder. itemView.findViewById(R.id.statePedido);
         state.setText("Estado: " + e.getEstado());
         TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
-        price.setText("Precio : S/."+ e.getPreciosActuales().get(0) );
+        price.setText("Precio : S/."+ e.getCostoEnvio() );
+        FloatingActionButton button = holder.itemView.findViewById(R.id.mapa2);
+        button.setContentDescription(e.getId());
+        FloatingActionButton button2 = holder.itemView.findViewById(R.id.detalles);
+        button2.setContentDescription(e.getId());
+
         //Ahora afectamos a los botones
         holder.itemView.setContentDescription(e.getId());
     }

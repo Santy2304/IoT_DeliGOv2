@@ -6,13 +6,12 @@ plugins {
 android {
     namespace 'com.example.deligov2'
     compileSdk 34
-
     defaultConfig {
         applicationId "com.example.deligov2"
         minSdk 30
-        targetSdk 34
         versionCode 1
         versionName "1.0"
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
