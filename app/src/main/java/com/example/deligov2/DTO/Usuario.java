@@ -20,6 +20,7 @@ public class Usuario implements Serializable {
     private String date;
     private String fotoUrl;
     private String restaurante;
+    private String aprobado;
 
 
     public String getId() {
@@ -148,5 +149,13 @@ public class Usuario implements Serializable {
 
     public void setRestaurante(String restaurante) {
         this.restaurante = restaurante;
+    }
+
+    public String getAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(String aprobado) {
+        this.aprobado = aprobado;
     }
 }

@@ -21,6 +21,8 @@ import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilRepartidor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -85,11 +87,9 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
             tvNombre = itemView.findViewById(R.id.tv_nombre);
             tvDni = itemView.findViewById(R.id.tv_dni);
             tvCorreo = itemView.findViewById(R.id.tv_correo);
-
             btInfo = itemView.findViewById(R.id.bt_info);
             btHabilitar = itemView.findViewById(R.id.bt_activar);
             btRechazar = itemView.findViewById(R.id.bt_desactivar);
-
         }
 
         public void bindData(final Usuario repartidor) {
@@ -98,12 +98,10 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
             tvCorreo.setText(repartidor.getCorreo());
             btHabilitar.setVisibility(View.VISIBLE);
             btRechazar.setVisibility(View.VISIBLE);
-
             // Cargar imagen desde Firebase Storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference()
                     .child("users/" + repartidor.getId() + "/profile.jpg");
-
             storageRef.getDownloadUrl()
                     .addOnSuccessListener(uri -> {
                         Glide.with(iconImage.getContext())
@@ -116,16 +114,14 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
                         Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
                         iconImage.setImageResource(R.drawable.ic_errorimg);
                     });
-
             btInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilRepartidor.class);
+                    intent.putExtra("repatidor_detail", repartidor);
                     itemView.getContext().startActivity(intent);
                 }
             });
-
             btHabilitar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -158,7 +154,6 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
                                                                     @Override
                                                                     public void onClick(DialogInterface dialogInterface, int i) {
                                                                         isRepartidorHabilitado = false;
-
                                                                         btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
                                                                         btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
                                                                         Toast.makeText(itemView.getContext(), "Repartidor deshabilitado", Toast.LENGTH_SHORT).show();
@@ -203,7 +198,6 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
                     }
 
             });
-
             btRechazar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -228,7 +222,27 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
                 }
 
             });
+            //Situaciones del repartidor
+            // PorValidar -  Aceptado o Rechazado - baneado o desbaneado
+            if(repartidor.getAprobado().equals("PorValidar")){
+                //Se muestra tal cual la vista
 
+            }else{
+                if(repartidor.getAprobado().equals("Aceptado") || repartidor.getAprobado().equals("Rechazado") ){
+                    btHabilitar.setVisibility(View.INVISIBLE);
+                    btRechazar.setVisibility(View.INVISIBLE);
+                    btHabilitar.setClickable(false);
+                    btRechazar.setClickable(false);
+                }
+                if(repartidor.getAprobado().equals("Aceptado")){
+                    btHabilitar.setVisibility(View.VISIBLE);
+                    btHabilitar.setClickable(true);
+                    //El boton de habilitar se vuelve boton de baneado
+                    btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+
+                }
+            }
 
         }
     }

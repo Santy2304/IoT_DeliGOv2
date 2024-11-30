@@ -124,7 +124,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                 public void onClick(View v) {
 
                     Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilCliente.class);
-                    //intent.putExtra("id_cliente", cliente.getId());
+                    intent.putExtra("cliente_detail", cliente);
                     itemView.getContext().startActivity(intent);
                 }
             });

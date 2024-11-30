@@ -118,6 +118,7 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
 
                     Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilAdministrador.class);
                     //intent.putExtra("id_cliente", cliente.getId());
+                    intent.putExtra("administrador",  admin);
                     itemView.getContext().startActivity(intent);
                 }
             });
