@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
 import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -26,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.bumptech.glide.Glide;
 
@@ -37,6 +39,8 @@ public class RepartidorVistaHome extends AppCompatActivity {
     private Usuario usuario;
     private FirebaseStorage storage ;
     private StorageReference storageRef;
+    private List<Pedido> listaPedidos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -49,27 +53,26 @@ public class RepartidorVistaHome extends AppCompatActivity {
         setContentView(R.layout.activity_repartidor_vista_home);
         RepartidorPedidosAdapter adapter = new RepartidorPedidosAdapter();
         adapter.setContext(this);
-        ArrayList<PedidoRepartidor> lis = llenarDatos();
-        ArrayList<PedidoRepartidor> pedidosFiltrado = new ArrayList<>();
-        for(PedidoRepartidor pes : lis) {
-            if(pes.getEstado().equals("Recibido") || pes.getEstado().equals("En preparacion") ){
-                pedidosFiltrado.add(pes);}}
-        adapter.setListaPedidosRepartidor(pedidosFiltrado);
-        RecyclerView recyclerView = findViewById(R.id.lista);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
-        ShapeableImageView image = findViewById(R.id.shapeableImageView3);
-        storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
-        // Usa Glide para cargar la imagen
-        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            Glide.with(this)
-                    .load(uri)
-                    .placeholder(R.drawable.user_icon) // Imagen de carga
-                    .error(R.drawable.xd)             // Imagen de error
-                    .into(image);
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+        listaPedidos =  new ArrayList<Pedido>();
+        loadPedidos(()->{
+            adapter.setListaPedidosRepartidor(listaPedidos);
+            RecyclerView recyclerView = findViewById(R.id.lista);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
+            ShapeableImageView image = findViewById(R.id.shapeableImageView3);
+            storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
+            // Usa Glide para cargar la imagen
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Glide.with(this)
+                        .load(uri)
+                        .placeholder(R.drawable.user_icon) // Imagen de carga
+                        .error(R.drawable.xd)             // Imagen de error
+                        .into(image);
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+            });
         });
+
     }
     public void verNotificacionesRepartidor(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
@@ -194,7 +197,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
         }
         return pedidos;
     }
-
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -207,4 +209,20 @@ public class RepartidorVistaHome extends AppCompatActivity {
                     }
                 });
     }
+
+    public void loadPedidos(Runnable onsuccess){
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            Pedido pedido = document.toObject(Pedido.class);
+                            if(pedido.getIdRepartidor() != null && (pedido.getEstado().equals("Recibido") || pedido.getEstado().equals("En preparacion"))){
+                                listaPedidos.add(pedido);
+                            }
+                        }
+                        onsuccess.run();
+                    }
+                });
+    }
+
 }
