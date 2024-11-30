@@ -1,5 +1,6 @@
 package com.example.deligov2.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +28,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperAdminRepartidorListAdapter.ViewHolder> {
     private List<Usuario> mRepartidor;
@@ -77,10 +80,7 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
         TextView tvNombre, tvDni, tvCorreo;
-        FloatingActionButton btInfo,btHabilitar,btRechazar;
-        private boolean isRepartidorAceptado;
-        private boolean isRepartidorHabilitado;
-
+        FloatingActionButton btInfo,btnBaneado,btnAceptar;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iconImage = itemView.findViewById(R.id.imgCliente);
@@ -88,16 +88,13 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
             tvDni = itemView.findViewById(R.id.tv_dni);
             tvCorreo = itemView.findViewById(R.id.tv_correo);
             btInfo = itemView.findViewById(R.id.bt_info);
-            btHabilitar = itemView.findViewById(R.id.bt_activar);
-            btRechazar = itemView.findViewById(R.id.bt_desactivar);
+            btnBaneado = itemView.findViewById(R.id.btn_baneado);
+            btnAceptar = itemView.findViewById(R.id.btn_aceptar);
         }
-
         public void bindData(final Usuario repartidor) {
             tvNombre.setText( repartidor.getNombre() + " " + repartidor.getApellido());
             tvDni.setText("DNI: " + repartidor.getNumDocument());
             tvCorreo.setText(repartidor.getCorreo());
-            btHabilitar.setVisibility(View.VISIBLE);
-            btRechazar.setVisibility(View.VISIBLE);
             // Cargar imagen desde Firebase Storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference()
@@ -122,128 +119,244 @@ public class SuperAdminRepartidorListAdapter extends RecyclerView.Adapter<SuperA
                     itemView.getContext().startActivity(intent);
                 }
             });
-            btHabilitar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                        new MaterialAlertDialogBuilder(itemView.getContext())
-                                .setTitle("Confirmación")
-                                .setMessage("¿Estás seguro de aceptar al repartidor?")
-                                .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+            if (!repartidor.isEstado()) {
+                btnBaneado.setImageResource(R.drawable.baseline_deactive_24);
+                btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+            } else {
+                btnBaneado.setImageResource(R.drawable.baseline_check_circle_24);
+                btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+            }
+            //LOGICA DE LOS BOTONES
+            if( repartidor.getAprobado()!=null && repartidor.getAprobado().equals("PorValidar")){
+                btnBaneado.setVisibility(View.INVISIBLE);
+                btnBaneado.setClickable(false);
+                btnAceptar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Confirmar acción");
+                        builder.setMessage("¿Qué acción deseas realizar con esta solicitud?");
+
+                        // Botón para aceptar
+                        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Acción cuando se presiona "Aceptar"
+                                repartidor.setAprobado("Aceptado");
+                                actualizarEstadoEnFirestore(repartidor);
+                                btnBaneado.setVisibility(View.VISIBLE);
+                                btnBaneado.setClickable(true);
+                                btnAceptar.setVisibility(View.INVISIBLE);
+                                btnAceptar.setClickable(false);
+                                btnBaneado.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        isRepartidorAceptado = true;
-                                        isRepartidorHabilitado = true;
+                                    public void onClick(View view) {
+                                        if (repartidor.isEstado()) {
+                                            // Mostrar el diálogo para deshabilitar
+                                            new MaterialAlertDialogBuilder(itemView.getContext())
+                                                    .setTitle("Confirmación")
+                                                    .setMessage("¿Estás seguro de deshabilitar?")
+                                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Map<String, Object> updates = new HashMap<>();
+                                                            updates.put("estado", false);
+                                                            FirebaseFirestore.getInstance().collection("Usuarios").document(repartidor.getId())
+                                                                    .update(updates)
+                                                                    .addOnCompleteListener(task ->{
+                                                                        repartidor.setEstado(false);
+                                                                        btnBaneado.setImageResource(R.drawable.baseline_deactive_24);
+                                                                        btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                                        Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                                                    });
 
-                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                        btRechazar.setVisibility(View.INVISIBLE);
-                                        Toast.makeText(itemView.getContext(), "Repartidor Aceptado", Toast.LENGTH_SHORT).show();
-
-                                        //Manejo de habilitar y deshabilitar
-                                        if(isRepartidorAceptado){
-
-                                            btHabilitar.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    if (isRepartidorHabilitado) {
-                                                        // Mostrar el diálogo para deshabilitar
-                                                        new MaterialAlertDialogBuilder(itemView.getContext())
-                                                                .setTitle("Confirmación")
-                                                                .setMessage("¿Estás seguro de deshabilitar?")
-                                                                .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                                        isRepartidorHabilitado = false;
-                                                                        btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                                                        Toast.makeText(itemView.getContext(), "Repartidor deshabilitado", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                })
-                                                                .setNegativeButton("Cancelar", null)
-                                                                .show();
-                                                    } else {
-                                                        // Mostrar el diálogo para habilitar
-                                                        new MaterialAlertDialogBuilder(itemView.getContext())
-                                                                .setTitle("Confirmación")
-                                                                .setMessage("¿Estás seguro de habilitar?")
-                                                                .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                                        isRepartidorHabilitado = true; //restaurante.setHabilitado(true)
-
-                                                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                                                        Toast.makeText(itemView.getContext(), "Repartidor habilitado", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                })
-                                                                .setNegativeButton("Cancelar", null)
-                                                                .show();
-                                                    }
-                                                }
-                                            });
-
-                                            if (!isRepartidorHabilitado) {
-                                                btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                                btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                            } else {
-                                                btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                                btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                            }
-
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Cancelar", null)
+                                                    .show();
+                                        } else {
+                                            // Mostrar el diálogo para habilitar
+                                            new MaterialAlertDialogBuilder(itemView.getContext())
+                                                    .setTitle("Confirmación")
+                                                    .setMessage("¿Estás seguro de habilitar?")
+                                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Map<String, Object> updates = new HashMap<>();
+                                                            updates.put("estado", true);
+                                                            FirebaseFirestore.getInstance().collection("Usuarios").document(repartidor.getId())
+                                                                    .update(updates)
+                                                                    .addOnCompleteListener(task -> {
+                                                                        repartidor.setEstado(true); //restaurante.setHabilitado(true)
+                                                                        btnBaneado.setImageResource(R.drawable.baseline_check_circle_24);
+                                                                        btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                                                        Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                                                    });
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Cancelar", null)
+                                                    .show();
                                         }
                                     }
-                                })
-                                .setNegativeButton("Cancelar", null)
-                                .show();
+                                });
+
+                                Toast.makeText(context, "Solicitud aceptada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        // Botón para rechazar
+                        builder.setNegativeButton("Rechazar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Acción cuando se presiona "Rechazar"
+                                repartidor.setAprobado("Aceptado");
+                                actualizarEstadoEnFirestore(repartidor);
+                                btnBaneado.setVisibility(View.VISIBLE);
+                                btnBaneado.setClickable(true);
+                                btnAceptar.setVisibility(View.INVISIBLE);
+                                btnAceptar.setClickable(false);
+                                btnBaneado.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (repartidor.isEstado()) {
+                                            // Mostrar el diálogo para deshabilitar
+                                            new MaterialAlertDialogBuilder(context)
+                                                    .setTitle("Confirmación")
+                                                    .setMessage("¿Estás seguro de deshabilitar?")
+                                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Map<String, Object> updates = new HashMap<>();
+                                                            updates.put("estado", false);
+                                                            FirebaseFirestore.getInstance().collection("Usuarios").document(repartidor.getId())
+                                                                    .update(updates)
+                                                                    .addOnCompleteListener(task ->{
+                                                                        repartidor.setEstado(false);
+                                                                        btnBaneado.setImageResource(R.drawable.baseline_deactive_24);
+                                                                        btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                                        Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                                                    });
+
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Cancelar", null)
+                                                    .show();
+                                        } else {
+                                            // Mostrar el diálogo para habilitar
+                                            new MaterialAlertDialogBuilder(context)
+                                                    .setTitle("Confirmación")
+                                                    .setMessage("¿Estás seguro de habilitar?")
+                                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Map<String, Object> updates = new HashMap<>();
+                                                            updates.put("estado", true);
+                                                            FirebaseFirestore.getInstance().collection("Usuarios").document(repartidor.getId())
+                                                                    .update(updates)
+                                                                    .addOnCompleteListener(task -> {
+                                                                        repartidor.setEstado(true); //restaurante.setHabilitado(true)
+                                                                        btnBaneado.setImageResource(R.drawable.baseline_check_circle_24);
+                                                                        btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                                                        Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                                                    });
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Cancelar", null)
+                                                    .show();
+                                        }
+                                    }
+                                });
+                                Toast.makeText(context, "Solicitud rechazada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        // Botón para cancelar
+                        builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                                dialog.dismiss();
+                                Toast.makeText(context, "Acción cancelada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        // Mostrar el diálogo
+                        builder.create().show();
                     }
+                });
+            }
+            if(repartidor.getAprobado()!=null && repartidor.getAprobado().equals("Aceptado") || repartidor.getAprobado().equals("Rechazado")){
+                btnBaneado.setVisibility(View.VISIBLE);
+                btnBaneado.setClickable(true);
+                btnAceptar.setVisibility(View.INVISIBLE);
+                btnAceptar.setClickable(false);
+                //Proceso de baneado normal
+                btnBaneado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (repartidor.isEstado()) {
+                            // Mostrar el diálogo para deshabilitar
+                            new MaterialAlertDialogBuilder(itemView.getContext())
+                                    .setTitle("Confirmación")
+                                    .setMessage("¿Estás seguro de deshabilitar?")
+                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Map<String, Object> updates = new HashMap<>();
+                                            updates.put("estado", false);
+                                            FirebaseFirestore.getInstance().collection("Usuarios").document(repartidor.getId())
+                                                    .update(updates)
+                                                    .addOnCompleteListener(task ->{
+                                                        repartidor.setEstado(false);
+                                                        btnBaneado.setImageResource(R.drawable.baseline_deactive_24);
+                                                        btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                        Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                                    });
 
-            });
-            btRechazar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new MaterialAlertDialogBuilder(itemView.getContext())
-                            .setTitle("Confirmación")
-                            .setMessage("¿Estás seguro de rechazar al repartidor?")
-                            .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    isRepartidorAceptado = false;
-                                    isRepartidorHabilitado = false;
-
-                                    btHabilitar.setImageResource(R.drawable.baseline_delete_24);
-                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                    btHabilitar.setClickable(false);
-                                    btRechazar.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(itemView.getContext(), "Repartidor fue rechazado", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .setNegativeButton("Cancelar", null)
-                            .show();
-                }
-
-            });
+                                        }
+                                    })
+                                    .setNegativeButton("Cancelar", null)
+                                    .show();
+                        } else {
+                            // Mostrar el diálogo para habilitar
+                            new MaterialAlertDialogBuilder(itemView.getContext())
+                                    .setTitle("Confirmación")
+                                    .setMessage("¿Estás seguro de habilitar?")
+                                    .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Map<String, Object> updates = new HashMap<>();
+                                            updates.put("estado", true);
+                                            FirebaseFirestore.getInstance().collection("Usuarios").document(repartidor.getId())
+                                                    .update(updates)
+                                                    .addOnCompleteListener(task -> {
+                                                        repartidor.setEstado(true); //restaurante.setHabilitado(true)
+                                                        btnBaneado.setImageResource(R.drawable.baseline_check_circle_24);
+                                                        btnBaneado.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                                        Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                                    });
+                                        }
+                                    })
+                                    .setNegativeButton("Cancelar", null)
+                                    .show();
+                        }
+                    }
+                });
+            }
             //Situaciones del repartidor
             // PorValidar -  Aceptado o Rechazado - baneado o desbaneado
-            if(repartidor.getAprobado().equals("PorValidar")){
-                //Se muestra tal cual la vista
-
-            }else{
-                if(repartidor.getAprobado().equals("Aceptado") || repartidor.getAprobado().equals("Rechazado") ){
-                    btHabilitar.setVisibility(View.INVISIBLE);
-                    btRechazar.setVisibility(View.INVISIBLE);
-                    btHabilitar.setClickable(false);
-                    btRechazar.setClickable(false);
-                }
-                if(repartidor.getAprobado().equals("Aceptado")){
-                    btHabilitar.setVisibility(View.VISIBLE);
-                    btHabilitar.setClickable(true);
-                    //El boton de habilitar se vuelve boton de baneado
-                    btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-
-                }
-            }
-
         }
+    }
+
+
+    private void actualizarEstadoEnFirestore(Usuario repartidor) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Usuarios").document(repartidor.getId())
+                .update("aprobado", repartidor.getAprobado())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Estado actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error al actualizar el estado", Toast.LENGTH_SHORT).show();
+                });
     }
 }

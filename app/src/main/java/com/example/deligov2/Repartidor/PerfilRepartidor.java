@@ -24,6 +24,8 @@ import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.LogIn.InicioSesion.LoginInicioActivity;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
+import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -142,12 +144,14 @@ public class PerfilRepartidor extends AppCompatActivity {
     }
 
     public void salir(View view){
-        firebaseAuth.signOut();
-        Intent intent = new Intent(this, LoginInicioActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        Toast.makeText(this, "Sesión cerrada exitosamente", Toast.LENGTH_SHORT).show();
-        finish();
+        AuthUI.getInstance().signOut(this)
+                .addOnCompleteListener(task -> {
+                    Intent intent = new Intent(this, LoginInicioActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(this, "Sesión cerrada exitosamente", Toast.LENGTH_SHORT).show();
+                });
     }
 
 

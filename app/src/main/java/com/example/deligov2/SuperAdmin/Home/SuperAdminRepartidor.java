@@ -56,34 +56,24 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_repartidor);
-
-
-
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();        // Obtener los datos del intent anterior a este
         loadUser();
-
         ImageView admin = findViewById(R.id.imgAdmin);
         ImageView cliente = findViewById(R.id.imgCostumer);
-
         admin.setOnClickListener(v -> {
             vistaPanelAdmin();
         });
-
         cliente.setOnClickListener(v -> {
             vistaPanelCliente();
         });
-
-
         //Para el buscador
         TextInputEditText searchInput;
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarRepartidor);
-
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
         topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -96,12 +86,9 @@ public class SuperAdminRepartidor extends AppCompatActivity {
                 }
             }
         });
-
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         bottomNavigationView.setSelectedItemId(R.id.principal);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -127,18 +114,14 @@ public class SuperAdminRepartidor extends AppCompatActivity {
 
             }
         });
-
         //Efectos
         cardRepartidor = findViewById(R.id.materialCardViewRepartidor);
-
         ObjectAnimator animator = ObjectAnimator.ofFloat(cardRepartidor, "translationX", 0f, 10f);
         animator.setDuration(500);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
-
         mostrarListaRepartidores();
-
         //Manejo del buscador
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -155,24 +138,22 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     }
 
     public void mostrarListaRepartidores(){
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         listAdapter = new SuperAdminRepartidorListAdapter(repartidores,this);
         RecyclerView recyclerView = findViewById(R.id.listRepartidor);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
-
         db.collection("Usuarios")
                 .whereEqualTo("rol", "Repartidor")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Usuario repartidor = doc.toObject(Usuario.class);
-                        repartidores.add(repartidor);
+                        if(repartidor.getRol().equals("Repartidor")){
+                            repartidores.add(repartidor);
+                        }
                     }
-
                     listAdapter.setRepartidor(repartidores);
                     listAdapter.notifyDataSetChanged();
                 })
@@ -180,34 +161,27 @@ public class SuperAdminRepartidor extends AppCompatActivity {
                     Log.e("Firestore", "Error al obtener repartidores: ", e);
                 });
     }
-
     //Cambio de vista
     public void vistaPanelCliente() {
         Intent intent = new Intent(this, SuperAdminHomeActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
-
     public void vistaPanelAdmin() {
         Intent intent = new Intent(this, SuperAdminAdministrador.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
-
     public void buscarRepartidor(String query) {
-
         List<Usuario> repartidores2 = new ArrayList<>();
         SuperAdminRepartidorListAdapter listAdapter2 = new SuperAdminRepartidorListAdapter(repartidores2,this);
         RecyclerView recyclerView = findViewById(R.id.listRepartidor);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter2);
-
         if (query.isEmpty()) {
             mostrarListaRepartidores();
-            return;
-        }
-
+            return;}
         db.collection("Usuarios")
                 .whereEqualTo("rol","Repartidor")
                 .whereGreaterThanOrEqualTo("nombre", query)
@@ -222,15 +196,11 @@ public class SuperAdminRepartidor extends AppCompatActivity {
                         for (DocumentSnapshot document : snapshot.getDocuments()) {
                             Usuario repartidor = document.toObject(Usuario.class);
                             if (repartidor != null) {
-                                repartidores2.add(repartidor);
-                            }
-                        }
+                                repartidores2.add(repartidor);}}
                         //listAdapter.setRepartidor(repartidores);
                         listAdapter2.notifyDataSetChanged();
                     }
-                });
-    }
-
+                });}
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {

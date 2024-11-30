@@ -97,6 +97,11 @@ public class LoginCrearCuentaCuartoPaso extends AppCompatActivity {
             Toast.makeText(this, "Debes de escoger un rol dentro de esta aplicacion", Toast.LENGTH_SHORT).show();
         }else{
             usuario.setRol(selectedRole[0]);
+            if(!usuario.getRol().equals("Cliente")){
+                usuario.setAprobado("PorValidar");
+            }else{
+                usuario.setAprobado("Aceptado");
+            }
             guardarDatosEnFirestore();
         }
     }

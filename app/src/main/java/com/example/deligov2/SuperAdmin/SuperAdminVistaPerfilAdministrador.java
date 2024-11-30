@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
@@ -18,6 +19,11 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
 
@@ -81,7 +87,6 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
             }
         });
         //Llenamos los datos
-        Usuario usuario = (Usuario) getIntent().getSerializableExtra("administrador");
         MaterialTextView nameView = findViewById(R.id.name);
         MaterialTextView restaurantView = findViewById(R.id.tv_restaurant);
         MaterialTextView dniView = findViewById(R.id.n_dni);
@@ -91,19 +96,19 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
 
         // Simula un usuario para el ejemplo (puedes obtener este objeto desde un Intent, Firebase, etc.)
         // URL de prueba para la foto
-
         // Setea los datos en las vistas
+        Usuario usuario = (Usuario) getIntent().getSerializableExtra("administrador");
         nameView.setText(usuario.getNombre());
         restaurantView.setText(usuario.getRestaurante());
         dniView.setText(usuario.getNumDocument());
         correoView.setText(usuario.getCorreo());
         ubicacionView.setText(usuario.getDireccion());
-
         // Usa Glide para cargar la imagen de perfil
         Glide.with(this)
                 .load(usuario.getFotoUrl())
                 .placeholder(R.drawable.ic_loading) // Imagen mientras se carga
                 .error(R.drawable.ic_errorimg)       // Imagen si falla la carga
                 .into(profileImageView);
+
     }
 }
