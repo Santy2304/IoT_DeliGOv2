@@ -115,55 +115,55 @@
             android:name=".Repartidor.RepartidorVistaHome"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminVistaPerfilRepartidor"
+            android:name=".SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilRepartidor"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminVistaPerfilCliente"
+            android:name=".SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilCliente"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminVistaPerfilAdministrador"
+            android:name=".SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilAdministrador"
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.SuperAdminVistaLogEvent"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRestauranteUbicacion"
+            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestauranteUbicacion"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRestauranteResumen"
+            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestauranteResumen"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRestaurantePlatillos"
+            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestaurantePlatillos"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminResturanteHistorialVentas"
+            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminResturanteHistorialVentas"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRegistroRestauranteCorrect"
+            android:name=".SuperAdmin.Restaurantes.RegistrarRestaurante.SuperAdminRegistroRestauranteCorrect"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRegistroRestaurante2"
+            android:name=".SuperAdmin.Restaurantes.RegistrarRestaurante.SuperAdminRegistroRestaurante2"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRegistroRestaurante1"
+            android:name=".SuperAdmin.Restaurantes.RegistrarRestaurante.SuperAdminRegistroRestaurante1"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRegistroAdministrador2"
+            android:name=".SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdministrador2"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRegistroAdministrador1"
+            android:name=".SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdministrador1"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRegistroAdminCorrect"
+            android:name=".SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdminCorrect"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminPlatillosDescription"
+            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminPlatillosDescription"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminRestaurante"
+            android:name=".SuperAdmin.Restaurantes.SuperAdminRestaurante"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminHistorialVentasDetalles"
+            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminHistorialVentasDetalles"
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.Home.SuperAdminAdministrador"

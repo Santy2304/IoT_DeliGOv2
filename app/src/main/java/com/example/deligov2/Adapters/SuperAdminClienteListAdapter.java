@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
-import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilCliente;
+import com.example.deligov2.SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilCliente;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;

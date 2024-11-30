@@ -1,4 +1,4 @@
-package com.example.deligov2.SuperAdmin;
+package com.example.deligov2.SuperAdmin.Restaurantes.RegistrarRestaurante;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
+import com.example.deligov2.SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdministrador1;
 
 public class SuperAdminRegistroRestauranteCorrect extends AppCompatActivity {
     Button btContinuar;

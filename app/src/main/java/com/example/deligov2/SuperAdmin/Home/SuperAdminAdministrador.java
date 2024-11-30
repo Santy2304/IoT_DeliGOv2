@@ -10,8 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -24,7 +22,7 @@ import com.example.deligov2.Adapters.SuperAdminAdministradorListAdapter;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
-import com.example.deligov2.SuperAdmin.SuperAdminRestaurante;
+import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

@@ -1,4 +1,4 @@
-package com.example.deligov2.SuperAdmin;
+package com.example.deligov2.SuperAdmin.Restaurantes.RegistrarAdministrador;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminRegistroAdminCorrect extends AppCompatActivity {

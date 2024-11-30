@@ -1,4 +1,4 @@
-package com.example.deligov2.SuperAdmin;
+package com.example.deligov2.SuperAdmin.Restaurantes.RegistrarAdministrador;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -21,6 +21,9 @@ import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
+import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
+import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
+import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;

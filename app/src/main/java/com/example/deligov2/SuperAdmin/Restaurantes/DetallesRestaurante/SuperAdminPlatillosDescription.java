@@ -1,46 +1,48 @@
-package com.example.deligov2.SuperAdmin;
+package com.example.deligov2.SuperAdmin.Restaurantes.DetallesRestaurante;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Adapters.SuperAdminRestauranteVentaAdapter;
+import com.example.deligov2.Beans.Plato;
 import com.example.deligov2.DTO.Usuario;
-import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
+import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
+import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
+import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
+public class SuperAdminPlatillosDescription extends AppCompatActivity {
 
-    List<VentaPlatilloSA> ventas;
     private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_super_admin_historial_ventas_detalles);
+        setContentView(R.layout.activity_super_admin_platillos_description);
 
         db = FirebaseFirestore.getInstance();
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
-
-        mostrarListaVentas();
 
         //Manejo del top app bar
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
@@ -57,7 +59,7 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.log_event){
-                    Intent intent = new Intent(SuperAdminHistorialVentasDetalles.this, SuperAdminVistaLogEvent.class);
+                    Intent intent = new Intent(SuperAdminPlatillosDescription.this, SuperAdminVistaLogEvent.class);
                     startActivity(intent);
                     return true;
                 }else{
@@ -76,15 +78,15 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.restaurant){
-                    Intent intentRestaurant = new Intent(SuperAdminHistorialVentasDetalles.this, SuperAdminRestaurante.class);
+                    Intent intentRestaurant = new Intent(SuperAdminPlatillosDescription.this, SuperAdminRestaurante.class);
                     startActivity(intentRestaurant);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(SuperAdminHistorialVentasDetalles.this, SuperAdminHomeActivity.class);
+                    Intent intentPrincipal = new Intent(SuperAdminPlatillosDescription.this, SuperAdminHomeActivity.class);
                     startActivity(intentPrincipal);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
-                    Intent intentProfile = new Intent(SuperAdminHistorialVentasDetalles.this, SuperAdminPerfil.class);
+                    Intent intentProfile = new Intent(SuperAdminPlatillosDescription.this, SuperAdminPerfil.class);
                     startActivity(intentProfile);
                     return true;
                 }else{
@@ -105,12 +107,12 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
             }
         });
 
-        Button btCarta = findViewById(R.id.bt_carta);
+        Button btVentas = findViewById(R.id.bt_ventas);
 
-        btCarta.setOnClickListener(new View.OnClickListener() {
+        btVentas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRestaurantePlatillos(v);
+                vistaRestauranteHistorialVentas(v);
             }
         });
 
@@ -122,20 +124,51 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
                 vistaRestauranteUbicacion(v);
             }
         });
-    }
 
-    //Manejo de datos
-    public void mostrarListaVentas(){
-        ventas = new ArrayList<>();
-        ventas.add(new VentaPlatilloSA(1,"Combo Platano",14.20f,4,1));
-        ventas.add(new VentaPlatilloSA(1,"Combo Ola",14.50f,2,1));
-        ventas.add(new VentaPlatilloSA(1,"Combo Supernatural",10.30f,3,1));
 
-        SuperAdminRestauranteVentaAdapter listAdapter = new SuperAdminRestauranteVentaAdapter(ventas,this);
-        RecyclerView recyclerView = findViewById(R.id.listVentas);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(listAdapter);
+        //Manejo de los datos
+
+        BarChart chartVentas = findViewById(R.id.chartVentasPlatos);
+        // Configura el gráfico de barras para las ventas mensuales
+        chartVentas.getDescription().setEnabled(false);
+        chartVentas.getLegend().setEnabled(true);
+        chartVentas.getAxisRight().setEnabled(false);
+        chartVentas.getAxisLeft().setAxisMinimum(0f);
+
+        // Agrega datos al gráfico de barras para las ventas mensuales
+        ArrayList<BarEntry> entriesVentas = new ArrayList<>();
+        entriesVentas.add(new BarEntry(1, 800));
+        entriesVentas.add(new BarEntry(2, 1000));
+        entriesVentas.add(new BarEntry(3, 1200));
+
+        // Crea un conjunto de datos para las ventas mensuales
+        BarDataSet dataSetVentas = new BarDataSet(entriesVentas, "Ventas");
+        dataSetVentas.setColor(ColorTemplate.MATERIAL_COLORS[1]);
+        dataSetVentas.setValueTextColor(ColorTemplate.MATERIAL_COLORS[1]);
+
+        // Crea un conjunto de datos para el gráfico de barras
+        BarData dataVentas = new BarData(dataSetVentas);
+        dataVentas.setValueTextSize(12f);
+
+        // Asigna el conjunto de datos al gráfico de barras
+        chartVentas.setData(dataVentas);
+
+        // Notifica al gráfico de barras que los datos han cambiado
+        chartVentas.invalidate();
+
+
+        Plato plato = (Plato) getIntent().getSerializableExtra("plato");
+
+        TextView tvNombre = findViewById(R.id.tv_platoNombre);
+        TextView tvPrecio = findViewById(R.id.tv_platoPrecio);
+        TextView tvDescription = findViewById(R.id.tv_platoDescripcion);
+        TextView tvIngredientes = findViewById(R.id.tv_platoIngredientes);
+
+        tvNombre.setText(plato.getNombre());
+        tvPrecio.setText(String.format("Precio: S/ %.2f", plato.getPrecio()));
+        tvDescription.setText(plato.getDescripcion());
+        tvIngredientes.setText("Tocino, Cebolla, Carne, Tomado, Queso,Pan");
+
     }
 
     //Cambio vista
@@ -144,8 +177,8 @@ public class SuperAdminHistorialVentasDetalles extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void vistaRestaurantePlatillos(View view) {
-        Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
+    public void vistaRestauranteHistorialVentas(View view) {
+        Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
         startActivity(intent);
     }
     public void vistaRestauranteUbicacion(View view){

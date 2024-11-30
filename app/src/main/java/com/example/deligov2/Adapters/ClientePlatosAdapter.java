@@ -73,6 +73,7 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
                 onPlatoClickListener.onPlatoClick(p);
                 btnAgregar.setEnabled(false);
                 btnAgregar.setBackgroundColor(Color.GRAY);
+                btnAgregar.setText("Agregado");
                 // Notifica el click a la actividad
             }
         });

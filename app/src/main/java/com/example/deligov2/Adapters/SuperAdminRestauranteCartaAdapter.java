@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Plato;
 import com.example.deligov2.R;
-import com.example.deligov2.SuperAdmin.SuperAdminPlatillosDescription;
+import com.example.deligov2.SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminPlatillosDescription;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;

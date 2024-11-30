@@ -282,7 +282,6 @@ public class ClienteCarrito extends AppCompatActivity {
         List<Integer> listaActualizadaCantidades = adapter.getCantidades();
         ArrayList<String> idListaPlatos = new ArrayList<>();
         for (Platillo platillo : listaActualizadaPlatos) {
-            idListaPlatos = new ArrayList<>();
             idListaPlatos.add(platillo.getId());
         }
         carrito.setIdListaPlatos(idListaPlatos);

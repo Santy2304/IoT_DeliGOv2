@@ -1,4 +1,4 @@
-package com.example.deligov2.SuperAdmin;
+package com.example.deligov2.SuperAdmin.Restaurantes.RegistrarRestaurante;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
@@ -30,6 +30,9 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
+import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
+import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
+import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
