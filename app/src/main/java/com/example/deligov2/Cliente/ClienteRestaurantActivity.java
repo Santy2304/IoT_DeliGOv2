@@ -157,6 +157,12 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         carrito.setIdRestaurante(idRestaurante);
         carrito.setIdUsuario(user.getUid());
         carrito.setIdListaPlatos(listaIdPlatos);
+        ArrayList<Integer> listaActualizadaCantidades = new ArrayList<>();
+        for(int i=0;i<listaIdPlatos.size();i++){
+            listaActualizadaCantidades.add(1);
+        }
+        carrito.setListaCantidades(listaActualizadaCantidades);
+
         db.collection("Carritos")
                 .document(user.getUid())
                 .set(carrito)

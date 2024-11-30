@@ -92,9 +92,11 @@ public class ClienteCarrito extends AppCompatActivity {
                                         lista.add(platillo);
                                     }
                                 }
-                                for (int i = 0; i < lista.size(); i++) {
-                                    cantidades.add(1); // Cada platillo comienza con cantidad 1
-                                }
+//                                for (int i = 0; i < lista.size(); i++) {
+//                                    cantidades.add(1); // Cada platillo comienza con cantidad 1
+//                                }
+
+                                cantidades = carrito.getListaCantidades();
 
                                 adapter = new ClienteCarritoAdapter();
                                 adapter.setContext(this);
