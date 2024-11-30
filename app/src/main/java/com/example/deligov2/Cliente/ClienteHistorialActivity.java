@@ -123,12 +123,11 @@ public class ClienteHistorialActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.cliente_menu, menu);
-        return true;
-    }
+        return true;}
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if(item.getItemId()==R.id.historial){
             startActivity(new Intent(this, ClienteHistorialActivity.class));
             return true;
