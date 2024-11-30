@@ -23,6 +23,7 @@ public class Pedido implements Serializable {
     private String longitud;
     private String latitud;
     private Timestamp hora;
+    private float costoEnvio;
 
     public String getIdRestaurante() {
         return idRestaurante;
@@ -127,5 +128,13 @@ public class Pedido implements Serializable {
 
     public void setLatitud(String latitud) {
         this.latitud = latitud;
+    }
+
+    public float getCostoEnvio() {
+        return costoEnvio;
+    }
+
+    public void setCostoEnvio(float costoEnvio) {
+        this.costoEnvio = costoEnvio;
     }
 }

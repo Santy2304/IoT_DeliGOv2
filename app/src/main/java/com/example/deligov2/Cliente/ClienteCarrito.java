@@ -77,6 +77,7 @@ public class ClienteCarrito extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         carrito = documentSnapshot.toObject(Carrito.class);
                         idsPlatos = carrito.getIdListaPlatos();
+                        cantidades = carrito.getListaCantidades();
 
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
                             if (error != null) {
@@ -92,11 +93,14 @@ public class ClienteCarrito extends AppCompatActivity {
                                         lista.add(platillo);
                                     }
                                 }
-//                                for (int i = 0; i < lista.size(); i++) {
-//                                    cantidades.add(1); // Cada platillo comienza con cantidad 1
-//                                }
 
-                                cantidades = carrito.getListaCantidades();
+                                double montoTotal = 0;
+                                for (int i = 0; i < lista.size(); i++) {
+                                    Platillo platillo = lista.get(i);
+                                    montoTotal += platillo.getPrecio() * cantidades.get(i);
+                                }
+                                costoProductosText.setText(String.format("S/%.2f", montoTotal));
+                                totalTextView.setText(String.format("S/%.2f", montoTotal+costoEnvio));
 
                                 adapter = new ClienteCarritoAdapter();
                                 adapter.setContext(this);
