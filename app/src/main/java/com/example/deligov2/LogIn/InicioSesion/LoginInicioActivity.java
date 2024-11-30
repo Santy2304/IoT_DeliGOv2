@@ -542,5 +542,9 @@ public class LoginInicioActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
         dialog.show();
+        AuthUI.getInstance().signOut(this)
+                .addOnCompleteListener(task1 -> {
+
+                });
     }
 }

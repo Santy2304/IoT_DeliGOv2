@@ -21,11 +21,14 @@ import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<SuperAdminAdministradorListAdapter.ViewHolder> {
 
@@ -89,6 +92,7 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
         }
 
         public void bindData(final Usuario admin) {
+            isAdminHabilitado =  admin.isEstado();
             tvNombre.setText(admin.getNombre() + " " + admin.getApellido());
             tvDni.setText("DNI: " + admin.getNumDocument());
             tvCorreo.setText(admin.getCorreo());
@@ -143,11 +147,17 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
                                 .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        isAdminHabilitado = false;
+                                        Map<String, Object> updates = new HashMap<>();
+                                        updates.put("estado", false);
+                                        FirebaseFirestore.getInstance().collection("Usuarios").document(admin.getId())
+                                                .update(updates)
+                                                .addOnCompleteListener(task ->{
+                                                    isAdminHabilitado = false;
+                                                    btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                    Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                                });
 
-                                        btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                        Toast.makeText(itemView.getContext(), "Administrador deshabilitado", Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("Cancelar", null)
@@ -160,11 +170,16 @@ public class SuperAdminAdministradorListAdapter extends RecyclerView.Adapter<Sup
                                 .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        isAdminHabilitado = true; //restaurante.setHabilitado(true)
-
-                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                        Toast.makeText(itemView.getContext(), "Administrador habilitado", Toast.LENGTH_SHORT).show();
+                                        Map<String, Object> updates = new HashMap<>();
+                                        updates.put("estado", true);
+                                        FirebaseFirestore.getInstance().collection("Usuarios").document(admin.getId())
+                                                .update(updates)
+                                                .addOnCompleteListener(task -> {
+                                                    isAdminHabilitado = true; //restaurante.setHabilitado(true)
+                                                    btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                                    Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                                });
                                     }
                                 })
                                 .setNegativeButton("Cancelar", null)
