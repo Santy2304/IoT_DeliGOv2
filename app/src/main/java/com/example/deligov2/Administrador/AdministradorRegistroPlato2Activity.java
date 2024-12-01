@@ -15,5 +15,7 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_administrador_registro_plato_parte2);
 
+        // Lógica para la actividad de registro de plato parte 2 (imagenes)
+
     }
 }
