@@ -1,0 +1,71 @@
+package com.example.deligov2.DTO;
+
+import java.io.Serializable;
+
+public class Platillo implements Serializable {
+
+    private String id;
+    private String nombre;
+    private String descripcion;
+    private float precio;
+    private String idRestaurante;
+    private int cantVentaTotal;
+    private boolean visibilidad;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getIdRestaurante() {
+        return idRestaurante;
+    }
+
+    public void setIdRestaurante(String idRestaurante) {
+        this.idRestaurante = idRestaurante;
+    }
+
+    public int getCantVentaTotal() {
+        return cantVentaTotal;
+    }
+
+    public void setCantVentaTotal(int cantVentaTotal) {
+        this.cantVentaTotal = cantVentaTotal;
+    }
+
+    public boolean isVisibilidad() {
+        return visibilidad;
+    }
+
+    public void setVisibilidad(boolean visibilidad) {
+        this.visibilidad = visibilidad;
+    }
+}

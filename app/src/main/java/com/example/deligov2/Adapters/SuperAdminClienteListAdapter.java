@@ -4,37 +4,39 @@ package com.example.deligov2.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Cliente;
-import com.example.deligov2.Beans.RestauranteSA;
+import com.bumptech.glide.Glide;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
-import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilCliente;
+import com.example.deligov2.SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilCliente;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdminClienteListAdapter.ViewHolder>{
-    private List<Cliente> mCliente;
-    private List<Cliente> mClienteS; //Esta es la listado con el filtro
+    private List<Usuario> mCliente;
+    private List<Usuario> mClienteS; //Esta es la listado con el filtro
     private LayoutInflater mInflater;
     private Context context;
-
-
-    public SuperAdminClienteListAdapter(List<Cliente> clienteList, Context context){
+    public SuperAdminClienteListAdapter(List<Usuario> clienteList, Context context){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mCliente = clienteList;
@@ -55,7 +57,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
         holder.bindData(mCliente.get(position));
     }
 
-    public void setClientes(List<Cliente> clientes){mCliente = clientes;}
+    public void setClientes(List<Usuario> clientes){mCliente = clientes;}
 
     // Método para filtrar la lista
     public void filter(String text) {
@@ -64,7 +66,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
             mCliente.addAll(mClienteS);
         } else {
             String filterPattern = text.toLowerCase().trim();
-            for (Cliente cliente : mClienteS) {
+            for (Usuario cliente : mClienteS) {
                 if (cliente.getNombre().toLowerCase().contains(filterPattern)) {
                     mCliente.add(cliente);
                 }
@@ -92,12 +94,29 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
 
         }
 
-        public void bindData(final Cliente cliente) {
+        public void bindData(final Usuario cliente) {
             tvNombre.setText(cliente.getNombre() + " " + cliente.getApellido());
             tvDni.setText("DNI: " + cliente.getNumDocument());
             tvCorreo.setText(cliente.getCorreo());
             btHabilitar.setVisibility(View.VISIBLE);
-            iconImage.setImageResource(R.drawable.elizabeth);
+            isClienteHabilitado = cliente.isEstado();
+            // Cargar imagen desde Firebase Storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference()
+                    .child("users/" + cliente.getId() + "/profile.jpg");
+
+            storageRef.getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        Glide.with(iconImage.getContext())
+                                .load(uri)
+                                .placeholder(R.drawable.ic_loading)
+                                .error(R.drawable.ic_errorimg)
+                                .into(iconImage);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                        iconImage.setImageResource(R.drawable.ic_errorimg);
+                    });
 
             //Posteriormente se podra hacer lo mismo con botones -- Añadir código para esa lógica
             btInfo.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +124,7 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                 public void onClick(View v) {
 
                     Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilCliente.class);
-                    //intent.putExtra("id_cliente", cliente.getId());
+                    intent.putExtra("cliente_detail", cliente);
                     itemView.getContext().startActivity(intent);
                 }
             });
@@ -118,7 +137,15 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                 btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
                 btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
             }
-
+            btInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), SuperAdminVistaPerfilCliente.class);
+                    intent.putExtra("cliente_detail", cliente);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+            btInfo.setContentDescription(cliente.getId());
             btHabilitar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -130,11 +157,17 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                                 .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        isClienteHabilitado = false;
+                                        Map<String, Object> updates = new HashMap<>();
+                                        updates.put("estado", false);
+                                        FirebaseFirestore.getInstance().collection("Usuarios").document(cliente.getId())
+                                                .update(updates)
+                                                .addOnCompleteListener(task ->{
+                                                    isClienteHabilitado = false;
+                                                    btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
+                                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
+                                                    Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
+                                                });
 
-                                        btHabilitar.setImageResource(R.drawable.baseline_deactive_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_error_mediumContrast));
-                                        Toast.makeText(itemView.getContext(), "Cliente deshabilitado", Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("Cancelar", null)
@@ -147,11 +180,16 @@ public class SuperAdminClienteListAdapter extends RecyclerView.Adapter<SuperAdmi
                                 .setPositiveButton("Estoy seguro", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        isClienteHabilitado = true; //restaurante.setHabilitado(true)
-
-                                        btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
-                                        btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
-                                        Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                        Map<String, Object> updates = new HashMap<>();
+                                        updates.put("estado", true);
+                                        FirebaseFirestore.getInstance().collection("Usuarios").document(cliente.getId())
+                                                .update(updates)
+                                                .addOnCompleteListener(task -> {
+                                                    isClienteHabilitado = true; //restaurante.setHabilitado(true)
+                                                    btHabilitar.setImageResource(R.drawable.baseline_check_circle_24);
+                                                    btHabilitar.setBackgroundTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.light_green));
+                                                    Toast.makeText(itemView.getContext(), "Cliente habilitado", Toast.LENGTH_SHORT).show();
+                                                });
                                     }
                                 })
                                 .setNegativeButton("Cancelar", null)

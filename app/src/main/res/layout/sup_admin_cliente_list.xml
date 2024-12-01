@@ -7,7 +7,7 @@
 
     <com.google.android.material.card.MaterialCardView
         style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="match_parent"
+        android:layout_width="400sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
@@ -28,11 +28,11 @@
                 android:layout_height="100sp"
                 android:contentDescription="banner"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/elizabeth" />
+                app:srcCompat="@drawable/ic_loading" />
 
 
             <LinearLayout
-                android:layout_width="0sp"
+                android:layout_width="40sp"
                 android:layout_height="90sp"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1.1"
@@ -44,6 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre: Lancelot del Lago"
+                    android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -52,6 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DNI: 12345678"
+                    android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -61,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="Correo: cliente@gmail.com"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -80,8 +83,8 @@
                     android:layout_height="40sp"
                     android:layout_weight="1"
                     android:contentDescription="Información"
-                    android:onClick="vistaPerfilCliente"
                     android:visibility="visible"
+
                     app:backgroundTint="@color/light_yellow"
                     app:srcCompat="@drawable/baseline_eye_24"
                     app:tint="@color/white" />

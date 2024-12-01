@@ -16,21 +16,36 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RepartidorDetalleComidaAdapter;
-import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
 import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
-
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
+    private Usuario usuario;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
     @Override
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
+        db = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        loadUser();
+        storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_detalle_compra_delivery);
@@ -167,6 +182,18 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         Intent  intent =  new Intent(this , RepartidorCancelacionPedido.class );
         finish();
         startActivity(intent);
+    }
+    public void loadUser(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                            }
+                        }
+                    }
+                });
     }
 
 }

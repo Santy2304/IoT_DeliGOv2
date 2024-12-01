@@ -2,7 +2,6 @@ package com.example.deligov2.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.R;
 

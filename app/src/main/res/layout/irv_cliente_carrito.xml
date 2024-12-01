@@ -20,9 +20,9 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/ImageFood"
                 android:layout_width="110sp"
                 android:layout_height="120dp"
-                android:contentDescription="imageFood"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/hamburguesa_royal" />
 
@@ -59,7 +59,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/removeButton"
+                        android:id="@+id/minusButton"
                         style="?attr/materialIconButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -95,6 +95,7 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/deleteButton"
                     android:layout_width="20sp"
                     android:onClick="deleteFood"
                     android:layout_height="20sp"

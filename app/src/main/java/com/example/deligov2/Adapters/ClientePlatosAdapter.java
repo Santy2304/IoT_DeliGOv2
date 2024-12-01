@@ -1,6 +1,8 @@
 package com.example.deligov2.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Cliente;
-import com.example.deligov2.Beans.Notificaciones;
-import com.example.deligov2.Beans.Plato;
+import com.bumptech.glide.Glide;
+import com.example.deligov2.Cliente.ClientePlatoActivity;
+import com.example.deligov2.Cliente.ClienteRestaurantActivity;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdapter.ClientePlatosViewHolder> {
-    private List<Plato> listaPlatos;
+    private List<Platillo> listaPlatos;
     private Context context;
+    private OnPlatoClickListener onPlatoClickListener;
+
+
 
     @NonNull
     @Override
@@ -31,13 +39,44 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
     @Override
     public void onBindViewHolder(@NonNull ClientePlatosViewHolder holder, int position) {
-        Plato p = listaPlatos.get(position);
-        holder.plato = p;
 
+        if (listaPlatos == null || listaPlatos.isEmpty()) {
+            return; // No hacer nada si la lista está vacía
+        }
+
+        Platillo p = listaPlatos.get(position);
+        holder.plato = p;
         TextView textViewName = holder.itemView.findViewById(R.id.foodName);
         textViewName.setText(p.getNombre());
         TextView textViewPrice = holder.itemView.findViewById(R.id.foodPrecio);
         textViewPrice.setText(String.format("S/ %.2f", p.getPrecio()));
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+p.getIdRestaurante()+"/"+p.getId()+"/plato.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.ImageView);
+        }).addOnFailureListener(e -> {
+            holder.ImageView.setImageResource(R.drawable.camara_icon);
+        });
+
+
+
+        ExtendedFloatingActionButton btnAgregar = holder.itemView.findViewById(R.id.btnAgregar);
+
+
+        btnAgregar.setOnClickListener(v -> {
+            if (onPlatoClickListener != null) {
+                onPlatoClickListener.onPlatoClick(p);
+                btnAgregar.setEnabled(false);
+                btnAgregar.setBackgroundColor(Color.GRAY);
+                btnAgregar.setText("Agregado");
+                // Notifica el click a la actividad
+            }
+        });
     }
 
     @Override
@@ -47,17 +86,32 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
 
     public class ClientePlatosViewHolder extends RecyclerView.ViewHolder{
-        Plato plato;
+        Platillo plato;
+        android.widget.ImageView ImageView;
         public ClientePlatosViewHolder(@NonNull View itemView) {
             super(itemView);
+            ImageView = itemView.findViewById(R.id.foodImage);
+            ImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(itemView.getContext(), ClientePlatoActivity.class);
+                intent.putExtra("idPlato",plato.getId());
+                itemView.getContext().startActivity(intent);
+            });
+
         }
     }
 
-    public List<Plato> getListaPlatos() {
+    public interface OnPlatoClickListener {
+        void onPlatoClick(Platillo plato);
+    }
+
+    public void setOnPlatoClickListener(OnPlatoClickListener listener) {
+        this.onPlatoClickListener = listener;
+    }
+    public List<Platillo> getListaPlatos() {
         return listaPlatos;
     }
 
-    public void setListaPlatos(List<Plato> listaPlatos) {
+    public void setListaPlatos(List<Platillo> listaPlatos) {
         this.listaPlatos = listaPlatos;
     }
 

@@ -5,22 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Plato;
-import com.example.deligov2.Beans.Restaurante;
-import com.example.deligov2.Cliente.ClientePlatoActivity;
-import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.R;
-import com.example.deligov2.SuperAdmin.SuperAdminPlatillosDescription;
-import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilRepartidor;
+import com.example.deligov2.SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminPlatillosDescription;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 

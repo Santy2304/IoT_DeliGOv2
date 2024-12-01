@@ -5,22 +5,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogIn.LoginCrearCuentaTercerPaso">
+    tools:context=".LogIn.Registro.LoginCrearCuentaTercerPaso">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="12dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:visibility="invisible"
+            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:onClick="retroceder"
             android:src="@drawable/icons8_izquierda_circulo_48" />
 
@@ -28,36 +29,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="¿Dónde vives?"
-            android:fontFamily="sans-serif-condensed"
+            android:text="Agrega una foto"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif-condensed-medium"
             android:textColor="@color/light_green"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="320sp"
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewFoto"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:srcCompat="@drawable/person_24px" />
+
+
+
+        <LinearLayout
+            android:layout_width="340sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:hint="Dirección"
-            app:startIconDrawable="@drawable/location">
+            android:layout_marginTop="55sp"
+            android:background="@drawable/border_form"
+            android:backgroundTint="#FBF5F0"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btnElegirFoto"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="20"
-                android:singleLine="true" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <ImageView
-            android:layout_width="363dp"
-            android:layout_height="301dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20sp"
-            android:src="@drawable/mapa" />
-
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18sp"
+                android:layout_marginBottom="12sp"
+                android:backgroundTint="@color/md_theme_tertiary"
+                android:text="Elegir una foto"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/continuar1"
@@ -66,14 +78,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="18sp"
-                android:layout_marginBottom="12sp"
+                android:layout_marginBottom="18dp"
                 android:backgroundTint="@color/light_green"
                 android:onClick="verLoginCrearCuentaCuartoPaso"
                 android:text="  Continuar  "
                 android:textColor="@color/white"
                 android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

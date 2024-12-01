@@ -1,56 +1,83 @@
 package com.example.deligov2.Repartidor;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
 import com.example.deligov2.Beans.Comida;
-import com.example.deligov2.Beans.PedidoPorSolicitar;
 import com.example.deligov2.Beans.PedidoRepartidor;
+import com.example.deligov2.DTO.Pedido;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.bumptech.glide.Glide;
 
 public class RepartidorVistaHome extends AppCompatActivity {
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
+    private Usuario usuario;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
+    private List<Pedido> listaPedidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        loadUser();
+        storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_vista_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
         RepartidorPedidosAdapter adapter = new RepartidorPedidosAdapter();
         adapter.setContext(this);
-        ArrayList<PedidoRepartidor> lis = llenarDatos();
-        ArrayList<PedidoRepartidor> pedidosFiltrado = new ArrayList<>();
-        for(PedidoRepartidor pes : lis) {
-            if(pes.getEstado().equals("Recibido") || pes.getEstado().equals("En preparacion") ){
-                pedidosFiltrado.add(pes);
-            }
-        }
-        adapter.setListaPedidosRepartidor(pedidosFiltrado);
-        RecyclerView recyclerView = findViewById(R.id.lista);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
+        listaPedidos =  new ArrayList<Pedido>();
+        loadPedidos(()->{
+            adapter.setListaPedidosRepartidor(listaPedidos);
+            RecyclerView recyclerView = findViewById(R.id.lista);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
+            ShapeableImageView image = findViewById(R.id.shapeableImageView3);
+            storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
+            // Usa Glide para cargar la imagen
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Glide.with(this)
+                        .load(uri)
+                        .placeholder(R.drawable.user_icon) // Imagen de carga
+                        .error(R.drawable.xd)             // Imagen de error
+                        .into(image);
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
     public void verNotificacionesRepartidor(View view ){
         Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
@@ -67,114 +94,96 @@ public class RepartidorVistaHome extends AppCompatActivity {
     }
     //Metodos que redirigen apartir de los elementos del recyclerView
     public void verDetalleCompraDelivery(View view){
-        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleCompraDelivery.class);
-        //Antes de lanzar un activity seteemos algunos valores;
-        View ver = (View) view.getParent().getParent().getParent();
-        int id =  ver.getId();
-        PedidoRepartidor pedido  =new PedidoRepartidor();
-        ArrayList<PedidoRepartidor> pedidos = llenarDatos();
-        for(PedidoRepartidor p : pedidos){
-            if(p.getIdPedidoRepartidor() == id){
-                pedido = p;
-            }
-        }
-        intent.putExtra("id" ,pedido.getIdPedidoRepartidor().toString());
-        startActivity(intent);
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        listaPedidos.clear();
+                        for (QueryDocumentSnapshot document : value) {
+                            Pedido pedido = document.toObject(Pedido.class);
+
+                            if(pedido.getId().equals(view.getContentDescription().toString())){
+                                Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleMapaPedido.class);
+                                intent.putExtra("pedido" ,pedido);
+                                startActivity(intent);
+                            }
+
+                        }
+                    }
+                });
     }
     public void verDetalleMapaPedido(View view){
-        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleMapaPedido.class);
-        View ver = (View) view.getParent().getParent().getParent();
-        int id =  ver.getId();
-        PedidoRepartidor pedido  =new PedidoRepartidor();
-        ArrayList<PedidoRepartidor> pedidos = llenarDatos();
-        for(PedidoRepartidor p : pedidos){
-            if(p.getIdPedidoRepartidor() == id){
-                pedido = p;
-            }
-        }
-        intent.putExtra("idPedido",pedido.getIdPedidoRepartidor().toString());
-        intent.putExtra("DestinoTienda" , pedido.getDireccionRestaurante());
-        intent.putExtra("DestinoFinal",pedido.getDireccionDelivery());
-        startActivity(intent);
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        listaPedidos.clear();
+                        for (QueryDocumentSnapshot document : value) {
+                            Pedido pedido = document.toObject(Pedido.class);
+                            if(pedido.getId().equals(view.getContentDescription().toString())){
+                                Intent intent = new Intent(RepartidorVistaHome.this, RepartidorDetalleMapaPedido.class);
+                                intent.putExtra("pedido" ,pedido);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
     }
     public void aceptacionRepartidor2(View view ){
-        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmar acción");
+        builder.setMessage("¿Qué acción deseas realizar con esta solicitud?");
+
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción cuando se presiona "Aceptar"
+                //Se realiza una acción xd
+                Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
+                startActivity(intent);
+            }
+        });
+
+        // Botón para rechazar
+
+        // Botón para cancelar
+        builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                dialog.dismiss();
+            }
+        });
+        // Mostrar el diálogo
+        builder.create().show();
+
     }
-    public ArrayList<PedidoRepartidor> llenarDatos(){
-        ArrayList<PedidoRepartidor> pedidos = new ArrayList<>();
 
-        ArrayList<Comida> comidas1 =  new ArrayList<>();
-        ArrayList<Comida> comidas2 =  new ArrayList<>();
-
-        String[]  estados = { "Recibido" , "En preparacion" , "En camino" , "Entregado"};
-        String[]  direccionesRestaurantes = { "Av. Javier Prado Este 1234, San Borja" ,
-                 "Av. Pardo y Aliaga 789, San Isidro"
-                , "Calle Los Cedros 987, La Molina" ,
-                "Av. La Marina 256, San Miguel"};
-        String[]  direccionesDelivery = { "Av. Perú 1456, San Martín de Porres"
-                , "Av. Canadá 789, La Victoria"
-                , "Calle Las Magnolias 123, San Borja"
-                , "Av. Universitaria 1550, Los Olivos"};
-        Calendar calendar = Calendar.getInstance();
-
-        Date[]  fechas  = new Date[4];
-        for (int i = 0; i < fechas.length; i++) {
-            // Añadir i días a la fecha actual
-            calendar.add(Calendar.DAY_OF_YEAR, -i*3);
-            fechas[i] = calendar.getTime(); // Convertir a Date y almacenar en el array
-        }
-
-        comidas1.add(new Comida(1, "Pizza", 2));
-        comidas1.add(new Comida(2, "Hamburguesa", 3));
-        comidas1.add(new Comida(3, "Helado", 3));
-        comidas1.add(new Comida(4, "Pollo", 3));
-        comidas1.add(new Comida(5, "Postre", 3));
-        comidas1.add(new Comida(6, "Chaufa", 3));
-        comidas1.add(new Comida(7, "Cangreburger", 3));
-
-        comidas2.add(new Comida(10, "Tacos", 4));
-        comidas2.add(new Comida(20, "Ensalada", 1));
-        comidas2.add(new Comida(50, "Arraoz chaufa", 5));
-        comidas2.add(new Comida(24, "Pescado frito", 3));
-        comidas2.add(new Comida(34, "Pollo frito", 2));
-        comidas2.add(new Comida(24, "Pescado frito", 3));
-        comidas2.add(new Comida(34, "Pollo frito", 2));
-
-        for(int i=20 ; i<100 ;  i++){
-            PedidoRepartidor p =  new PedidoRepartidor();
-            p.setIdPedidoRepartidor(i);
-            if(i%4==0){
-                p.setEstado(estados[0]);
-                p.setDireccionRestaurante(direccionesRestaurantes[1]);
-                p.setDireccionDelivery(direccionesDelivery[2]);
-                p.setComida(comidas1);
-                p.setFecha(fechas[1]);
-            }
-            if(i%4==1){
-                p.setEstado(estados[1]);
-                p.setDireccionRestaurante(direccionesRestaurantes[3]);
-                p.setDireccionDelivery(direccionesDelivery[1]);
-                p.setComida(comidas1);
-                p.setFecha(fechas[2]);
-            }
-            if(i%4==2){
-                p.setEstado(estados[2]);
-                p.setDireccionRestaurante(direccionesRestaurantes[2]);
-                p.setDireccionDelivery(direccionesDelivery[3]);
-                p.setComida(comidas2);
-                p.setFecha(fechas[0]);
-            }
-            if(i%4==3){
-                p.setEstado(estados[3]);
-                p.setDireccionRestaurante(direccionesRestaurantes[0]);
-                p.setDireccionDelivery(direccionesDelivery[0]);
-                p.setComida(comidas2);
-                p.setFecha(fechas[2]);
-            }
-            p.setPrecioDelivery(20F +  (10 * i) );
-            pedidos.add(p);
-        }
-        return pedidos;
+    public void loadUser(){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                            }
+                        }
+                    }
+                });
     }
+
+    public void loadPedidos(Runnable onsuccess){
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        listaPedidos.clear();
+                        for (QueryDocumentSnapshot document : value) {
+                            Pedido pedido = document.toObject(Pedido.class);
+                            if(pedido.getIdRepartidor() == null && (pedido.getEstado().equals("Recibido") || pedido.getEstado().equals("En preparacion"))){
+                                listaPedidos.add(pedido);
+                            }
+                        }
+                        onsuccess.run();
+                    }
+                });
+    }
+
 }

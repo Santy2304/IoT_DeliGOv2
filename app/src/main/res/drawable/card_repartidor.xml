@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/md_theme_primaryFixedDim"/> <!-- Color de fondo -->
+    <solid android:color="@color/colorOnCustomColor1Container_highContrast"/> <!-- Color de fondo -->
     <corners android:radius="16dp"/> <!-- Radio del borde redondeado -->
-    <stroke android:width="2dp" android:color="#BCB4B4"/> <!-- Borde con un color específico y grosor -->
-    <solid android:elevation="10000dp"/> <!-- Sombra inferior -->
+    <stroke android:width="0dp" android:color="#3C3939"/> <!-- Borde con un color específico y grosor -->
+    <solid android:elevation="1000000dp"/> <!-- Sombra inferior -->
 </shape>

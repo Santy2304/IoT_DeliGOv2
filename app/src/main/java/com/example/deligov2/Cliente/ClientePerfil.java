@@ -15,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.LogIn.InicioSesion.LoginInicioActivity;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
 import com.firebase.ui.auth.AuthUI;
@@ -32,18 +33,19 @@ public class ClientePerfil extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_perfil);
 
         logout = findViewById(R.id.logOut);
         logout.setOnClickListener(view -> {
             AuthUI.getInstance().signOut(ClientePerfil.this)
-                    .addOnCompleteListener(task ->  {
-                        Intent intent = new Intent(ClientePerfil.this,LoginPrimeraVista.class);
+                    .addOnCompleteListener(task -> {
+                        Intent intent = new Intent(ClientePerfil.this, LoginInicioActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpiar pila
                         startActivity(intent);
                         finish();
-                        });
+                    });
         });
+
 
         goBackButton = findViewById(R.id.goBackButtonPerfil);
 

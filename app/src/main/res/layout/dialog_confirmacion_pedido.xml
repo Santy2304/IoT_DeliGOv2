@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tv_titulo_pedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título del Pedido"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="10dp" />
+
+    <TextView
+        android:id="@+id/tv_descripcion_pedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción del pedido aquí."
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:paddingBottom="20dp" />
+</LinearLayout>

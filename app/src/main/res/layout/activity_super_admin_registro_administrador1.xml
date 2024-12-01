@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".SuperAdmin.SuperAdminRegistroAdministrador1">
+    tools:context=".SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdministrador1">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -51,6 +51,7 @@
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/layout_border"
+        android:backgroundTint="@color/white"
         android:orientation="vertical"
         app:layout_anchorGravity="center"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
@@ -99,17 +100,29 @@
                 app:startIconDrawable="@drawable/baseline_person_outline_24" />
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <TextView
+            android:id="@+id/activity_label"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:text="Tipo de documento:"
+            android:layout_marginStart="4dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="2dp"
             android:layout_marginStart="3sp"
             android:layout_marginEnd="3sp"
             android:entries="@array/elementos"
             android:popupBackground="@drawable/spinner_border"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"/>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -161,6 +174,7 @@
                 android:layout_marginStart="8dp"
                 android:backgroundTint="@color/md_theme_error"
                 android:text="Cancelar"
+                android:visibility="invisible"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 

@@ -9,9 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.PedidoPorSolicitar;
 import com.example.deligov2.Beans.PedidoRepartidor;
-import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -19,9 +18,8 @@ import java.util.List;
 
 public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPedidosAdapter.RepartidorPedidosViewHolder> {
 
-    private List<PedidoRepartidor> listaPedidos;
+    private List<Pedido> listaPedidos;
     private Context context;
-
     @NonNull
     @Override
     public RepartidorPedidosViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,16 +28,21 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
     }
     @Override
     public void onBindViewHolder(@NonNull RepartidorPedidosViewHolder holder, int position) {
-        PedidoRepartidor e = listaPedidos.get(position) ;
+        Pedido e = listaPedidos.get(position) ;
         holder.pedido = e;
         TextView idOrder = holder.itemView.findViewById(R.id.orderIdPedidos);
-        idOrder.setText("#" + e.getIdPedidoRepartidor()) ;
+        idOrder.setText("#" + e.getId()) ;
         TextView state = holder. itemView.findViewById(R.id.statePedido);
         state.setText("Estado: " + e.getEstado());
         TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
-        price.setText("Precio : S/."+ e.getPrecioDelivery());
+        price.setText("Precio : S/."+ e.getCostoEnvio() );
+        FloatingActionButton button = holder.itemView.findViewById(R.id.mapa2);
+        button.setContentDescription(e.getId());
+        FloatingActionButton button2 = holder.itemView.findViewById(R.id.detalles);
+        button2.setContentDescription(e.getId());
+
         //Ahora afectamos a los botones
-        holder.itemView.setId(e.getIdPedidoRepartidor());
+        holder.itemView.setContentDescription(e.getId());
     }
     @Override
     public int getItemCount() {
@@ -47,7 +50,7 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
     }
 
     public class RepartidorPedidosViewHolder extends RecyclerView.ViewHolder {
-        PedidoRepartidor pedido;
+        Pedido pedido;
         public RepartidorPedidosViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -62,11 +65,11 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
     }
 
 
-    public List<PedidoRepartidor> getListaPedidosRepartidor() {
+    public List<Pedido> getListaPedidosRepartidor() {
         return listaPedidos;
     }
 
-    public void setListaPedidosRepartidor(List<PedidoRepartidor> listaPedidosRepartidor) {
+    public void setListaPedidosRepartidor(List<Pedido> listaPedidosRepartidor) {
         this.listaPedidos = listaPedidosRepartidor;
     }
 }

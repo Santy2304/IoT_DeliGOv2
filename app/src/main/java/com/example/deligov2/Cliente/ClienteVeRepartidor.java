@@ -23,7 +23,6 @@ public class ClienteVeRepartidor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_ve_repartidor);
 
         backButton = findViewById(R.id.salirRepartidor);

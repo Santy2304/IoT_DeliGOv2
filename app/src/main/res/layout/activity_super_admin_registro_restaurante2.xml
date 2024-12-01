@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:map="http://schemas.android.com/apk/res-auto"
-    tools:context=".SuperAdmin.SuperAdminRegistroRestaurante2">
+    tools:context=".SuperAdmin.Restaurantes.RegistrarRestaurante.SuperAdminRegistroRestaurante2">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"

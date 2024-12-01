@@ -1,6 +1,5 @@
 package com.example.deligov2.Cliente;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,67 +7,50 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
-import com.example.deligov2.Beans.Restaurante;
+import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
-import com.example.deligov2.Repartidor.PerfilRepartidor;
-import com.example.deligov2.SuperAdmin.SuperAdminAdministrador;
-import com.example.deligov2.SuperAdmin.SuperAdminHomeActivity;
-import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
-import com.example.deligov2.SuperAdmin.SuperAdminRestaurante;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ClienteHomeActivity extends AppCompatActivity {
 
     ArrayList<Restaurante> lista=new ArrayList<>();
-    String[] nombresRestaurantes = {
-            "Bembos",
-            "KFC",
-            "Pardos",
-            "Comida Saludable",
-            "Rincón Italiano"
-    };
-    String[] horariosAtencion  = {
-                "10:00 am - 20:00 pm",
-                "11:00 am - 21:00 pm",
-                "09:00 am - 23:00 pm",
-                "10:00 am - 19:00 pm",
-                "11:00 am - 20:00 pm"
-    };
-
-    int[] idsRestaurantes = {
-            1,2,3,4,5
-    };
-
     FirebaseFirestore db;
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
     MaterialButton restaurantButton;
+    Carrito carrito;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_home);
-
         db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
+        db.collection("Carritos").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        carrito = documentSnapshot.toObject(Carrito.class);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -134,15 +116,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //lista = new ArrayList<>();
-        //for(int i=0;i<5;i++){
-          //  Restaurante restaurante = new Restaurante();
-           // restaurante.setNombre(nombresRestaurantes[i]);
-            //restaurante.setHorario(horariosAtencion[i]);
-           // restaurante.setId(idsRestaurantes[i]);
-           // lista.add(restaurante);
-       // }
-
         RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
         adapter.setContext(this);
         adapter.setListaRestaurantes(lista);
@@ -173,23 +146,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
         //});
 
     }
-
-
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -19,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+        android:onClick="showBottomSheetDialog"
         app:srcCompat="@drawable/hineilll" />
 
     <LinearLayout
@@ -41,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -56,12 +58,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/logOut"
             style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/md_theme_errorContainer_mediumContrast"
             android:contentDescription="back"
+            android:onClick="salir"
             app:srcCompat="@drawable/logout_24px" />
     </LinearLayout>
 
@@ -266,6 +268,7 @@
                     android:fontFamily="sans-serif-condensed-medium"
                     android:paddingBottom="6dp"
                     android:text="998394930"
+                    android:onClick="editPhoneNumber"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -321,35 +324,6 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/saveButton"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/light_green"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Guardar"
-                android:textColor="@color/white"/>
-            <Button
-                android:id="@+id/cancelButton"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_marginStart="30dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/red"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Cancelar"
-                android:textColor="@color/white"
-                />
-        </LinearLayout>
-
 
     </LinearLayout>
 

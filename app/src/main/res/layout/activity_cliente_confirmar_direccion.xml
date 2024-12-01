@@ -7,64 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".Cliente.ClienteConfirmarDireccion">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/backButtonPlato"
-        style="?attr/floatingActionButtonSmallStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:contentDescription="back"
-        android:onClick="regresarCarrito"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/arrow_back_24px" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="36dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:gravity="center_horizontal"
-        android:text="Confirma la ubicación de entrega"
-        android:textAlignment="center"
-        android:textColor="@color/light_green"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linearLayout24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/backButtonPlato"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:menu="@menu/cliente_menu" />
+            app:srcCompat="@drawable/arrow_back_24px"
+            android:onClick="regresarCarrito" />
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="center_horizontal"
+            android:text="Confirma la ubicación de entrega"
+            android:textAlignment="center"
+            android:layout_marginTop="-20sp"
+            android:textColor="@color/light_green"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,60 +50,58 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ubicación Elegida"
                 android:fontFamily="sans-serif-condensed-medium"
+                android:text="Ubicación predeterminada: "
                 android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/ubi"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:layout_marginStart="5dp"
-                android:spinnerMode="dialog" />
+                android:text="ubicación de usuario"/>
 
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Seleccionar nueva ubicación"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="-1dp"
             android:fontFamily="sans-serif-condensed-medium"
+            android:text="Seleccionar nueva ubicación"
             android:textColor="@color/light_green"
             android:textSize="24sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Si no desea seleccionar una nueva ubicación, no toque el mapa ni añada referencias."
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-condensed-medium"
-            />
+            android:text="Si no desea seleccionar una nueva ubicación, no toque el mapa ni añada referencias." />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="240sp"
             android:scaleType="centerCrop"
-            android:src="@drawable/mapa"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textField"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Añade referencias">
+            android:layout_marginTop="10dp"
+            android:hint="Ingrese la dirección">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -136,12 +109,25 @@
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="verConfirmacion"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
             android:backgroundTint="@color/light_green"
             android:fontFamily="sans-serif-condensed"
             android:text="Confirmar"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </LinearLayout>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout24"
+        app:menu="@menu/cliente_menu" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

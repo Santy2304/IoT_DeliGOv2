@@ -2,6 +2,7 @@ package com.example.deligov2.Cliente;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +20,15 @@ import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Adapters.NotificacionesAdapter;
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Ordenes;
+import com.example.deligov2.DTO.Pedido;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,29 +36,44 @@ import java.util.ArrayList;
 public class ClienteHistorialActivity extends AppCompatActivity {
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
-    ArrayList<Ordenes> lista;
-    String[] nombreRestaurante = {
-            "Bembos",
-            "KFC",
-            "Pardos",
-            "Comida Saludable",
-            "Rincón Italiano",
-            "Eco Suchi",
-            "Fridays"
-    };
-
-    float[] precios = {
-            50,20, 32.5F,40,60,23,19
-    };
-    int[] idOrdes={
-            42,36,56,78,90,23,88
-    };
+    ArrayList<Pedido> lista;
+    FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_historial);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        ClienteHistorialAdapter adapter = new ClienteHistorialAdapter();
 
+        adapter.setContext(this);
+
+
+        db.collection("Pedidos").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Pedido pedido = document.toObject(Pedido.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
+                    if (pedido.getIdUsuario().equals(user.getUid())){
+                        lista.add(pedido);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setListaOrdenes(lista);
+        RecyclerView recyclerView = findViewById(R.id.recicler);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -81,24 +103,7 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         });
 
 
-        lista = new ArrayList<>();
-        for(int i=0;i<7;i++){
-            Ordenes ordenes = new Ordenes();
-            ordenes.setIdOrder(idOrdes[i]);
-            ordenes.setNombreRestaurante(nombreRestaurante[i]);
-            ordenes.setPrice(precios[i]);
-            ordenes.setFecha(LocalDateTime.now().plusMinutes(i*10));
-            lista.add(ordenes);
-        }
 
-
-        ClienteHistorialAdapter adapter = new ClienteHistorialAdapter();
-        adapter.setContext(this);
-        adapter.setListaOrdenes(lista);
-
-        RecyclerView recyclerView = findViewById(R.id.recicler);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
         notiButton = findViewById(R.id.noti_button);
@@ -116,28 +121,13 @@ public class ClienteHistorialActivity extends AppCompatActivity {
 
     }
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.cliente_menu, menu);
-        return true;
-    }
+        return true;}
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if(item.getItemId()==R.id.historial){
             startActivity(new Intent(this, ClienteHistorialActivity.class));
             return true;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".SuperAdmin.SuperAdminHomeActivity">
+    tools:context=".SuperAdmin.Home.SuperAdminHomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -79,13 +79,14 @@
                     android:id="@+id/imgCostumer"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    app:srcCompat="@drawable/costumer_green" />
+                    app:srcCompat="@drawable/icclient" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Cliente"
+                    android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -115,12 +116,13 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:onClick="vistaPanelRepartidor"
-                    app:srcCompat="@drawable/deliver_green2" />
+                    app:srcCompat="@drawable/icdealer" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Repartidor"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -150,12 +152,13 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:onClick="vistaPanelAdmin"
-                    app:srcCompat="@drawable/admin_green" />
+                    app:srcCompat="@drawable/icadmin" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Administrador"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -171,6 +174,7 @@
         android:layout_marginStart="6sp"
         android:layout_marginEnd="6sp"
         android:hint="Buscar"
+        android:textColorHint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/bt_reciente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -214,7 +218,7 @@
         android:layout_marginTop="6sp"
         android:backgroundTint="@color/light_green"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Más reciente"
+        android:text="Baneados"
         android:textSize="14sp"
         app:backgroundTint="@color/light_green"
         app:layout_constraintBottom_toBottomOf="parent"

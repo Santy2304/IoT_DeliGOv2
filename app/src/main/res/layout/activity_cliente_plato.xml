@@ -20,15 +20,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/arrow_back_24px" />
-    <ImageView
-        android:id="@+id/imageView2"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/carrusel"
         android:layout_width="match_parent"
-        android:layout_height="240sp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/hamburguesa_royal"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -54,9 +58,9 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        app:layout_constraintTop_toBottomOf="@+id/carrusel">
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/nameText"
             android:layout_marginTop="15sp"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -67,25 +71,26 @@
             android:textSize="35sp"
             android:textStyle="bold"/>
         <TextView
-            android:id="@+id/textView6"
-            android:layout_width="390dp"
+            android:id="@+id/detailText"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15sp"
+            android:layout_marginTop="40dp"
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
             android:textColor="@color/black"
             android:text="Disfruta de una jugosa hamburguesa con queso cheddar derretido y crujientes tiras de tocino ahumado. Servida en un suave pan con lechuga fresca, tomate y cebolla caramelizada. Acompañada de papas fritas doradas."
+            android:lineSpacingExtra="10dp"
             android:textSize="20sp"/>
 
-
+<!--
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButton"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content">
-            <!--style="?attr/materialButtonOutlinedStyle"-->
+            style="?attr/materialButtonOutlinedStyle"
             <Button
                 android:id="@+id/button1"
                 style="@style/Widget.Material3.Button.ElevatedButton"
@@ -119,15 +124,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
+    -->
+        <!--
         <Button
             android:id="@+id/addButton"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/light_green"
             android:text="Agregar al carro"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"/>-->
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

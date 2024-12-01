@@ -3,6 +3,7 @@ package com.example.deligov2.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Restaurante;
-import com.example.deligov2.Beans.RestauranteSA;
-import com.example.deligov2.Beans.VentaPlatilloSA;
+import com.bumptech.glide.Glide;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
-import com.example.deligov2.SuperAdmin.SuperAdminRegistroAdministrador1;
-import com.example.deligov2.SuperAdmin.SuperAdminRestauranteResumen;
-import com.example.deligov2.SuperAdmin.SuperAdminVistaPerfilAdministrador;
+import com.example.deligov2.SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdministrador1;
+import com.example.deligov2.SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestauranteResumen;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                 //btDeshabilitar.setVisibility(View.INVISIBLE);
                 btVer.setImageResource(R.drawable.ic_admin2);
 
+
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -116,16 +118,61 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
 
             }else{
 
-                iconImage.setImageResource(R.drawable.bembos_logo);
-                tvGanancia.setText("S/"+ restaurante.getMonto());
-                tvNombre.setText(restaurante.getNombre());
-                tvAdmin.setText("Admin: "+restaurante.getAdmin());
-                btHabilitar.setVisibility(View.VISIBLE);
-                //btDeshabilitar.setVisibility(View.INVISIBLE);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("administradores")
+                        .document(restaurante.getAdmin())
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+
+                            //iconImage.setImageResource(R.drawable.bembos_logo);
+                            tvGanancia.setText("S/"+ restaurante.getMonto());
+                            tvNombre.setText(restaurante.getNombre());
+                            btHabilitar.setVisibility(View.VISIBLE);
+                            //btDeshabilitar.setVisibility(View.INVISIBLE);
+
+                            if (documentSnapshot.exists()) {
+                                String admin = documentSnapshot.getString("nombre") + " "+ documentSnapshot.getString("apellido");
+                                if (admin != null && !admin.isEmpty()) {
+                                    tvAdmin.setText("Admin: " + admin);
+                                } else {
+                                    tvAdmin.setText("Admin: Sin nombre");
+                                }
+                            } else {
+                                tvAdmin.setText("Admin: No encontrado");
+                            }
+
+                            Log.d("IMAGEN ADAPTER","AJUAAA0" + restaurante.getId());
+                            // Cargar imagen desde Firebase Storage
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageRef = storage.getReference()
+                                    .child("restaurantes/" + restaurante.getId() + "/logo.jpg");
+
+                            storageRef.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        Glide.with(iconImage.getContext())
+                                                .load(uri)
+                                                .placeholder(R.drawable.ic_loading)
+                                                .error(R.drawable.ic_errorimg)
+                                                .into(iconImage);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                                        iconImage.setImageResource(R.drawable.ic_errorimg);
+                                    });
+
+                        })
+                        .addOnFailureListener(e -> {
+                            tvAdmin.setText("Admin: Error");
+                            Log.e("Firestore", "Error al obtener el administrador: ", e);
+                        });
+
                 btVer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(itemView.getContext(), SuperAdminRestauranteResumen.class);
+                        intent.putExtra("res",restaurante);
+
+                        Log.d("RESTAURANTE LIST ADAPTER0","FUNCIONA: "+restaurante.getId()+"-"+restaurante.getAdmin());
                         itemView.getContext().startActivity(intent);
                     }
                 });

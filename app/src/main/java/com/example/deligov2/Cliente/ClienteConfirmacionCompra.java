@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,71 +19,35 @@ import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ClienteConfirmacionCompra extends AppCompatActivity {
-
+    TextView id;
     Button backMenuButton;
     Button trackingButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cliente_confirmacion_compra);
+        Intent intent = getIntent();
+        String idPedido = intent.getStringExtra("id");
+
+        id = findViewById(R.id.idCompra);
+        id.setText("#"+idPedido);
 
         backMenuButton = findViewById(R.id.goToMenu);
         trackingButton = findViewById(R.id.followOrderButton);
 
         backMenuButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this,ClienteHomeActivity.class);
-            startActivity(intent);
+            Intent intent1 = new Intent(this,ClienteHomeActivity.class);
+            startActivity(intent1);
+            finish();
         });
 
         trackingButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this,ClienteTrackingActivity.class);
-            startActivity(intent);
+            Intent intent1 = new Intent(this,ClienteTrackingActivity.class);
+            intent1.putExtra("id",idPedido);
+            startActivity(intent1);
+            finish();
         });
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 
-
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.cliente_menu, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId()==R.id.historial){
-            startActivity(new Intent(this, ClienteHistorialActivity.class));
-            return true;
-        } else if (item.getItemId()==R.id.restaurant) {
-            startActivity(new Intent(this, ClienteRestaurantActivity.class));
-            return true;
-        } else if (item.getItemId()==R.id.profile) {
-            startActivity(new Intent(this, ClientePerfil.class));
-            return true;
-        }else{
-            return super.onOptionsItemSelected(item);
-
-        }
-
-    }
 }
