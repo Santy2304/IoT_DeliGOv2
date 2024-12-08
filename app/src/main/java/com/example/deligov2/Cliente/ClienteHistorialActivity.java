@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class ClienteHistorialActivity extends AppCompatActivity {
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
-    ArrayList<Pedido> lista;
+    ArrayList<Pedido> lista = new ArrayList<>();
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
@@ -48,9 +48,7 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         ClienteHistorialAdapter adapter = new ClienteHistorialAdapter();
-
         adapter.setContext(this);
-
 
         db.collection("Pedidos").addSnapshotListener((snapshot, error)->{
             if (error != null) {
@@ -70,11 +68,11 @@ public class ClienteHistorialActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+
         adapter.setListaOrdenes(lista);
         RecyclerView recyclerView = findViewById(R.id.recicler);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.historial);

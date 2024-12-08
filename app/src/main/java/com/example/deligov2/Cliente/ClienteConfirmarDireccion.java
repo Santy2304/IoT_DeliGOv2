@@ -84,7 +84,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
         confirmarButton = findViewById(R.id.confirm_Button);
         address =  findViewById(R.id.address);
         Intent intent = getIntent();
-        List<Platillo> listaPlatillos = (List<Platillo>) intent.getSerializableExtra("listaPlatillos");
+        ArrayList<Float> listaPrecios =  (ArrayList<Float>) intent.getSerializableExtra("listaPrecios");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -139,12 +139,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 }
                                 pedido.setIdRestaurante(carrito.getIdRestaurante());
                                 pedido.setIdListaPlatos(carrito.getIdListaPlatos());
-                                ArrayList<Float> preciosActuales = new ArrayList<>();
-
-                                for (Platillo platillo : listaPlatillos) {
-                                    preciosActuales.add(platillo.getPrecio());
-                                }
-
+                                pedido.setPreciosActuales(listaPrecios);
                                 pedido.setId(generarIdAleatorio());
                                 pedido.setListaCantidades(carrito.getListaCantidades());
                                 pedido.setIdUsuario(user.getUid());

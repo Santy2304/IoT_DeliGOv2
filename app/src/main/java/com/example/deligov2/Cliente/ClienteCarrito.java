@@ -148,7 +148,7 @@ public class ClienteCarrito extends AppCompatActivity {
                     .addOnSuccessListener(unused -> {
                         Log.d("msg-test","Data guardada exitosamente");
                         Intent intent = new Intent(this, ClienteConfirmarDireccion.class);
-                        intent.putExtra("listaPlatillos", (Serializable) listaActualizadaPlatos);
+                        intent.putExtra("listaPrecios", preciosActuales);
                         startActivity(intent);
                     })
                     .addOnFailureListener(e -> e.printStackTrace());
