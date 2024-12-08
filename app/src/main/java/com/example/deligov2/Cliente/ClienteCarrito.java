@@ -119,10 +119,6 @@ public class ClienteCarrito extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
-
-
-
-
         orderButton.setOnClickListener(view -> {
             List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
             List<Integer> listaActualizadaCantidades = adapter.getCantidades();

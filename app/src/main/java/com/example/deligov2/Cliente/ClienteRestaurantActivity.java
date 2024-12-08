@@ -60,7 +60,11 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                        carrito  = documentSnapshot.toObject(Carrito.class);
+                        listaIdPlatos.addAll(carrito.getIdListaPlatos());
+
                     }
+                    adapter.notifyDataSetChanged();
+
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
@@ -87,6 +91,8 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         adapter = new ClientePlatosAdapter();
         adapter.setContext(this);
         adapter.setListaPlatos(lista);
+        adapter.setListaIdsEnCarrito(listaIdPlatos);
+
         adapter.setOnPlatoClickListener(plato -> {
             // Agregar plato al arreglo
             listaPlatosSeleccionados.add(plato);
