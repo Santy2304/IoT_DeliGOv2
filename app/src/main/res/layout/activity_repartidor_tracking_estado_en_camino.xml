@@ -95,15 +95,11 @@
 
         </LinearLayout>
 
-        <fragment
-            android:id="@+id/mapR"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:name="com.google.android.libraries.navigation.SupportNavigationFragment"
+            android:id="@+id/navigation_fragment"
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="4"
-            map:cameraZoom="20"
-            map:uiRotateGestures="true"
-            map:uiZoomControls="true" />
+            android:layout_height="350sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

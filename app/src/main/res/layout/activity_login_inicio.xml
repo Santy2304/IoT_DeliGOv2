@@ -47,7 +47,7 @@
             android:layout_marginTop="30sp"
             android:id="@+id/linearLayout"
             android:layout_width="348dp"
-            android:layout_height="379dp"
+            android:layout_height="348dp"
             android:background="@drawable/border_form"
             android:backgroundTint="#FBF5F0"
             android:layout_gravity="center"

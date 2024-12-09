@@ -270,7 +270,7 @@
                     android:text="998394930"
                     android:onClick="editPhoneNumber"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
             </LinearLayout>
 

@@ -138,6 +138,7 @@
             android:backgroundTint="@color/light_green"
             android:contentDescription="filtro"
             app:srcCompat="@drawable/filterpx"
+            android:onClick="verOtros"
             app:tint="@color/white" />
     </LinearLayout>
 

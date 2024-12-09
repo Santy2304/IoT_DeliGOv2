@@ -97,6 +97,7 @@ public class LoginCrearCuentaSegundoPaso extends AppCompatActivity implements On
         LatLng defaultLocation = new LatLng(-12.0464, -77.0428); // Lima, Perú
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15));
         mMap.setOnMapClickListener(latLng -> {
+            latLng.toString();
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicación seleccionada"));
             selectedLocation = latLng;

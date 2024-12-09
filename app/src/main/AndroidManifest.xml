@@ -5,13 +5,16 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.IMAGE_CAPTURE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -40,7 +43,7 @@
         </activity> <!-- Para google maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCjWH_98tHjw4r9sEDaLCC1rD6oDZXbfeU" />
+            android:value="AIzaSyDuXiWeYB_ZQNkarlXUNhQdshsVjNU7yYI" />
 
         <activity
             android:name=".NotiActivity"
@@ -226,9 +229,7 @@
         <activity
             android:name=".SuperAdmin.Home.SuperAdminHomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".Repartidor.RepartidorHomeActivity"
-            android:exported="false" />
+
         <activity
             android:name=".LogIn.RecuperarContra.LoginRecuperarPasswordPrimerPaso"
             android:exported="false" />
