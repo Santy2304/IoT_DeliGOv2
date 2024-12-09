@@ -127,7 +127,7 @@
             android:layout_margin="16dp">
 
             <Button
-                android:id="@+id/finalizarRegistroPlato"
+                android:id="@+id/btnFinalizar"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
