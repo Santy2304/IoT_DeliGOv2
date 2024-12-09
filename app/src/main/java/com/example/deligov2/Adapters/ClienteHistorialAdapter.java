@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Ordenes;
 import com.example.deligov2.Cliente.ClienteDetalleCompra;
@@ -22,6 +24,8 @@ import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -58,6 +62,19 @@ public class ClienteHistorialAdapter extends RecyclerView.Adapter<ClienteHistori
         TextView textViewHorario = holder.itemView.findViewById(R.id.fechaHistorial);
         textViewHorario.setText(fechaFormateada);
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+o.getIdRestaurante()+"/logo.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.imagen);
+        }).addOnFailureListener(e -> {
+            holder.imagen.setImageResource(R.drawable.camara_icon);
+        });
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("restaurantes").document(o.getIdRestaurante()).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -92,9 +109,11 @@ public class ClienteHistorialAdapter extends RecyclerView.Adapter<ClienteHistori
 
     public class HistorialViewHolder extends RecyclerView.ViewHolder{
         Pedido ordenes;
+        ImageView imagen;
         public HistorialViewHolder(@NonNull View itemView) {
             super(itemView);
             TextView button = itemView.findViewById(R.id.toDetails);
+            imagen = itemView.findViewById(R.id.img);
             button.setOnClickListener(view -> {
 
                 if (ordenes.getEstado().equals("Entregado")){

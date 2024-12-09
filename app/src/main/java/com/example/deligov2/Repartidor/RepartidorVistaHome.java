@@ -156,7 +156,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
         builder.create().show();
 
     }
-
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -169,7 +168,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
                     }
                 });
     }
-
     public void loadPedidos(Runnable onsuccess){
         db.collection("Pedidos")
                 .addSnapshotListener((value, error) -> {
@@ -184,6 +182,10 @@ public class RepartidorVistaHome extends AppCompatActivity {
                         onsuccess.run();
                     }
                 });
+    }
+
+    public void verOtros(View view){
+        startActivity(new Intent(this , RepartidorTrackingEstadoEnCamino.class));
     }
 
 }

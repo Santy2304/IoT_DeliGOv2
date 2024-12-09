@@ -53,6 +53,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
+            android:onClick="showBottomSheetDialog"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
             app:srcCompat="@drawable/hineilll" />
 
@@ -249,6 +250,7 @@
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/baseline_edit_24"
                         android:drawablePadding="10dp"
+                        android:onClick="editPhoneNumber"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:paddingStart="16dp"
                         android:paddingTop="6dp"
@@ -311,34 +313,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/saveButton"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/light_green"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Guardar"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/cancelButton"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:backgroundTint="@color/red"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Cancelar"
-                    android:textColor="@color/white" />
-            </LinearLayout>
 
 
         </LinearLayout>
