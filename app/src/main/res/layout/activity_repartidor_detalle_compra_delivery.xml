@@ -55,8 +55,9 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"/>
 
+
             <Button
-                android:id="@+id/btn_rechazar"
+                android:id="@+id/btn_aceptar"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="155sp"
                 android:layout_height="wrap_content"
@@ -69,9 +70,8 @@
                 android:textSize="18sp"
                 app:iconSize="25sp"
                 app:icon="@drawable/intento"
-                android:onClick="rechazarPedido"
+                android:onClick="aceptarPedido"
                 />
-
         </LinearLayout>
 
         <TextView
