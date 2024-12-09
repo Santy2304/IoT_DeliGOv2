@@ -18,7 +18,7 @@ import com.example.deligov2.LogIn.Registro.LoginCrearCuentaPrimerPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaTercerPaso;
 import com.example.deligov2.R;
-import com.example.deligov2.Repartidor.RepartidorVistaHome;
+import com.example.deligov2.Repartidor.HomePedidos.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;

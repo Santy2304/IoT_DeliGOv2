@@ -40,7 +40,8 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
         button.setContentDescription(e.getId());
         FloatingActionButton button2 = holder.itemView.findViewById(R.id.detalles);
         button2.setContentDescription(e.getId());
-
+        FloatingActionButton button3 = holder.itemView.findViewById(R.id.aceptacionRepartidor2);
+        button3.setContentDescription(e.getId());
         //Ahora afectamos a los botones
         holder.itemView.setContentDescription(e.getId());
     }

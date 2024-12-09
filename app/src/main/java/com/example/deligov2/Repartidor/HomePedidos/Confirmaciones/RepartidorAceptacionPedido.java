@@ -1,4 +1,4 @@
-package com.example.deligov2.Repartidor;
+package com.example.deligov2.Repartidor.HomePedidos.Confirmaciones;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,13 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.ProcesosTracking.RepartidorTrackingEstadoRecibido;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,14 +20,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class RepartidorTrackingFinalizado extends AppCompatActivity {
+public class RepartidorAceptacionPedido extends AppCompatActivity {
+
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
     private Usuario usuario;
     private FirebaseStorage storage ;
     private StorageReference storageRef;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -33,15 +37,21 @@ public class RepartidorTrackingFinalizado extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_repartidor_tracking_finalizado);
-
-
-
+        setContentView(R.layout.activity_repartidor_aceptacion_pedido);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
-    public void verListaPrincipal(View view){
-        Intent intent = new Intent(this, RepartidorVistaHome.class);
+    public void verTrackingPedidoRepartidor(View view){
+        Intent intent = new Intent(RepartidorAceptacionPedido.this, RepartidorTrackingEstadoRecibido.class);
         startActivity(intent);
+    }
+
+    public void verRepartidorConfirmacionTomarPedido(View view){
+
     }
 
     public void loadUser(){
@@ -56,4 +66,5 @@ public class RepartidorTrackingFinalizado extends AppCompatActivity {
                     }
                 });
     }
+
 }

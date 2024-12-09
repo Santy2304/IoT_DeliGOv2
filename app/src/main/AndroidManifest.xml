@@ -85,37 +85,37 @@
             android:name=".Repartidor.PerfilRepartidor"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorTrackingFinalizado"
+            android:name=".Repartidor.ProcesosTracking.RepartidorTrackingFinalizado"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorTrackingEstadoRecibido"
+            android:name=".Repartidor.ProcesosTracking.RepartidorTrackingEstadoRecibido"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorTrackingEstadoEnPreparacion"
+            android:name=".Repartidor.ProcesosTracking.RepartidorTrackingEstadoEnPreparacion"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorTrackingEstadoEnCamino"
+            android:name=".Repartidor.ProcesosTracking.RepartidorTrackingEstadoEnCamino"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorCancelacionPedido"
+            android:name=".Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido"
             android:exported="false" />
         <activity
             android:name=".Repartidor.RepartidorHistorial"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorAceptacionPedido"
+            android:name=".Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorDetalleMapaPedido"
+            android:name=".Repartidor.HomePedidos.RepartidorDetalleMapaPedido"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorDetalleCompraDelivery"
+            android:name=".Repartidor.HomePedidos.RepartidorDetalleCompraDelivery"
             android:exported="false" />
         <activity
             android:name=".Repartidor.RepartidorNotificaciones"
             android:exported="false" />
         <activity
-            android:name=".Repartidor.RepartidorVistaHome"
+            android:name=".Repartidor.HomePedidos.RepartidorVistaHome"
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilRepartidor"

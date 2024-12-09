@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Repartidor.RepartidorDetalleMapaPedido">
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    tools:context=".Repartidor.HomePedidos.RepartidorDetalleMapaPedido">
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -46,13 +47,18 @@
             android:textAlignment="center"
             />
 
-        <ImageView
-            android:layout_marginTop="18sp"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center_horizontal"
+        <fragment
+            android:id="@+id/mapRestaurant"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_marginTop="10sp"
             android:layout_width="370sp"
-            android:layout_height="550sp"
-            android:src="@drawable/mapa"/>
+            android:layout_height="420sp"
+            map:cameraZoom="20"
+            android:layout_gravity="center_horizontal"
+            map:uiRotateGestures="true"
+            map:uiZoomControls="true"
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"

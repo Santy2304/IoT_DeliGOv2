@@ -20,6 +20,8 @@ import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.HomePedidos.RepartidorDetalleCompraDelivery;
+import com.example.deligov2.Repartidor.HomePedidos.RepartidorDetalleMapaPedido;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

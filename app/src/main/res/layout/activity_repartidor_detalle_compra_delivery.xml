@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Repartidor.RepartidorDetalleCompraDelivery">
+    tools:context=".Repartidor.HomePedidos.RepartidorDetalleCompraDelivery">
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -75,12 +75,12 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/totalProductos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-
             android:layout_marginStart="15sp"
             android:text="Total de productos: 5"/>
 

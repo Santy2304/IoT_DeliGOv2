@@ -112,12 +112,12 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="?attr/floatingActionButtonSmallStyle"
-                android:id="@+id/aceptar"
+                android:id="@+id/aceptacionRepartidor2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18sp"
                 android:contentDescription="Aceptar"
-                android:onClick="aceptacionRepartidor2"
+                android:onClick="aceptarPedido"
                 app:backgroundTint="@color/light_green"
                 app:srcCompat="@drawable/check_circle_24px"
                 app:tint="@color/white" />

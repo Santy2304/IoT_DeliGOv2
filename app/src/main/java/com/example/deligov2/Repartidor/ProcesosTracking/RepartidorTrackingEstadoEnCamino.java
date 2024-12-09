@@ -1,8 +1,7 @@
-package com.example.deligov2.Repartidor;
+package com.example.deligov2.Repartidor.ProcesosTracking;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,15 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceTypes;
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.api.net.SearchByTextRequest;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +20,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.google.android.gms.maps.GoogleMap.CameraPerspective;

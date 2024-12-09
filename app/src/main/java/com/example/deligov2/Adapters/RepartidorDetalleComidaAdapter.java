@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
+import com.example.deligov2.DTO.Platillo;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.List;
 
@@ -39,28 +43,34 @@ public class RepartidorDetalleComidaAdapter extends RecyclerView.Adapter<Reparti
     public int getItemCount() {
         return lista.size();
     }
-
     public class RepartidorDetalleComidaViewHolder extends RecyclerView.ViewHolder {
         Comida elemento;
         public RepartidorDetalleComidaViewHolder(@NonNull View itemView) {
             super(itemView);
-        }
-    }
-
+        }}
     public Context getContext() {
         return context;
     }
-
     public void setContext(Context context) {
         this.context = context;
     }
-
-
     public List<Comida> getLista() {
         return lista;
     }
-
     public void setLista(List<Comida> lista) {
         this.lista = lista;
+    }
+    public void buscarComidaPorId(String idComida, Runnable runnable){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Platos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Platillo.class)).getId()).equals(idComida)){
+                                runnable.run();
+                            }
+                        }
+                    }
+                });
     }
 }

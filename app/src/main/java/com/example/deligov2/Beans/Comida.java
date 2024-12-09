@@ -36,4 +36,6 @@ public class Comida implements Serializable {
         this.nombreComida = nombreComida;
         this.cantidad = cantidad;
     }
+    public Comida() {
+    }
 }

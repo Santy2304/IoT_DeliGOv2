@@ -14,7 +14,7 @@ import com.example.deligov2.Administrador.AdministradorRestauranteActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.LogIn.InicioSesion.LoginVistaInicialApp;
-import com.example.deligov2.Repartidor.RepartidorVistaHome;
+import com.example.deligov2.Repartidor.HomePedidos.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
