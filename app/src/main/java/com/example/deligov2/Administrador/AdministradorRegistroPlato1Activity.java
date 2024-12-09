@@ -95,7 +95,8 @@ public class AdministradorRegistroPlato1Activity extends AppCompatActivity {
             plato.setCantVentaTotal(0); // Establecer cantidad de ventas en 0 por default
 
             // Guardar el plato en la base de datos
-            String platoId = UUID.randomUUID().toString();
+            String platoId = generarId();
+            plato.setId(platoId);
             db.collection("Platos").document(platoId).set(plato)
                     .addOnSuccessListener(aVoid -> {
                         // Mostrar un mensaje de éxito
@@ -112,5 +113,11 @@ public class AdministradorRegistroPlato1Activity extends AppCompatActivity {
                     });
         });
 
+    }
+
+    private String generarId() {
+        String uuid = UUID.randomUUID().toString();
+        String[] parts = uuid.split("-");
+        return parts[0] + parts[1];
     }
 }

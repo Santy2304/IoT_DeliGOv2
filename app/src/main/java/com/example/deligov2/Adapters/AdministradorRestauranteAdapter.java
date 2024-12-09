@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,13 +55,13 @@ public class AdministradorRestauranteAdapter extends RecyclerView.Adapter<Admini
         Plato plato;
         public AdministradorRestauranteViewHolder(@NonNull View itemView) {
             super(itemView);
-            ShapeableImageView buttonDetalles = itemView.findViewById(R.id.verPlato);
+            Button buttonDetalles = itemView.findViewById(R.id.verPlato);
             buttonDetalles.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), AdministradorDetallePlatoActivity.class);
                 itemView.getContext().startActivity(intent);
             });
 
-            ShapeableImageView buttonEdit = itemView.findViewById(R.id.editarPlato);
+            Button buttonEdit = itemView.findViewById(R.id.editarPlato);
             buttonEdit.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), AdministradorEditarPlatoActivity.class);
                 itemView.getContext().startActivity(intent);
