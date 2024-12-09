@@ -51,7 +51,6 @@ public class LoginCrearCuentaSegundoPaso extends AppCompatActivity implements On
         user = firebaseAuth.getCurrentUser();
         loadUser();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_crear_cuenta_segundo_paso);
         addressInput = findViewById(R.id.addressInput);
         referenceInput = findViewById(R.id.referenceInput);

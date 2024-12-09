@@ -34,13 +34,14 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
-    private TextInputEditText adminRestaurante;
+    private MaterialTextView adminRestaurante;
     private TextInputEditText adminCorreo;
     private Usuario adminN;
     String canal2 = "importante Otro";

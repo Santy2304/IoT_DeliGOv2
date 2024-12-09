@@ -11,20 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:visibility="invisible"
-            android:clickable="false"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/goBackButton"
+            style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="retroceder"
-            android:src="@drawable/icons8_izquierda_circulo_48" />
-
+            android:visibility="invisible"
+            android:enabled="false"
+            app:srcCompat="@drawable/arrow_back_24px" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
