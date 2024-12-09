@@ -7,7 +7,7 @@
     android:background="@color/white"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     tools:context=".SuperAdmin.Restaurantes.RegistrarRestaurante.SuperAdminRegistroRestaurante2">
-
+<!--
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -28,68 +28,62 @@
             app:titleTextColor="@color/light_green" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="match_parent"
-        android:layout_height="40sp"
-        android:text="Registrar Restaurante"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.114"
-        tools:layout_editor_absoluteX="0dp" />
+-->
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linea"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/layout_border"
-        android:backgroundTint="@color/white"
         android:orientation="vertical"
-        app:layout_anchorGravity="center"
+        android:padding="6dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14">
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/goBackButton"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="back"
+            app:srcCompat="@drawable/arrow_back_24px" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Registrar Restaurante"
+            android:textColor="@color/light_green"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <SearchView
             android:id="@+id/mapSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Buscar"
-            android:iconifiedByDefault="false"
-            android:elevation="5dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bg_search"
-            />
-
+            android:elevation="5dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Buscar" />
 
         <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="8"
+            android:layout_height="400dp"
+            android:layout_marginTop="10dp"
             map:cameraZoom="20"
             map:uiRotateGestures="true"
-            map:uiZoomControls="true"
-            />
+            map:uiZoomControls="true" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:layout_weight="2"
-            android:gravity="center_vertical|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <Button
@@ -117,17 +111,18 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
     </LinearLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="130sp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation_superadmin"
-        tools:layout_editor_absoluteX="6dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="linea"
+        app:menu="@menu/bottom_navigation_superadmin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

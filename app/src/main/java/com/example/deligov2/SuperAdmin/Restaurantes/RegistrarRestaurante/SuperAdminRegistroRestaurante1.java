@@ -85,26 +85,25 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         loadUser();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_restaurante1);
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
         //Manejo del top app bar
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.log_event){
-                    Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminVistaLogEvent.class);
-                    intent.putExtra("sa",sa);
-                    startActivity(intent);
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
+//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(@NonNull MenuItem item) {
+//                if(item.getItemId()==R.id.log_event){
+//                    Intent intent = new Intent(SuperAdminRegistroRestaurante1.this, SuperAdminVistaLogEvent.class);
+//                    intent.putExtra("sa",sa);
+//                    startActivity(intent);
+//                    return true;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
