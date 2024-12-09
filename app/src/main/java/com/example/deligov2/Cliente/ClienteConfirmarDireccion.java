@@ -42,6 +42,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -70,6 +71,8 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
     FirebaseFirestore db;
     Button confirmarButton;
     Carrito carrito;
+    ArrayList<Platillo> lista = new ArrayList<>();
+
     private Usuario usuario;
     private GoogleMap mMap;
     private TextInputEditText address;
@@ -139,6 +142,33 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 }
                                 pedido.setIdRestaurante(carrito.getIdRestaurante());
                                 pedido.setIdListaPlatos(carrito.getIdListaPlatos());
+
+
+                                db.collection("Platos").addSnapshotListener((snapshot, error)->{
+                                    if (error != null) {
+                                        Log.w("msg-test", "Listen failed.", error);
+                                        return;
+                                    }
+                                    if (snapshot != null && !snapshot.isEmpty()) {
+                                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                                            Platillo platillo = document.toObject(Platillo.class);
+                                            Log.w("msg-test", "Listen failed " + document.getId());
+                                            if (carrito.getIdListaPlatos().contains(platillo.getId())) {
+                                                lista.add(platillo);
+
+                                                for (int i=0;i<lista.size();i++) {
+                                                    Platillo platilloAu = lista.get(i);
+                                                    int cantidadVendida = carrito.getListaCantidades().get(i);
+                                                    platillo.setCantVentaTotal(platillo.getCantVentaTotal() + cantidadVendida);
+                                                    db.collection("Platos").document(platillo.getId())
+                                                            .update("cantVenta", platillo.getCantVentaTotal())
+                                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "cantVenta actualizada correctamente para " + platillo.getNombre()))
+                                                            .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar cantVenta", e));
+                                                }
+                                            }
+                                        }
+                                    }});
+
                                 pedido.setPreciosActuales(listaPrecios);
                                 pedido.setId(generarIdAleatorio());
                                 pedido.setListaCantidades(carrito.getListaCantidades());

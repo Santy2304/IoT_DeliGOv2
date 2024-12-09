@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Ordenes;
+import com.example.deligov2.Cliente.ClienteDetalleCompra;
 import com.example.deligov2.Cliente.ClienteTrackingActivity;
 import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Pedido;
@@ -95,9 +96,17 @@ public class ClienteHistorialAdapter extends RecyclerView.Adapter<ClienteHistori
             super(itemView);
             TextView button = itemView.findViewById(R.id.toDetails);
             button.setOnClickListener(view -> {
-                Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
-                intent.putExtra("idOrder",ordenes.getId());
-                itemView.getContext().startActivity(intent);
+
+                if (ordenes.getEstado().equals("Entregado")){
+                    Intent intent = new Intent(itemView.getContext(), ClienteDetalleCompra.class);
+                    intent.putExtra("idOrder",ordenes.getId());
+                    itemView.getContext().startActivity(intent);
+
+                }else{
+                    Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
+                    intent.putExtra("idOrder",ordenes.getId());
+                    itemView.getContext().startActivity(intent);
+                }
             });
         }
     }

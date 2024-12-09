@@ -27,7 +27,7 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
     private List<Platillo> listaPlatos;
     private Context context;
     private OnPlatoClickListener onPlatoClickListener;
-
+    private List<String> listaIdsEnCarrito = new ArrayList<>();
 
 
     @NonNull
@@ -66,6 +66,12 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
 
         ExtendedFloatingActionButton btnAgregar = holder.itemView.findViewById(R.id.btnAgregar);
+
+        if (listaIdsEnCarrito.contains(p.getId())) {
+            btnAgregar.setEnabled(false);
+            btnAgregar.setBackgroundColor(Color.GRAY);
+            btnAgregar.setText("Agregado");
+        }
 
 
         btnAgregar.setOnClickListener(v -> {
@@ -121,5 +127,13 @@ public class ClientePlatosAdapter extends RecyclerView.Adapter<ClientePlatosAdap
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public List<String> getListaIdsEnCarrito() {
+        return listaIdsEnCarrito;
+    }
+
+    public void setListaIdsEnCarrito(List<String> listaIdsEnCarrito) {
+        this.listaIdsEnCarrito = listaIdsEnCarrito;
     }
 }
