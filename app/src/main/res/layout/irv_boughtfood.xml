@@ -36,6 +36,8 @@
 
                 <TextView
                     android:id="@+id/foodName"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed-medium"

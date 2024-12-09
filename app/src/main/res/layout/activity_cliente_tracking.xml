@@ -194,6 +194,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintTop_toBottomOf="@id/linearPrincipal">
 
         <LinearLayout
@@ -229,9 +230,10 @@
                 android:fontFamily="sans-serif-condensed-medium"
                 android:layout_gravity="start" />
             <TextView
+                android:id="@+id/costoTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Número de pedido: 42"
+                android:text="Costo Total: 42"
                 android:textColor="@color/black"
                 android:layout_marginTop="5sp"
                 android:layout_marginStart="10sp"
@@ -254,13 +256,13 @@
 
     </ScrollView>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/cliente_menu" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/cliente_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

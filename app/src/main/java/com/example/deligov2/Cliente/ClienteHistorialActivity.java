@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,6 +25,7 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,9 +39,12 @@ public class ClienteHistorialActivity extends AppCompatActivity {
     FloatingActionButton notiButton;
     FloatingActionButton carritoButton;
     ArrayList<Pedido> lista = new ArrayList<>();
+    ArrayList<Pedido> listaEnCamino = new ArrayList<>();
+    ArrayList<Pedido> listaEntregado = new ArrayList<>();
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
+    MaterialButton enCamino, Entregados;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,8 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         ClienteHistorialAdapter adapter = new ClienteHistorialAdapter();
         adapter.setContext(this);
+        enCamino = findViewById(R.id.enCaminoButton);
+        Entregados = findViewById(R.id.EntregadosButton);
 
         db.collection("Pedidos").addSnapshotListener((snapshot, error)->{
             if (error != null) {
@@ -73,10 +80,39 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recicler);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        enCamino.setOnClickListener(view -> {
+            listaEnCamino.clear();
+
+            for(int i=0;i<lista.size();i++){
+                if(!lista.get(i).getEstado().equals("Entregado")){
+                    listaEnCamino.add(lista.get(i));
+                }
+            }
+            adapter.setListaOrdenes(listaEnCamino);
+
+            adapter.notifyDataSetChanged();
+            enCamino.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+            Entregados.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+        });
+
+        Entregados.setOnClickListener(view -> {
+            listaEntregado.clear();
+
+            for(int i=0;i<lista.size();i++){
+                if(lista.get(i).getEstado().equals("Entregado")){
+                    listaEntregado.add(lista.get(i));
+                }
+            }
+            adapter.setListaOrdenes(listaEntregado);
+
+            adapter.notifyDataSetChanged();
+            enCamino.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+            Entregados.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+        });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         bottomNavigationView.setSelectedItemId(R.id.historial);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

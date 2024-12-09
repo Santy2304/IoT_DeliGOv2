@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,70 +29,67 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteCarritoAdapter;
 import com.example.deligov2.Adapters.ClienteDetalleCompraAdapter;
 import com.example.deligov2.Beans.VentaPlatilloSA;
+import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.Pedido;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.NotiActivity;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.slider.Slider;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ClienteTrackingActivity extends AppCompatActivity {
-
+    FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
     String channelId = "noti";
     Button repartidorButton;
     TextView recibidoText;
     TextView preparacionText;
     TextView listoText;
-    TextView caminoText;
+    TextView caminoText, costoTotal,dateText;
     TextView entregadoTexT;
     Button qrButton;
     Slider slider;
     FloatingActionButton backButton;
-    ArrayList<VentaPlatilloSA> lista;
-    String[] nombresPlatos = {
-            "Hamburguesa Royal",
-            "Americana",
-            "Tocino con Queso",
-            "La Peruana",
+    ArrayList<Platillo> lista = new ArrayList<>();
+    ArrayList<String> idsPlatos = new ArrayList<>();
+    ArrayList<Integer> cantidades = new ArrayList<>();
+    ArrayList<Float> listaPrecios = new ArrayList<>();
 
-    };
-    float[] Precios  = {
-            8,
-            13,
-            11,
-            15,
-    };
-    int[] idRestaurante ={
-            1,1,1,1
-    };
-
-    int[] cantidad = {
-            1,5,2,3
-    };
-    int[] idPlato = {
-            1,2,3,4
-    };
+    ClienteDetalleCompraAdapter adapter;
+    String idPedido;
+    Pedido pedido;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_tracking);
-
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
         crearCanalNotificacion();
         slider = findViewById(R.id.slider);
-
-        String title;
-        String content;
-
         recibidoText = findViewById(R.id.recibido);
         preparacionText = findViewById(R.id.preparacion);
         listoText = findViewById(R.id.listo);
         caminoText = findViewById(R.id.camino);
         entregadoTexT = findViewById(R.id.entregado);
-
-
+        idPedido = getIntent().getStringExtra("idOrder");
+        costoTotal = findViewById(R.id.costoTotal);
+        dateText = findViewById(R.id.hourText);
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(Slider slider, float value, boolean fromUser) {
@@ -138,21 +136,59 @@ public class ClienteTrackingActivity extends AppCompatActivity {
             }
         });
 
+        db.collection("Pedidos").document(idPedido).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        pedido = documentSnapshot.toObject(Pedido.class);
+                        idsPlatos = pedido.getIdListaPlatos();
+                        cantidades = pedido.getListaCantidades();
+                        listaPrecios = pedido.getPreciosActuales();
+                        db.collection("Platos").addSnapshotListener((snapshot, error)->{
+                            if (error != null) {
+                                Log.w("msg-test", "Listen failed.", error);
+                                return;
+                            }
+                            if (snapshot != null && !snapshot.isEmpty()) {
+                                lista.clear();
+                                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                                    Platillo platillo = document.toObject(Platillo.class);
+                                    Log.w("msg-test", "Listen failed "+ document.getId());
+                                    if (idsPlatos.contains(platillo.getId())){
+                                        lista.add(platillo);
+                                    }
+                                }
+
+                                float montoTotal = pedido.getCostoEnvio();
+                                for (int i = 0; i < lista.size(); i++) {
+                                    montoTotal += listaPrecios.get(i) * cantidades.get(i);
+                                }
+
+                                costoTotal.setText(String.format("S/ %.2f",montoTotal));
+
+                                Timestamp timestamp = pedido.getHora();
+                                Date date = timestamp.toDate();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+                                String fechaFormateada = dateFormat.format(date);
+                                dateText.setText(fechaFormateada);
+
+                                adapter = new ClienteDetalleCompraAdapter();
+                                adapter.setContext(this);
+                                adapter.setListafood(lista);
+                                adapter.setListaCantidades(cantidades);
+                                adapter.setListaPrecios(listaPrecios);
+
+                                RecyclerView recyclerView = findViewById(R.id.recycler);
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(ClienteTrackingActivity.this));
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
 
-        lista = new ArrayList<>();
-        for(int i=0;i<4;i++){
-            VentaPlatilloSA ventaPlatilloSA = new VentaPlatilloSA(idPlato[i],nombresPlatos[i],Precios[i],cantidad[i],idRestaurante[i]);
-            lista.add(ventaPlatilloSA);
-        }
-
-        ClienteDetalleCompraAdapter adapter = new ClienteDetalleCompraAdapter();
-        adapter.setContext(this);
-        adapter.setListafood(lista);
-
-        RecyclerView recyclerView = findViewById(R.id.recycler);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         repartidorButton = findViewById(R.id.repartidorButton);
         qrButton = findViewById(R.id.qrButton);

@@ -43,7 +43,7 @@ public class ClienteConfirmacionCompra extends AppCompatActivity {
 
         trackingButton.setOnClickListener(view -> {
             Intent intent1 = new Intent(this,ClienteTrackingActivity.class);
-            intent1.putExtra("id",idPedido);
+            intent1.putExtra("idOrder",idPedido);
             startActivity(intent1);
             finish();
         });
