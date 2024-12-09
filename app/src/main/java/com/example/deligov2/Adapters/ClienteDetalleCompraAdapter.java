@@ -4,16 +4,20 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Notificaciones;
 import com.example.deligov2.Beans.Ordenes;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +49,20 @@ public class ClienteDetalleCompraAdapter extends RecyclerView.Adapter<ClienteDet
 
         TextView textViewPrice = holder.itemView.findViewById(R.id.foodPrice);
         textViewPrice.setText(String.format("S/ %.2f",listaPrecios.get(position)));
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+v.getIdRestaurante()+"/"+v.getId()+"/plato.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.imageView);
+        }).addOnFailureListener(e -> {
+            holder.imageView.setImageResource(R.drawable.camara_icon);
+        });
+
     }
 
     @Override
@@ -55,8 +73,11 @@ public class ClienteDetalleCompraAdapter extends RecyclerView.Adapter<ClienteDet
 
     public class ClienteDetalleViewHolder extends RecyclerView.ViewHolder{
         Platillo plato;
+        ImageView imageView;
         public ClienteDetalleViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.imagen);
+
         }
     }
 
