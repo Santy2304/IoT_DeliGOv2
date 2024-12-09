@@ -83,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:hint="Nombre del restaurante"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:inputType="text"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -97,12 +98,14 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:fontFamily="sans-serif-condensed-medium"
+                />
 
             <Spinner
                 android:id="@+id/spinner_categoria"
-                android:layout_width="320sp"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
@@ -125,6 +128,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/hora_inicio"
+                        android:fontFamily="sans-serif-condensed-medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
@@ -142,6 +146,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/hora_fin"
+                        android:fontFamily="sans-serif-condensed-medium"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
@@ -192,6 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:backgroundTint="@color/light_green"
                     android:onClick="vistaRegistroRestaurante2"
                     android:text="Continuar"
@@ -203,6 +210,7 @@
                     style="@style/Widget.Material3.Button.ElevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:layout_marginStart="16dp"
                     android:backgroundTint="@color/md_theme_error"
                     android:onClick="vistaPanelRestaurante"

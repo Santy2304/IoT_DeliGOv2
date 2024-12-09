@@ -40,12 +40,11 @@
             <Spinner
                 android:outlineAmbientShadowColor="@color/black"
                 android:id="@+id/spinnerDocs"
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:entries="@array/docs"
-                android:textColor="#000000"
-                android:backgroundTint="#FBF5F0"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:spinnerMode="dialog" />
 
 
@@ -63,6 +62,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/numeroDocumentoId"
                     android:inputType="text"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:maxLength="20"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -78,6 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/telefonoText"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:inputType="text"
                     android:maxLength="20"
                     android:singleLine="true" />
@@ -97,6 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:focusable="false"
                     android:inputType="none"
                     android:maxLength="20"
@@ -111,6 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:layout_marginTop="18sp"
                 android:layout_marginBottom="12sp"
                 android:backgroundTint="@color/light_green"

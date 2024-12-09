@@ -50,27 +50,26 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_administrador2);
 
         db = FirebaseFirestore.getInstance();
 
 
         //Manejo del top app bar
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
-        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.log_event){
-                    Intent intent = new Intent(SuperAdminRegistroAdministrador2.this, SuperAdminVistaLogEvent.class);
-                    startActivity(intent);
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
+//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+//
+//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(@NonNull MenuItem item) {
+//                if(item.getItemId()==R.id.log_event){
+//                    Intent intent = new Intent(SuperAdminRegistroAdministrador2.this, SuperAdminVistaLogEvent.class);
+//                    startActivity(intent);
+//                    return true;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
