@@ -1,5 +1,7 @@
 package com.example.deligov2.Repartidor.HomePedidos;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.example.deligov2.DTO.Pedido;
 
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
+import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,6 +32,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RepartidorDetalleMapaPedido extends AppCompatActivity implements OnMapReadyCallback {
     private FirebaseAuth firebaseAuth;
@@ -60,6 +66,7 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
             //Buscamos el idDelPedido
             loadPedidos(getIntent().getStringExtra("pedido") , ()->{
                 TextView title = findViewById(R.id.title);
+                ( findViewById(R.id.btn_aceptar) ).setContentDescription(pedidoSupreme.getId());
                 title.setText("Mapa de pedido #" +  pedidoSupreme.getId());
                 TextView destinoTienda = findViewById(R.id.destinoTienda);
                 destinoTienda.setText( pedidoSupreme.getDireccion());
@@ -77,7 +84,7 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
 
                 //Seteamos el mapa
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapRestaurant);
-                mapFragment.getMapAsync(this);
+                mapFragment.getMapAsync(RepartidorDetalleMapaPedido.this);
 
 
                 //
@@ -89,10 +96,7 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
         onBackPressed();
     }
 
-    public void aceptacionRepartidor2(View view ) {
-        Intent intent = new Intent(this, RepartidorAceptacionPedido.class);
-        startActivity(intent);
-    }
+
 
     public void loadUser(Runnable run){
         db.collection("Usuarios")
@@ -131,5 +135,54 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
             mMap.addMarker(new MarkerOptions().position(ubicacion).title(resUbi));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 15));
         }
+    }
+
+
+    public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("idRepartidor", idRepartidor);
+        updates.put("estado", "En camino");
+
+        // Realizar el update
+        db.collection("Pedidos")
+                .document(idPedido)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    // Éxito
+                    onsuccess.run();
+                })
+                .addOnFailureListener(e -> {
+                    // Error
+                    onfailure.run();});
+    }
+    public void aceptarPedido(View view ){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorDetalleMapaPedido.this);
+        builder.setTitle("Confirmar acción");
+        builder.setMessage("¿Qué acción deseas realizar con esta solicitud?");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción cuando se presiona "Aceptar"
+                aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
+                            startActivity(new Intent(RepartidorDetalleMapaPedido.this, RepartidorAceptacionPedido.class));
+                        }, ()->{
+                            Intent intent = new Intent(RepartidorDetalleMapaPedido.this, RepartidorCancelacionPedido.class);
+                            startActivity(intent);
+                        }
+                );
+
+            }
+        });
+
+
+        builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                dialog.dismiss();
+            }
+        });
+        // Mostrar el diálogo
+        builder.create().show();
     }
 }

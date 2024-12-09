@@ -47,7 +47,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
     private Usuario usuario;
     private FirebaseStorage storage ;
     private StorageReference storageRef;
-    private List<Pedido> listaPedidos;
+    private List<Pedido> listaPedidos =  new ArrayList<Pedido>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -75,6 +75,14 @@ public class RepartidorVistaHome extends AppCompatActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
                 });
             },()->{
+                RepartidorPedidosAdapter adapter = new RepartidorPedidosAdapter();
+                adapter.setContext(this);
+                loadPedidos(()->{
+                    adapter.setListaPedidosRepartidor(listaPedidos);
+                    RecyclerView recyclerView = findViewById(R.id.lista);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
+                });
                 //Fallo
                 //Se debería bloquear la pantalla
                 showNonCancelableDialog();
@@ -138,8 +146,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // Acción cuando se presiona "Aceptar"
                 aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
-                    Intent intent = new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
-                    startActivity(intent);
+                    startActivity(new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class));
                 }, ()->{
                     Intent intent = new Intent(RepartidorVistaHome.this, RepartidorCancelacionPedido.class);
                     startActivity(intent);
@@ -206,7 +213,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
     public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
         Map<String, Object> updates = new HashMap<>();
         updates.put("idRepartidor", idRepartidor);
-
+        updates.put("estado", "En camino");
         // Realizar el update
         db.collection("Pedidos")
                 .document(idPedido)
@@ -217,7 +224,8 @@ public class RepartidorVistaHome extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     // Error
-                    onfailure.run();                });
+                    onfailure.run();
+                });
     }
 
 
@@ -229,7 +237,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
                         Integer count = 0 ;
                         for (QueryDocumentSnapshot document : value) {
                             Pedido pedido = document.toObject(Pedido.class);
-                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(usuario.getId())  && (pedido.getEstado().equals("Recibido") || pedido.getEstado().equals("En preparacion")) ){
+                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && !(pedido.getEstado().equals("Entregado")) ){
                                 count++;
                             }
                         }
@@ -243,7 +251,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
     }
 
     private void showNonCancelableDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorVistaHome.this);
         builder.setTitle("Usted tiene una entrega pendiente");
         // Botón para cerrar el diálogo
         builder.setPositiveButton("Ver mapa", new DialogInterface.OnClickListener() {
@@ -254,16 +262,12 @@ public class RepartidorVistaHome extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         // Crear el diálogo
         AlertDialog dialog = builder.create();
-
         // Evitar que se cierre al tocar fuera del diálogo
         dialog.setCanceledOnTouchOutside(false);
-
         // Evitar que se cierre al presionar el botón de retroceso
         dialog.setCancelable(false);
-
         // Mostrar el diálogo
         dialog.show();
     }
