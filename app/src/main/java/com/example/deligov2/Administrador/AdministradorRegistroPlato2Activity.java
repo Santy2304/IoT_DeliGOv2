@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,7 +26,8 @@ import java.util.List;
 public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private Button btnUploadImage, btnFinalize;
+    private Button btnFinalize;
+    private ImageView btnUploadImage;
     private RecyclerView rvImages;
     private ImagesAdapter imagesAdapter;
     private List<Uri> imageUris = new ArrayList<>();
@@ -36,7 +38,6 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_administrador_registro_plato_parte2);
 
         // Lógica para la actividad de registro de plato parte 2 (imagenes)
