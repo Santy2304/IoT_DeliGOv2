@@ -611,6 +611,26 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         ListenableResultFuture<Navigator.RouteStatus> pendingRoute =
                 mNavigator.setDestinations(mWaypoints);
 
+        Location dummyLocation = new Location("dummyProvider");
+        dummyLocation.setLatitude(new Double(pedido.getLatitudActualRepartidor()));
+        dummyLocation.setLongitude(new  Double (pedido.getLongitudActualRepartidor()));
+        RoadSnappedLocationProvider roadSnappedLocationProvider = new RoadSnappedLocationProvider() {
+            @Override
+            public void addLocationListener(LocationListener locationListener) {
+
+            }
+
+            @Override
+            public void removeLocationListener(LocationListener locationListener) {
+
+            }
+
+            @Override
+            public void resetFreeNav() {
+
+            }
+        };
+
         // Define the action to perform when the SDK has determined the route.
         pendingRoute.setOnResultListener(
                 new ListenableResultFuture.OnResultListener<Navigator.RouteStatus>() {
