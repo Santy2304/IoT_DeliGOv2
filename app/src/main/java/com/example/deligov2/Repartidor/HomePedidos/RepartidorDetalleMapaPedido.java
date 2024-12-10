@@ -54,13 +54,8 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
         storage = FirebaseStorage.getInstance();
         //Lanzamos el view
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_detalle_mapa_pedido);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         //Recogemos los valores del anterior activity
         loadUser(()->{
             //Buscamos el idDelPedido
