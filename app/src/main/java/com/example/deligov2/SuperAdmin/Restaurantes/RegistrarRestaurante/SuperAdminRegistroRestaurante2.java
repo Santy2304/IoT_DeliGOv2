@@ -54,7 +54,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
     private Button btContinuar;
     private Button btCancelar;
     String canal1 = "importanteDefault";
-
+    private LatLng selectedLocation;
     private GoogleMap myMap;
     private SearchView mapSearchView;
     private Marker currentMarker;
@@ -184,8 +184,6 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         });
 
         mapFragment.getMapAsync( SuperAdminRegistroRestaurante2.this);
-
-
         //Notificaciones
         crearCanalesNotificacion();
         //Manejo de botones
@@ -196,7 +194,6 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                 notificarRestauranteCreado(nameR.getNombre());
                 //vistaRegistroRestauranteCorrect(nameR);
                 registrarRestauranteFirestore(nameR, imageUriString, imageByteArray);
-
             }
         });
 
@@ -286,9 +283,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                 if (currentMarker != null) {
                     currentMarker.remove();
                 }
-
                 currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title("Nueva ubicación"));
-
+                selectedLocation =  latLng;
                 myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                 Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);
@@ -305,7 +301,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         newRestaurant.setEstado(true);
         newRestaurant.setHorario(restaurante.getHorario());
         newRestaurant.setDireccion(restaurante.getDireccion());
-
+        newRestaurant.setLatitud(""+selectedLocation.latitude);
+        newRestaurant.setLongitud(""+selectedLocation.longitude);
         db.collection("restaurantes")
                 .add(newRestaurant)
                 .addOnSuccessListener(documentReference -> {

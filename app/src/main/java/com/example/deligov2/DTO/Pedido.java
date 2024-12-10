@@ -24,7 +24,8 @@ public class Pedido implements Serializable {
     private String latitud;
     private Timestamp hora;
     private float costoEnvio;
-
+    private String latitudActualRepartidor = null;
+    private String longitudActualRepartidor = null;
     public String getIdRestaurante() {
         return idRestaurante;
     }
@@ -136,5 +137,21 @@ public class Pedido implements Serializable {
 
     public void setCostoEnvio(float costoEnvio) {
         this.costoEnvio = costoEnvio;
+    }
+
+    public String getLatitudActualRepartidor() {
+        return latitudActualRepartidor;
+    }
+
+    public void setLatitudActualRepartidor(String latitudActualRepartidor) {
+        this.latitudActualRepartidor = latitudActualRepartidor;
+    }
+
+    public String getLongitudActualRepartidor() {
+        return longitudActualRepartidor;
+    }
+
+    public void setLongitudActualRepartidor(String longitudActualRepartidor) {
+        this.longitudActualRepartidor = longitudActualRepartidor;
     }
 }

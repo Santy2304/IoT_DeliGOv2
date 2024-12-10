@@ -1,20 +1,32 @@
 package com.example.deligov2.Repartidor.ProcesosTracking;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.DTO.Pedido;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -42,6 +54,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
 
@@ -51,8 +65,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     private Navigator mNavigator;
     private SupportNavigationFragment mNavFragment;
     private RoutingOptions mRoutingOptions;
-    // Define the Sydney Opera House by specifying its place ID.
-    // Set fields for requesting location permission.
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
     private FirebaseAuth firebaseAuth;
@@ -61,18 +73,19 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     private Usuario usuario;
     private FirebaseStorage storage ;
     private StorageReference storageRef;
+    private Pedido pedidoSupreme;
+    private Restaurante restauranteSupreme;
+    private String ola ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
+        loadUser();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_tracking_estado_en_camino);
-
-        loadUser();
         storage = FirebaseStorage.getInstance();
-
         ShapeableImageView image = findViewById(R.id.shapeableImageView3);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
         // Usa Glide para cargar la imagen
@@ -85,10 +98,21 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
         });
-        String idAddres = "ChIJkzeqdLbIBZERzolWqH64Kc4";
-        Double latitud =  -12.046374 ;
-        Double longitud =  -77.0427934 ;
-        getPlaceId(latitud,longitud );
+        loadPedido(()->{
+            //Cargamos pedido
+            ( (TextView) findViewById(R.id.pedidoId) ) .setText("Pedido #"+ pedidoSupreme.getId());
+            ( (TextView) findViewById(R.id.estado) ) .setText(pedidoSupreme.getEstado());
+            //Buscamos restaurante
+
+                loadRestaturante(pedidoSupreme.getIdRestaurante() , ()->{
+                    if(!ola .equals("segundaVez")) {
+                        getPlaceId(new Double(restauranteSupreme.getLatitud()), new Double(restauranteSupreme.getLongitud()));
+                    }
+                    ola =  "segundaVez";
+                });
+        });
+        listenerUpdate();
+        actualiza();
     }
 
     public void verSiguienteTracking(View view) {
@@ -113,11 +137,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
      * navigateToPlace() method when the navigator is ready.
      */
     private void initializeNavigationSdk(String id ) {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
         if (ContextCompat.checkSelfPermission(
                 this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -207,7 +226,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             displayMessage("Error starting navigation: Place ID is not supported.");
             return;
         }
-
         // Create a future to await the result of the asynchronous navigator task.
         ListenableResultFuture<Navigator.RouteStatus> pendingRoute =
                 mNavigator.setDestination(destination, travelMode);
@@ -325,4 +343,90 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         });
     }
 
+    public void loadPedido(Runnable runnable){
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Pedido.class)).getId()).equals(getIntent().getStringExtra("idPedido"))){
+                                pedidoSupreme = document.toObject(Pedido.class);
+                            }
+                        }
+                        runnable.run();
+                    }
+                });
+    }
+
+    public void loadRestaturante(String idRestaurante , Runnable runnable){
+        db.collection("restaurantes")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Restaurante.class)).getId()).equals(idRestaurante)){
+                                restauranteSupreme = document.toObject(Restaurante.class);
+                            }
+                        }
+                        runnable.run();
+                    }
+                });
+    }
+
+    //Capta cambios
+    public void listenerUpdate(){
+        DocumentReference docRef = db.collection("Pedidos").document(getIntent().getStringExtra("idPedido"));
+        // Agrega un listener al documento
+        docRef.addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                // El documento se actualizó
+                Pedido pedidoUpdate = documentSnapshot.toObject(Pedido.class);
+                ((TextView) findViewById(R.id.estado) ).  setText(pedidoUpdate.getEstado());
+            } else {
+                // El documento no existe o fue eliminado
+                Log.d("Firestore", "El documento no existe");
+            }
+        });
+    }
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+    @SuppressLint("MissingPermission")
+    public void actualiza(){
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        // Configurar la solicitud de ubicación
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000); // Cada 10 segundos
+        locationRequest.setFastestInterval(5000); // Máximo cada 5 segundos
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        // Definir el callback para recibir las actualizaciones
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) return;
+
+                for (Location location : locationResult.getLocations()) {
+                    // Enviar la ubicación a Firebase
+                    updateLocationToFirebase(location);
+                }
+            }
+        };
+
+        // Iniciar las actualizaciones de ubicación
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+    private void updateLocationToFirebase(Location location) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Crear un mapa con los datos de ubicación
+        Map<String, Object> locationData = new HashMap<>();
+        locationData.put("latitudActualRepartidor",""+location.getLatitude());
+        locationData.put("longitudActualRepartidor", ""+location.getLongitude());
+
+        // Actualizar los datos en Firestore
+        db.collection("Pedidos").document(pedidoSupreme.getId())
+                .update(locationData)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Ubicación actualizada con éxito"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar la ubicación", e));
+    }
 }

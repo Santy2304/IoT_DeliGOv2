@@ -13,7 +13,8 @@ public class Restaurante implements Serializable {
     private boolean estado;
     private String id;
     private String fotoUrl;
-
+        private String latitud;
+    private String longitud;
     public String getFotoUrl() {
         return fotoUrl;
     }
@@ -86,5 +87,19 @@ public class Restaurante implements Serializable {
         this.categorias = categorias;
     }
 
+    public String getLatitud() {
+        return latitud;
+    }
 
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
 }

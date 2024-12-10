@@ -50,6 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Ubicación predeterminada: "
                 android:textSize="18sp"
@@ -57,6 +58,7 @@
 
             <TextView
                 android:id="@+id/ubi"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
@@ -79,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/black"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="Si no desea seleccionar una nueva ubicación, no toque el mapa ni añada referencias." />
 
@@ -100,6 +103,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/address"
+                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>

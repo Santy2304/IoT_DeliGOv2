@@ -1,8 +1,10 @@
 package com.example.deligov2.Repartidor.HomePedidos.Confirmaciones;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.ProcesosTracking.RepartidorTrackingEstadoEnCamino;
 import com.example.deligov2.Repartidor.ProcesosTracking.RepartidorTrackingEstadoRecibido;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +31,7 @@ public class RepartidorAceptacionPedido extends AppCompatActivity {
     private Usuario usuario;
     private FirebaseStorage storage ;
     private StorageReference storageRef;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();

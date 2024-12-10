@@ -192,7 +192,15 @@
                 android:valueFrom="0.0"
                 android:valueTo="100.0" />
 
+            <fragment
+                android:layout_marginTop="25sp"
+                android:id="@+id/navigation_fragment"
+                android:name="com.google.android.libraries.navigation.SupportNavigationFragment"
+                android:layout_width="match_parent"
+                android:layout_height="280dp" />
+
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/imageView8"
                 android:layout_marginTop="10dp"
                 android:layout_width="300dp"

@@ -90,9 +90,6 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
     public void retroceder(View view){
         onBackPressed();
     }
-
-
-
     public void loadUser(Runnable run){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -131,8 +128,6 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 15));
         }
     }
-
-
     public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
         Map<String, Object> updates = new HashMap<>();
         updates.put("idRepartidor", idRepartidor);
