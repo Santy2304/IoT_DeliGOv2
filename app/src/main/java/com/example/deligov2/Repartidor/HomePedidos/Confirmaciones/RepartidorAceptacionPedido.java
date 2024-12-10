@@ -50,10 +50,6 @@ public class RepartidorAceptacionPedido extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void verRepartidorConfirmacionTomarPedido(View view){
-
-    }
-
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {

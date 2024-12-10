@@ -132,7 +132,7 @@
                 android:textSize="18sp"
                 app:iconSize="25sp"
                 app:icon="@drawable/intento"
-                android:onClick="aceptacionRepartidor2"
+                android:onClick="aceptarPedido"
                 />
 
 

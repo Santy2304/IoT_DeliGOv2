@@ -16,20 +16,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:visibility="invisible"
-            android:clickable="false"
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/goBackButton"
+            style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="retroceder"
-            android:src="@drawable/icons8_izquierda_circulo_48" />
-
+            android:visibility="invisible"
+            android:enabled="false"
+            app:srcCompat="@drawable/arrow_back_24px" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="¿Dónde vives?"
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="sans-serif-condensed-medium"
             android:textColor="@color/light_green"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -47,6 +48,7 @@
                 android:id="@+id/addressInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:inputType="text"
                 android:maxLength="40"
                 android:singleLine="true" />
@@ -71,6 +73,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/referenceInput"
                 android:layout_width="match_parent"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLength="20"
@@ -87,6 +90,7 @@
             android:layout_marginBottom="12sp"
             android:backgroundTint="@color/light_green"
             android:onClick="continuar"
+            android:fontFamily="sans-serif-condensed-medium"
             android:text="  Continuar  "
             android:textColor="@color/white"
             android:textStyle="bold" />

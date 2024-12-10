@@ -1,8 +1,11 @@
 package com.example.deligov2.Repartidor.HomePedidos;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +41,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -57,20 +63,16 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         //Cargamos vista
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_detalle_compra_delivery);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         //Seteamos los valores
         loadUser(()->{
             loadPedidos(getIntent().getStringExtra("pedido") , ()->{
-                ((TextView)findViewById(R.id.totalProductos)).setText("Total de productos: " + pedidoSupreme.getIdListaPlatos().size());
+                ((TextView)findViewById(R.id.idPedido)).setText("#"+pedidoSupreme.getId());
                 ((MaterialButton)findViewById(R.id.btn_estado)).setText(pedidoSupreme.getEstado());
                 ((TextView)findViewById(R.id.direccion)).setText(pedidoSupreme.getDireccion());
                 ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + 20);
+                ((Button)findViewById(R.id.btn_aceptar)).setContentDescription(pedidoSupreme.getId());
+
                 Float sum =  new Float(0);
                 for(Integer j =0 ; j<pedidoSupreme.getIdListaPlatos().size(); j++){
                     sum = sum +  pedidoSupreme.getPreciosActuales().get(j) * pedidoSupreme.getListaCantidades().get(j);
@@ -86,6 +88,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 });
                 //Empezamos con el adapter
 
+
             });
         });
     }
@@ -93,11 +96,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
     public void retroceder(View view) {
         onBackPressed();
     }
-    public void rechazarPedido(View view){
-        Intent  intent =  new Intent(this , RepartidorCancelacionPedido.class );
-        finish();
-        startActivity(intent);
-    }
+
     public void loadUser(Runnable runnable){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -167,5 +166,53 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
             lista.add(comida);
         }
         return lista;
+    }
+
+    public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("idRepartidor", idRepartidor);
+        updates.put("estado", "En camino");
+
+        // Realizar el update
+        db.collection("Pedidos")
+                .document(idPedido)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    // Éxito
+                    onsuccess.run();
+                })
+                .addOnFailureListener(e -> {
+                    // Error
+                    onfailure.run();});
+    }
+    public void aceptarPedido(View view ) {
+        Log.d("Auxilio", "Le diste click");
+        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorDetalleCompraDelivery.this);
+        builder.setTitle("Confirmar acción");
+        builder.setMessage("¿Qué acción deseas realizar con esta solicitud?");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción cuando se presiona "Aceptar"
+                aceptar(view.getContentDescription().toString(), user.getUid(), () -> {
+                            startActivity(new Intent(RepartidorDetalleCompraDelivery.this, RepartidorAceptacionPedido.class));
+                        }, () -> {
+                            Intent intent = new Intent(RepartidorDetalleCompraDelivery.this, RepartidorCancelacionPedido.class);
+                            startActivity(intent);
+                        }
+                );
+            }
+        });
+
+
+        builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                dialog.dismiss();
+            }
+        });
+        // Mostrar el diálogo
+        builder.create().show();
     }
 }

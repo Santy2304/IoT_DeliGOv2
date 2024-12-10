@@ -33,13 +33,8 @@ public class LoginCrearCuentaCuartoPaso extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         loadUser();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_crear_cuenta_cuarto_paso);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         MaterialCardView cardCliente = findViewById(R.id.card_cliente);
         MaterialCardView cardRepartidor = findViewById(R.id.card_repartidor);
         // Variables para almacenar el rol seleccionado

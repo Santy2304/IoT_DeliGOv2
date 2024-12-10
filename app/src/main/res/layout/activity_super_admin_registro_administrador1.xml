@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdministrador1">
-
+<!--
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -27,168 +27,173 @@
             app:titleTextColor="@color/light_green" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="match_parent"
-        android:layout_height="40sp"
-        android:text="Registrar Administrador"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.114"
-        tools:layout_editor_absoluteX="0dp" />
+-->
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/layout_border"
-        android:backgroundTint="@color/white"
         android:orientation="vertical"
-        app:layout_anchorGravity="center"
+        android:padding="6dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="3sp"
-            android:layout_marginEnd="3sp"
-            app:errorEnabled="true"
-            android:hint="@string/nombre">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/adminNombre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text=" "
-                app:startIconDrawable="@drawable/baseline_person_outline_24" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:id="@+id/apellidoLayout"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="3sp"
-            android:layout_marginEnd="3sp"
-            app:errorEnabled="true"
-            android:hint="@string/apellido">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/adminApellido"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text=" "
-                app:startIconDrawable="@drawable/baseline_person_outline_24" />
-        </com.google.android.material.textfield.TextInputLayout>
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/goBackButton"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="back"
+            app:srcCompat="@drawable/arrow_back_24px" />
 
         <TextView
-            android:id="@+id/activity_label"
+            android:id="@+id/textView14"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:text="Tipo de documento:"
-            android:layout_marginStart="4dp"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginStart="3sp"
-            android:layout_marginEnd="3sp"
-            android:entries="@array/elementos"
-            android:popupBackground="@drawable/spinner_border"
-            android:spinnerMode="dropdown"/>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:id="@+id/dniLayout"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="3sp"
-            android:layout_marginEnd="3sp"
-            app:errorEnabled="true"
-            android:hint="@string/dni">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/adminNumeroDocumento"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text=" "
-                app:startIconDrawable="@drawable/baseline_person_outline_24" />
-        </com.google.android.material.textfield.TextInputLayout>
-
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:text="Registrar Administrador"
+            android:textColor="@color/light_green"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="4dp">
+            android:id="@+id/linearLayout4"
+            android:layout_width="360dp"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/border_form"
+            android:backgroundTint="#FBF5F0"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/continuar1"
-                android:onClick="vistaRegistroAdmin2"
-                style="@style/Widget.Material3.Button.ElevatedButton"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:hint="@string/nombre"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/adminNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:inputType="text"
+                    app:startIconDrawable="@drawable/baseline_person_outline_24" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/apellidoLayout"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:hint="@string/apellido"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/adminApellido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:inputType="text"
+                    app:startIconDrawable="@drawable/baseline_person_outline_24" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/activity_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/light_green"
-                android:text="Continuar"
-                android:textColor="@color/white"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Tipo de documento"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/cancelar1"
-                android:onClick="vistaPanelRestaurante"
-                style="@style/Widget.Material3.Button.ElevatedButton"
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:entries="@array/elementos"
+                android:popupBackground="@drawable/spinner_border"
+                android:spinnerMode="dropdown" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dniLayout"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:hint="@string/dni"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/adminNumeroDocumento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:inputType="number"
+                    app:startIconDrawable="@drawable/baseline_person_outline_24" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/md_theme_error"
-                android:text="Cancelar"
-                android:visibility="invisible"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/continuar1"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/light_green"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:onClick="vistaRegistroAdmin2"
+                    android:text="Continuar"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/cancelar1"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:backgroundTint="@color/md_theme_error"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:onClick="vistaPanelRestaurante"
+                    android:text="Cancelar"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="130sp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation_superadmin"
-        tools:layout_editor_absoluteX="6dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_superadmin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
