@@ -51,8 +51,7 @@ public class AdministradorRestauranteAdapter extends RecyclerView.Adapter<Admini
             super(itemView);
             Button buttonDetalles = itemView.findViewById(R.id.verPlato);
             buttonDetalles.setOnClickListener(view -> {
-                Intent intent = new Intent(itemView.getContext(), AdministradorDetallePlatoActivity.class);
-                itemView.getContext().startActivity(intent);
+
             });
 
             Button buttonEdit = itemView.findViewById(R.id.editarPlato);
