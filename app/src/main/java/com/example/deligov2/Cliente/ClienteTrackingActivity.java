@@ -158,56 +158,14 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         idPedido = getIntent().getStringExtra("idOrder");
         costoTotal = findViewById(R.id.costoTotal);
         dateText = findViewById(R.id.hourText);
-        slider.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(Slider slider, float value, boolean fromUser) {
-                String title;
-                String content;
 
-                if(value < 50 && value >= 35){
-                    title = "Tu pedido está en preparación";
-                    content = "Los cocineros ya leyeron tu pedido y lo están cocinando";
-                    recibidoText.setTextColor(Color.BLACK);
-                    listoText.setTextColor(Color.BLACK);
-                    caminoText.setTextColor(Color.BLACK);
-                    entregadoTexT.setTextColor(Color.BLACK);
-                    preparacionText.setTextColor(getResources().getColor(R.color.blue));
-//                    lanzarNotificacion(title, content);
-                } else if (value < 64 && value >= 52) {
-                    title = "Tu pedido está listo";
-                    recibidoText.setTextColor(Color.BLACK);
-                    preparacionText.setTextColor(Color.BLACK);
-                    caminoText.setTextColor(Color.BLACK);
-                    entregadoTexT.setTextColor(Color.BLACK);
-                    content = "El pedido ya está cocinado y a la espera de un repartidor que lo recoja.";
-                    listoText.setTextColor(getResources().getColor(R.color.blue));
-//                    lanzarNotificacion(title, content);
-                } else if (value < 85 && value >= 70) {
-                    title = "Tu pedido está en camino";
-                    content = "El repartidor ha tomado tu pedido y está en camino al destino.";
-                    caminoText.setTextColor(getResources().getColor(R.color.blue));
-                    recibidoText.setTextColor(Color.BLACK);
-                    listoText.setTextColor(Color.BLACK);
-                    preparacionText.setTextColor(Color.BLACK);
-                    entregadoTexT.setTextColor(Color.BLACK);
-//                    lanzarNotificacion(title, content);
-                } else if (value == 100) {
-                    title = "Tu pedido ha llegado";
-                    content = "El repartidor ha llegado al destino.";
-                    entregadoTexT.setTextColor(getResources().getColor(R.color.blue));
-                    recibidoText.setTextColor(Color.BLACK);
-                    listoText.setTextColor(Color.BLACK);
-                    caminoText.setTextColor(Color.BLACK);
-                    preparacionText.setTextColor(Color.BLACK);
-//                    lanzarNotificacion(title, content);
-                }
-            }
-        });
         db.collection("Pedidos").document(idPedido).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         pedido = documentSnapshot.toObject(Pedido.class);
                         idsPlatos = pedido.getIdListaPlatos();
+                        actualizarSliderSegunEstado(pedido.getEstado());
+
                         cantidades = pedido.getListaCantidades();
                         listaPrecios = pedido.getPreciosActuales();
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
@@ -251,6 +209,8 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+        escucharCambiosEstadoPedido();
         repartidorButton = findViewById(R.id.repartidorButton);
         qrButton = findViewById(R.id.qrButton);
         backButton = findViewById(R.id.atrasTracking);
@@ -291,6 +251,61 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         ubicacionUpdateListener();
 
     }
+    private void actualizarSliderSegunEstado(String estado) {
+        if (estado == null || estado.isEmpty()) return;
+
+        switch (estado) {
+            case "Recibido":
+                slider.setValue(0);
+                actualizarColorTexto(recibidoText);
+                break;
+            case "En Preparación":
+                slider.setValue(40);
+                actualizarColorTexto(preparacionText);
+                break;
+            case "Listo":
+                slider.setValue(60);
+                actualizarColorTexto(listoText);
+                break;
+            case "En Camino":
+                slider.setValue(80);
+                actualizarColorTexto(caminoText);
+                break;
+            case "Entregado":
+                slider.setValue(100);
+                actualizarColorTexto(entregadoTexT);
+                break;
+            default:
+                Log.w("ClienteTrackingActivity", "Estado desconocido: " + estado);
+        }
+    }
+
+    private void actualizarColorTexto(TextView textViewActivo) {
+        recibidoText.setTextColor(getResources().getColor(R.color.black));
+        preparacionText.setTextColor(getResources().getColor(R.color.black));
+        listoText.setTextColor(getResources().getColor(R.color.black));
+        caminoText.setTextColor(getResources().getColor(R.color.black));
+        entregadoTexT.setTextColor(getResources().getColor(R.color.black));
+
+        textViewActivo.setTextColor(getResources().getColor(R.color.blue));
+    }
+
+    private void escucharCambiosEstadoPedido() {
+        db.collection("Pedidos").document(idPedido)
+                .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.w(TAG, "Error al escuchar cambios: ", error);
+                        return;
+                    }
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Pedido pedidoActualizado = documentSnapshot.toObject(Pedido.class);
+                        if (pedidoActualizado != null) {
+                            actualizarSliderSegunEstado(pedidoActualizado.getEstado());
+                        }
+                    }
+                });
+    }
+
 
 //    public void crearCanalNotificacion(){
 //

@@ -7,20 +7,12 @@ import java.time.LocalDateTime;
 
 public class Notificaciones implements Serializable {
 
-    private String id;
     private String contenido;
     private Timestamp fecha;
     private String idPedido;
     private String idCliente;
     private String idRepartidor;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private String idRestaurante;
 
     public String getContenido() {
         return contenido;
@@ -60,5 +52,13 @@ public class Notificaciones implements Serializable {
 
     public void setIdPedido(String idPedido) {
         this.idPedido = idPedido;
+    }
+
+    public String getIdRestaurante() {
+        return idRestaurante;
+    }
+
+    public void setIdRestaurante(String idRestaurante) {
+        this.idRestaurante = idRestaurante;
     }
 }

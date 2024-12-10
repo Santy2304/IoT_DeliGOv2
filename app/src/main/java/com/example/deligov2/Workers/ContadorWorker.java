@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -16,8 +17,14 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.deligov2.Cliente.ClienteTrackingActivity;
+import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.Notificaciones;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.checker.units.qual.N;
 
 import java.util.Random;
 
@@ -29,11 +36,21 @@ public class ContadorWorker extends Worker {
     public ContadorWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
+    private Pedido pedido;
 
     @NonNull
     @Override
     public Result doWork() {
         String pedidoId = getInputData().getString("pedidoId");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Pedidos").document(pedidoId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        pedido = documentSnapshot.toObject(Pedido.class);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
         try {
             int tiempoParte1 = (new Random().nextInt(3) + 1) * 60 * 1000;
@@ -41,17 +58,43 @@ public class ContadorWorker extends Worker {
             Thread.sleep(tiempoParte1);
 
             cambiarEstadoPedido(pedidoId, "En Preparación");
-            enviarNotificacion("Pedido Preparándose", "Tu pedido ahora está en preparación.", NOTIFICATION_ID_1);
+            enviarNotificacion("Pedido Preparándose", "Tu pedido ahora está en preparación.", NOTIFICATION_ID_1,pedidoId);
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Notificaciones notificaciones = new Notificaciones();
+            notificaciones.setContenido("Tu pedido ahora está en preparación.");
+            notificaciones.setIdPedido(pedidoId);
+            notificaciones.setIdCliente(pedido.getIdUsuario());
+            notificaciones.setFecha(Timestamp.now());
+            notificaciones.setIdRestaurante(pedido.getIdRestaurante());
+            db.collection("Notificaciones")
+                    .add(notificaciones)
+                    .addOnSuccessListener(aVoid -> {
 
+                    })
+                    .addOnFailureListener(e -> {
+                    });
 
             int tiempoParte2 = (new Random().nextInt(3) + 1) * 60 * 1000;
             Log.d("PedidoWorker", "Esperando " + tiempoParte2 / 1000 + " segundos para la segunda parte.");
             Thread.sleep(tiempoParte2);
 
             cambiarEstadoPedido(pedidoId, "Listo");
-            enviarNotificacion("Pedido Listo", "El pedido está listo y esperando por un repartidor para inicar el camnio.", NOTIFICATION_ID_2);
+            enviarNotificacion("Pedido Listo", "El pedido está listo y esperando por un repartidor para inicar el camnio.", NOTIFICATION_ID_2,pedidoId);
+            Notificaciones notificaciones2 = new Notificaciones();
+            notificaciones2.setContenido("Tu pedido esta listo y esperando por el repartidor para ir en camino.");
+            notificaciones2.setIdPedido(pedidoId);
+            notificaciones2.setIdCliente(pedido.getIdUsuario());
+            notificaciones2.setFecha(Timestamp.now());
+            notificaciones2.setIdRestaurante(pedido.getIdRestaurante());
+            db.collection("Notificaciones")
+                    .add(notificaciones2)
+                    .addOnSuccessListener(aVoid -> {
+
+                    })
+                    .addOnFailureListener(e -> {
+                    });
+
+
 
         } catch (InterruptedException e) {
             Log.e("PedidoWorker", "Error en el temporizador: " + e.getMessage());
@@ -68,7 +111,7 @@ public class ContadorWorker extends Worker {
                 .addOnFailureListener(e -> Log.e("PedidoWorker", "Error al actualizar estado: " + e.getMessage()));
     }
 
-    private void enviarNotificacion(String titulo, String mensaje, int notificationId) {
+    private void enviarNotificacion(String titulo, String mensaje, int notificationId,String pedidoId) {
         Context context = getApplicationContext();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -78,6 +121,19 @@ public class ContadorWorker extends Worker {
                 return;
             }
         }
+
+
+        Intent intent = new Intent(context, ClienteTrackingActivity.class); // Cambia por la actividad deseada
+        intent.putExtra("idOrder", pedidoId); // Pasa el ID del pedido
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Configuración del Intent
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -95,6 +151,8 @@ public class ContadorWorker extends Worker {
                 .setSmallIcon(R.drawable.deligo)
                 .setContentTitle(titulo)
                 .setContentText(mensaje)
+                .setContentIntent(pendingIntent) // Asociar el PendingIntent
+                .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         notificationManager.notify(notificationId, builder.build());
