@@ -68,8 +68,7 @@ public class AdministradorReporteClientesActivity extends AppCompatActivity {
 
         //Botones para cambiar entre reportes
         findViewById(R.id.comidaButton).setOnClickListener(v -> {
-            Intent intent = new Intent(this, AdministradorReporteComidaActivity.class);
-            startActivity(intent);
+
         });
 
         //Navegación por el navigation bar

@@ -57,9 +57,7 @@
         <activity
             android:name=".Administrador.AdministradorHistorialActivity"
             android:exported="false" />
-        <activity
-            android:name=".Administrador.AdministradorDetallePlatoActivity"
-            android:exported="false" />
+
         <activity
             android:name=".Administrador.AdministradorInfoRestauranteActivity"
             android:exported="false" />
@@ -74,9 +72,6 @@
             android:exported="false" />
         <activity
             android:name=".Administrador.AdministradorReporteClientesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Administrador.AdministradorReporteComidaActivity"
             android:exported="false" />
         <activity
             android:name=".Adapters.RepartidorHistorialPedidosAdapter"

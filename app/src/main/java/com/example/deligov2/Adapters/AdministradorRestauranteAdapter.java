@@ -1,7 +1,5 @@
 package com.example.deligov2.Adapters;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,13 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Administrador.AdministradorDetallePlatoActivity;
 import com.example.deligov2.Administrador.AdministradorEditarPlatoActivity;
 import com.example.deligov2.Beans.Plato;
-import com.example.deligov2.Beans.ReporteCliente;
 import com.example.deligov2.R;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
 
