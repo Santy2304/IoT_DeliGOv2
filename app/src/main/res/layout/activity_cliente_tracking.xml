@@ -11,7 +11,7 @@
         android:id="@+id/scroll"
         android:padding="6dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
@@ -193,11 +193,10 @@
                 android:valueTo="100.0" />
 
             <fragment
-                android:layout_marginTop="25sp"
                 android:id="@+id/navigation_fragment"
                 android:name="com.google.android.libraries.navigation.SupportNavigationFragment"
                 android:layout_width="match_parent"
-                android:layout_height="280dp" />
+                android:layout_height="240dp" />
 
             <ImageView
                 android:visibility="gone"
@@ -228,7 +227,7 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="5sp"
                 android:layout_marginStart="10sp"
-                android:textSize="12sp"
+                android:textSize="16dp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:layout_gravity="start" />

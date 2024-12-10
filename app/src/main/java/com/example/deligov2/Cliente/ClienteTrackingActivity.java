@@ -148,7 +148,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        crearCanalNotificacion();
+//        crearCanalNotificacion();
         slider = findViewById(R.id.slider);
         recibidoText = findViewById(R.id.recibido);
         preparacionText = findViewById(R.id.preparacion);
@@ -172,7 +172,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     caminoText.setTextColor(Color.BLACK);
                     entregadoTexT.setTextColor(Color.BLACK);
                     preparacionText.setTextColor(getResources().getColor(R.color.blue));
-                    lanzarNotificacion(title, content);
+//                    lanzarNotificacion(title, content);
                 } else if (value < 64 && value >= 52) {
                     title = "Tu pedido está listo";
                     recibidoText.setTextColor(Color.BLACK);
@@ -181,7 +181,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     entregadoTexT.setTextColor(Color.BLACK);
                     content = "El pedido ya está cocinado y a la espera de un repartidor que lo recoja.";
                     listoText.setTextColor(getResources().getColor(R.color.blue));
-                    lanzarNotificacion(title, content);
+//                    lanzarNotificacion(title, content);
                 } else if (value < 85 && value >= 70) {
                     title = "Tu pedido está en camino";
                     content = "El repartidor ha tomado tu pedido y está en camino al destino.";
@@ -190,7 +190,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     listoText.setTextColor(Color.BLACK);
                     preparacionText.setTextColor(Color.BLACK);
                     entregadoTexT.setTextColor(Color.BLACK);
-                    lanzarNotificacion(title, content);
+//                    lanzarNotificacion(title, content);
                 } else if (value == 100) {
                     title = "Tu pedido ha llegado";
                     content = "El repartidor ha llegado al destino.";
@@ -199,7 +199,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     listoText.setTextColor(Color.BLACK);
                     caminoText.setTextColor(Color.BLACK);
                     preparacionText.setTextColor(Color.BLACK);
-                    lanzarNotificacion(title, content);
+//                    lanzarNotificacion(title, content);
                 }
             }
         });
@@ -292,51 +292,51 @@ public class ClienteTrackingActivity extends AppCompatActivity {
 
     }
 
-    public void crearCanalNotificacion(){
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Canal notificaciones default",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("Canal para notificaciones con prioridad default");
-            channel.enableVibration(true);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-
-            askPermission();
-
-        }
-    }
-    public void askPermission(){
-        //android.os.Build.VERSION_CODES.TIRAMISU == 33
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) ==
-                        PackageManager.PERMISSION_DENIED) {
-
-            ActivityCompat.requestPermissions(ClienteTrackingActivity.this,
-                    new String[]{POST_NOTIFICATIONS},
-                    101);
-        }
-
-    }
-    public void lanzarNotificacion(String title,String texto) {
-        Intent intent = new Intent(this, ClienteTrackingActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.deligo)
-                .setContentTitle(title)
-                .setContentText(texto)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            notificationManager.notify(1, builder.build());
-        }
-    }
+//    public void crearCanalNotificacion(){
+//
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(channelId,
+//                    "Canal notificaciones default",
+//                    NotificationManager.IMPORTANCE_DEFAULT);
+//            channel.setDescription("Canal para notificaciones con prioridad default");
+//            channel.enableVibration(true);
+//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//            notificationManager.createNotificationChannel(channel);
+//
+//            askPermission();
+//
+//        }
+//    }
+//    public void askPermission(){
+//        //android.os.Build.VERSION_CODES.TIRAMISU == 33
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+//                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) ==
+//                        PackageManager.PERMISSION_DENIED) {
+//
+//            ActivityCompat.requestPermissions(ClienteTrackingActivity.this,
+//                    new String[]{POST_NOTIFICATIONS},
+//                    101);
+//        }
+//
+//    }
+//    public void lanzarNotificacion(String title,String texto) {
+//        Intent intent = new Intent(this, ClienteTrackingActivity.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+//                .setSmallIcon(R.drawable.deligo)
+//                .setContentTitle(title)
+//                .setContentText(texto)
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true);
+//
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//
+//        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+//            notificationManager.notify(1, builder.build());
+//        }
+//    }
 
     public void verPerfil(View view){
         Intent intent = new Intent(this, ClientePerfil.class);
