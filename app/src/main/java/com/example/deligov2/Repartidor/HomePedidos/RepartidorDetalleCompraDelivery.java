@@ -63,17 +63,11 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         //Cargamos vista
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_detalle_compra_delivery);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         //Seteamos los valores
         loadUser(()->{
             loadPedidos(getIntent().getStringExtra("pedido") , ()->{
-                ((TextView)findViewById(R.id.totalProductos)).setText("Total de productos: " + pedidoSupreme.getIdListaPlatos().size());
+                ((TextView)findViewById(R.id.idPedido)).setText("#"+pedidoSupreme.getId());
                 ((MaterialButton)findViewById(R.id.btn_estado)).setText(pedidoSupreme.getEstado());
                 ((TextView)findViewById(R.id.direccion)).setText(pedidoSupreme.getDireccion());
                 ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + 20);

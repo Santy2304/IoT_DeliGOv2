@@ -56,12 +56,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repartidor_vista_home);
-        EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top/2, systemBars.right, 0);
-            return insets;
-        });
+
         listaPedidos =  new ArrayList<Pedido>();
         loadUser(()->{
             validarRepartidorDisponible(()->{
