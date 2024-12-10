@@ -94,6 +94,7 @@ public class ClientePlatoActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+            intent.putExtra("idRestaurante",platillo.getIdRestaurante());
             startActivity(intent);
         });
 
