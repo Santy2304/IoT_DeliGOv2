@@ -50,10 +50,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-condensed"
                 android:text="Estado: En camino"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+               />
 
             <TextView
                 android:id="@+id/id_fecha_pedido"
@@ -63,17 +64,18 @@
                 android:text="Fecha: 12/12/2024"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+         />
 
             <TextView
                 android:id="@+id/id_costo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2sp"
+                android:fontFamily="sans-serif-condensed"
                 android:text="Costo delivery:S/.12.00"
-                android:textColor="@color/md_theme_errorContainer_mediumContrast"
+                android:textColor="@color/light_green"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                />
         </LinearLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             style="?attr/floatingActionButtonSmallStyle"

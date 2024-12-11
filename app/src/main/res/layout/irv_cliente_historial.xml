@@ -86,7 +86,6 @@
                         android:text="S/50.00"
                         android:textColor="@color/black"
                         android:layout_weight="1"
-                        android:textStyle="bold"
                         android:textAppearance="?attr/textAppearanceTitleMedium"/>
 
                     <TextView
