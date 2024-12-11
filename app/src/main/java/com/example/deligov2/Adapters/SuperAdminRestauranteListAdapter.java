@@ -119,7 +119,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
             }else{
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("administradores")
+                db.collection("Usuarios")
                         .document(restaurante.getAdmin())
                         .get()
                         .addOnSuccessListener(documentSnapshot -> {

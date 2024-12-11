@@ -40,10 +40,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Para google maps -->
+        </activity> <!-- Para google maps
+        AIzaSyDuXiWeYB_ZQNkarlXUNhQdshsVjNU7yYI -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDuXiWeYB_ZQNkarlXUNhQdshsVjNU7yYI" />
+            android:value="AIzaSyDRLybmEGCEhyhA-IwL8BZvhsbVAbAOyCM" />
 
         <activity
             android:name=".NotiActivity"

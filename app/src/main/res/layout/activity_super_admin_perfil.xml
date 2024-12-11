@@ -36,7 +36,6 @@
         android:contentDescription="Cerrar Sesión"
         android:onClick="cerrarSesion"
         android:shadowColor="@color/gray"
-        android:text="Salir"
         app:icon="@drawable/baseline_exit_to_app_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,21 +118,22 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="2dp"
                 android:text="@string/nombre"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#C4C0FFB1"
-                android:drawableStart="@drawable/baseline_person_24"
                 android:drawablePadding="10dp"
                 android:paddingStart="16dp"
                 android:paddingTop="6dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="6dp"
-                android:text="Emma"
+                android:text="Lancelot"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -169,21 +169,22 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="2dp"
                 android:text="@string/apellido"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/apellido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#C4C0FFB1"
-                android:drawableStart="@drawable/baseline_person_24"
                 android:drawablePadding="10dp"
                 android:paddingStart="16dp"
                 android:paddingTop="6dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="6dp"
                 android:text="Del Lago"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -218,21 +219,22 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="2dp"
                 android:text="@string/dni"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/n_dni"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#C4C0FFB1"
-                android:drawableStart="@drawable/baseline_person_add_24"
                 android:drawablePadding="10dp"
                 android:paddingStart="16dp"
                 android:paddingTop="6dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="6dp"
-                android:text="12345678"
+                android:text="72094338"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -266,21 +268,22 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="2dp"
                 android:text="@string/email"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/correo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#C4C0FFB1"
-                android:drawableStart="@drawable/baseline_alternate_email_24"
                 android:drawablePadding="10dp"
                 android:paddingStart="16dp"
                 android:paddingTop="6dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="6dp"
-                android:text="emmaSuperAdmin@deligo.com"
+                android:text="chevalier999999999@gmail.com"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 

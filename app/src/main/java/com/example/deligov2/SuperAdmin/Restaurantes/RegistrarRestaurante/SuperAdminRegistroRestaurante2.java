@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -126,6 +127,11 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         byte[] imageByteArray = intent.getByteArrayExtra("imageBitmap");
         Log.d("IMAGEN GOOD","GOOO: "+imageUriString+ "-"+ imageByteArray);
 
+        //Banner
+        String imageUriString2 = intent.getStringExtra("imageUri2");
+        byte[] imageByteArray2 = intent.getByteArrayExtra("imageBitmap2");
+        Log.d("IMAGEN BANNER GOOD","GOOO: "+imageUriString2+ "-"+ imageByteArray2);
+
         if (nameR != null) {
             String cNameR = nameR.getNombre();
             String categoriaR = nameR.getCategorias();
@@ -154,23 +160,20 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                     }
 
                     if (addressList != null && !addressList.isEmpty()) {
-                        // Si hay un marcador anterior, lo eliminamos
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                         if (currentMarker != null) {
                             currentMarker.remove();
                         }
-
-                        Address address = addressList.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                        myMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-
                         currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title(location));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-                        nameR.setDireccion(location);
 
+                        selectedLocation = latLng;
+                        nameR.setDireccion(location);
                     } else {
                         Toast.makeText(SuperAdminRegistroRestaurante2.this, "No se encontró ninguna dirección para: " + location, Toast.LENGTH_SHORT).show();
                     }
+
                 } else {
                     Toast.makeText(SuperAdminRegistroRestaurante2.this, "Por favor ingresa un lugar válido", Toast.LENGTH_SHORT).show();
                 }
@@ -193,7 +196,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
             public void onClick(View v) {
                 notificarRestauranteCreado(nameR.getNombre());
                 //vistaRegistroRestauranteCorrect(nameR);
-                registrarRestauranteFirestore(nameR, imageUriString, imageByteArray);
+                registrarRestauranteFirestore(nameR, imageUriString, imageByteArray, imageUriString2, imageByteArray2);
             }
         });
 
@@ -204,9 +207,15 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                 vistaPanelRestaurante();
             }
         });
+        FloatingActionButton btAtras = findViewById(R.id.bt_atras);
+
+        btAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
-
-
 
     //Cambio vista
 
@@ -284,7 +293,7 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                     currentMarker.remove();
                 }
                 currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title("Nueva ubicación"));
-                selectedLocation =  latLng;
+                selectedLocation = latLng;
                 myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                 Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);
@@ -292,8 +301,12 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         });
     }
 
-    private void registrarRestauranteFirestore(Restaurante restaurante, String imageUriString, byte[] imageByteArray) {
+    private void registrarRestauranteFirestore(Restaurante restaurante, String imageUriString, byte[] imageByteArray, String imageUriString2, byte[] imageByteArray2) {
 
+        if (selectedLocation == null) {
+            Toast.makeText(this, "Por favor selecciona una ubicación en el mapa antes de continuar.", Toast.LENGTH_LONG).show();
+            return;
+        }
         Restaurante newRestaurant = new Restaurante();
         newRestaurant.setCategorias(restaurante.getCategorias());
         newRestaurant.setNombre(restaurante.getNombre());
@@ -316,9 +329,9 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
 
                     Log.d("Firestore", "Restaurante registrado con ID: " + idRestaurante);
 
-                    // Subir imagen a Firebase Storage
+                    // Subir imagen a Firebase Storage (logo y banner)
                     subirImagenAFirebaseStorage(idRestaurante, imageUriString, imageByteArray);
-
+                    subirBannerAFirebaseStorage(idRestaurante, imageUriString2, imageByteArray2);
                     vistaRegistroRestauranteCorrect(newRestaurant);
 
                 })
@@ -326,6 +339,37 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                     Log.w("Firestore", "Error al registrar el restaurante", e);
                 });
 
+    }
+
+    private void subirBannerAFirebaseStorage(String idRestaurante, String imageUriString, byte[] imageByteArray) {
+        if (imageUriString != null) {
+            // Subir desde Uri
+            Uri imageUri = Uri.parse(imageUriString);
+            StorageReference imageRef = storageReference.child("restaurantes/" + idRestaurante + "/banner.jpg");
+
+            imageRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d("Firebase Storage", "Imagen subida correctamente desde Uri.");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firebase Storage", "Error al subir la imagen desde Uri", e);
+                    });
+
+        } else if (imageByteArray != null) {
+            // Subir desde byte[]
+            StorageReference imageRef = storageReference.child("restaurantes/" + idRestaurante + "/banner.jpg");
+
+            imageRef.putBytes(imageByteArray)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d("Firebase Storage", "Imagen subida correctamente desde byte[].");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firebase Storage", "Error al subir la imagen desde byte[]", e);
+                    });
+
+        } else {
+            Log.w("Firebase Storage", "No se encontró una imagen para subir.");
+        }
     }
 
     private void subirImagenAFirebaseStorage(String idRestaurante, String imageUriString, byte[] imageByteArray) {
@@ -358,5 +402,4 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
             Log.w("Firebase Storage", "No se encontró una imagen para subir.");
         }
     }
-
 }

@@ -160,24 +160,10 @@
                     style="@style/Widget.Material3.Button.ElevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:backgroundTint="@color/light_green"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:onClick="vistaRegistroAdmin2"
                     android:text="Continuar"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/cancelar1"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:backgroundTint="@color/md_theme_error"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:onClick="vistaPanelRestaurante"
-                    android:text="Cancelar"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 

@@ -13,7 +13,7 @@ public class Restaurante implements Serializable {
     private boolean estado;
     private String id;
     private String fotoUrl;
-        private String latitud;
+    private String latitud;
     private String longitud;
     public String getFotoUrl() {
         return fotoUrl;
