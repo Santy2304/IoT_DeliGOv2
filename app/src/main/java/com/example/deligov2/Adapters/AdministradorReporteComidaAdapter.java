@@ -33,8 +33,6 @@ public class AdministradorReporteComidaAdapter extends RecyclerView.Adapter<Admi
         ReporteComida r = listaReportes.get(position);
         holder.reporte = r;
 
-        TextView textViewId = holder.itemView.findViewById(R.id.idReporteComida);
-        textViewId.setText(String.format("%d",r.getId()));
         TextView textViewFood = holder.itemView.findViewById(R.id.nombrePlatoReporte);
         textViewFood.setText(r.getPlato());
         MaterialButton buttonCantidad = holder.itemView.findViewById(R.id.cantidadVendida);
