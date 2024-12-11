@@ -159,30 +159,25 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 }
                                 pedido.setIdRestaurante(carrito.getIdRestaurante());
                                 pedido.setIdListaPlatos(carrito.getIdListaPlatos());
-                                db.collection("Platos").addSnapshotListener((snapshot, error)->{
-                                    if (error != null) {
-                                        Log.w("msg-test", "Listen failed.", error);
-                                        return;
-                                    }
-                                    if (snapshot != null && !snapshot.isEmpty()) {
-                                        for (DocumentSnapshot document : snapshot.getDocuments()) {
-                                            Platillo platillo = document.toObject(Platillo.class);
-                                            Log.w("msg-test", "Listen failed " + document.getId());
-                                            if (carrito.getIdListaPlatos().contains(platillo.getId())) {
-                                                lista.add(platillo);
 
-                                                for (int i=0;i<lista.size();i++) {
-                                                    Platillo platilloAu = lista.get(i);
-                                                    int cantidadVendida = carrito.getListaCantidades().get(i);
-                                                    platillo.setCantVentaTotal(platillo.getCantVentaTotal() + cantidadVendida);
-                                                    db.collection("Platos").document(platillo.getId())
-                                                            .update("cantVenta", platillo.getCantVentaTotal())
-                                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "cantVenta actualizada correctamente para " + platillo.getNombre()))
+                                for(int i=0;i<carrito.getIdListaPlatos().size();i++){
+                                    String id = carrito.getIdListaPlatos().get(i);
+                                    int cantidadVendida = carrito.getListaCantidades().get(i);
+                                    float cantidadRecaudado = cantidadVendida*listaPrecios.get(i);
+                                    db.collection("Platos").document(carrito.getIdListaPlatos().get(i)).get()
+                                            .addOnSuccessListener(documentSnapshot1 -> {
+                                                if (documentSnapshot1.exists()) {
+                                                    Platillo platillo = documentSnapshot1.toObject(Platillo.class);
+                                                    db.collection("Platos").document(id)
+                                                            .update("cantVentaTotal", cantidadVendida + platillo.getCantVentaTotal(),
+                                                                    "cantRecaudadoTotal",cantidadRecaudado+platillo.getCantRecaudadoTotal())
+                                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "cantVenta actualizada correctamente para " ))
                                                             .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar cantVenta", e));
                                                 }
-                                            }
-                                        }
-                                    }});
+                                            })
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+                                }
 
                                 pedido.setPreciosActuales(listaPrecios);
                                 pedido.setId(generarIdAleatorio());

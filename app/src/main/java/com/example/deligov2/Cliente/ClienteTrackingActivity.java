@@ -260,15 +260,15 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                 actualizarColorTexto(recibidoText);
                 break;
             case "En Preparación":
-                slider.setValue(40);
+                slider.setValue(35);
                 actualizarColorTexto(preparacionText);
                 break;
             case "Listo":
-                slider.setValue(60);
+                slider.setValue(52);
                 actualizarColorTexto(listoText);
                 break;
             case "En Camino":
-                slider.setValue(80);
+                slider.setValue(70);
                 actualizarColorTexto(caminoText);
                 break;
             case "Entregado":

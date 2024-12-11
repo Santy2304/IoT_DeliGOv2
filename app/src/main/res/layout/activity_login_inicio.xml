@@ -158,7 +158,7 @@
                 app:icon="@drawable/icons8_google_120" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10sp"
@@ -167,8 +167,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="45sp"
                     android:text="¿No tienes una cuenta?"
+                    android:layout_marginEnd="10dp"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:textColor="@color/md_theme_scrim"
                     android:textSize="15sp"
@@ -178,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="5sp"
+                    android:layout_marginStart="10sp"
                     android:layout_marginTop="8sp"
                     android:onClick="CrearCuenta"
                     android:fontFamily="sans-serif-condensed-medium"
