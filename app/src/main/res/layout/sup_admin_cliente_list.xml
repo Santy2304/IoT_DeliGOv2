@@ -7,7 +7,7 @@
 
     <com.google.android.material.card.MaterialCardView
         style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="match_parent"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:foregroundGravity="center_horizontal"
@@ -30,7 +30,7 @@
 
 
             <LinearLayout
-                android:layout_width="195dp"
+                android:layout_width="170dp"
                 android:layout_height="90sp"
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
@@ -68,23 +68,24 @@
             </LinearLayout>
 
 
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/bt_info"
-                    style="?attr/floatingActionButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40sp"
-                    android:layout_gravity="center_vertical"
-                    android:visibility="visible"
-                    app:backgroundTint="@color/light_yellow"
-                    app:srcCompat="@drawable/baseline_eye_24"
-                    app:tint="@color/white" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bt_info"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:visibility="visible"
+                app:backgroundTint="@color/light_yellow"
+                app:srcCompat="@drawable/baseline_eye_24"
+                app:tint="@color/white" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/bt_activar"
                     style="?attr/floatingActionButtonSmallStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="40sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_gravity="center_vertical"
                     android:visibility="visible"
                     app:backgroundTint="@color/light_green"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -7,10 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".SuperAdmin.SuperAdminVistaLogEvent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+<!--
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
@@ -31,21 +28,110 @@
                 app:titleTextColor="@color/light_green" />
 
         </com.google.android.material.appbar.AppBarLayout>
+-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView14"
+        <LinearLayout
+            android:id="@+id/linearLayout11"
             android:layout_width="match_parent"
-            android:layout_height="40sp"
-            android:text="Eventos de Log"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.114"
-            tools:layout_editor_absoluteX="0dp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Eventos Logs"
+                android:textColor="@color/light_green"
+                android:textSize="38sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Notificaciones"
+                android:enabled="false"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/baseline_history_24"
+                app:tint="@color/white" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView3"
+                android:layout_width="0dp"
+                android:layout_height="50sp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.9"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:srcCompat="@drawable/hineilll" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout12"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clientesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18sp"
+                android:backgroundTint="@color/light_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Pedidos"
+                android:textSize="13sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/comidaButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/dark_green"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="-5sp"
+                android:paddingRight="-5sp"
+                android:text="Restaurantes"
+                android:textSize="13sp"
+                app:backgroundTint="@color/md_theme_secondary" />
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listLogs"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+    <!--
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/bt_filtro"
             style="?attr/floatingActionButtonSmallStyle"
@@ -62,32 +148,21 @@
             app:layout_constraintVertical_bias="0.154"
             app:srcCompat="@drawable/filterpx"
             app:tint="@color/white" />
+-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listLogs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bt_filtro"
-            app:layout_constraintVertical_bias="0.0" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_superadmin" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="130sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            app:menu="@menu/bottom_navigation_superadmin"
-            tools:layout_editor_absoluteX="6dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Sidebar para filtros -->
+
+    <!--
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="280dp"
@@ -174,5 +249,5 @@
         </LinearLayout>
 
     </com.google.android.material.navigation.NavigationView>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+-->
+</androidx.constraintlayout.widget.ConstraintLayout>

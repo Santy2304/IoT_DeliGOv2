@@ -40,7 +40,6 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_vista_log_event);
 
         db = FirebaseFirestore.getInstance();
@@ -49,29 +48,29 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
         //Manejo del top app bar
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
-        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Esto de aquí te manda a la vista anterior
-                onBackPressed();
-            }
-        });
-
-        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.log_event){
-                    Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminVistaLogEvent.class);
-                    intent.putExtra("sa",sa);
-                    startActivity(intent);
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
+//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+//
+//        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Esto de aquí te manda a la vista anterior
+//                onBackPressed();
+//            }
+//        });
+//
+//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(@NonNull MenuItem item) {
+//                if(item.getItemId()==R.id.log_event){
+//                    Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminVistaLogEvent.class);
+//                    intent.putExtra("sa",sa);
+//                    startActivity(intent);
+//                    return true;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -115,49 +114,49 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
 
         //Manejo del side bar
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        FloatingActionButton btFiltro = findViewById(R.id.bt_filtro);
+//        FloatingActionButton btFiltro = findViewById(R.id.bt_filtro);
 
-        btFiltro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                    drawerLayout.closeDrawer(GravityCompat.END);
-                } else {
-                    drawerLayout.openDrawer(GravityCompat.END);
-                }
-            }
-        });
+//        btFiltro.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+//                    drawerLayout.closeDrawer(GravityCompat.END);
+//                } else {
+//                    drawerLayout.openDrawer(GravityCompat.END);
+//                }
+//            }
+//        });
 
         // Manejar los botones dentro del sidebar
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        Button btnLimpiar = navigationView.findViewById(R.id.btn_limpiar);
-        Button btnMostrar = navigationView.findViewById(R.id.btn_mostrar);
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//        Button btnLimpiar = navigationView.findViewById(R.id.btn_limpiar);
+//        Button btnMostrar = navigationView.findViewById(R.id.btn_mostrar);
+//
+//        btnLimpiar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CheckBox checkCliente = navigationView.findViewById(R.id.check_cliente);
+//                CheckBox checkRepartidor = navigationView.findViewById(R.id.check_repartidor);
+//                CheckBox checkAdministrador = navigationView.findViewById(R.id.check_administrador);
+//                CheckBox checkRegistros = navigationView.findViewById(R.id.check_registros);
+//                CheckBox checkPedidos = navigationView.findViewById(R.id.check_pedidos);
+//                CheckBox checkRechazos = navigationView.findViewById(R.id.check_rechazos);
+//
+//                checkCliente.setChecked(false);
+//                checkRepartidor.setChecked(false);
+//                checkAdministrador.setChecked(false);
+//                checkRegistros.setChecked(false);
+//                checkPedidos.setChecked(false);
+//                checkRechazos.setChecked(false);
+//            }
+//        });
 
-        btnLimpiar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox checkCliente = navigationView.findViewById(R.id.check_cliente);
-                CheckBox checkRepartidor = navigationView.findViewById(R.id.check_repartidor);
-                CheckBox checkAdministrador = navigationView.findViewById(R.id.check_administrador);
-                CheckBox checkRegistros = navigationView.findViewById(R.id.check_registros);
-                CheckBox checkPedidos = navigationView.findViewById(R.id.check_pedidos);
-                CheckBox checkRechazos = navigationView.findViewById(R.id.check_rechazos);
-
-                checkCliente.setChecked(false);
-                checkRepartidor.setChecked(false);
-                checkAdministrador.setChecked(false);
-                checkRegistros.setChecked(false);
-                checkPedidos.setChecked(false);
-                checkRechazos.setChecked(false);
-            }
-        });
-
-        btnMostrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //En el futuro irá la lógica para los filtros seleccionados
-            }
-        });
+//        btnMostrar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //En el futuro irá la lógica para los filtros seleccionados
+//            }
+//        });
     }
 
 
