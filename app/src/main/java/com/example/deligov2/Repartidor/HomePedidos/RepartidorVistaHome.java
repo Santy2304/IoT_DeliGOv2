@@ -41,13 +41,16 @@ import java.util.Map;
 import com.bumptech.glide.Glide;
 
 public class RepartidorVistaHome extends AppCompatActivity {
+    //FIREBASE
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
     private Usuario usuario;
     private FirebaseStorage storage ;
     private StorageReference storageRef;
+    //FIREBASE
     private List<Pedido> listaPedidos =  new ArrayList<Pedido>();
+    private String primeraVez = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -56,7 +59,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repartidor_vista_home);
-
         listaPedidos =  new ArrayList<Pedido>();
         loadUser(()->{
             validarRepartidorDisponible(()->{
@@ -80,25 +82,103 @@ public class RepartidorVistaHome extends AppCompatActivity {
                 });
                 //Fallo
                 //Se debería bloquear la pantalla
-                showNonCancelableDialog();
+                if(primeraVez ==null){
+                    showNonCancelableDialog();
+                }
             });
         });
+    }
 
+    //CARGAR DATOS
+    public void loadUser(Runnable runnable){
+        db.collection("Usuarios")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
+                                usuario = document.toObject(Usuario.class);
+                                ShapeableImageView image = findViewById(R.id.shapeableImageView3);
+                                storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
+                                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    Glide.with(this)
+                                            .load(uri)
+                                            .placeholder(R.drawable.user_icon) // Imagen de carga
+                                            .error(R.drawable.xd)             // Imagen de error
+                                            .into(image);
+                                }).addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                                });
+                                runnable.run();
+                            }
+                        }
+                    }
+                });
+    }
+    public void loadPedidos(Runnable onsuccess){
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        listaPedidos.clear();
+                        for (QueryDocumentSnapshot document : value) {
+                            Pedido pedido = document.toObject(Pedido.class);
+                            if(pedido.getIdRepartidor() == null && (pedido.getEstado().equals("Recibido") || pedido.getEstado().equals("En preparacion")  || pedido.getEstado().equals("Listo"))){
+                                listaPedidos.add(pedido);
+                            }
+                        }
+                        onsuccess.run();
+                    }
+                });
+    }
+    //CARGAR DATOS
+    private String idPedidoPendiente  =  null;
+    //VALIDACIÓN DE QUE EL REPARTIDOR PUEDE TOMAR EL PEDIDO
+    public void validarRepartidorDisponible(Runnable onsuccess  , Runnable onfailure){
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        int count = 0 ;
+                        for (QueryDocumentSnapshot document : value) {
+                            Pedido pedido = document.toObject(Pedido.class);
+                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && !(pedido.getEstado().equals("Entregado")) ){
+                                count++;
+                                idPedidoPendiente =  pedido.getId();
+                            }
+                        }
+                        if(count==0){
+                            onsuccess.run();
+                        }else{
+                            onfailure.run();
+                        }
+                    }
+                });
+    }
+    private void showNonCancelableDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorVistaHome.this);
+        builder.setTitle("Usted tiene una entrega pendiente");
+        // Botón para cerrar el diálogo
+        builder.setPositiveButton("Ver mapa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Acción al presionar el botón (puedes cerrar el diálogo aquí)
+                //Se redirige a la vista del tracking
+                dialog.dismiss();
+                Intent intent = new Intent(RepartidorVistaHome.this, RepartidorTrackingEstadoEnCamino.class);
+                intent.putExtra("idPedido" , idPedidoPendiente);
+                startActivity(intent);
+            }
+        });
+        // Crear el diálogo
+        AlertDialog dialog = builder.create();
+        // Evitar que se cierre al tocar fuera del diálogo
+        dialog.setCanceledOnTouchOutside(false);
+        // Evitar que se cierre al presionar el botón de retroceso
+        dialog.setCancelable(false);
+        // Mostrar el diálogo
+        dialog.show();
+    }
+    //VALIDACIÓN DE QUE EL REPARTIDOR PUEDE TOMAR EL PEDIDO
 
-    }
-    public void verNotificacionesRepartidor(View view ){
-        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
-        view.getId();
-        startActivity(intent);
-    }
-    public void verHistorialRepartidor(View view){
-        Intent intent = new Intent(this, RepartidorHistorial.class);
-        startActivity(intent);
-    }
-    public void verPerfil(View view){
-        Intent intent = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
-        startActivity(intent);
-    }
+    //VER DETALLES DEL PEDIDO
     public void verDetalleCompraDelivery(View view){
         db.collection("Pedidos")
                 .addSnapshotListener((value, error) -> {
@@ -132,6 +212,9 @@ public class RepartidorVistaHome extends AppCompatActivity {
                     }
                 });
     }
+    //VER DETALLES DEL PEDIDO
+
+    //ACEPTAR PEDIDO
     public void aceptarPedido(View view ){
         AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorVistaHome.this);
         builder.setTitle("Confirmar acción");
@@ -141,7 +224,10 @@ public class RepartidorVistaHome extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // Acción cuando se presiona "Aceptar"
                 aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
-                    startActivity(new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class));
+                    primeraVez = "noTeLevantes";
+                     Intent intent =        new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
+                        intent.putExtra("idPedido", view.getContentDescription().toString());
+                     startActivity(intent);
                 }, ()->{
                     Intent intent = new Intent(RepartidorVistaHome.this, RepartidorCancelacionPedido.class);
                     startActivity(intent);
@@ -150,8 +236,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
 
             }
         });
-
-
         builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -162,53 +246,9 @@ public class RepartidorVistaHome extends AppCompatActivity {
         // Mostrar el diálogo
         builder.create().show();
     }
-    public void loadUser(Runnable runnable){
-        db.collection("Usuarios")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (QueryDocumentSnapshot document : value) {
-                            if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
-                                usuario = document.toObject(Usuario.class);
-                                ShapeableImageView image = findViewById(R.id.shapeableImageView3);
-                                storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
-                                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                    Glide.with(this)
-                                            .load(uri)
-                                            .placeholder(R.drawable.user_icon) // Imagen de carga
-                                            .error(R.drawable.xd)             // Imagen de error
-                                            .into(image);
-                                }).addOnFailureListener(e -> {
-                                    Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                                });
-                                runnable.run();
-                            }
-                        }
-                    }
-                });
-    }
-    public void loadPedidos(Runnable onsuccess){
-        db.collection("Pedidos")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        listaPedidos.clear();
-                        for (QueryDocumentSnapshot document : value) {
-                            Pedido pedido = document.toObject(Pedido.class);
-                            if(pedido.getIdRepartidor() == null && (pedido.getEstado().equals("Recibido") || pedido.getEstado().equals("En preparacion")  || pedido.getEstado().equals("Pendiente"))){
-                                listaPedidos.add(pedido);
-                            }
-                        }
-                        onsuccess.run();
-                    }
-                });
-    }
-    public void verOtros(View view){
-        startActivity(new Intent(this , RepartidorTrackingEstadoEnCamino.class));
-    }
-
     public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
         Map<String, Object> updates = new HashMap<>();
         updates.put("idRepartidor", idRepartidor);
-        updates.put("estado", "En camino");
         // Realizar el update
         db.collection("Pedidos")
                 .document(idPedido)
@@ -222,48 +262,20 @@ public class RepartidorVistaHome extends AppCompatActivity {
                     onfailure.run();
                 });
     }
+    //ACEPTAR PEDIDO
 
-
-
-    public void validarRepartidorDisponible(Runnable onsuccess  , Runnable onfailure){
-        db.collection("Pedidos")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        Integer count = 0 ;
-                        for (QueryDocumentSnapshot document : value) {
-                            Pedido pedido = document.toObject(Pedido.class);
-                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && !(pedido.getEstado().equals("Entregado")) ){
-                                count++;
-                            }
-                        }
-                        if(count>0){
-                            onfailure.run();
-                        }else{
-                            onsuccess.run();
-                        }
-                    }
-                });
+    //REDIRECCIONES A OTROS ACTIVITIES Q NO SON DEL RECYCLER
+    public void verNotificacionesRepartidor(View view ){
+        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorNotificaciones.class);
+        view.getId();
+        startActivity(intent);
     }
-
-    private void showNonCancelableDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorVistaHome.this);
-        builder.setTitle("Usted tiene una entrega pendiente");
-        // Botón para cerrar el diálogo
-        builder.setPositiveButton("Ver mapa", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Acción al presionar el botón (puedes cerrar el diálogo aquí)
-                //Se redirige a la vista del tracking
-                dialog.dismiss();
-            }
-        });
-        // Crear el diálogo
-        AlertDialog dialog = builder.create();
-        // Evitar que se cierre al tocar fuera del diálogo
-        dialog.setCanceledOnTouchOutside(false);
-        // Evitar que se cierre al presionar el botón de retroceso
-        dialog.setCancelable(false);
-        // Mostrar el diálogo
-        dialog.show();
+    public void verHistorialRepartidor(View view){
+        Intent intent = new Intent(this, RepartidorHistorial.class);
+        startActivity(intent);
+    }
+    public void verPerfil(View view){
+        Intent intent = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
+        startActivity(intent);
     }
 }

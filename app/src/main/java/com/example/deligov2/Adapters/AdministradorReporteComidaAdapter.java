@@ -4,21 +4,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.ReporteCliente;
 import com.example.deligov2.Beans.ReporteComida;
+import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 public class AdministradorReporteComidaAdapter extends RecyclerView.Adapter<AdministradorReporteComidaAdapter.AdministradorReportesViewHolder>{
 
-    private List<ReporteComida> listaReportes;
+    private List<Platillo> listaReportes;
     private Context context;
 
     @NonNull
@@ -30,17 +35,29 @@ public class AdministradorReporteComidaAdapter extends RecyclerView.Adapter<Admi
 
     @Override
     public void onBindViewHolder(@NonNull AdministradorReporteComidaAdapter.AdministradorReportesViewHolder holder, int position) {
-        ReporteComida r = listaReportes.get(position);
+        Platillo r = listaReportes.get(position);
         holder.reporte = r;
 
-        TextView textViewId = holder.itemView.findViewById(R.id.idReporteComida);
-        textViewId.setText(String.format("%d",r.getId()));
         TextView textViewFood = holder.itemView.findViewById(R.id.nombrePlatoReporte);
-        textViewFood.setText(r.getPlato());
-        MaterialButton buttonCantidad = holder.itemView.findViewById(R.id.cantidadVendida);
-        buttonCantidad.setText(String.format("%d",r.getCantidadVendida()));
-        MaterialButton buttonGanancia = holder.itemView.findViewById(R.id.ganancia);
-        buttonGanancia.setText(String.format("S/.%f", r.getGanancia()));
+        textViewFood.setText(r.getNombre());
+        TextView textViewPrice = holder.itemView.findViewById(R.id.pricePedido);
+        textViewPrice.setText(String.format("S/.%.2f", r.getPrecio()));
+        TextView buttonCantidad = holder.itemView.findViewById(R.id.cantidadVendida);
+        buttonCantidad.setText(String.format("%d",r.getCantVentaTotal()));
+        TextView buttonGanancia = holder.itemView.findViewById(R.id.ganancia);
+        buttonGanancia.setText(String.format("%.2f", r.getCantRecaudadoTotal()));
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+r.getIdRestaurante()+"/"+r.getId()+"/plato.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.imageView);
+        }).addOnFailureListener(e -> {
+            holder.imageView.setImageResource(R.drawable.camara_icon);
+        });
     }
 
     @Override
@@ -49,17 +66,19 @@ public class AdministradorReporteComidaAdapter extends RecyclerView.Adapter<Admi
     }
 
     public class AdministradorReportesViewHolder extends RecyclerView.ViewHolder{
-        ReporteComida reporte;
+        Platillo reporte;
+        ImageView imageView;
         public AdministradorReportesViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.img);
         }
     }
 
-    public List<ReporteComida> getListaReportes() {
+    public List<Platillo> getListaReportes() {
         return listaReportes;
     }
 
-    public void setListaReportes(List<ReporteComida> listaReportes) {
+    public void setListaReportes(List<Platillo> listaReportes) {
         this.listaReportes = listaReportes;
     }
 

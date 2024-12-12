@@ -137,7 +137,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:backgroundTint="@color/light_green"
-                android:onClick="verOtros"
                 app:srcCompat="@drawable/filterpx"
                 app:tint="@color/white" />
         </LinearLayout>
@@ -146,7 +145,7 @@
             android:id="@+id/lista"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
         </androidx.recyclerview.widget.RecyclerView>

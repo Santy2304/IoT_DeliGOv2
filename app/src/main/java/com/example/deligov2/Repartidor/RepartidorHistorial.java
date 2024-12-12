@@ -52,13 +52,8 @@ public class RepartidorHistorial extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
 
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_historial);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
 
         ShapeableImageView image = findViewById(R.id.imageView);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
@@ -124,21 +119,15 @@ public class RepartidorHistorial extends AppCompatActivity {
             fechas[i] = calendar.getTime(); // Convertir a Date y almacenar en el array
         }
 
-        comidas1.add(new Comida(1, "Pizza", 2));
-        comidas1.add(new Comida(2, "Hamburguesa", 3));
-        comidas1.add(new Comida(3, "Helado", 3));
-        comidas1.add(new Comida(4, "Pollo", 3));
-        comidas1.add(new Comida(5, "Postre", 3));
-        comidas1.add(new Comida(6, "Chaufa", 3));
-        comidas1.add(new Comida(7, "Cangreburger", 3));
+        comidas1.add(new Comida("", "Pizza", 2));
+        comidas1.add(new Comida("", "Hamburguesa", 3));
+        comidas1.add(new Comida("", "Helado", 3));
+        comidas1.add(new Comida("", "Pollo", 3));
+        comidas1.add(new Comida("", "Postre", 3));
+        comidas1.add(new Comida("", "Chaufa", 3));
+        comidas1.add(new Comida("", "Cangreburger", 3));
 
-        comidas2.add(new Comida(10, "Tacos", 4));
-        comidas2.add(new Comida(20, "Ensalada", 1));
-        comidas2.add(new Comida(50, "Arraoz chaufa", 5));
-        comidas2.add(new Comida(24, "Pescado frito", 3));
-        comidas2.add(new Comida(34, "Pollo frito", 2));
-        comidas2.add(new Comida(24, "Pescado frito", 3));
-        comidas2.add(new Comida(34, "Pollo frito", 2));
+
 
         for(int i=20 ; i<100 ;  i++){
             PedidoRepartidor p =  new PedidoRepartidor();

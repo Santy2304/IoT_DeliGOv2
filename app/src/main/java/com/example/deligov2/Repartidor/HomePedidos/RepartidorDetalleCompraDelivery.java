@@ -28,6 +28,8 @@ import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -71,7 +73,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 ((MaterialButton)findViewById(R.id.btn_estado)).setText(pedidoSupreme.getEstado());
                 ((TextView)findViewById(R.id.direccion)).setText(pedidoSupreme.getDireccion());
                 ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + 20);
-                ((Button)findViewById(R.id.btn_aceptar)).setContentDescription(pedidoSupreme.getId());
+                ((ExtendedFloatingActionButton)findViewById(R.id.btn_aceptar)).setContentDescription(pedidoSupreme.getId());
 
                 Float sum =  new Float(0);
                 for(Integer j =0 ; j<pedidoSupreme.getIdListaPlatos().size(); j++){
@@ -81,7 +83,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 obtenerPlatillos(pedidoSupreme.getIdListaPlatos(), ()->{
                     RepartidorDetalleComidaAdapter adapter = new RepartidorDetalleComidaAdapter();
                     adapter.setContext(this);
-                    adapter.setLista(convertComida(pedidoSupreme.getPreciosActuales() , devolverPlatos(pedidoSupreme.getIdListaPlatos()) ,  pedidoSupreme.getListaCantidades()));
+                    adapter.setLista(convertComida(pedidoSupreme.getIdListaPlatos() , devolverPlatos(pedidoSupreme.getIdListaPlatos()) ,  pedidoSupreme.getListaCantidades()));
                     RecyclerView recyclerView = findViewById(R.id.lista);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -156,13 +158,14 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         }
         return nuevo;
     }
-    public List<Comida> convertComida(ArrayList<Float> listaPrecios, ArrayList<String> idComidas , ArrayList<Integer> listaCantidades){
+    public List<Comida> convertComida(ArrayList<String> listaIds, ArrayList<String> idComidas , ArrayList<Integer> listaCantidades){
         List<Comida> lista = new ArrayList<>();
         for (int i = 0 ; i < listaCantidades.size() ;  i++){
             Comida comida = new Comida();
             comida.setNombreComida(idComidas.get(i));
             comida.setCantidad(listaCantidades.get(i));
-            comida.setIdComida(i);
+            comida.setIdComida(listaIds.get(i));
+            comida.setIdRestaurante(pedidoSupreme.getIdRestaurante());
             lista.add(comida);
         }
         return lista;

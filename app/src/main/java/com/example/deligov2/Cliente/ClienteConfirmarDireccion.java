@@ -64,41 +64,56 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMapReadyCallback {
+    //FIREBASE
     FirebaseAuth firebaseAuth;
-    private LatLng selectedLocation;
-    private boolean direccionValida = false;
+    private Usuario usuario;
     FirebaseUser user;
     FirebaseFirestore db;
+    //FIREBASE
+
+    //MANEJO DE MAPAS
+    private LatLng selectedLocation;
+    private boolean direccionValida = false;
+    private GoogleMap mMap;
+    private TextInputEditText address;
+    //MANEJO DE MAPAS
+
+    //GESTIONAR EL MAPA
     Button confirmarButton;
     Carrito carrito;
     ArrayList<Platillo> lista = new ArrayList<>();
+    //GESTIONAR EL MAPA
 
-    private Usuario usuario;
-    private GoogleMap mMap;
-    private TextInputEditText address;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cliente_confirmar_direccion);
+        //FIREBASE
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
+        //FIREBASE
+
+        //CARGA LA VISTA
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cliente_confirmar_direccion);
+        //CARGA LA VISTA
+        //OBTENEMOS ELEMENTOS DE LA VISTA
         confirmarButton = findViewById(R.id.confirm_Button);
         address =  findViewById(R.id.address);
         Intent intent = getIntent();
+        //CARGAMOS EL MAPA
         ArrayList<Float> listaPrecios =  (ArrayList<Float>) intent.getSerializableExtra("listaPrecios");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+        //RECOGE CAMBIOS EN EL INPUTTEXT PARA PODER MOSTRARLO EN EL MAPA
         address.addTextChangedListener(new TextWatcher() {
             private Timer timer = new Timer();
             private final long DELAY = 1000;
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -123,7 +138,9 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                 }, DELAY); // Ejecuta después del tiempo definido en DELAY
             }
         });
+        //DESPUES DE CARGAR LOS DATOS DEL USUARIO
         loadUser(()->{
+
             ((TextView)findViewById(R.id.ubi)).setText(usuario.getDireccion());
             db.collection("Carritos").document(user.getUid()).get()
                     .addOnSuccessListener(documentSnapshot -> {
@@ -143,42 +160,34 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 pedido.setIdRestaurante(carrito.getIdRestaurante());
                                 pedido.setIdListaPlatos(carrito.getIdListaPlatos());
 
-
-                                db.collection("Platos").addSnapshotListener((snapshot, error)->{
-                                    if (error != null) {
-                                        Log.w("msg-test", "Listen failed.", error);
-                                        return;
-                                    }
-                                    if (snapshot != null && !snapshot.isEmpty()) {
-                                        for (DocumentSnapshot document : snapshot.getDocuments()) {
-                                            Platillo platillo = document.toObject(Platillo.class);
-                                            Log.w("msg-test", "Listen failed " + document.getId());
-                                            if (carrito.getIdListaPlatos().contains(platillo.getId())) {
-                                                lista.add(platillo);
-
-                                                for (int i=0;i<lista.size();i++) {
-                                                    Platillo platilloAu = lista.get(i);
-                                                    int cantidadVendida = carrito.getListaCantidades().get(i);
-                                                    platillo.setCantVentaTotal(platillo.getCantVentaTotal() + cantidadVendida);
-                                                    db.collection("Platos").document(platillo.getId())
-                                                            .update("cantVenta", platillo.getCantVentaTotal())
-                                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "cantVenta actualizada correctamente para " + platillo.getNombre()))
+                                for(int i=0;i<carrito.getIdListaPlatos().size();i++){
+                                    String id = carrito.getIdListaPlatos().get(i);
+                                    int cantidadVendida = carrito.getListaCantidades().get(i);
+                                    float cantidadRecaudado = cantidadVendida*listaPrecios.get(i);
+                                    db.collection("Platos").document(carrito.getIdListaPlatos().get(i)).get()
+                                            .addOnSuccessListener(documentSnapshot1 -> {
+                                                if (documentSnapshot1.exists()) {
+                                                    Platillo platillo = documentSnapshot1.toObject(Platillo.class);
+                                                    db.collection("Platos").document(id)
+                                                            .update("cantVentaTotal", cantidadVendida + platillo.getCantVentaTotal(),
+                                                                    "cantRecaudadoTotal",cantidadRecaudado+platillo.getCantRecaudadoTotal())
+                                                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "cantVenta actualizada correctamente para " ))
                                                             .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar cantVenta", e));
                                                 }
-                                            }
-                                        }
-                                    }});
+                                            })
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+                                }
 
                                 pedido.setPreciosActuales(listaPrecios);
                                 pedido.setId(generarIdAleatorio());
                                 pedido.setListaCantidades(carrito.getListaCantidades());
                                 pedido.setIdUsuario(user.getUid());
-                                pedido.setEstado("Pendiente");
+                                pedido.setEstado("Recibido");
                                 pedido.setHora(Timestamp.now());
                                 pedido.setCostoEnvio(carrito.getCostoEnvio());
                                 Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
                                 guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
-
                                 db.collection("Pedidos").document(pedido.getId())
                                         .set(pedido)
                                         .addOnSuccessListener(aVoid -> {
@@ -188,7 +197,6 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                         .addOnFailureListener(e -> {
                                             Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                         });
-
                                 carrito.setIdListaPlatos(new ArrayList<>());
                                 carrito.setListaCantidades(new ArrayList<>());
                                 carrito.setIdRestaurante("");
@@ -197,17 +205,16 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                         .addOnSuccessListener(aVoid -> {
                                             Toast.makeText(this, "Carrito vaciado.", Toast.LENGTH_SHORT).show();
                                         });
-
                                 Intent intent1 = new Intent(this,ClienteConfirmacionCompra.class);
                                 intent1.putExtra("id",pedido.getId());
                                 startActivity(intent1);
                                 finish();
-
                             });
 
                         }
                     })
                     .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -235,27 +242,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.cliente_menu, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId()==R.id.historial){
-            startActivity(new Intent(this, ClienteHistorialActivity.class));
-            return true;
-        } else if (item.getItemId()==R.id.restaurant) {
-            startActivity(new Intent(this, ClienteRestaurantActivity.class));
-            return true;
-        } else if (item.getItemId()==R.id.profile) {
-            startActivity(new Intent(this, ClientePerfil.class));
-            return true;
-        }else{
-            return super.onOptionsItemSelected(item);
-        }
-    }
 
     public static String generarIdAleatorio() {
         Random random = new Random();
@@ -278,7 +265,6 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
 
         return new String(idArray);
     }
-
     public void guardarQRCodeEnFirebase(Bitmap qrBitmap, String idPedido) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         qrBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -301,7 +287,6 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
             Log.e("FirebaseStorage", "Error al guardar el QR Code en Firebase Storage");
         });
     }
-
     public Bitmap generarQRCode(String texto) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
@@ -333,6 +318,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                 });
     }
 
+    //GESTIONA EL MAPA
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -384,4 +370,29 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
             Toast.makeText(this, "Por favor, ingresa una dirección", Toast.LENGTH_SHORT).show();
         }
     }
+    //GESTIONA EL MAPA
+
+    //GESTION DE LOS BOTONES DE LA BARRA DE ABAJO
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cliente_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.historial){
+            startActivity(new Intent(this, ClienteHistorialActivity.class));
+            return true;
+        } else if (item.getItemId()==R.id.restaurant) {
+            startActivity(new Intent(this, ClienteRestaurantActivity.class));
+            return true;
+        } else if (item.getItemId()==R.id.profile) {
+            startActivity(new Intent(this, ClientePerfil.class));
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    //GESTION DE LOS BOTONES DE LA BARRA DE ABAJO
 }

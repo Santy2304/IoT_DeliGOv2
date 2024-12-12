@@ -14,8 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.deligov2.R;
+import com.example.deligov2.Workers.ContadorWorker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ClienteConfirmacionCompra extends AppCompatActivity {
@@ -31,6 +35,7 @@ public class ClienteConfirmacionCompra extends AppCompatActivity {
 
         id = findViewById(R.id.idCompra);
         id.setText("#"+idPedido);
+        iniciarPedidoWorker(idPedido);
 
         backMenuButton = findViewById(R.id.goToMenu);
         trackingButton = findViewById(R.id.followOrderButton);
@@ -49,5 +54,16 @@ public class ClienteConfirmacionCompra extends AppCompatActivity {
         });
 
     }
+    private void iniciarPedidoWorker(String idPedido) {
+        Data inputData = new Data.Builder()
+                .putString("pedidoId", idPedido)
+                .build();
 
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(ContadorWorker.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(this).enqueue(workRequest);
+
+    }
 }

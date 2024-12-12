@@ -122,21 +122,19 @@
 
             </LinearLayout>
 
-            <Button
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btn_aceptar"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="155sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="-10sp"
-                android:backgroundTint="@color/light_green"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Aceptar"
+                android:layout_marginStart="10dp"
                 android:onClick="aceptarPedido"
-                android:text="Aceptar pedido"
-                android:textColor="@color/white"
-                android:textSize="18sp"
                 android:textStyle="bold"
-                app:icon="@drawable/intento"
-                app:iconSize="25sp" />
+                app:icon="@drawable/check_circle_24px"
+                />
 
 
         </LinearLayout>

@@ -38,13 +38,7 @@ public class RepartidorNotificaciones extends AppCompatActivity {
         loadUser();
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_notificaciones);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         ShapeableImageView image = findViewById(R.id.ola);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");

@@ -5,18 +5,24 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Beans.Notificaciones;
+import com.bumptech.glide.Glide;
+import com.example.deligov2.DTO.Notificaciones;
 import com.example.deligov2.Cliente.ClienteTrackingActivity;
 import com.example.deligov2.R;
+import com.google.firebase.Timestamp;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAdapter.NotificacionesViewHolder> {
 
@@ -36,17 +42,30 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
         holder.notificaciones = n;
 
         TextView textViewOrder = holder.itemView.findViewById(R.id.orderId);
-        textViewOrder.setText(n.getIdCompra() +"");
+        textViewOrder.setText("#"+n.getIdPedido());
 
-        LocalDateTime fechaHora = n.getFecha();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String fechaHoraFormateada = fechaHora.format(formatter);
+        Timestamp timestamp = n.getFecha();
+        Date date = timestamp.toDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String fechaFormateada = dateFormat.format(date);
 
         TextView textViewHorario = holder.itemView.findViewById(R.id.notiDate);
-        textViewHorario.setText(fechaHoraFormateada);
+        textViewHorario.setText(fechaFormateada);
 
         TextView textViewContent = holder.itemView.findViewById(R.id.contentId);
         textViewContent.setText(n.getContenido());
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+n.getIdRestaurante()+"/logo.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.imageView);
+        }).addOnFailureListener(e -> {
+            holder.imageView.setImageResource(R.drawable.camara_icon);
+        });
     }
 
     @Override
@@ -71,12 +90,14 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
     }
     public class NotificacionesViewHolder extends RecyclerView.ViewHolder{
         Notificaciones notificaciones;
+        ImageView imageView;
         public NotificacionesViewHolder(@NonNull View itemView) {
             super(itemView);
             TextView button = itemView.findViewById(R.id.goToDetails);
+            imageView = itemView.findViewById(R.id.imgMsg);
             button.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
-                intent.putExtra("idCompra",notificaciones.getId());
+                intent.putExtra("idCompra",notificaciones.getIdPedido());
                 itemView.getContext().startActivity(intent);
             });
         }

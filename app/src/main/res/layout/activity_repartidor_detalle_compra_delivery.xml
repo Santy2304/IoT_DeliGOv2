@@ -76,6 +76,7 @@
         android:layout_gravity="center_vertical"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Aceptar"
+        android:onClick="aceptarPedido"
         android:layout_marginStart="60dp"
         android:layout_marginTop="12dp"
         android:textStyle="bold"

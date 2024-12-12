@@ -72,6 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/baseline_eye_24"
+                    app:backgroundTint="@color/light_yellow"
 
                     />
 
@@ -83,6 +84,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/baseline_edit_24"
+                    app:backgroundTint="@color/light_green"
+
                     />
 
             </LinearLayout>

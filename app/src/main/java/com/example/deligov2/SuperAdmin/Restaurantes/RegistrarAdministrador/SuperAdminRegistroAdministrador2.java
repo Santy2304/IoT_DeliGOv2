@@ -175,8 +175,11 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
             }
         });
 
+        /*
         Button btCancelar = findViewById(R.id.cancelar2);
         btCancelar.setVisibility(View.INVISIBLE);
+
+         */
         /*
         btCancelar.setOnClickListener(new View.OnClickListener() {
             @Override

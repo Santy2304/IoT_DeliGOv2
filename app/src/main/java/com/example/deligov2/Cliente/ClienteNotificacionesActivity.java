@@ -2,6 +2,7 @@ package com.example.deligov2.Cliente;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,50 +12,61 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Adapters.NotificacionesAdapter;
-import com.example.deligov2.Beans.Notificaciones;
+import com.example.deligov2.DTO.Notificaciones;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ClienteNotificacionesActivity extends AppCompatActivity {
+    FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    ArrayList<Notificaciones> lista = new ArrayList<>();
 
-
-   // TextView goToDetails;
-    ArrayList<Notificaciones> lista;
-    String[] contenido = {
-            "Se ha recibido su pedido correctamente",
-            "Su pedido está en preparación",
-            "Su pedido está listo",
-            "Su pedido está en camino",
-            "Su pedido ha llegado a su destino"
-    };
-
-    int[] idsNotificaciones = {
-            1,2,3,4,5
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_notificaciones);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        NotificacionesAdapter adapter = new NotificacionesAdapter();
+        adapter.setContext(this);
 
-       // goToDetails = findViewById(R.id.goToDetails);
-        //goToDetails.setOnClickListener(view -> {
-            //Intent intent = new Intent(this,ClienteDetalleCompra.class);
-            //startActivity(intent);
-        //});
+        db.collection("Notificaciones").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Notificaciones notificaciones = document.toObject(Notificaciones.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
+                    if (notificaciones.getIdCliente().equals(user.getUid())){
+                        lista.add(notificaciones);
+                    }
 
-        lista = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            Notificaciones notificaciones = new Notificaciones();
-            notificaciones.setId(idsNotificaciones[i]);
-            notificaciones.setContenido(contenido[i]);
-            notificaciones.setIdCompra(42);
-            notificaciones.setFecha(LocalDateTime.now().plusMinutes(i*10));
-            lista.add(notificaciones);
-        }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        adapter.setListaNotificaciones(lista);
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewNoti);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -79,30 +91,9 @@ public class ClienteNotificacionesActivity extends AppCompatActivity {
 
             }
         });
-        NotificacionesAdapter adapter = new NotificacionesAdapter();
-        adapter.setContext(ClienteNotificacionesActivity.this);
-        adapter.setListaNotificaciones(lista);
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewNoti);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cliente_menu, menu);

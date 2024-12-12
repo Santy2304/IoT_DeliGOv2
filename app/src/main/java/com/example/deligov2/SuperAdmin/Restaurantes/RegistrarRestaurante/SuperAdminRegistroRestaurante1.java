@@ -37,6 +37,7 @@ import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,6 +64,10 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private Usuario usuario;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
+    private static final int REQUEST_IMAGE_CAPTURE_LOGO = 3;
+    private static final int REQUEST_IMAGE_PICK_LOGO = 4;
+    private static final int REQUEST_IMAGE_CAPTURE_BANNER = 5;
+    private static final int REQUEST_IMAGE_PICK_BANNER = 6;
     private static final int REQUEST_PERMISSIONS = 100;
     private FirebaseFirestore db;
     //Nombre del restaurante
@@ -76,6 +81,14 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     private Uri imageUri;
     private Bitmap imageBitmap;
 
+    private Uri imageUri2; //para el banner
+    private Bitmap imageBitmap2;
+    private ImageView currentImageView;
+
+    private int currentRequestType;
+
+    private boolean lastRequestWasForLogo = false;
+    private boolean lastRequestWasForBanner = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         storage = FirebaseStorage.getInstance();
@@ -135,7 +148,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             }
         });
 
-
         //Para las categorías
         tipoCategoria = (Spinner) findViewById(R.id.spinner_categoria);
 
@@ -188,11 +200,27 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         String time = dateFormat.format(new Date());
         ImageView imageView = findViewById(R.id.imgLogo);
         TextView tvLogo = findViewById(R.id.tv_logo);
+        ImageView imageView2 = findViewById(R.id.imgBanner);
+        TextView tvBanner = findViewById(R.id.tv_banner);
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                lastRequestWasForLogo = true;
+                lastRequestWasForBanner = false;
                 if (checkPermissions()) {
                     openGalleryOrCamera();
+                }
+            }
+        });
+
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lastRequestWasForLogo = false;
+                lastRequestWasForBanner = true;
+                if (checkPermissions()) {
+                    openGalleryOrCamera2();
                 }
             }
         });
@@ -257,19 +285,26 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
                             intent.putExtra("imageBitmap", byteArray);
                             Log.d("DEBUG_IMAGE", "Bitmap enviado.");
                         }
+                        //banner
+                        if (imageUri2 != null) {
+                            intent.putExtra("imageUri2", imageUri2.toString());
+                            Log.d("DEBUG_IMAGE", "imageUri2: " + imageUri2.toString());
+                        } else if (imageBitmap2 != null) {
+                            ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+                            imageBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, baos2);
+                            byte[] byteArray = baos2.toByteArray();
+                            intent.putExtra("imageBitmap2", byteArray);
+                            Log.d("DEBUG_IMAGE", "Bitmap enviado.");
+                        }
                         startActivity(intent);
-
                         //vistaRegistroRestaurante2(restA,sa);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 if (!validInput) return;
             }
         });
-
-
 
         btCancelar = (Button) findViewById(R.id.cancelar1);
         btCancelar.setOnClickListener(new View.OnClickListener() {
@@ -278,6 +313,15 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
                 vistaPanelRestaurante();
             }
         });
+        FloatingActionButton btAtras = findViewById(R.id.bt_atras);
+
+        btAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
     }
 
@@ -287,7 +331,18 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
         Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
-        startActivityForResult(chooser, REQUEST_IMAGE_PICK);
+
+        startActivityForResult(chooser,REQUEST_IMAGE_PICK_LOGO);
+    }
+
+    private void openGalleryOrCamera2() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
+
+        startActivityForResult(chooser,REQUEST_IMAGE_PICK_BANNER);
     }
 
     @Override
@@ -295,9 +350,14 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGalleryOrCamera();
+                // Decide cuál acción tomar según el contexto
+                if (lastRequestWasForLogo) {
+                    openGalleryOrCamera(); // para logo
+                } else if (lastRequestWasForBanner) {
+                    openGalleryOrCamera2(); // Abre cámara o galería para banner
+                }
             } else {
-                //No sé ayuda
+                Log.e("DEBUG_PERMISSION", "Permisos denegados por el usuario.");
             }
         }
     }
@@ -306,53 +366,63 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        /*
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                ImageView imageView = findViewById(R.id.imgLogo);
-                TextView tvLogo = findViewById(R.id.tv_logo);
-                tvLogo.setVisibility(View.INVISIBLE);
-                imageView.setImageBitmap(imageBitmap);
-            } else if (requestCode == REQUEST_IMAGE_PICK) {
-                Uri selectedImageUri = data.getData();
-                ImageView imageView = findViewById(R.id.imgLogo);
-                TextView tvLogo = findViewById(R.id.tv_logo);
-                tvLogo.setVisibility(View.INVISIBLE);
-                imageView.setImageURI(selectedImageUri);
-            }
-        }
-         */
         if (resultCode == RESULT_OK && data != null) {
-            ImageView imageView = findViewById(R.id.imgLogo);
-            TextView tvLogo = findViewById(R.id.tv_logo);
-            tvLogo.setVisibility(View.INVISIBLE);
-
-            if (requestCode == REQUEST_IMAGE_CAPTURE) { // Cámara
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    imageBitmap = (Bitmap) extras.get("data");
-                    imageView.setImageBitmap(imageBitmap);
-                    imageUri = null;
-                    Log.d("DEBUG_IMAGE", "Imagen capturada desde la cámara.");
-                } else {
-                    Log.e("DEBUG_IMAGE", "Extras nulos al capturar imagen.");
-                }
-            } else if (requestCode == REQUEST_IMAGE_PICK) { // Galería
-                imageUri = data.getData();
-                if (imageUri != null) {
-                    imageView.setImageURI(imageUri);
-                    imageBitmap = null;
-                    Log.d("DEBUG_IMAGE", "Imagen seleccionada de la galería: " + imageUri.toString());
-                } else {
-                    Log.e("DEBUG_IMAGE", "Uri nulo al seleccionar imagen.");
-                }
+            // Manejo para logo
+            if (requestCode == REQUEST_IMAGE_CAPTURE_LOGO || requestCode == REQUEST_IMAGE_PICK_LOGO) {
+                handleImageResult(data, findViewById(R.id.imgLogo), findViewById(R.id.tv_logo));
+            }
+            // Manejo para banner
+            else if (requestCode == REQUEST_IMAGE_CAPTURE_BANNER || requestCode == REQUEST_IMAGE_PICK_BANNER) {
+                handleImageResult(data, findViewById(R.id.imgBanner), findViewById(R.id.tv_banner));
+            }
+            // Caso no manejado
+            else {
+                Log.e("DEBUG_IMAGE", "Código de solicitud no manejado: " + requestCode);
             }
         } else {
             Log.e("DEBUG_IMAGE", "onActivityResult recibió un código de resultado no OK o data nula.");
         }
     }
+
+    private void handleImageResult(Intent data, ImageView imageView, TextView textView) {
+        try {
+            if (data.getExtras() != null && data.getExtras().get("data") instanceof Bitmap) {
+                // Imagen capturada por la cámara
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                imageView.setImageBitmap(bitmap);
+                textView.setVisibility(View.INVISIBLE);
+
+                // Almacena la imagen dependiendo del tipo
+                if (imageView.getId() == R.id.imgLogo) {
+                    imageBitmap = bitmap;
+                    imageUri = null; // Limpia cualquier URI previo
+                } else if (imageView.getId() == R.id.imgBanner) {
+                    imageBitmap2 = bitmap;
+                    imageUri2 = null; // Limpia cualquier URI previo
+                }
+            } else if (data.getData() != null) {
+                // Imagen seleccionada de la galería
+                Uri uri = data.getData();
+                imageView.setImageURI(uri);
+                textView.setVisibility(View.INVISIBLE);
+
+                // Almacena la imagen dependiendo del tipo
+                if (imageView.getId() == R.id.imgLogo) {
+                    imageUri = uri;
+                    imageBitmap = null; // Limpia cualquier Bitmap previo
+                } else if (imageView.getId() == R.id.imgBanner) {
+                    imageUri2 = uri;
+                    imageBitmap2 = null; // Limpia cualquier Bitmap previo
+                }
+            } else {
+                Log.e("DEBUG_IMAGE", "No se recibió imagen válida.");
+            }
+        } catch (Exception e) {
+            Log.e("DEBUG_IMAGE", "Error al procesar la imagen: ", e);
+        }
+    }
+
+
 
     private boolean checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
@@ -362,20 +432,18 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_PERMISSIONS);
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     //Manejo de los datos
     public void onClick(View v){
         if(v==tiHinicio){
             final Calendar calendar = Calendar.getInstance();
-
             hora = calendar.get(Calendar.HOUR_OF_DAY);
             minuto = calendar.get(Calendar.MINUTE);
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this,new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hoursOfDay, int minute) {
                     tiHinicio.setText(hoursOfDay + ":" + minute);
@@ -386,7 +454,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
 
         if(v==tiHfin){
             final Calendar calendar = Calendar.getInstance();
-
             hora = calendar.get(Calendar.HOUR_OF_DAY);
             minuto = calendar.get(Calendar.MINUTE);
 
@@ -426,5 +493,4 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
                     }
                 });
     }
-
 }

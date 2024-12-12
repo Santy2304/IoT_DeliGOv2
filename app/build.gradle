@@ -57,6 +57,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
     implementation 'com.google.firebase:firebase-storage'
+    implementation "androidx.work:work-runtime:2.8.0"
 
 //Esto es para actualizar los datos de firebase
     implementation 'com.google.firebase:firebase-core:21.1.1'

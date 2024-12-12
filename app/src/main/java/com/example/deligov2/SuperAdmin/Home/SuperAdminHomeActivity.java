@@ -60,7 +60,6 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         loadUser();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_home);
         ImageView repartidor = findViewById(R.id.imgRepartidor);
         ImageView admin = findViewById(R.id.imgAdmin);
@@ -78,20 +77,20 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarCliente);
 
         //Manejo del top app bar
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
-        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.log_event){
-                    Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);
-                    startActivity(intent);
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
+//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+//
+//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(@NonNull MenuItem item) {
+//                if(item.getItemId()==R.id.log_event){
+//                    Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);
+//                    startActivity(intent);
+//                    return true;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        });
 
 
         //Manejo del botton_navbar

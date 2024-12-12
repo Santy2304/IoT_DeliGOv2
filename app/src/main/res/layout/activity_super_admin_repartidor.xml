@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".SuperAdmin.Home.SuperAdminRepartidor">
-
+<!--
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -25,250 +25,235 @@
             app:titleTextColor="@color/light_green" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="match_parent"
-        android:layout_height="40sp"
-        android:text="Panel de usuarios"
-        android:textAlignment="center"
-        android:textColor="@color/light_green"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.092"
-        tools:layout_editor_absoluteX="-39dp" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/panel_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="120dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardViewCliente"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/materialCardViewRepartidor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:background="@drawable/borde_estatico"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imgCostumer"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:onClick="vistaPanelCliente"
-                    app:srcCompat="@drawable/icclient" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:text="Cliente"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardViewRepartidor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/light_green"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/materialCardViewAdmin"
-            app:layout_constraintStart_toEndOf="@+id/materialCardViewCliente"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:strokeColor="@color/light_green"
-            app:strokeWidth="2dp"
-            app:background="@drawable/borde">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imgRepartidor"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:srcCompat="@drawable/icdealer" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-
-                    android:text="Repartidor"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardViewAdmin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/materialCardViewRepartidor"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:background="@drawable/borde_estatico">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imgAdmin"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:textColor="@color/black"
-                    android:onClick="vistaPanelAdmin"
-                    app:srcCompat="@drawable/icadmin" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:text="Administrador"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6sp"
-        android:layout_marginEnd="6sp"
-        android:hint="Buscar"
-        app:layout_constraintBottom_toTopOf="@+id/bt_reciente"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:boxCornerRadiusTopStart="23dp"
-        app:boxCornerRadiusTopEnd="23dp"
-        app:boxCornerRadiusBottomStart="23dp"
-        app:boxCornerRadiusBottomEnd="23dp"
-        app:startIconDrawable="@drawable/baseline_search_24">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/buscarRepartidor"
-            android:imeOptions="actionSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:maxHeight="48dp"
-            android:padding="8dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
+-->
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_alfabetico"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="15sp"
-        android:layout_height="40sp"
-        android:backgroundTint="@color/light_green"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Alfabetico"
-        android:textSize="14sp"
-        app:backgroundTint="@color/light_green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.365" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_reciente"
-        android:layout_width="wrap_content"
-        android:layout_height="40sp"
-        android:layout_marginTop="15sp"
-        android:backgroundTint="@color/light_green"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Más reciente"
-        android:textSize="14sp"
-        app:backgroundTint="@color/light_green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.365" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/bt_filtro"
-        style="?attr/floatingActionButtonSmallStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:backgroundTint="@color/light_green"
-        android:contentDescription="filtro"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.371"
-        app:srcCompat="@drawable/filterpx"
-        app:tint="@color/white" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listRepartidor"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:padding="6dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_filtro"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="DeliGo"
+                android:textColor="@color/light_green"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/light_green"
+                android:contentDescription="Notificaciones"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/notifications_24px"
+                app:tint="@color/white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/logButton"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/light_green"
+                app:srcCompat="@drawable/list_alt_24px"
+                app:tint="@color/white" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView3"
+                android:layout_width="0dp"
+                android:layout_height="50sp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.9"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:srcCompat="@drawable/hineilll" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardViewCliente"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:background="@drawable/borde"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imgCostumer"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:srcCompat="@drawable/icclient" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:gravity="center"
+                        android:text="Cliente"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardViewRepartidor"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/light_green"
+                app:background="@drawable/borde"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/light_green"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imgRepartidor"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="vistaPanelRepartidor"
+                        app:srcCompat="@drawable/icdealer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:gravity="center"
+                        android:text="Repartidor"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardViewAdmin"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:background="@drawable/borde_estatico"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imgAdmin"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="vistaPanelAdmin"
+                        app:srcCompat="@drawable/icadmin" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:gravity="center"
+                        android:text="Administrador"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="6sp"
+            android:hint="Buscar"
+            app:boxCornerRadiusBottomEnd="23dp"
+            app:boxCornerRadiusBottomStart="23dp"
+            app:boxCornerRadiusTopEnd="23dp"
+            app:boxCornerRadiusTopStart="23dp"
+            app:startIconDrawable="@drawable/baseline_search_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/buscarRepartidor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                android:maxHeight="48dp"
+                android:minHeight="40dp"
+                android:padding="8dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listRepartidor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="130sp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation_superadmin"
-        tools:layout_editor_absoluteX="6dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_superadmin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
