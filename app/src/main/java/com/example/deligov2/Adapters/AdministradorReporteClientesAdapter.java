@@ -34,8 +34,6 @@ public class AdministradorReporteClientesAdapter extends RecyclerView.Adapter<Ad
         ReporteCliente r = listaReportes.get(position);
         holder.reporte = r;
 
-        TextView textViewId = holder.itemView.findViewById(R.id.idReporteCliente);
-        textViewId.setText(String.format("%d",r.getId()));
         TextView textViewName = holder.itemView.findViewById(R.id.nombreCliente);
         textViewName.setText(r.getNombre());
         TextView textViewFecha = holder.itemView.findViewById(R.id.fechaUltimoPedido);
