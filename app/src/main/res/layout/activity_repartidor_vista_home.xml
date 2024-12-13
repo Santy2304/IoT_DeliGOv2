@@ -121,7 +121,7 @@
 -->
             <TextView
                 android:id="@+id/textView12"
-                android:layout_width="320dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginStart="10dp"

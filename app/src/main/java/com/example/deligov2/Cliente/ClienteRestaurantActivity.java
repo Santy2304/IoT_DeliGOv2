@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
 import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Platillo;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -47,6 +53,9 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
     FloatingActionButton cartButton;
     FloatingActionButton backButton;
     Carrito carrito;
+    TextView nameRest;
+    ImageView logo, banner;
+    Restaurante restaurante;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,15 +64,16 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         idRestaurante = getIntent().getStringExtra("idRestaurante");
-
+        logo = findViewById(R.id.logo);
+        banner = findViewById(R.id.bannerRest);
+        nameRest = findViewById(R.id.nameRest);
         db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                        carrito  = documentSnapshot.toObject(Carrito.class);
                         listaIdPlatos.addAll(carrito.getIdListaPlatos());
-
                     }
-                    adapter.notifyDataSetChanged();
+                   // adapter.notifyDataSetChanged();
 
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
@@ -85,6 +95,39 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged();
             }
+        });
+        db.collection("restaurantes").document(idRestaurante).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        restaurante  = documentSnapshot.toObject(Restaurante.class);
+                        nameRest.setText(restaurante.getNombre());
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("restaurantes/"+idRestaurante+"/logo.jpg");
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(logo);
+        }).addOnFailureListener(e -> {
+            logo.setImageResource(R.drawable.camara_icon);
+        });
+
+        StorageReference storageReference2 = storage.getReference().child("restaurantes/"+idRestaurante+"/banner.jpg");
+
+        storageReference2.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(banner);
+        }).addOnFailureListener(e -> {
+            banner.setImageResource(R.drawable.camara_icon);
         });
 
 

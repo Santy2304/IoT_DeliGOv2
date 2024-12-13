@@ -36,14 +36,30 @@ public class ClienteHomeActivity extends AppCompatActivity {
     Carrito carrito;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
+    RestaurantesClientesAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cliente_home);
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-
+        adapter = new RestaurantesClientesAdapter();
+        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Restaurante restaurante = document.toObject(Restaurante.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
+                    lista.add(restaurante);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cliente_home);
         db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -80,28 +96,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
             }
         });
 
-
-
-        RecyclerView carouselRecyclerView;
-        CarouselAdapter adapter2;
-//        carouselRecyclerView = findViewById(R.id.carousel_recycler_view);
-
-//        List<Integer> imageList = Arrays.asList(
-//                R.drawable.carrusel_1,
-//                R.drawable.carrusel_2,
-//                R.drawable.carrusel_3,
-//                R.drawable.carrusel_4,
-//                R.drawable.carrusel_5
-//        );
-//
-//
-//        adapter2 = new CarouselAdapter(this, imageList);
-//        carouselRecyclerView.setAdapter(adapter2);
-//
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//        carouselRecyclerView.setLayoutManager(layoutManager);
-//
-
         notiButton = findViewById(R.id.noti_button);
         carritoButton = findViewById(R.id.cart_button);
         //restaurantButton = findViewById(R.id.go_button);
@@ -116,7 +110,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        RestaurantesClientesAdapter adapter = new RestaurantesClientesAdapter();
         adapter.setContext(this);
         adapter.setListaRestaurantes(lista);
 
@@ -124,26 +117,6 @@ public class ClienteHomeActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ClienteHomeActivity.this));
 
-        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
-            if (error != null) {
-                Log.w("msg-test", "Listen failed.", error);
-                return;
-            }
-            if (snapshot != null && !snapshot.isEmpty()) {
-                lista.clear();
-                for (DocumentSnapshot document : snapshot.getDocuments()) {
-                    Restaurante restaurante = document.toObject(Restaurante.class);
-                    Log.w("msg-test", "Listen failed "+ document.getId());
-                    lista.add(restaurante);
-                }
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        //restaurantButton.setOnClickListener(view -> {
-          //  Intent intent = new Intent(this, ClienteRestaurantActivity.class);
-            //startActivity(intent);
-        //});
 
     }
 
