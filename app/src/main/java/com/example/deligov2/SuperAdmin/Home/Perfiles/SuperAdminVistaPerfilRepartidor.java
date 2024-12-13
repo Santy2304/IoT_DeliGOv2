@@ -19,6 +19,7 @@ import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -33,6 +34,7 @@ public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
         Usuario repartidor = (Usuario) getIntent().getSerializableExtra("repatidor_detail");
         // Obtener los datos del intent anterior a este
         //Manejo del top app bar
+        /*
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,8 @@ public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
                 }
             }
         });
+
+         */
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -95,5 +99,14 @@ public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
                 .error(R.drawable.ic_loading) // Imagen de error si falla
                 .into((ImageView) findViewById(R.id.imgSAperfil));
 
+        //atras
+        FloatingActionButton btAtras = findViewById(R.id.bt_atras);
+
+        btAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

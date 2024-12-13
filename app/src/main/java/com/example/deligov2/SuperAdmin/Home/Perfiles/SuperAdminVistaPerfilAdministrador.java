@@ -19,6 +19,7 @@ import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -35,6 +36,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
         // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
         //Manejo del top app bar
+        /*
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +45,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
 
         topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
             @Override
@@ -56,6 +59,8 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
                 }
             }
         });
+
+         */
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -83,6 +88,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
                 }
             }
         });
+
         //Llenamos los datos
         MaterialTextView nameView = findViewById(R.id.name);
         MaterialTextView restaurantView = findViewById(R.id.tv_restaurant);
@@ -107,5 +113,15 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
                 .error(R.drawable.ic_errorimg)       // Imagen si falla la carga
                 .into(profileImageView);
 
+
+        //Atras
+        FloatingActionButton btAtras = findViewById(R.id.back);
+
+        btAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

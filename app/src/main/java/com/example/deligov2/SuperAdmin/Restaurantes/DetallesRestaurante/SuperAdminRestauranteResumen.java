@@ -251,7 +251,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
                             tvEstado.setTextColor(getResources().getColor(R.color.md_theme_error));
                         }
 
-                        db.collection("administradores")
+                        db.collection("Usuarios")
                                 .document(adminRes)
                                 .get()
                                 .addOnSuccessListener(documentSnapshotAdmin -> {
