@@ -75,7 +75,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iconImage;
+        ImageView iconImage, iconBanner;
         TextView tvNombre, tvGanancia, tvAdmin;
         FloatingActionButton btVer,btHabilitar,btDeshabilitar;
 
@@ -84,6 +84,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iconImage = itemView.findViewById(R.id.imgRestaurante);
+            iconBanner = itemView.findViewById(R.id.imgRestauranteLarge);
             tvNombre = itemView.findViewById(R.id.tv_nombre);
             tvGanancia = itemView.findViewById(R.id.tv_ganancia);
             tvAdmin = itemView.findViewById(R.id.tv_admin);
@@ -99,6 +100,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
 
             if(strAdmin==null){
                 iconImage.setImageResource(R.drawable.bembos_logo);
+                iconBanner.setImageResource(R.drawable.bembos2);
                 tvGanancia.setText("S/"+ restaurante.getMonto());
                 tvNombre.setText(restaurante.getNombre());
                 btHabilitar.setVisibility(View.INVISIBLE);
@@ -123,7 +125,6 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                         .document(restaurante.getAdmin())
                         .get()
                         .addOnSuccessListener(documentSnapshot -> {
-
                             //iconImage.setImageResource(R.drawable.bembos_logo);
                             tvGanancia.setText("S/"+ restaurante.getMonto());
                             tvNombre.setText(restaurante.getNombre());
@@ -158,6 +159,24 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                                     .addOnFailureListener(e -> {
                                         Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
                                         iconImage.setImageResource(R.drawable.ic_errorimg);
+                                    });
+
+                            // Cargar banner desde Firebase Storage
+                            FirebaseStorage storageB = FirebaseStorage.getInstance();
+                            StorageReference storageRefb = storageB.getReference()
+                                    .child("restaurantes/" + restaurante.getId() + "/banner.jpg");
+
+                            storageRefb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        Glide.with(iconBanner.getContext())
+                                                .load(uri)
+                                                .placeholder(R.drawable.ic_loading)
+                                                .error(R.drawable.ic_errorimg)
+                                                .into(iconBanner);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                                        iconBanner.setImageResource(R.drawable.ic_errorimg);
                                     });
 
                         })
