@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.AdministradorRestauranteAdapter;
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
 import com.example.deligov2.Beans.Plato;
@@ -27,6 +30,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +59,7 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
     };*/
     FirebaseAuth auth;
     FirebaseFirestore db;
+    FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +107,12 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
             }
         });
 
-        // Cargar la lista de platos desde FireStore
+        // Cargar el usuario desde firestore para obtener el ID del restaurante al que pertenece
         db.collection("Usuarios").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String idRestaurante = documentSnapshot.getString("restaurante"); // Atributo "restaurante" para obtener idRestaurante
-                        cargarPlatos(idRestaurante); // Llama al método para cargar los platos
+                        cargarDatosRestaurante(idRestaurante); // Llama al método para cargar los datos de la vista (banner y listado)
                     } else {
                         Log.e("Firestore", "No se encontró el usuario con ID: " + userId);
                     }
@@ -130,9 +136,35 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
 
     }
 
-    private void cargarPlatos(String idRestaurante) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private void cargarDatosRestaurante(String idRestaurante) {
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
 
+        // Cargar nombre del restaurante
+        db.collection("restaurantes").document(idRestaurante).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String nombreRestaurante = documentSnapshot.getString("nombre");
+                        TextView titleRestaurante = findViewById(R.id.titleRestaurante);
+                        titleRestaurante.setText(nombreRestaurante);
+                    } else {
+                        Log.e("Firestore", "No se encontró el restaurante con ID: " + idRestaurante);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al obtener restaurante", e));
+
+        // Cargar el logo del restaurante
+        String rutaLogo = "restaurantes/" + idRestaurante + "/logo.jpg";
+        StorageReference storageReference = storage.getReference(rutaLogo);
+        ImageView imageRestaurante = findViewById(R.id.imageRestaurante);
+
+        Glide.with(this)
+                .load(storageReference)
+                .placeholder(R.drawable.ic_loading)
+                .error(R.drawable.ic_errorimg)
+                .into(imageRestaurante);
+
+        // Cargar la lista de platos del restaurante
         db.collection("Platos")
                 .whereEqualTo("idRestaurante", idRestaurante)
                 .get()
