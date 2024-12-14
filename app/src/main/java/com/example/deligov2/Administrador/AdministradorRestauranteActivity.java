@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,12 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.AdministradorRestauranteAdapter;
-import com.example.deligov2.Adapters.ClientePlatosAdapter;
-import com.example.deligov2.Beans.Plato;
-import com.example.deligov2.Cliente.ClienteHistorialActivity;
-import com.example.deligov2.Cliente.ClienteHomeActivity;
-import com.example.deligov2.Cliente.ClientePerfil;
-import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -89,7 +82,7 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.reports){
-                    Intent intentReportes = new Intent(AdministradorRestauranteActivity.this, AdministradorReporteClientesActivity.class);
+                    Intent intentReportes = new Intent(AdministradorRestauranteActivity.this, AdministradorReportesActivity.class);
                     startActivity(intentReportes);
                     return true;
                 }else if(item.getItemId()==R.id.information){
@@ -202,7 +195,7 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId()==R.id.reports){
-            startActivity(new Intent(this, AdministradorReporteClientesActivity.class));
+            startActivity(new Intent(this, AdministradorReportesActivity.class));
             return true;
         } else if (item.getItemId()==R.id.information) {
             startActivity(new Intent(this, AdministradorInfoRestauranteActivity.class));

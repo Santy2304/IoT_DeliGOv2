@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,7 +25,7 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.reports){
-                    Intent intentReportes = new Intent(AdministradorInfoRestauranteActivity.this, AdministradorReporteClientesActivity.class);
+                    Intent intentReportes = new Intent(AdministradorInfoRestauranteActivity.this, AdministradorReportesActivity.class);
                     startActivity(intentReportes);
                     return true;
                 }else if(item.getItemId()==R.id.information){

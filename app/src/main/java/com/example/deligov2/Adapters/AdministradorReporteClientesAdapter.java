@@ -11,11 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.deligov2.Administrador.AdministradorReporteClientesActivity;
 import com.example.deligov2.DTO.ReporteCliente;
-import com.example.deligov2.Beans.Solicitud;
 import com.example.deligov2.R;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

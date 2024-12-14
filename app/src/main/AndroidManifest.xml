@@ -72,7 +72,7 @@
             android:name=".Administrador.AdministradorRegistroPlatoExitosoActivity"
             android:exported="false" />
         <activity
-            android:name=".Administrador.AdministradorReporteClientesActivity"
+            android:name=".Administrador.AdministradorReportesActivity"
             android:exported="false" />
         <activity
             android:name=".Adapters.RepartidorHistorialPedidosAdapter"
