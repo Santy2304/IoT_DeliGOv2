@@ -7,7 +7,7 @@
     tools:context=".Administrador.AdministradorInfoRestauranteActivity">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:scaleType="centerCrop"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/arrow_back_24px" />
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
@@ -41,19 +41,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Bembos"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Nombre"
         android:textColor="@color/black"
         android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.131"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
 
     <LinearLayout
         android:id="@+id/linearLayout19"
@@ -65,8 +65,8 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_admin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
-
+        app:layout_constraintTop_toBottomOf="@+id/nombre">
+<!--
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +100,6 @@
                     android:id="@+id/restName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_edit_24"
                     android:drawablePadding="10dp"
                     android:paddingStart="16dp"
                     android:paddingTop="6dp"
@@ -114,7 +113,7 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
+-->
 
 
         <com.google.android.material.card.MaterialCardView
@@ -157,7 +156,7 @@
                     android:paddingEnd="16dp"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:paddingBottom="6dp"
-                    android:text="5:000 pm - 19:00 pm"
+                    android:text="5:00 pm - 19:00 pm"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 

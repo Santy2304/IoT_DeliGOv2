@@ -1,6 +1,7 @@
 package com.example.deligov2.Cliente;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -83,6 +85,37 @@ public class ClientePerfil extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
         });
+
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            imageUri = selectedImageUri;
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .placeholder(R.drawable.user_icon)
+                                    .into(image);
+                            uploadImageToFirebase();
+                        }
+                    }
+                }
+        );
+
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Glide.with(this)
+                                .load(imageUri)
+                                .placeholder(R.drawable.user_icon)
+                                .into(image);
+                        uploadImageToFirebase();
+                    }
+                }
+        );
+
         name= findViewById(R.id.name);
         lastName= findViewById(R.id.lastName);
         email= findViewById(R.id.email);
@@ -222,20 +255,30 @@ public class ClientePerfil extends AppCompatActivity {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_edit_photo, null);
         bottomSheetDialog.setContentView(bottomSheetView);
+
         LinearLayout btnGallery = bottomSheetView.findViewById(R.id.btn_gallery);
         LinearLayout btnCamera = bottomSheetView.findViewById(R.id.btn_camera);
         LinearLayout btnCancel = bottomSheetView.findViewById(R.id.btn_cancel);
+
         btnGallery.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             galleryLauncher.launch(intent);
             bottomSheetDialog.dismiss();
         });
+
         btnCamera.setOnClickListener(v -> {
-            if (checkCameraPermission()) {
-                openCamera();
-                bottomSheetDialog.dismiss();
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            try {
+                File photoFile = createImageFile();
+                imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                cameraLauncher.launch(cameraIntent);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            bottomSheetDialog.dismiss();
         });
+
         btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.show();
     }
@@ -263,5 +306,21 @@ public class ClientePerfil extends AppCompatActivity {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile("IMG_" + timeStamp, ".jpg", storageDir);
     }
+
+    private void uploadImageToFirebase() {
+        if (imageUri != null) {
+            StorageReference profileRef = storageRef;
+            profileRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> profileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Glide.with(this)
+                                .load(uri)
+                                .placeholder(R.drawable.user_icon)
+                                .into((ShapeableImageView) findViewById(R.id.shapeableImageView));
+                        Toast.makeText(this, "Imagen actualizada", Toast.LENGTH_SHORT).show();
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show());
+        }
+    }
+
 
 }
