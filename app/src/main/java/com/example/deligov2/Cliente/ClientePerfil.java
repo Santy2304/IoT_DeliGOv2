@@ -154,20 +154,6 @@ public class ClientePerfil extends AppCompatActivity {
 
     }
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
-    }
-
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
-
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cliente_menu, menu);
