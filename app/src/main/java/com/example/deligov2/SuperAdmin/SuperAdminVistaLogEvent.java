@@ -25,6 +25,7 @@ import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -61,21 +62,34 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminRestaurante.class);
                     intent.putExtra("sa",sa);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminHomeActivity.class);
                     intent.putExtra("sa",sa);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminPerfil.class);
                     intent.putExtra("sa",sa);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;
                 }
 
+            }
+        });
+
+        MaterialButton btPedidos = findViewById(R.id.bt_pedidos);
+        btPedidos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminVistaLogEventRep.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
