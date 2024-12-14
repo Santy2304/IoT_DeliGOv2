@@ -3,21 +3,21 @@ package com.example.deligov2.Beans;
 import java.util.Date;
 
 public class Logs {
-    private int idLog;
+    private String idLog;
     private String info;
     private Date fecha;
 
-    public Logs(int idLog, String info, Date fecha) {
+    public Logs(String idLog, String info, Date fecha) {
         this.idLog = idLog;
         this.info = info;
         this.fecha = fecha;
     }
 
-    public int getIdLog() {
+    public String getIdLog() {
         return idLog;
     }
 
-    public void setIdLog(int idLog) {
+    public void setIdLog(String idLog) {
         this.idLog = idLog;
     }
 
