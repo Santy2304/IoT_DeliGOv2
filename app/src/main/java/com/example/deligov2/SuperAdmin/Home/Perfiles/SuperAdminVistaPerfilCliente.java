@@ -20,6 +20,7 @@ import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,6 +48,7 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
         Usuario clienteDetail = (Usuario) getIntent().getSerializableExtra("cliente_detail");
 
         //Manejo del top app bar
+        /*
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
 
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -56,6 +58,8 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+
 
         topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
             @Override
@@ -69,6 +73,8 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
                 }
             }
         });
+
+         */
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -97,6 +103,7 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
 
             }
         });
+
         // Inicialización de vistas
         MaterialTextView nameTextView = findViewById(R.id.name);
         MaterialTextView dniTextView = findViewById(R.id.n_dni);
@@ -121,5 +128,15 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
         }else{
             Log.e("SuperAdminVistaPerfilCliente", "clienteDetail es nulo");
         }
+
+        //Atras
+        FloatingActionButton btAtras = findViewById(R.id.backButton);
+
+        btAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

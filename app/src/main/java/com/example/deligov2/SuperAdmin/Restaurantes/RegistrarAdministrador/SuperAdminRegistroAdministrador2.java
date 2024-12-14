@@ -2,6 +2,7 @@ package com.example.deligov2.SuperAdmin.Restaurantes.RegistrarAdministrador;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,19 +10,26 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
@@ -35,8 +43,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,14 +61,26 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
+    private static final int REQUEST_IMAGE_CAPTURE_LOGO = 3;
+    private static final int REQUEST_IMAGE_PICK_LOGO = 4;
+    private static final int REQUEST_PERMISSIONS = 100;
+    //para la foto
+    private Uri imageUri;
+    private Bitmap imageBitmap;
+
+    //Para guardar la foto
+    private StorageReference storageReference;
+    private FirebaseStorage storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_admin_registro_administrador2);
 
         db = FirebaseFirestore.getInstance();
-
-
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         //Manejo del top app bar
 //        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
 //
@@ -101,32 +126,11 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         });
 
         // Obtener los datos del intent anterior a este
-
         Intent intent = getIntent();
-
         Restaurante resR = (Restaurante) intent.getSerializableExtra("nr2");
         //String nameR = intent.getStringExtra("nr2");
         Usuario ad = (Usuario) intent.getSerializableExtra("admin");
-        /*
-        String nameAdmin = intent.getStringExtra("adminName");
-        String apellidoAdmin = intent.getStringExtra("adminApellido");
-        String numDocAdmin = intent.getStringExtra("adminDoc");
-
-         */
         Log.d("PROBANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO", "Nombre ADMIN"+ad.getNombre()+ad.getApellido() + " _ " + ad.getRestaurante());
-
-        /*
-
-        Log.d("Registro Admin 2", "Nombre del restaurante: " + nameR);
-        String cNameR;
-        if(nameR != null){
-            cNameR = nameR;
-        }else{
-            cNameR = "Nombre no disponible";
-        }
-
-         */
-
 
         adminRestaurante = findViewById(R.id.adminRestaurante);
         adminCorreo = findViewById(R.id.adminCorreo);
@@ -139,6 +143,18 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         TextInputLayout emailLayout = findViewById(R.id.emailLayout);
 
         crearCanalesNotificacion();
+
+        ImageView imageView = findViewById(R.id.imgAdmin);
+        TextView tvLogo = findViewById(R.id.tv_foto);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermissions()) {
+                    openGalleryOrCamera();
+                }
+            }
+        });
 
         btContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,11 +172,7 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                     emailLayout.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.md_theme_error)));
                     return;
                 }
-
-
                 emailLayout.setError(null);
-                notificarAsignarAdminRestaurante(adminN,ad.getNombre(),resR.getNombre());
-                vistaRegistroAdminCorrect();
 
                 adminN = new Usuario();
                 adminN.setNombre(ad.getNombre());
@@ -171,24 +183,25 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                 //adminN.setUbicacionRestaurante(resR.getDireccion());
                 adminN.setNumDocument(ad.getNumDocument());
 
-                registrarAdministradorFirebase(adminN,resR.getId());
+                notificarAsignarAdminRestaurante(adminN,ad.getNombre(),resR.getNombre());
+                vistaRegistroAdminCorrect();
+
+                //Foto
+                byte[] byteArray = null;
+                String imageStr = null;
+                if (imageUri != null) {
+                    imageStr = imageUri.toString();
+                    Log.d("DEBUG_IMAGE", "imageUri: " + imageUri.toString());
+                } else if (imageBitmap != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byteArray = baos.toByteArray();
+                }
+
+                registrarAdministradorFirebase(adminN,resR.getId(), imageStr,byteArray);
             }
         });
 
-        /*
-        Button btCancelar = findViewById(R.id.cancelar2);
-        btCancelar.setVisibility(View.INVISIBLE);
-
-         */
-        /*
-        btCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaPanelRestaurante();
-            }
-        });
-
-         */
     }
 
     public void vistaRegistroAdminCorrect(){
@@ -250,11 +263,11 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         }
     }
 
-
-    private void registrarAdministradorFirebase(Usuario admin, String resId) {
+    /*
+    private void registrarAdministradorFirebase(Usuario admin, String resId, String imageUriString, byte[] imageByteArray) {
         admin.setDate("_");
         admin.setDireccion("_");
-        //Falta setear foto po default
+        //Falta setear foto po default --> feat: ya está hecho
         admin.setNumeroTelefono("_");
         admin.setReferencia("_");
         admin.setRol("Administrador");
@@ -273,6 +286,9 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                             .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo ID", e));
 
                     Log.d("Firestore", "Administrador registrado con ID: " + idAdmin);
+
+                    //Aquí se sube la imagen a fireStorage
+                    subirImagenAFirebaseStorage(idAdmin, imageUriString, imageByteArray);
 
                     // Buscar el restaurante por id en su colección y actualizar el campo admin
                     db.collection("restaurantes").document(resId)
@@ -293,6 +309,170 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error al registrar el admin", e);
                 });
+    }
 
+     */
+    private void registrarAdministradorFirebase(Usuario admin, String resId, String imageUriString, byte[] imageByteArray) {
+        admin.setDate("_");
+        admin.setDireccion("_");
+        //Falta setear foto por defecto --> feat: ya está hecho
+        admin.setNumeroTelefono("_");
+        admin.setReferencia("_");
+        admin.setRol("Administrador");
+
+        // Credenciales para Firebase Authentication
+        String email = admin.getCorreo();
+        String password = "D3L1G02X24"; //le puse una contra por defecto
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        // Crear usuario en Firebase Authentication
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Usuario creado en Firebase Authentication
+                        FirebaseUser firebaseUser = task.getResult().getUser();
+                        if (firebaseUser != null) {
+                            String idAdmin = firebaseUser.getUid();
+                            admin.setId(idAdmin);
+
+                            // Guardar los datos en Firestore
+                            db.collection("Usuarios")
+                                    .document(idAdmin)
+                                    .set(admin)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("Firestore", "Administrador registrado en Firestore con ID: " + idAdmin);
+
+                                        // Subir imagen a Firebase Storage
+                                        subirImagenAFirebaseStorage(idAdmin, imageUriString, imageByteArray);
+
+                                        // Actualizar restaurante con el ID del admin
+                                        db.collection("restaurantes").document(resId)
+                                                .update("admin", idAdmin)
+                                                .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Campo admin actualizado correctamente para el restaurante con ID: " + resId))
+                                                .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo admin del restaurante", e));
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.w("Firestore", "Error al registrar el admin en Firestore", e);
+                                    });
+                        }
+                    } else {
+                        Log.w("FirebaseAuth", "Error al crear el usuario en Firebase Authentication", task.getException());
+                    }
+                });
+    }
+
+    private void openGalleryOrCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        Intent chooser = Intent.createChooser(pickPhotoIntent, "Selecciona la opción");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
+
+        startActivityForResult(chooser,REQUEST_IMAGE_PICK_LOGO);
+    }
+
+    private boolean checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+    private void handleImageResult(Intent data, ImageView imageView, TextView textView) {
+        try {
+            if (data.getExtras() != null && data.getExtras().get("data") instanceof Bitmap) {
+                // Imagen capturada por la cámara
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                imageView.setImageBitmap(bitmap);
+                textView.setVisibility(View.INVISIBLE);
+
+                // Almacena la imagen dependiendo del tipo
+                if (imageView.getId() == R.id.imgAdmin) {
+                    imageBitmap = bitmap;
+                    imageUri = null;
+                }
+            } else if (data.getData() != null) {
+                // Imagen seleccionada de la galería
+                Uri uri = data.getData();
+                imageView.setImageURI(uri);
+                textView.setVisibility(View.INVISIBLE);
+
+                // Almacena la imagen dependiendo del tipo
+                if (imageView.getId() == R.id.imgAdmin) {
+                    imageUri = uri;
+                    imageBitmap = null;
+                }
+            } else {
+                Log.e("DEBUG_IMAGE", "No se recibió imagen válida.");
+            }
+        } catch (Exception e) {
+            Log.e("DEBUG_IMAGE", "Error al procesar la imagen: ", e);
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && data != null) {
+            // Manejo para logo
+            if (requestCode == REQUEST_IMAGE_CAPTURE_LOGO || requestCode == REQUEST_IMAGE_PICK_LOGO) {
+                handleImageResult(data, findViewById(R.id.imgAdmin), findViewById(R.id.tv_foto));
+            }
+            // Caso no manejado
+            else {
+                Log.e("DEBUG_IMAGE", "Código de solicitud no manejado: " + requestCode);
+            }
+        } else {
+            Log.e("DEBUG_IMAGE", "onActivityResult recibió un código de resultado no OK o data nula.");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGalleryOrCamera();
+            } else {
+                Log.e("DEBUG_PERMISSION", "Permisos denegados por el usuario.");
+            }
+        }
+    }
+
+    private void subirImagenAFirebaseStorage(String idUser, String imageUriString, byte[] imageByteArray) {
+        if (imageUriString != null) {
+            // Subir desde Uri
+            Uri imageUri = Uri.parse(imageUriString);
+            StorageReference imageRef = storageReference.child("users/" + idUser + "/profile.jpg");
+
+            imageRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d("Firebase Storage", "Imagen subida correctamente desde Uri.");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firebase Storage", "Error al subir la imagen desde Uri", e);
+                    });
+
+        } else if (imageByteArray != null) {
+            // Subir desde byte[]
+            StorageReference imageRef = storageReference.child("users/" + idUser + "/profile.jpg");
+
+            imageRef.putBytes(imageByteArray)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d("Firebase Storage", "Imagen subida correctamente desde byte[].");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firebase Storage", "Error al subir la imagen desde byte[]", e);
+                    });
+
+        } else {
+            Log.w("Firebase Storage", "No se encontró una imagen para subir.");
+        }
     }
 }

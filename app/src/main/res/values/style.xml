@@ -33,8 +33,8 @@
         <item name="android:background">#FFFFFF</item>
     </style>
 
-    <!-- Estilo para el DatePicker (Widget) -->
-    <style name="CustomTimePicker" parent="Widget.MaterialComponents.TimePicker">
-        <item name="colorPrimary">@color/light_green</item>
+    <!-- Estilo para el DatePicker (Widget)  Widget.MaterialComponents.TimePicker-->
+    <style name="greenPicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/light_green</item>
     </style>
 </resources>

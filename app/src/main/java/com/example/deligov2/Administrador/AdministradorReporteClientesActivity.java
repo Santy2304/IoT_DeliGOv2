@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Adapters.AdministradorHistorialAdapter;
 import com.example.deligov2.Adapters.AdministradorReporteClientesAdapter;
 import com.example.deligov2.Adapters.AdministradorReporteComidaAdapter;
-import com.example.deligov2.Beans.ReporteCliente;
+import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.ReporteCliente;
 import com.example.deligov2.Beans.Solicitud;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,26 +35,7 @@ import java.util.ArrayList;
 
 public class AdministradorReporteClientesActivity extends AppCompatActivity {
 
-    ArrayList<ReporteCliente> lista;
-    int[] ids = {33, 32, 31, 30, 29, 28};
-    String[] nombres = {
-            "Elizabeth Swann",
-            "Santiago Yong",
-            "Hineill Cespedes",
-            "Yosthim Enciso",
-            "Jean Piere Ipurre",
-            "Manuel Yarleque"
-    };
-    String[] fechasUltimoPedido = {
-            "12/12/2024",
-            "12/12/2024",
-            "12/12/2024",
-            "11/12/2024",
-            "10/12/2024",
-            "10/12/2024"
-    };
-    int[] cantidadPedidos = {20, 5, 12, 1, 13, 9};
-    float[] gastos = {450, 100, 240, 25, 265, 200};
+
     ArrayList<Platillo> listaPlatillo = new ArrayList<>();
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
@@ -60,20 +43,20 @@ public class AdministradorReporteClientesActivity extends AppCompatActivity {
     String idRestaurante;
     MaterialButton reporteClienteButton, reporteComidaButton;
     AdministradorReporteComidaAdapter adapterComida = new AdministradorReporteComidaAdapter();
+    AdministradorReporteClientesAdapter adapterCliente = new AdministradorReporteClientesAdapter();
+    ArrayList<String> listaNombres = new ArrayList<>();
+    ArrayList<ReporteCliente> reporteClientes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_administrador_reporte_clientes);
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        reporteClienteButton = findViewById(R.id.clientesButton);
-        reporteComidaButton = findViewById(R.id.comidaButton);
         db.collection("Usuarios").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
                     assert usuario != null : "Usuario no creado en DB";
                     idRestaurante = usuario.getRestaurante();
+                    String idRes = usuario.getRestaurante();
                     db.collection("Platos").orderBy("cantVentaTotal", Query.Direction.DESCENDING).addSnapshotListener((snapshot, error)->{
                         if (snapshot != null && !snapshot.isEmpty()) {
                             listaPlatillo.clear();
@@ -87,31 +70,53 @@ public class AdministradorReporteClientesActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+                    db.collection("ReportesClientes").addSnapshotListener((snapshot, error)->{
+                        if (error != null) {
+                            Log.w("msg-test", "Listen failed.", error);
+                            return;
+                        }
+                        if (snapshot != null && !snapshot.isEmpty()) {
+                            reporteClientes.clear();
+                            for (DocumentSnapshot document : snapshot.getDocuments()) {
+                                ReporteCliente reporteCliente = document.toObject(ReporteCliente.class);
+                                if(reporteCliente.getIdRestaurante().equals(idRes)){
+                                    reporteClientes.add(reporteCliente);
+                                    db.collection("Usuarios").document(reporteCliente.getIdCliente()).get()
+                                            .addOnSuccessListener(documentSnapshotUWU -> {
+                                                if (documentSnapshotUWU.exists()) {
+                                                    Usuario usuarioUWU = documentSnapshotUWU.toObject(Usuario.class);
+                                                    listaNombres.add(usuarioUWU.getNombre()+" "+usuarioUWU.getApellido());
+                                                }
+                                            })
+                                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+                                }
+                            }
+                        }
+                    });
                 })
                 .addOnFailureListener(e -> {
                 });
 
-//        lista = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            ReporteCliente reporte = new ReporteCliente();
-//            reporte.setId(ids[i]);
-//            reporte.setNombre(nombres[i]);
-//            reporte.setUltimoPedido(fechasUltimoPedido[i]);
-//            reporte.setCantidadPedidos(cantidadPedidos[i]);
-//            reporte.setGasto(gastos[i]);
-//            lista.add(reporte);
-//        }
-//
-//        AdministradorReporteClientesAdapter adapter = new AdministradorReporteClientesAdapter();
-//        adapter.setContext(this);
-//        adapter.setListaReportes(lista);
-//
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_administrador_reporte_clientes);
+        reporteClienteButton = findViewById(R.id.clientesButton);
+        reporteComidaButton = findViewById(R.id.comidaButton);
+
         RecyclerView recyclerView = findViewById(R.id.recyclerReporteClientes);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-
+        reporteClienteButton.setOnClickListener(view -> {
+            adapterCliente.setListaReportes(reporteClientes);
+            adapterCliente.setListaNombres(listaNombres);
+            adapterCliente.setContext(this);
+            adapterCliente.notifyDataSetChanged();
+            reporteComidaButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+            reporteClienteButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+            recyclerView.setAdapter(adapterCliente);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        });
 
         reporteComidaButton.setOnClickListener(v -> {
             adapterComida.setListaReportes(listaPlatillo);

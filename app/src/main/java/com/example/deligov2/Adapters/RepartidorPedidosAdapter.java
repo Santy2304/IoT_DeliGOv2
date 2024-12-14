@@ -51,23 +51,17 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
         holder.itemView.setContentDescription(e.getId());
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        // Crea una referencia a la ruta del archivo
         StorageReference fileRef = storage.getReference().child("restaurantes/"+e.getIdRestaurante()+"/logo.jpg");
 
-        // Obtén la URL de descarga
         fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            // La URI o URL de la imagen
-            String downloadUrl = uri.toString();
-            Glide.with(getContext())
-                    .load(downloadUrl) // URL o URI de la imagen
-                    .placeholder(R.drawable.ic_loading) // Imagen de carga (opcional)
-                    .error(R.drawable.ic_errorimg) // Imagen de error (opcional)
-                    .into( (ImageView) holder.itemView.findViewById(R.id.logo)); // El ImageView donde se cargará la imagen
-            Log.d("FirebaseStorage", "URL de descarga: " + downloadUrl);
-        }).addOnFailureListener(ae-> {
-            Log.e("FirebaseStorage", "Error al obtener la URL", ae);
+            Glide.with(holder.itemView.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.camara_icon)
+                    .error(R.drawable.camara_icon)
+                    .into(holder.logo);
+        }).addOnFailureListener(error -> {
+            holder.logo.setImageResource(R.drawable.camara_icon);
         });
-        // Usa Glide para cargar la imagen
 
     }
     @Override
@@ -77,8 +71,10 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
 
     public class RepartidorPedidosViewHolder extends RecyclerView.ViewHolder {
         Pedido pedido;
+        ImageView logo;
         public RepartidorPedidosViewHolder(@NonNull View itemView) {
             super(itemView);
+            logo = itemView.findViewById(R.id.img);
         }
     }
 

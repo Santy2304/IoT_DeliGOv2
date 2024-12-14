@@ -39,7 +39,7 @@
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="120dp"
+                android:layout_marginStart="130dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_green"
@@ -81,11 +81,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10sp"
-                android:layout_marginTop="30sp"
+                android:layout_gravity="center_vertical"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Bembos"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -106,7 +106,7 @@
             android:layout_width="380sp"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             android:hint="Buscar" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

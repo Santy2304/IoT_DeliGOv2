@@ -141,9 +141,9 @@
 
                     <ImageView
                         android:id="@+id/imgLogo"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/baseline_file_upload_24" />
 
@@ -166,9 +166,9 @@
 
                     <ImageView
                         android:id="@+id/imgBanner"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/baseline_file_upload_24" />
 

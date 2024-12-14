@@ -183,17 +183,6 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
             }
         });
 
-        Button btCancelar = findViewById(R.id.cancelar1);
-        btCancelar.setVisibility(View.INVISIBLE);
-        /*
-        btCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaPanelRestaurante();
-            }
-        });
-
-         */
     }
 
     public void vistaRegistroAdmin2(Restaurante resR, String name, String apellido, String num){

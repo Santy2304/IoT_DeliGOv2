@@ -79,7 +79,7 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
 
         // Obtener los datos del intent anterior a este
         Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
-        Log.d("RESTAURANTE IDDDD RESUMEN", "OLA: "+resR.getId()+"-"+ resR.getAdmin());
+        Log.d("RESTAURANTE IDDDD UBICACION", "OLA: "+resR.getId()+"-"+ resR.getAdmin());
 
         // Obtener las referencias para los datos
         tvRestaurante = findViewById(R.id.tv_restaurante);
@@ -237,23 +237,24 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
                         Log.d("ID ADMINISTRADOR PT2", "OLA2" + adminRes);
                         boolean estado = documentSnapshot.getBoolean("estado");
 
+                        tvRestaurante.setText(nombreRestaurante != null ? nombreRestaurante : "---");
+                        tvHorario.setText(horario != null ? "Horario de atención: " + horario : "---");
+                        tvCategorias.setText(categorias != null ? "Categorías: " + categorias : "---");
 
-                        db.collection("administradores")
+                        if (estado) {
+                            tvEstado.setText("Activado");
+                            tvEstado.setTextColor(getResources().getColor(R.color.light_green));
+                        } else {
+                            tvEstado.setText("Desactivado");
+                            tvEstado.setTextColor(getResources().getColor(R.color.md_theme_error));
+                        }
+                        ubicacionRestaurante.setText(direccionRes);
+
+                        db.collection("Usuarios")
                                 .document(adminRes)
                                 .get()
                                 .addOnSuccessListener(documentSnapshotAdmin -> {
                                     if (documentSnapshotAdmin.exists()) {
-                                        tvRestaurante.setText(nombreRestaurante != null ? nombreRestaurante : "---");
-                                        tvHorario.setText(horario != null ? "Horario de atención: " + horario : "---");
-                                        tvCategorias.setText(categorias != null ? "Categorías: " + categorias : "---");
-
-                                        if (estado) {
-                                            tvEstado.setText("Activado");
-                                            tvEstado.setTextColor(getResources().getColor(R.color.light_green));
-                                        } else {
-                                            tvEstado.setText("Desactivado");
-                                            tvEstado.setTextColor(getResources().getColor(R.color.md_theme_error));
-                                        }
 
                                         String adminNombre = documentSnapshotAdmin.getString("nombre");
                                         String adminApellido = documentSnapshotAdmin.getString("apellido");
@@ -261,7 +262,6 @@ public class SuperAdminRestauranteUbicacion extends AppCompatActivity implements
                                                 " " + (adminApellido != null ? adminApellido : "---");
                                         tvAdminRes.setText("Administrador: " + adminCompleto);
 
-                                        ubicacionRestaurante.setText(direccionRes);
                                     } else {
                                         tvAdminRes.setText("Administrador no encontrado");
                                     }

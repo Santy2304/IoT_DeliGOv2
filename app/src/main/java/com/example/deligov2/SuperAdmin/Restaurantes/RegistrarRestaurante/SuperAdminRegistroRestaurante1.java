@@ -352,9 +352,9 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Decide cuál acción tomar según el contexto
                 if (lastRequestWasForLogo) {
-                    openGalleryOrCamera(); // para logo
+                    openGalleryOrCamera();
                 } else if (lastRequestWasForBanner) {
-                    openGalleryOrCamera2(); // Abre cámara o galería para banner
+                    openGalleryOrCamera2();
                 }
             } else {
                 Log.e("DEBUG_PERMISSION", "Permisos denegados por el usuario.");
@@ -422,8 +422,6 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
         }
     }
 
-
-
     private boolean checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -443,7 +441,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             hora = calendar.get(Calendar.HOUR_OF_DAY);
             minuto = calendar.get(Calendar.MINUTE);
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this,new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this,R.style.greenPicker,new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hoursOfDay, int minute) {
                     tiHinicio.setText(hoursOfDay + ":" + minute);
@@ -457,7 +455,7 @@ public class SuperAdminRegistroRestaurante1 extends AppCompatActivity {
             hora = calendar.get(Calendar.HOUR_OF_DAY);
             minuto = calendar.get(Calendar.MINUTE);
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, R.style.greenPicker, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hoursOfDay, int minute) {
                     tiHfin.setText(hoursOfDay + ":" + minute);

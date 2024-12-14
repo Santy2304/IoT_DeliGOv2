@@ -11,24 +11,17 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
+import com.example.deligov2.DTO.ReporteCliente;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,14 +47,12 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMapReadyCallback {
     //FIREBASE
@@ -146,6 +137,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             carrito = documentSnapshot.toObject(Carrito.class);
+                            ArrayList<Integer> listaCantidadesUWU = carrito.getListaCantidades();
                             confirmarButton.setOnClickListener(view -> {
                                 Pedido pedido = new Pedido();
                                 if(direccionValida  && address.getText().toString().trim()!=null){
@@ -179,6 +171,68 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
 
                                 }
 
+
+                                ReporteCliente reporteCliente = new ReporteCliente();
+                                reporteCliente.setIdCliente(user.getUid());
+                                reporteCliente.setIdRestaurante(carrito.getIdRestaurante());
+
+                                db.collection("ReportesClientes")
+                                        .whereEqualTo("idCliente", reporteCliente.getIdCliente())
+                                        .whereEqualTo("idRestaurante", reporteCliente.getIdRestaurante())
+                                        .get()
+                                        .addOnSuccessListener(querySnapshot -> {
+                                            if (!querySnapshot.isEmpty()) {
+                                                DocumentSnapshot documentSnapshot1 = querySnapshot.getDocuments().get(0);
+                                                String docId = documentSnapshot1.getId();
+                                                ReporteCliente reporteExistente = documentSnapshot1.toObject(ReporteCliente.class);
+
+                                                if (reporteExistente != null) {
+                                                    int nuevaCantidadPedidos = reporteExistente.getCantidadPedidos() + 1;
+                                                    float nuevoTotalGastado = reporteExistente.getTotalGastado();
+
+                                                    for (int i = 0; i <listaCantidadesUWU.size(); i++) {
+                                                        int cantidadVendida = listaCantidadesUWU.get(i);
+                                                        nuevoTotalGastado += cantidadVendida * listaPrecios.get(i);
+                                                    }
+
+                                                    Timestamp ultimoPedido = Timestamp.now();
+
+                                                    db.collection("ReportesClientes").document(docId)
+                                                            .update(
+                                                                    "cantidadPedidos", nuevaCantidadPedidos,
+                                                                    "totalGastado", nuevoTotalGastado,
+                                                                    "ultimoPedido", ultimoPedido
+                                                            )
+                                                            .addOnSuccessListener(aVoid -> {
+                                                                Log.d("Firestore", "Documento actualizado correctamente");
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                                Log.e("Firestore", "Error al actualizar el documento", e);
+                                                            });
+                                                }
+                                            } else {
+                                                reporteCliente.setCantidadPedidos(1);
+                                                float totalGastado = 0;
+                                                for (int i = 0; i < listaCantidadesUWU.size(); i++) {
+                                                    int cantidadVendida = listaCantidadesUWU.get(i);
+                                                    totalGastado += cantidadVendida * listaPrecios.get(i);
+                                                }
+                                                reporteCliente.setTotalGastado(totalGastado);
+                                                reporteCliente.setUltimoPedido(Timestamp.now());
+
+                                                db.collection("ReportesClientes").add(reporteCliente)
+                                                        .addOnSuccessListener(documentReference -> {
+                                                            Log.d("Firestore", "Documento creado con ID: " + documentReference.getId());
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            Log.e("Firestore", "Error al crear el documento", e);
+                                                        });
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("Firestore", "Error al realizar la consulta", e);
+                                        });
+
                                 pedido.setPreciosActuales(listaPrecios);
                                 pedido.setId(generarIdAleatorio());
                                 pedido.setListaCantidades(carrito.getListaCantidades());
@@ -197,6 +251,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                         .addOnFailureListener(e -> {
                                             Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                         });
+
                                 carrito.setIdListaPlatos(new ArrayList<>());
                                 carrito.setListaCantidades(new ArrayList<>());
                                 carrito.setIdRestaurante("");

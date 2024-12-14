@@ -83,7 +83,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         loadUser();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_tracking_estado_en_camino);
         storage = FirebaseStorage.getInstance();
         ShapeableImageView image = findViewById(R.id.shapeableImageView3);
