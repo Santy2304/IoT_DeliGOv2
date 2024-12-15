@@ -191,13 +191,12 @@
                 android:value="70.0"
                 android:valueFrom="0.0"
                 android:valueTo="100.0" />
-
             <fragment
-                android:id="@+id/navigation_fragment"
-                android:name="com.google.android.libraries.navigation.SupportNavigationFragment"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/map"
                 android:layout_width="match_parent"
-                android:layout_height="240dp" />
-
+                android:layout_height="240dp"
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/imageView8"

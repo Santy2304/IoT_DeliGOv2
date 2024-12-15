@@ -44,7 +44,13 @@ import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.NotiActivity;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.ProcesosTracking.RepartidorTrackingEstadoEnCamino;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.navigation.ListenableResultFuture;
 import com.google.android.libraries.navigation.NavigationApi;
 import com.google.android.libraries.navigation.Navigator;
@@ -84,20 +90,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import java.util.List;
 import java.util.concurrent.Executor;
+import androidx.fragment.app.FragmentActivity;
 
-public class ClienteTrackingActivity extends AppCompatActivity {
+public class ClienteTrackingActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private GoogleMap mMap;
 
     private static final String TAG = RepartidorTrackingEstadoEnCamino.class.getSimpleName();
-    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
-    private static final String API_KEY = "AIzaSyCZ6AXAM3lT9VfbdDfNTSxtk-cXe0n_nDA";
-
-    private Navigator mNavigator;
-    private SupportNavigationFragment mNavFragment;
-    private RoutingOptions mRoutingOptions;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private boolean mLocationPermissionGranted;
-    private final List<Waypoint> mWaypoints = new ArrayList<>();
-
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
@@ -118,28 +116,8 @@ public class ClienteTrackingActivity extends AppCompatActivity {
     ClienteDetalleCompraAdapter adapter;
     String idPedido;
     Pedido pedido;
-
-
-    private static final String DISPLAY_BOTH = "both";
-    private static final String DISPLAY_TOAST = "toast";
-    private static final String DISPLAY_LOG = "log";
-
-    private RoadSnappedLocationProvider mRoadSnappedLocationProvider;
-
-
-    private Navigator.ArrivalListener mArrivalListener;
-    private Navigator.RouteChangedListener mRouteChangedListener;
-    private Navigator.RemainingTimeOrDistanceChangedListener mRemainingTimeOrDistanceChangedListener;
-    private RoadSnappedLocationProvider.LocationListener mLocationListener;
-
-    private Bundle mSavedInstanceState;
-    private static final String KEY_JOURNEY_IN_PROGRESS = "journey_in_progress";
-    private boolean mJourneyInProgress = false;
-
     // Set fields for requesting location permission.
-
-
-
+    private Restaurante restauranteSupreme = new Restaurante();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +126,6 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-//        crearCanalNotificacion();
         slider = findViewById(R.id.slider);
         recibidoText = findViewById(R.id.recibido);
         preparacionText = findViewById(R.id.preparacion);
@@ -198,7 +175,6 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                                 adapter.setListafood(lista);
                                 adapter.setListaCantidades(cantidades);
                                 adapter.setListaPrecios(listaPrecios);
-
                                 RecyclerView recyclerView = findViewById(R.id.recycler);
                                 recyclerView.setAdapter(adapter);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(ClienteTrackingActivity.this));
@@ -248,12 +224,15 @@ public class ClienteTrackingActivity extends AppCompatActivity {
 
             }
         });
-        ubicacionUpdateListener();
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        ubicacionUpdateListener();
     }
     private void actualizarSliderSegunEstado(String estado) {
         if (estado == null || estado.isEmpty()) return;
-
         switch (estado) {
             case "Recibido":
                 slider.setValue(0);
@@ -286,7 +265,6 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         listoText.setTextColor(getResources().getColor(R.color.black));
         caminoText.setTextColor(getResources().getColor(R.color.black));
         entregadoTexT.setTextColor(getResources().getColor(R.color.black));
-
         textViewActivo.setTextColor(getResources().getColor(R.color.blue));
     }
 
@@ -307,51 +285,7 @@ public class ClienteTrackingActivity extends AppCompatActivity {
     }
 
 
-//    public void crearCanalNotificacion(){
-//
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//            NotificationChannel channel = new NotificationChannel(channelId,
-//                    "Canal notificaciones default",
-//                    NotificationManager.IMPORTANCE_DEFAULT);
-//            channel.setDescription("Canal para notificaciones con prioridad default");
-//            channel.enableVibration(true);
-//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//
-//            askPermission();
-//
-//        }
-//    }
-//    public void askPermission(){
-//        //android.os.Build.VERSION_CODES.TIRAMISU == 33
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-//                ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) ==
-//                        PackageManager.PERMISSION_DENIED) {
-//
-//            ActivityCompat.requestPermissions(ClienteTrackingActivity.this,
-//                    new String[]{POST_NOTIFICATIONS},
-//                    101);
-//        }
-//
-//    }
-//    public void lanzarNotificacion(String title,String texto) {
-//        Intent intent = new Intent(this, ClienteTrackingActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-//                .setSmallIcon(R.drawable.deligo)
-//                .setContentTitle(title)
-//                .setContentText(texto)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setContentIntent(pendingIntent)
-//                .setAutoCancel(true);
-//
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//
-//        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-//            notificationManager.notify(1, builder.build());
-//        }
-//    }
+
 
     public void verPerfil(View view){
         Intent intent = new Intent(this, ClientePerfil.class);
@@ -388,8 +322,6 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         }
     }
 
-    Location dummyLocation = new Location("Repartidor");
-
     public void ubicacionUpdateListener(){
         String id   = getIntent().getStringExtra("idOrder");
         DocumentReference docRef = db.collection("Pedidos").document(id);
@@ -402,7 +334,9 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     //Actualizar mapa
                     Double latitud =  new Double(pedidoUpdate.getLatitudActualRepartidor());
                     Double longitud = new Double(pedidoUpdate.getLongitudActualRepartidor());
-                    getPlaceId(latitud , longitud);
+                    LatLng repartidorLocation = new LatLng(latitud, longitud);
+                    mMap.addMarker(new MarkerOptions().position(repartidorLocation).title("Posicion Repartidor"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(repartidorLocation, 100));
                 }
             } else {
                 // El documento no existe o fue eliminado
@@ -411,299 +345,12 @@ public class ClienteTrackingActivity extends AppCompatActivity {
         });
     }
 
-    private String placeIdRepartidor = "";
-    //Te devuelve el id de la ubicación q quieras de forma asincrona
-    private void getPlaceId(Double latitude, Double longitude ) {
-        OkHttpClient client = new OkHttpClient();
-        String url = BASE_URL + "?latlng=" + latitude + "," + longitude + "&key=" + API_KEY;
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Error en la solicitud: " + e.getMessage());
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    try {
-                        JSONObject json = new JSONObject(responseBody);
-                        if ("OK".equals(json.getString("status"))) {
-                            JSONArray results = json.getJSONArray("results");
-                            if (results.length() > 0) {
-                                JSONObject firstResult = results.getJSONObject(0);
-                                placeIdRepartidor = firstResult.getString("place_id");
-                                Log.i(TAG, "Place ID: " + placeIdRepartidor);
-                                //Buscamos al restaurante
-
-                                getPlaceIdRestaurante(new Double(pedido.getLatitud()), new Double(pedido.getLongitud()));
-                            } else {
-                                Log.i(TAG, "No se encontraron resultados.");
-                            }
-                        } else {
-                            Log.e(TAG, "Error en la API: " + json.getString("status"));
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error al procesar la respuesta JSON: " + e.getMessage());
-                    }
-                } else {
-                    Log.e(TAG, "Error HTTP: " + response.code());
-                }
-            }
-        });
-    }
-    private String placeIdRestaurante = "";
-    private void getPlaceIdRestaurante(Double latitude, Double longitude ) {
-        OkHttpClient client = new OkHttpClient();
-        String url = BASE_URL + "?latlng=" + latitude + "," + longitude + "&key=" + API_KEY;
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Error en la solicitud: " + e.getMessage());
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    try {
-                        JSONObject json = new JSONObject(responseBody);
-                        if ("OK".equals(json.getString("status"))) {
-                            JSONArray results = json.getJSONArray("results");
-                            if (results.length() > 0) {
-                                JSONObject firstResult = results.getJSONObject(0);
-                                placeIdRestaurante = firstResult.getString("place_id");
-                                Log.i(TAG, "Place ID: " + placeIdRepartidor);
-                                loadRestaurante(()->{
-                                    getPlaceIdDestino(new Double(restauranteSupreme.getLatitud()), new Double(restauranteSupreme.getLongitud()));
-                                });
-                            } else {
-                                Log.i(TAG, "No se encontraron resultados.");
-                            }
-                        } else {
-                            Log.e(TAG, "Error en la API: " + json.getString("status"));
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error al procesar la respuesta JSON: " + e.getMessage());
-                    }
-                } else {
-                    Log.e(TAG, "Error HTTP: " + response.code());
-                }
-            }
-        });
-    }
-    private String idDestino = "";
-    private void getPlaceIdDestino (Double latitude, Double longitude ) {
-        OkHttpClient client = new OkHttpClient();
-        String url = BASE_URL + "?latlng=" + latitude + "," + longitude + "&key=" + API_KEY;
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Error en la solicitud: " + e.getMessage());
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    try {
-                        JSONObject json = new JSONObject(responseBody);
-                        if ("OK".equals(json.getString("status"))) {
-                            JSONArray results = json.getJSONArray("results");
-                            if (results.length() > 0) {
-                                JSONObject firstResult = results.getJSONObject(0);
-                                idDestino = firstResult.getString("place_id");
-                                Log.i(TAG, "Place ID: " + placeIdRepartidor);
-                                initializeNavigationSdk();
-                            } else {
-                                Log.i(TAG, "No se encontraron resultados.");
-                            }
-                        } else {
-                            Log.e(TAG, "Error en la API: " + json.getString("status"));
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error al procesar la respuesta JSON: " + e.getMessage());
-                    }
-                } else {
-                    Log.e(TAG, "Error HTTP: " + response.code());
-                }
-            }
-        });
-    }
-
-    private void displayMessage(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-        Log.d(TAG, errorMessage);
-    }
-
-    private void initializeNavigationSdk( ) {
-
-        //PERMISOS
-        if (ContextCompat.checkSelfPermission(
-                this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-        //PERMISOS
-        if (!mLocationPermissionGranted) {
-            displayMessage(
-                    "Error loading Navigation SDK: " + "The user has not granted location permission.");
-            return;
-        }
-        //AHORA SÍ
-        NavigationApi.getNavigator(
-                this,
-                new NavigationApi.NavigatorListener() {
-                    @Override
-                    public void onNavigatorReady(Navigator navigator) {
-                        displayMessage("Navigator ready.");
-                        mNavigator = navigator;
-                        mNavFragment =
-                                (SupportNavigationFragment)
-                                        getSupportFragmentManager().findFragmentById(R.id.navigation_fragment);
-
-                        mRoutingOptions = new RoutingOptions();
-                        mRoutingOptions.travelMode(RoutingOptions.TravelMode.TAXI);
-                        //mRoutingOptions.travelMode(RoutingOptions.TravelMode.DRIVING);
-                        navigateToPlace( mRoutingOptions);
-                    }
-                    @Override
-                    public void onError(@NavigationApi.ErrorCode int errorCode) {
-                        switch (errorCode) {
-                            case NavigationApi.ErrorCode.NOT_AUTHORIZED:
-                                displayMessage(
-                                        "Error loading Navigation SDK: Your API key is "
-                                                + "invalid or not authorized to use the Navigation SDK.");
-                                break;
-                            case NavigationApi.ErrorCode.TERMS_NOT_ACCEPTED:
-                                displayMessage(
-                                        "Error loading Navigation SDK: User did not accept "
-                                                + "the Navigation Terms of Use.");
-                                break;
-                            case NavigationApi.ErrorCode.NETWORK_ERROR:
-                                displayMessage("Error loading Navigation SDK: Network error.");
-                                break;
-                            case NavigationApi.ErrorCode.LOCATION_PERMISSION_MISSING:
-                                displayMessage(
-                                        "Error loading Navigation SDK: Location permission " + "is missing.");
-                                break;
-                            default:
-                                displayMessage("Error loading Navigation SDK: " + errorCode);
-                        }
-                    }
-                });
-    }
-    //idDestino
-    //placeIdRestaurante
-    //placeIdRepartidor
-    private void navigateToPlace( RoutingOptions travelMode) {
-
-        // Set up a waypoint for each place that we want to go to.
-        createWaypoint(idDestino, "Destino final");
-        createWaypoint(placeIdRestaurante, "Restaurante");
-        createWaypoint(placeIdRepartidor, "Repartidor");
-
-        // If this journey is already in progress, no need to restart navigation.
-        // This can happen when the user rotates the device, or sends the app to the background.
-        if (mSavedInstanceState != null
-                && mSavedInstanceState.containsKey(KEY_JOURNEY_IN_PROGRESS)
-                && mSavedInstanceState.getInt(KEY_JOURNEY_IN_PROGRESS) == 1) {
-            return;
-        }
-
-        // Create a future to await the result of the asynchronous navigator task.
-        ListenableResultFuture<Navigator.RouteStatus> pendingRoute =
-                mNavigator.setDestinations(mWaypoints);
-
-        Location dummyLocation = new Location("dummyProvider");
-        dummyLocation.setLatitude(new Double(pedido.getLatitudActualRepartidor()));
-        dummyLocation.setLongitude(new  Double (pedido.getLongitudActualRepartidor()));
-        RoadSnappedLocationProvider roadSnappedLocationProvider = new RoadSnappedLocationProvider() {
-            @Override
-            public void addLocationListener(LocationListener locationListener) {
-
-            }
-
-            @Override
-            public void removeLocationListener(LocationListener locationListener) {
-
-            }
-
-            @Override
-            public void resetFreeNav() {
-
-            }
-        };
-
-        // Define the action to perform when the SDK has determined the route.
-        pendingRoute.setOnResultListener(
-                new ListenableResultFuture.OnResultListener<Navigator.RouteStatus>() {
-                    @Override
-                    public void onResult(Navigator.RouteStatus code) {
-                        switch (code) {
-                            case OK:
-                                mJourneyInProgress = true;
-                                // Hide the toolbar to maximize the navigation UI.
-                                if (getActionBar() != null) {
-                                    getActionBar().hide();
-                                }
-
-                                // Register some listeners for navigation events.
-                                //registerNavigationListeners();
-
-
-                                // Enable voice audio guidance (through the device speaker).
-                                mNavigator.setAudioGuidance(
-                                        Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE);
-                                // Simulate vehicle progress along the route for demo/debug builds.
-                                if (BuildConfig.DEBUG) {
-                                    mNavigator.getSimulator().simulateLocationsAlongExistingRoute(
-                                            new SimulationOptions().speedMultiplier(5));
-                                }
-
-                                // Start turn-by-turn guidance along the current route.
-                                //mNavigator.startGuidance();
-                                break;
-                            // Handle error conditions returned by the navigator.
-                            case NO_ROUTE_FOUND:
-                                displayMessage("Error starting navigation: No route found.");
-                                break;
-                            case NETWORK_ERROR:
-                                displayMessage("Error starting navigation: Network error.");
-                                break;
-                            case ROUTE_CANCELED:
-                                displayMessage("Error starting navigation: Route canceled.");
-                                break;
-                            default:
-                                displayMessage("Error starting navigation: "
-                                        + String.valueOf(code));
-                        }
-                    }
-                });
-    }
-//Tres ubicaciones
-    //Repartidor
-    //Restaurante
-    //Destino
-
-    private Restaurante restauranteSupreme = new Restaurante();
     public void loadRestaurante(Runnable runnable){
         db.collection("restaurantes")
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         for (QueryDocumentSnapshot document : value) {
-                            if(((document.toObject(Restaurante.class)).getId()).equals(pedido.getIdRestaurante())){
+                            if(((document.toObject(Restaurante.class)).getId()).equals(pedidoSupreme.getIdRestaurante())){
                                 restauranteSupreme = document.toObject(Restaurante.class);
                                 runnable.run();
                             }
@@ -711,16 +358,39 @@ public class ClienteTrackingActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void createWaypoint(String placeId, String title) {
-        try {
-            mWaypoints.add(
-                    Waypoint.builder()
-                            .setPlaceIdString(placeId)
-                            .setTitle(title)
-                            .build()
-            );
-        } catch (Waypoint.UnsupportedPlaceIdException e) {
-        }
+    private Pedido pedidoSupreme;
+    public void loadPedido(Runnable runnable){
+        db.collection("Pedidos")
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        for (QueryDocumentSnapshot document : value) {
+                            if(((document.toObject(Pedido.class)).getId()).equals(getIntent().getStringExtra("idOrder"))){
+                                pedidoSupreme = document.toObject(Pedido.class);
+                                runnable.run();
+                            }
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        // Agregar un marcador en una ubicación y mover la cámara
+        loadPedido(()->{
+            loadRestaurante(()->{
+                LatLng restauranteLocation = new LatLng(new Double(restauranteSupreme.getLatitud()), new Double(restauranteSupreme.getLongitud())); // Coordenadas de Sídney
+                LatLng RepartidorLocation = new LatLng(new Double(pedidoSupreme.getLatitudActualRepartidor()), new Double(pedidoSupreme.getLongitudActualRepartidor())); // Coordenadas de Sídney
+                LatLng DestinoLocation = new LatLng(new Double(pedidoSupreme.getLatitud()), new Double(pedidoSupreme.getLongitud())); // Coordenadas de Sídney
+                Log.d("Locations" ,""+ restauranteLocation.latitude );
+                Log.d("Locations" ,""+ RepartidorLocation.latitude );
+                Log.d("Locations" ,""+ DestinoLocation.latitude );
+                mMap.addMarker(new MarkerOptions().position(restauranteLocation).title("Restaurante").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                mMap.addMarker(new MarkerOptions().position(RepartidorLocation).title("Posicion Repartidor").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                mMap.addMarker(new MarkerOptions().position(DestinoLocation).title("Destino final").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restauranteLocation, 0.1F));
+            });
+        });
     }
 
 }
