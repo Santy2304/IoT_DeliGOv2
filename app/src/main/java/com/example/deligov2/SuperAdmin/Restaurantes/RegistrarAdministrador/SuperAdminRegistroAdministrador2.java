@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -38,6 +39,8 @@ import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -51,6 +54,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -327,6 +331,22 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         // Credenciales para Firebase Authentication
         String email = admin.getCorreo();
         String password = generarContrasenaAleatoria(8); // Contraseña de 8 caracteres
+
+        Map<String, Object> emailData = new HashMap<>();
+        emailData.put("to", Arrays.asList(email)); // Correo destinatario
+        Map<String, Object> message = new HashMap<>();
+        message.put("subject", "Bienvenido a DeliGO"); // Asunto
+        message.put("text", "Ha sido registrado como Administrador de restaurante y su contraseña de acceso es: " + password);
+        message.put("html", "<p>Ha sido registrado como Administrador de restaurante y su contraseña de acceso es: <b>" + password + "</b></p>");
+        emailData.put("message", message);
+        db.collection("mail").add(emailData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
+
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
