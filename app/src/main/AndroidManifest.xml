@@ -48,10 +48,11 @@
         <!--
  Para google maps
         AIzaSyDuXiWeYB_ZQNkarlXUNhQdshsVjNU7yYI
+        AIzaSyDRLybmEGCEhyhA-IwL8BZvhsbVAbAOyCM
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDRLybmEGCEhyhA-IwL8BZvhsbVAbAOyCM" />
+            android:value="AIzaSyDuXiWeYB_ZQNkarlXUNhQdshsVjNU7yYI" />
 
         <activity
             android:name=".NotiActivity"
