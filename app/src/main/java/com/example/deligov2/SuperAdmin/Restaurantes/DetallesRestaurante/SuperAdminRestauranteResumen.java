@@ -1,6 +1,7 @@
 package com.example.deligov2.SuperAdmin.Restaurantes.DetallesRestaurante;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,11 +24,16 @@ import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.example.deligov2.SuperAdmin.SuperAdminVistaLogEvent;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import com.example.deligov2.R;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,11 +43,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SuperAdminRestauranteResumen extends AppCompatActivity {
@@ -59,6 +68,8 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
     FloatingActionButton goBack;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     ImageView logo;
+
+    private PieChart pieChart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -141,63 +152,6 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
             }
         });
 
-
-        //Para las estadísticas
-//        BarChart chartGanancias = findViewById(R.id.chartGanancias);
-//        BarChart chartVentas = findViewById(R.id.chartVentas);
-
-        // Configura el gráfico de barras para las ganancias mensuales
-//        chartGanancias.getDescription().setEnabled(false);
-//        chartGanancias.getLegend().setEnabled(true);
-//        chartGanancias.getAxisRight().setEnabled(false);
-//        chartGanancias.getAxisLeft().setAxisMinimum(0f);
-//
-//// Configura el gráfico de barras para las ventas mensuales
-//        chartVentas.getDescription().setEnabled(false);
-//        chartVentas.getLegend().setEnabled(true);
-//        chartVentas.getAxisRight().setEnabled(false);
-//        chartVentas.getAxisLeft().setAxisMinimum(0f);
-
-// Agrega datos al gráfico de barras para las ganancias mensuales
-        ArrayList<BarEntry> entriesGanancias = new ArrayList<>();
-        entriesGanancias.add(new BarEntry(1, 1000));
-        entriesGanancias.add(new BarEntry(2, 1200));
-        entriesGanancias.add(new BarEntry(3, 1500));
-        entriesGanancias.add(new BarEntry(4, 1800));
-
-// Agrega datos al gráfico de barras para las ventas mensuales
-        ArrayList<BarEntry> entriesVentas = new ArrayList<>();
-        entriesVentas.add(new BarEntry(1, 800));
-        entriesVentas.add(new BarEntry(2, 1000));
-        entriesVentas.add(new BarEntry(3, 1200));
-        entriesVentas.add(new BarEntry(4, 1500));
-
-// Crea un conjunto de datos para las ganancias mensuales
-        BarDataSet dataSetGanancias = new BarDataSet(entriesGanancias, "Ganancias");
-        dataSetGanancias.setColor(ColorTemplate.MATERIAL_COLORS[0]);
-        dataSetGanancias.setValueTextColor(ColorTemplate.MATERIAL_COLORS[0]);
-
-// Crea un conjunto de datos para las ventas mensuales
-        BarDataSet dataSetVentas = new BarDataSet(entriesVentas, "Ventas");
-        dataSetVentas.setColor(ColorTemplate.MATERIAL_COLORS[1]);
-        dataSetVentas.setValueTextColor(ColorTemplate.MATERIAL_COLORS[1]);
-
-// Crea un conjunto de datos para el gráfico de barras
-        BarData dataGanancias = new BarData(dataSetGanancias);
-        BarData dataVentas = new BarData(dataSetVentas);
-        dataGanancias.setValueTextSize(12f);
-        dataVentas.setValueTextSize(12f);
-
-// Asigna el conjunto de datos al gráfico de barras
-//        chartGanancias.setData(dataGanancias);
-//        chartVentas.setData(dataVentas);
-//
-//// Notifica al gráfico de barras que los datos han cambiado
-//        chartGanancias.invalidate();
-//        chartVentas.invalidate();
-
-
-
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -229,15 +183,106 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
             }
         });
 
+        pieChart = findViewById(R.id.pieChart);
+        generarGraficoPie(resR.getId());
+
+    }
+    private void generarGraficoPie(String restaurantId) {
+        // Lista para almacenar los platos válidos y su monto acumulado
+        Map<String, Double> platosConMontos = new HashMap<>();
+
+        // Paso 1: Obtener los platos relacionados al restaurante
+        db.collection("Platos")
+                .whereEqualTo("idRestaurante", restaurantId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<String> idsPlatos = new ArrayList<>();
+                    Map<String, String> nombresPlatos = new HashMap<>();
+
+                    Log.d("OLAALASAS", "PROBANDO"+restaurantId);
+
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        String idPlato = document.getId();
+                        String nombre = document.getString("nombre");
+
+                        idsPlatos.add(idPlato);
+                        nombresPlatos.put(idPlato, nombre);
+                    }
+
+                    Log.d("COntinuando", "PASO2");
+                    // Paso 2: Obtener los pedidos relacionados al restaurante
+                    db.collection("Pedidos")
+                            .whereEqualTo("idRestaurante", restaurantId)
+                            .get()
+                            .addOnSuccessListener(pedidosSnapshot -> {
+                                for (QueryDocumentSnapshot pedido : pedidosSnapshot) {
+                                    List<String> idListaPlatos = (List<String>) pedido.get("idListaPlatos");
+                                    List<Long> listaCantidades = (List<Long>) pedido.get("listaCantidades");
+                                    Log.d("Pedidos", "Lista Cantidades: " + listaCantidades);
+                                    List<Double> preciosActuales = (List<Double>) pedido.get("preciosActuales");
+                                    Log.d("Pedidos", "Precios Actuales: " + preciosActuales);
+
+                                    if (idListaPlatos != null && listaCantidades != null && preciosActuales != null) {
+                                        for (int i = 0; i < idListaPlatos.size(); i++) {
+                                            String idPlato = idListaPlatos.get(i);
+
+                                            if (idsPlatos.contains(idPlato)) {
+                                                double cantidad = listaCantidades.get(i).doubleValue();
+                                                double precio = preciosActuales.get(i);
+                                                double monto = cantidad*precio;
+
+                                                platosConMontos.put(idPlato, platosConMontos.getOrDefault(idPlato, 0.0) + monto);
+                                            }
+                                        }
+                                    }
+                                }
+                                Log.d("MontosGAAAAA", platosConMontos.toString());
+
+                                // Paso 3: Crear el gráfico con los datos procesados
+                                crearPieChart(platosConMontos, nombresPlatos);
+                            })
+                            .addOnFailureListener(e -> Log.e("Pedidos", "Error al obtener pedidos: ", e));
+                })
+                .addOnFailureListener(e -> Log.e("Platos", "Error al obtener platos: ", e));
     }
 
-    //Cambio vista
-//    public void vistaRestaurantePlatillos(View view, Restaurante res, Usuario sa) {
-//        Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
-//        intent.putExtra("res",res);
-//        intent.putExtra("sa",sa);
-//        startActivity(intent);
-//    }
+    private void crearPieChart(Map<String, Double> platosConMontos, Map<String, String> nombresPlatos) {
+        List<PieEntry> entries = new ArrayList<>();
+
+        for (Map.Entry<String, Double> entry : platosConMontos.entrySet()) {
+            String idPlato = entry.getKey();
+            double monto = entry.getValue();
+            String nombrePlato = nombresPlatos.get(idPlato);
+
+            if (nombrePlato != null) {
+                entries.add(new PieEntry((float) monto, nombrePlato));
+            }
+        }
+
+        if (entries.isEmpty()) {
+            Log.w("PieChart", "No hay datos para mostrar en el gráfico.");
+            pieChart.setNoDataText("No hay datos disponibles");
+            pieChart.setNoDataTextColor(Color.RED);
+            pieChart.invalidate();
+            return;
+        }
+
+        //Este es el PIE CHART
+        PieDataSet dataSet = new PieDataSet(entries, "Platos");
+        dataSet.setColors(new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA});
+        dataSet.setValueTextSize(12f);
+
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+
+        Description description = new Description();
+        description.setText("Montos por Plato");
+        pieChart.setDescription(description);
+
+        //Esto es para refrescar el grafico
+        pieChart.invalidate();
+    }
+
 
     public void vistaRestauranteHistorialVentas(View view, Restaurante res, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
