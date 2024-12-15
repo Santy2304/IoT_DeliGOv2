@@ -88,8 +88,10 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
         });
     }
     public void retroceder(View view){
+
         onBackPressed();
-    }
+        finish();
+        }
     public void loadUser(Runnable run){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {

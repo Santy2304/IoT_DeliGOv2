@@ -60,7 +60,7 @@
                 android:id="@+id/shapeableImageView3"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
-                android:layout_marginStart="8sp"
+                android:layout_marginStart="10sp"
                 android:layout_marginTop="10sp"
                 android:onClick="verRepartidorTrackingEstadoEnPreparacion"
                 android:scaleType="centerCrop"
@@ -106,7 +106,7 @@
             android:id="@+id/navigation_fragment"
             android:name="com.google.android.libraries.navigation.SupportNavigationFragment"
             android:layout_width="match_parent"
-            android:layout_height="350sp" />
+            android:layout_height="455sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
