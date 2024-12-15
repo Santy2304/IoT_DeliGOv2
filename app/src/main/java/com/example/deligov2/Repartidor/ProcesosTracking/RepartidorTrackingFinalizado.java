@@ -1,8 +1,10 @@
 package com.example.deligov2.Repartidor.ProcesosTracking;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +27,7 @@ public class RepartidorTrackingFinalizado extends AppCompatActivity {
     private FirebaseStorage storage ;
     private StorageReference storageRef;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -35,8 +38,8 @@ public class RepartidorTrackingFinalizado extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_tracking_finalizado);
-
-
+        String idPedido = getIntent().getStringExtra("idPedido");
+        ((TextView)findViewById(R.id.texto)).setText("Pedido #"+idPedido +  "Terminado");
 
     }
 

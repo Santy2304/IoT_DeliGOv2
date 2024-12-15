@@ -156,7 +156,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
                         int count = 0 ;
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Pedido pedido = document.toObject(Pedido.class);
-                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && (pedido.getEstado().equals("Listo")) ){
+                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && (pedido.getEstado().equals("Listo")  || pedido.getEstado().equals("En Camino")) ){
                                 count++;
                                 idPedidoPendiente =  pedido.getId();
                             }

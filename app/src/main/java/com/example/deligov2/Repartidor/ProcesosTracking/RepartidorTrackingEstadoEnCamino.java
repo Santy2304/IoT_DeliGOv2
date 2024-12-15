@@ -3,6 +3,7 @@ package com.example.deligov2.Repartidor.ProcesosTracking;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,12 +21,16 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
+import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
+import com.example.deligov2.Repartidor.HomePedidos.RepartidorVistaHome;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.libraries.navigation.RoadSnappedLocationProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,22 +58,18 @@ import com.google.android.libraries.navigation.SupportNavigationFragment;
 import com.google.android.libraries.navigation.Waypoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     private Bundle mSavedInstanceState;
     private static final String KEY_JOURNEY_IN_PROGRESS = "journey_in_progress";
@@ -126,12 +127,29 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             ((TextView) findViewById(R.id.pedidoId)).setText("Pedido #" + pedidoSupreme.getId());
             ((TextView) findViewById(R.id.estado)).setText(pedidoSupreme.getEstado());
             findViewById(R.id.Recoger).setOnClickListener(view -> {
-                updatePedido("En Camino");
-                findViewById(R.id.Recoger).setVisibility(View.GONE);
-                findViewById(R.id.qr).setVisibility(View.VISIBLE);
-                //Hay q quitar la ruta
-                pedidoSupreme.setEstado("En Camino");
-                navigateToPlace( mRoutingOptions);
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle("Confirmación recojo")
+                        .setMessage("¿Recogiste satisfactoriamente el pedido del cliente?")
+                        .setPositiveButton("Sí , ahora voy en camino al domicilio", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                updatePedido("En Camino");
+                                findViewById(R.id.Recoger).setVisibility(View.GONE);
+                                findViewById(R.id.qr).setVisibility(View.VISIBLE);
+                                //Hay q quitar la ruta
+                                pedidoSupreme.setEstado("En Camino");
+                                navigateToPlace( mRoutingOptions);
+                            }
+                        })
+                        .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                                dialog.dismiss();
+                            }
+                        })
+                        .setCancelable(true)
+                        .show();
             });
             findViewById(R.id.qr).setOnClickListener(view -> {
                 //Abrir camara para validar QR
@@ -606,10 +624,15 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                 // Mostrar el resultado del escaneo
                 if(!result.getContents().equals(pedidoSupreme.getId())){
                     Toast.makeText(this, "Código escaneado: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    Intent intent  = new Intent(RepartidorTrackingEstadoEnCamino.this, RepartidorTrackingFinalizado.class);
+                    intent.putExtra("idPedido", result.getContents());
+                    startActivity(intent);
                 }else{
                     Toast.makeText(this, "Código escaneado: " + result.getContents(), Toast.LENGTH_LONG).show();
                     updatePedido("Entregado");
-
+                    Intent intent  = new Intent(RepartidorTrackingEstadoEnCamino.this, RepartidorTrackingFinalizado.class);
+                    intent.putExtra("idPedido", result.getContents());
+                    startActivity(intent);
                 }
             } else {
                 // Si el escaneo fue cancelado
