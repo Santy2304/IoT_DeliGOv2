@@ -80,11 +80,12 @@
             android:padding="5dp">
 
             <TextView
+                android:id="@+id/restName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20sp"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text="Restaurante: Bembos"
+                android:text="Restaurante:"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />

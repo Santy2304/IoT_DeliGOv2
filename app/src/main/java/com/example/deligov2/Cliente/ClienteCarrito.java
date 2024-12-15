@@ -21,6 +21,8 @@ import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.Beans.VentaPlatilloSA;
+import com.example.deligov2.DTO.Restaurante;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,7 +53,7 @@ public class ClienteCarrito extends AppCompatActivity {
     Carrito carrito;
     ClienteCarritoAdapter adapter;
     ArrayList<Integer> cantidades = new ArrayList<>();
-    TextView totalTextView, costoEnvioText, costoProductosText;
+    TextView totalTextView, costoEnvioText, costoProductosText,restName;
     Double costoEnvio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,10 @@ public class ClienteCarrito extends AppCompatActivity {
         vaciarButton = findViewById(R.id.vaciarButton);
         returnRestaurant = findViewById(R.id.comprarMas);
         orderButton = findViewById(R.id.orderButton);
-
         totalTextView = findViewById(R.id.costoTotal);
         costoEnvioText = findViewById(R.id.costoEnvio);
         costoProductosText = findViewById(R.id.precioProdcutos);
-
+        restName = findViewById(R.id.restName);
         costoEnvio = Math.random() * 5 + 1;
         costoEnvioText.setText(String.format("S/%.2f", costoEnvio));
 
@@ -78,6 +79,15 @@ public class ClienteCarrito extends AppCompatActivity {
                         carrito = documentSnapshot.toObject(Carrito.class);
                         idsPlatos = carrito.getIdListaPlatos();
                         cantidades = carrito.getListaCantidades();
+
+                        db.collection("restaurantes").document(carrito.getIdRestaurante()).get()
+                                .addOnSuccessListener(documentSnapshot1 -> {
+                                    if (documentSnapshot1.exists()) {
+                                        Restaurante restaurante = documentSnapshot1.toObject(Restaurante.class);
+                                        restName.setText("Restaurante: "+restaurante.getNombre());
+                                    }
+                                })
+                                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
                             if (error != null) {

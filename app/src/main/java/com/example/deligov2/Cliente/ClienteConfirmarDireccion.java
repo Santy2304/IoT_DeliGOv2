@@ -283,7 +283,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 pedido.setEstado("Recibido");
                                 pedido.setHora(Timestamp.now());
                                 pedido.setCostoEnvio(carrito.getCostoEnvio());
-                                Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
+                                Bitmap qrBitmap = generarQRCode(pedido.getId());
                                 guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
 
 

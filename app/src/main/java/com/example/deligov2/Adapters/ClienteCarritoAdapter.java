@@ -139,7 +139,7 @@ public class ClienteCarritoAdapter extends RecyclerView.Adapter<ClienteCarritoAd
 
             button.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), ClientePlatoActivity.class);
-                intent.putExtra("idFood",platillo.getId());
+                intent.putExtra("idPlato",platillo.getId());
                 itemView.getContext().startActivity(intent);
             });
         }

@@ -54,7 +54,6 @@ public class ClientePlatoActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
-
         String idPlato = getIntent().getStringExtra("idPlato");
 
         foodDes = findViewById(R.id.detailText);
