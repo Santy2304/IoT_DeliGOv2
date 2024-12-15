@@ -1,9 +1,14 @@
 package com.example.deligov2.Administrador;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,54 +16,143 @@ import com.example.deligov2.Adapters.AdministradorDetalleCompraAdapter;
 import com.example.deligov2.Adapters.AdministradorHistorialAdapter;
 import com.example.deligov2.Beans.DetalleCompra;
 import com.example.deligov2.Beans.Solicitud;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class AdministradorHistorialActivity extends AppCompatActivity {
 
-    ArrayList<Solicitud> lista;
-    int[] ids = {33, 32, 31, 30, 29, 28};
-    String[] estados = {
-            "En camino",
-            "Entregado",
-            "En camino",
-            "Entregado",
-            "Entregado",
-            "Entregado"
-    };
-    String[] fechas = {
-            "12/12/2024",
-            "12/12/2024",
-            "12/12/2024",
-            "11/12/2024",
-            "10/12/2024",
-            "10/12/2024"
-    };
-    float[] preciosDelivery = {12, 9, 8, 5, 4, 7};
+    List<Pedido> pedidosPendientes = new ArrayList<>();
+    List<Pedido> pedidosEntregados = new ArrayList<>();
+    FirebaseFirestore db;
+    FirebaseAuth auth;
+    FirebaseStorage storage;
+    RecyclerView recyclerView;
+    AdministradorHistorialAdapter adapter = new AdministradorHistorialAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador_historial);
 
-        lista = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            Solicitud solicitud = new Solicitud();
-            solicitud.setId(ids[i]);
-            solicitud.setEstado(estados[i]);
-            solicitud.setFecha(fechas[i]);
-            solicitud.setPrecioDelivery(preciosDelivery[i]);
-            lista.add(solicitud);
-        }
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
 
-        AdministradorHistorialAdapter adapter = new AdministradorHistorialAdapter();
+        // Obtener el id del usuario actual
+        String idUsuario = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+
+        // Obtener el id del restaurante del usuario actual
+        db.collection("Usuarios").document(idUsuario).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String idRestaurante = documentSnapshot.getString("restaurante");
+                        cargarHistorial(idRestaurante);
+                    } else {
+                        Log.e("Firestore", "No se encontró el usuario con ID: " + idUsuario);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al obtener usuario", e));
+
+        // Obtener los componentes de la interfaz
+        MaterialButton pendientesButton = findViewById(R.id.pendientesButton);
+        MaterialButton entregadosButton = findViewById(R.id.entregadosButton);
+        pendientesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+        entregadosButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+
+        // Configuramos lista por default
         adapter.setContext(this);
-        adapter.setListaSolicitudes(lista);
+        adapter.setListaSolicitudes(pedidosPendientes);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerHistorialAdmin);
+        recyclerView = findViewById(R.id.recyclerHistorialAdmin);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Configuramos los botones
+        pendientesButton.setOnClickListener(view -> {
+            adapter.setContext(this);
+            adapter.setListaSolicitudes(pedidosPendientes);
+            adapter.notifyDataSetChanged();
+            pendientesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+            entregadosButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        });
+
+        entregadosButton.setOnClickListener(view -> {
+            adapter.setContext(this);
+            adapter.setListaSolicitudes(pedidosEntregados);
+            adapter.notifyDataSetChanged();
+            pendientesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+            entregadosButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        });
+
+        // Bottom Navigation View
+        // Navegación por medio del bottom Navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.principal);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if(item.getItemId()==R.id.reports){
+                    Intent intentReportes = new Intent(AdministradorHistorialActivity.this, AdministradorReportesActivity.class);
+                    startActivity(intentReportes);
+                    return true;
+                }else if(item.getItemId()==R.id.information){
+                    Intent intentInformation = new Intent(AdministradorHistorialActivity.this, AdministradorInfoRestauranteActivity.class);
+                    startActivity(intentInformation);
+                    return true;
+                }else if(item.getItemId()==R.id.principal){
+                    Intent intentPrincipal = new Intent(AdministradorHistorialActivity.this, AdministradorRestauranteActivity.class);
+                    startActivity(intentPrincipal);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
+    }
+
+    private void cargarHistorial(String idRestaurante) {
+        // Cargamos la lista de pedidos pendientes
+        db.collection("Pedidos")
+                .whereEqualTo("idRestaurante", idRestaurante)
+                .whereNotEqualTo("estado", "Entregado").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    pedidosPendientes.clear();
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        Pedido pedido = document.toObject(Pedido.class);
+                        pedidosPendientes.add(pedido);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al obtener pedidos pendientes", e));
+
+        // Cargar la lista de pedidos entregados
+        db.collection("Pedidos")
+                .whereEqualTo("idRestaurante", idRestaurante)
+                .whereEqualTo("estado", "Entregado").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    pedidosEntregados.clear();
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        Pedido pedido = document.toObject(Pedido.class);
+                        pedidosEntregados.add(pedido);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al obtener pedidos entregados", e));
     }
 }

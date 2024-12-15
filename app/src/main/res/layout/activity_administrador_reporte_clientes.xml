@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Administrador.AdministradorReporteClientesActivity">
+    tools:context=".Administrador.AdministradorReportesActivity">
 
 
     <LinearLayout
@@ -73,7 +73,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/clientesButton"
+                android:id="@+id/comidaButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18sp"
@@ -81,12 +81,12 @@
                 android:fontFamily="sans-serif-condensed-medium"
                 android:paddingLeft="-5sp"
                 android:paddingRight="-5sp"
-                android:text="Clientes"
+                android:text="Platos"
                 android:textSize="13sp"
                 app:backgroundTint="@color/md_theme_secondary" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/comidaButton"
+                android:id="@+id/clientesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -94,7 +94,7 @@
                 android:fontFamily="sans-serif-condensed-medium"
                 android:paddingLeft="-5sp"
                 android:paddingRight="-5sp"
-                android:text="Platos"
+                android:text="Clientes"
                 android:textSize="13sp"
                 app:backgroundTint="@color/md_theme_secondary" />
 

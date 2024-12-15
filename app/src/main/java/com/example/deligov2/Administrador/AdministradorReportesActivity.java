@@ -5,26 +5,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deligov2.Adapters.AdministradorHistorialAdapter;
 import com.example.deligov2.Adapters.AdministradorReporteClientesAdapter;
 import com.example.deligov2.Adapters.AdministradorReporteComidaAdapter;
-import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.ReporteCliente;
-import com.example.deligov2.Beans.Solicitud;
-import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
-import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,7 +28,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
-public class AdministradorReporteClientesActivity extends AppCompatActivity {
+public class AdministradorReportesActivity extends AppCompatActivity {
 
 
     ArrayList<Platillo> listaPlatillo = new ArrayList<>();
@@ -107,6 +102,15 @@ public class AdministradorReporteClientesActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerReporteClientes);
 
+        // Setear vista por defecto (reporte de platos)
+        adapterComida.setListaReportes(listaPlatillo);
+        adapterComida.setContext(this);
+        recyclerView.setAdapter(adapterComida);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reporteComidaButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+        reporteClienteButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+
+        // Cambio de vista de acuerdo al botón seleccionado
         reporteClienteButton.setOnClickListener(view -> {
             adapterCliente.setListaReportes(reporteClientes);
             adapterCliente.setListaNombres(listaNombres);
@@ -128,23 +132,32 @@ public class AdministradorReporteClientesActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         });
 
+        // Botón del historial
+        FloatingActionButton historyButton = findViewById(R.id.buttonHistorial);
+
+        historyButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdministradorHistorialActivity.class);
+            startActivity(intent);
+        });
+
         //Navegación por el navigation bar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_admin);
+        bottomNavigationView.setSelectedItemId(R.id.reports);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.reports){
-                    Intent intentReportes = new Intent(AdministradorReporteClientesActivity.this, AdministradorReporteClientesActivity.class);
+                    Intent intentReportes = new Intent(AdministradorReportesActivity.this, AdministradorReportesActivity.class);
                     startActivity(intentReportes);
                     return true;
                 }else if(item.getItemId()==R.id.information){
-                    Intent intentInformation = new Intent(AdministradorReporteClientesActivity.this, AdministradorInfoRestauranteActivity.class);
+                    Intent intentInformation = new Intent(AdministradorReportesActivity.this, AdministradorInfoRestauranteActivity.class);
                     startActivity(intentInformation);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
-                    Intent intentPrincipal = new Intent(AdministradorReporteClientesActivity.this, AdministradorRestauranteActivity.class);
+                    Intent intentPrincipal = new Intent(AdministradorReportesActivity.this, AdministradorRestauranteActivity.class);
                     startActivity(intentPrincipal);
                     return true;
                 }else{
