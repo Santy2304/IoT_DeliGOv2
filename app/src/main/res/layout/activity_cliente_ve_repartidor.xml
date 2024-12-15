@@ -104,6 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/black"
                 android:text="Josh Fernando"
                 android:textSize="20sp"
                 />
@@ -134,6 +135,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Yauri Salas"
+                android:textColor="@color/black"
                 android:textSize="20sp"/>
         </LinearLayout>
 
@@ -161,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="73495090"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -189,6 +192,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="938490494"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
         </LinearLayout>
 

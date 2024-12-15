@@ -507,8 +507,8 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // Configurar la solicitud de ubicación
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000*6); // Cada 10 segundos
-        locationRequest.setFastestInterval(5000*12); // Máximo cada 5 segundos
+        locationRequest.setInterval(10000); // Cada 10 segundos
+        locationRequest.setFastestInterval(5000*3); // Máximo cada 5 segundos
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         // Definir el callback para recibir las actualizaciones
         locationCallback = new LocationCallback() {

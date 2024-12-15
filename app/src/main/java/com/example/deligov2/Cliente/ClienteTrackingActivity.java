@@ -7,6 +7,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -50,6 +52,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.navigation.ListenableResultFuture;
 import com.google.android.libraries.navigation.NavigationApi;
@@ -80,6 +83,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -94,7 +98,6 @@ import androidx.fragment.app.FragmentActivity;
 
 public class ClienteTrackingActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
-
     private static final String TAG = RepartidorTrackingEstadoEnCamino.class.getSimpleName();
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
@@ -192,10 +195,12 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
         backButton = findViewById(R.id.atrasTracking);
         repartidorButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteVeRepartidor.class);
+            intent.putExtra("idOrder",getIntent().getStringExtra("idOrder"));
             startActivity(intent);
         });
         qrButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteQR.class);
+            intent.putExtra("idOrder",getIntent().getStringExtra("idOrder"));
             startActivity(intent);
         });
         backButton.setOnClickListener(view -> {
@@ -332,11 +337,15 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                 Pedido pedidoUpdate = documentSnapshot.toObject(Pedido.class);
                 if(pedidoUpdate.getLatitudActualRepartidor() != null){
                     //Actualizar mapa
-                    Double latitud =  new Double(pedidoUpdate.getLatitudActualRepartidor());
-                    Double longitud = new Double(pedidoUpdate.getLongitudActualRepartidor());
-                    LatLng repartidorLocation = new LatLng(latitud, longitud);
-                    mMap.addMarker(new MarkerOptions().position(repartidorLocation).title("Posicion Repartidor"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(repartidorLocation, 100));
+                    if(marker2 != null){
+                        marker2.remove();
+                        Double latitud =  new Double(pedidoUpdate.getLatitudActualRepartidor());
+                        Double longitud = new Double(pedidoUpdate.getLongitudActualRepartidor());
+                        LatLng repartidorLocation = new LatLng(latitud, longitud);
+                        Bitmap resizedBitmap = resizeBitmap(R.drawable.reparr, 100, 100); // Ajusta el tamaño deseado
+                        marker2 = mMap.addMarker(new MarkerOptions().position(repartidorLocation).title("Posicion Repartidor").icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(repartidorLocation, 13));
+                    }
                 }
             } else {
                 // El documento no existe o fue eliminado
@@ -372,25 +381,40 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                     }
                 });
     }
-
+    HashMap<String, Marker> markers = new HashMap<>();
+    Integer counter = 0 ;
+    Marker marker1;
+    Marker marker2;
+    Marker marker3;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // Agregar un marcador en una ubicación y mover la cámara
         loadPedido(()->{
-            loadRestaurante(()->{
+            loadRestaurante(()->{if(counter == 0 ){
                 LatLng restauranteLocation = new LatLng(new Double(restauranteSupreme.getLatitud()), new Double(restauranteSupreme.getLongitud())); // Coordenadas de Sídney
                 LatLng RepartidorLocation = new LatLng(new Double(pedidoSupreme.getLatitudActualRepartidor()), new Double(pedidoSupreme.getLongitudActualRepartidor())); // Coordenadas de Sídney
                 LatLng DestinoLocation = new LatLng(new Double(pedidoSupreme.getLatitud()), new Double(pedidoSupreme.getLongitud())); // Coordenadas de Sídney
                 Log.d("Locations" ,""+ restauranteLocation.latitude );
                 Log.d("Locations" ,""+ RepartidorLocation.latitude );
                 Log.d("Locations" ,""+ DestinoLocation.latitude );
-                mMap.addMarker(new MarkerOptions().position(restauranteLocation).title("Restaurante").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                mMap.addMarker(new MarkerOptions().position(RepartidorLocation).title("Posicion Repartidor").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                mMap.addMarker(new MarkerOptions().position(DestinoLocation).title("Destino final").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restauranteLocation, 0.1F));
+                Bitmap resizedBitmap = resizeBitmap(R.drawable.restaaaa, 100, 100); // Ajusta el tamaño deseado
+                marker1 =mMap.addMarker(new MarkerOptions().position(restauranteLocation).title("Restaurante").icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
+                resizedBitmap = resizeBitmap(R.drawable.reparr, 100, 100); // Ajusta el tamaño deseado
+                marker2 = mMap.addMarker(new MarkerOptions().position(RepartidorLocation).title("Posicion Repartidor").icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
+                resizedBitmap = resizeBitmap(R.drawable.metaaa, 100, 100); // Ajusta el tamaño deseado
+                marker3 =mMap.addMarker(new MarkerOptions().position(DestinoLocation).title("Destino final").icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restauranteLocation, 13));
+                counter++;
+            }
             });
         });
     }
+    private Bitmap resizeBitmap(int resourceId, int width, int height) {
+        // Cargar el recurso como un Bitmap
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
 
+        // Redimensionar el Bitmap
+        return Bitmap.createScaledBitmap(originalBitmap, width, height, false);
+    }
 }

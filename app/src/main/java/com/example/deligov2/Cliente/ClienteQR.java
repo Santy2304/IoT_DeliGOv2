@@ -38,11 +38,10 @@ public class ClienteQR extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-
         backButton = findViewById(R.id.backButtonQR);
         qr = findViewById(R.id.imageView);
-
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("pedidos/"+idPedido+"qr.jpg");
+        idPedido =  getIntent().getStringExtra("idOrder");
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("pedidos/"+idPedido+"/qr.jpg");
 
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             Glide.with(this)
@@ -53,8 +52,8 @@ public class ClienteQR extends AppCompatActivity {
         });
 
         backButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this,ClienteTrackingActivity.class);
-            startActivity(intent);
+            onBackPressed();
+            finish();
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
