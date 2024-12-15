@@ -120,7 +120,7 @@ public class ClientePerfil extends AppCompatActivity {
         lastName= findViewById(R.id.lastName);
         email= findViewById(R.id.email);
         cellphone= findViewById(R.id.cellphone);
-        mainLocation= findViewById(R.id.mainLocation);
+        mainLocation= findViewById(R.id.editLocation);
 
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -149,13 +149,13 @@ public class ClientePerfil extends AppCompatActivity {
                     });
         });
 
-
-        goBackButton = findViewById(R.id.goBackButtonPerfil);
-
-        goBackButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ClienteHomeActivity.class);
-            startActivity(intent);
-        });
+//
+//        goBackButton = findViewById(R.id.goBackButtonPerfil);
+//
+//        goBackButton.setOnClickListener(view -> {
+//            Intent intent = new Intent(this, ClienteHomeActivity.class);
+//            startActivity(intent);
+//        });
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -299,6 +299,11 @@ public class ClientePerfil extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void editarUbicacion(View view) {
+        Intent intent = new Intent(this, ClienteEdicionUbicacionActivity.class);
+        startActivity(intent);
     }
 
     private File createImageFile() throws IOException {

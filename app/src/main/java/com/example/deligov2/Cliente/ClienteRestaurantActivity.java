@@ -73,7 +73,7 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
                        carrito  = documentSnapshot.toObject(Carrito.class);
                         listaIdPlatos.addAll(carrito.getIdListaPlatos());
                     }
-                   // adapter.notifyDataSetChanged();
+                   adapter.notifyDataSetChanged();
 
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));

@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
+<!--
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/goBackButtonPerfil"
                 style="?attr/floatingActionButtonSmallStyle"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="back"
                 app:srcCompat="@drawable/arrow_back_24px" />
-
+-->
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -295,11 +295,12 @@
                         android:textStyle="bold" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/mainLocation"
+                        android:id="@+id/editLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/read_more_24px"
                         android:drawablePadding="10dp"
+                        android:onClick="editarUbicacion"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:paddingStart="16dp"
                         android:paddingTop="6dp"

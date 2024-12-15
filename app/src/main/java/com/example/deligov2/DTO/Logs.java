@@ -1,4 +1,4 @@
-package com.example.deligov2.Beans;
+package com.example.deligov2.DTO;
 
 import java.util.Date;
 

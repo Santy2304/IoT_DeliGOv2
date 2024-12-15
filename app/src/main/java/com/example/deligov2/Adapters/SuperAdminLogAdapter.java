@@ -12,8 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.deligov2.Beans.Logs;
-import com.example.deligov2.Beans.VentaPlatilloSA;
+import com.example.deligov2.DTO.Logs;
 import com.example.deligov2.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
