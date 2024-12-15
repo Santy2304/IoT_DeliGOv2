@@ -33,36 +33,37 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
     }
     @Override
     public void onBindViewHolder(@NonNull RepartidorPedidosViewHolder holder, int position) {
-        Pedido e = listaPedidos.get(position) ;
-        holder.pedido = e;
-        TextView idOrder = holder.itemView.findViewById(R.id.orderIdPedidos);
-        idOrder.setText("#" + e.getId()) ;
-        TextView state = holder. itemView.findViewById(R.id.statePedido);
-        state.setText("Estado: " + e.getEstado());
-        TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
-        price.setText("Precio : S/."+ e.getCostoEnvio() );
-        FloatingActionButton button = holder.itemView.findViewById(R.id.mapa2);
-        button.setContentDescription(e.getId());
-        FloatingActionButton button2 = holder.itemView.findViewById(R.id.detalles);
-        button2.setContentDescription(e.getId());
-        FloatingActionButton button3 = holder.itemView.findViewById(R.id.aceptacionRepartidor2);
-        button3.setContentDescription(e.getId());
-        //Ahora afectamos a los botones
-        holder.itemView.setContentDescription(e.getId());
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-
-        StorageReference fileRef = storage.getReference().child("restaurantes/"+e.getIdRestaurante()+"/logo.jpg");
-
-        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            Glide.with(holder.itemView.getContext())
-                    .load(uri)
-                    .placeholder(R.drawable.camara_icon)
-                    .error(R.drawable.camara_icon)
-                    .into(holder.logo);
-        }).addOnFailureListener(error -> {
-            holder.logo.setImageResource(R.drawable.camara_icon);
-        });
-
+        try{
+            Pedido e = listaPedidos.get(position) ;
+            holder.pedido = e;
+            TextView idOrder = holder.itemView.findViewById(R.id.orderIdPedidos);
+            idOrder.setText("#" + e.getId()) ;
+            TextView state = holder. itemView.findViewById(R.id.statePedido);
+            state.setText("Estado: " + e.getEstado());
+            TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
+            price.setText("Precio : S/."+ e.getCostoEnvio() );
+            FloatingActionButton button = holder.itemView.findViewById(R.id.mapa2);
+            button.setContentDescription(e.getId());
+            FloatingActionButton button2 = holder.itemView.findViewById(R.id.detalles);
+            button2.setContentDescription(e.getId());
+            FloatingActionButton button3 = holder.itemView.findViewById(R.id.aceptacionRepartidor2);
+            button3.setContentDescription(e.getId());
+            //Ahora afectamos a los botones
+            holder.itemView.setContentDescription(e.getId());
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference fileRef = storage.getReference().child("restaurantes/"+e.getIdRestaurante()+"/logo.jpg");
+            fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Glide.with(holder.itemView.getContext())
+                        .load(uri)
+                        .placeholder(R.drawable.camara_icon)
+                        .error(R.drawable.camara_icon)
+                        .into(holder.logo);
+            }).addOnFailureListener(error -> {
+                holder.logo.setImageResource(R.drawable.camara_icon);
+            });
+        }catch(Exception error){
+            Log.d("ola" , error.getStackTrace().toString());
+        }
     }
     @Override
     public int getItemCount() {

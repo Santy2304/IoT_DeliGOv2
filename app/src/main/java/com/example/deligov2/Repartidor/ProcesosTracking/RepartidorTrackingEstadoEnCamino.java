@@ -126,11 +126,11 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             ((TextView) findViewById(R.id.pedidoId)).setText("Pedido #" + pedidoSupreme.getId());
             ((TextView) findViewById(R.id.estado)).setText(pedidoSupreme.getEstado());
             findViewById(R.id.Recoger).setOnClickListener(view -> {
-                updatePedido("En camino");
+                updatePedido("En Camino");
                 findViewById(R.id.Recoger).setVisibility(View.GONE);
                 findViewById(R.id.qr).setVisibility(View.VISIBLE);
                 //Hay q quitar la ruta
-                pedidoSupreme.setEstado("En camino");
+                pedidoSupreme.setEstado("En Camino");
                 navigateToPlace( mRoutingOptions);
             });
             findViewById(R.id.qr).setOnClickListener(view -> {
@@ -141,7 +141,7 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             });
             if(pedidoSupreme.getEstado().equals("Listo")){
                 findViewById(R.id.qr).setVisibility(View.GONE);
-            }else if(pedidoSupreme.getEstado().equals("En camino")){
+            }else if(pedidoSupreme.getEstado().equals("En Camino")){
                 findViewById(R.id.Recoger).setVisibility(View.GONE);
             }
             //Buscamos restaurante
@@ -308,7 +308,7 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         if(pedidoSupreme.getEstado().equals("Listo")){
             createWaypoint(idDestino, "Destino final");
             createWaypoint(placeIdRestaurante, "Restaurante");
-        }else if(pedidoSupreme.getEstado().equals("En camino")){
+        }else if(pedidoSupreme.getEstado().equals("En Camino")){
             createWaypoint(idDestino, "Destino final");
         }
 

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,6 +26,7 @@ import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAcep
 import com.example.deligov2.Repartidor.RepartidorHistorial;
 import com.example.deligov2.Repartidor.RepartidorNotificaciones;
 import com.example.deligov2.Repartidor.ProcesosTracking.RepartidorTrackingEstadoEnCamino;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,8 +53,11 @@ public class RepartidorVistaHome extends AppCompatActivity {
     //FIREBASE
     private List<Pedido> listaPedidos =  new ArrayList<Pedido>();
     private String primeraVez = null;
+    private String ola  =  "PrimeraVez";
+    private RepartidorPedidosAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        adapter = new RepartidorPedidosAdapter();
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
@@ -60,26 +65,31 @@ public class RepartidorVistaHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repartidor_vista_home);
         listaPedidos =  new ArrayList<Pedido>();
+        adapter.setContext(this);
+
         loadUser(()->{
             validarRepartidorDisponible(()->{
                 //Exito
-                RepartidorPedidosAdapter adapter = new RepartidorPedidosAdapter();
-                adapter.setContext(this);
-                loadPedidos(()->{
-                    adapter.setListaPedidosRepartidor(listaPedidos);
-                    RecyclerView recyclerView = findViewById(R.id.lista);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
-                });
+                if(ola.equals("PrimeraVez")) {
+                    loadPedidos(() -> {
+                        adapter.setListaPedidosRepartidor(listaPedidos);
+                        RecyclerView recyclerView = findViewById(R.id.lista);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
+                        ola  = "ga";
+                    });
+                }
             },()->{
-                RepartidorPedidosAdapter adapter = new RepartidorPedidosAdapter();
-                adapter.setContext(this);
-                loadPedidos(()->{
-                    adapter.setListaPedidosRepartidor(listaPedidos);
-                    RecyclerView recyclerView = findViewById(R.id.lista);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
-                });
+
+                if(ola.equals("PrimeraVez")) {
+                    loadPedidos(() -> {
+                        adapter.setListaPedidosRepartidor(listaPedidos);
+                        RecyclerView recyclerView = findViewById(R.id.lista);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(RepartidorVistaHome.this));
+                        ola  = "ga";
+                    });
+                }
                 //Fallo
                 //Se debería bloquear la pantalla
                 if(primeraVez ==null){
@@ -125,6 +135,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
                                 listaPedidos.add(pedido);
                             }
                         }
+                        adapter.notifyDataSetChanged();
                         onsuccess.run();
                     }
                 });
@@ -139,7 +150,7 @@ public class RepartidorVistaHome extends AppCompatActivity {
                         int count = 0 ;
                         for (QueryDocumentSnapshot document : value) {
                             Pedido pedido = document.toObject(Pedido.class);
-                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && !(pedido.getEstado().equals("Entregado")) ){
+                            if(pedido.getIdRepartidor() != null && pedido.getIdRepartidor().equals(user.getUid())  && (pedido.getEstado().equals("Listo")) ){
                                 count++;
                                 idPedidoPendiente =  pedido.getId();
                             }
@@ -153,28 +164,18 @@ public class RepartidorVistaHome extends AppCompatActivity {
                 });
     }
     private void showNonCancelableDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorVistaHome.this);
-        builder.setTitle("Usted tiene una entrega pendiente");
-        // Botón para cerrar el diálogo
-        builder.setPositiveButton("Ver mapa", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Acción al presionar el botón (puedes cerrar el diálogo aquí)
-                //Se redirige a la vista del tracking
-                dialog.dismiss();
-                Intent intent = new Intent(RepartidorVistaHome.this, RepartidorTrackingEstadoEnCamino.class);
-                intent.putExtra("idPedido" , idPedidoPendiente);
-                startActivity(intent);
-            }
-        });
-        // Crear el diálogo
-        AlertDialog dialog = builder.create();
-        // Evitar que se cierre al tocar fuera del diálogo
-        dialog.setCanceledOnTouchOutside(false);
-        // Evitar que se cierre al presionar el botón de retroceso
-        dialog.setCancelable(false);
-        // Mostrar el diálogo
-        dialog.show();
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Usted tiene una entrega pendiente")
+                .setPositiveButton("Ver mapa", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(RepartidorVistaHome.this, RepartidorTrackingEstadoEnCamino.class);
+                        intent.putExtra("idPedido" , idPedidoPendiente);
+                        startActivity(intent);
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
     //VALIDACIÓN DE QUE EL REPARTIDOR PUEDE TOMAR EL PEDIDO
 
@@ -216,35 +217,35 @@ public class RepartidorVistaHome extends AppCompatActivity {
 
     //ACEPTAR PEDIDO
     public void aceptarPedido(View view ){
-        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorVistaHome.this);
-        builder.setTitle("Confirmar acción");
-        builder.setMessage("¿Qué acción deseas realizar con esta solicitud?");
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Acción cuando se presiona "Aceptar"
-                aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
-                    primeraVez = "noTeLevantes";
-                     Intent intent =        new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
-                        intent.putExtra("idPedido", view.getContentDescription().toString());
-                     startActivity(intent);
-                }, ()->{
-                    Intent intent = new Intent(RepartidorVistaHome.this, RepartidorCancelacionPedido.class);
-                    startActivity(intent);
-                        }
-                );
 
-            }
-        });
-        builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
-                dialog.dismiss();
-            }
-        });
-        // Mostrar el diálogo
-        builder.create().show();
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Confirmar acción")
+                .setMessage("¿Qué acción deseas realizar con esta solicitud?")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
+                                    primeraVez = "noTeLevantes";
+                                    Intent intent =        new Intent(RepartidorVistaHome.this, RepartidorAceptacionPedido.class);
+                                    intent.putExtra("idPedido", view.getContentDescription().toString());
+                                    startActivity(intent);
+                                }, ()->{
+                                    Intent intent = new Intent(RepartidorVistaHome.this, RepartidorCancelacionPedido.class);
+                                    startActivity(intent);
+                                }
+                        );
+                    }
+                })
+                .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .show();
+
     }
     public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
         Map<String, Object> updates = new HashMap<>();

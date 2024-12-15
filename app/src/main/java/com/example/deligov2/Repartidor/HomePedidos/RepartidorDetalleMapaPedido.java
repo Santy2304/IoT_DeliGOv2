@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.deligov2.Cliente.ClienteHomeActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.DTO.Pedido;
 
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -88,10 +90,11 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
         });
     }
     public void retroceder(View view){
-
-        onBackPressed();
+        Intent intent = new Intent(this, RepartidorVistaHome.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
-        }
+    }
     public void loadUser(Runnable run){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -133,7 +136,6 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
     public void aceptar(String idPedido ,  String idRepartidor , Runnable onsuccess  , Runnable onfailure){
         Map<String, Object> updates = new HashMap<>();
         updates.put("idRepartidor", idRepartidor);
-        updates.put("estado", "En camino");
 
         // Realizar el update
         db.collection("Pedidos")
@@ -148,33 +150,30 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
                     onfailure.run();});
     }
     public void aceptarPedido(View view ){
-        AlertDialog.Builder builder = new AlertDialog.Builder(RepartidorDetalleMapaPedido.this);
-        builder.setTitle("Confirmar acción");
-        builder.setMessage("¿Qué acción deseas realizar con esta solicitud?");
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Acción cuando se presiona "Aceptar"
-                aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
-                            startActivity(new Intent(RepartidorDetalleMapaPedido.this, RepartidorAceptacionPedido.class));
-                        }, ()->{
-                            Intent intent = new Intent(RepartidorDetalleMapaPedido.this, RepartidorCancelacionPedido.class);
-                            startActivity(intent);
-                        }
-                );
 
-            }
-        });
-
-
-        builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
-                dialog.dismiss();
-            }
-        });
-        // Mostrar el diálogo
-        builder.create().show();
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Confirmar acción")
+                .setMessage("¿Qué acción deseas realizar con esta solicitud?")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        aceptar(view.getContentDescription().toString() , user.getUid() , ()->{
+                                    startActivity(new Intent(RepartidorDetalleMapaPedido.this, RepartidorAceptacionPedido.class));
+                                }, ()->{
+                                    Intent intent = new Intent(RepartidorDetalleMapaPedido.this, RepartidorCancelacionPedido.class);
+                                    startActivity(intent);
+                                }
+                        );
+                    }
+                })
+                .setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Acción cuando se presiona "Cancelar" (cerrar el diálogo)
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .show();
     }
 }
