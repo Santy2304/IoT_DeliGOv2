@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Administrador.Adapters.ImagesAdapter;
+import com.example.deligov2.DTO.LogSuper;
 import com.example.deligov2.DTO.Platillo;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -151,7 +154,6 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
         }
         db.collection("Platos").document(plato.getId()).set(plato)
                 .addOnSuccessListener(aVoid -> {
-                    // Mostrar un mensaje de éxito
                     Toast.makeText(this, "Plato registrado con éxito", Toast.LENGTH_SHORT).show();
                     // Subir las imágenes
                     for (int i = 0; i < imageUris.size(); i++) {
@@ -159,8 +161,30 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
                         uploadImageToFirebase(imageUris.get(i), isFirstImage);
                     }
 
+                    db.collection("restaurantes").document(plato.getIdRestaurante()).get()
+                            .addOnSuccessListener(documentSnapshot1 -> {
+                                if (documentSnapshot1.exists()) {
+                                    Restaurante restaurante = documentSnapshot1.toObject(Restaurante.class);
+                                    LogSuper logSuper = new LogSuper();
+                                    logSuper.setTipo("Plato");
+                                    logSuper.setInfo("Se ha creado el platillo "+plato.getNombre() +" en el restaurante "+restaurante.getNombre());
+                                    logSuper.setFecha(Timestamp.now());
+                                    logSuper.setIdImage(plato.getIdRestaurante()+"/"+plato.getId());
+                                    db.collection("Logs").add(logSuper)
+                                            .addOnSuccessListener(aVoid1 -> {
+                                                Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
+
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            });
+
+                                }
+                            })
+                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+
                     Toast.makeText(this, "Imágenes subidas exitosamente", Toast.LENGTH_SHORT).show();
-                    // Redirigir o finalizar actividad
                     Intent intent = new Intent(this, AdministradorRegistroPlatoExitosoActivity.class);
                     startActivity(intent);
                     finish();

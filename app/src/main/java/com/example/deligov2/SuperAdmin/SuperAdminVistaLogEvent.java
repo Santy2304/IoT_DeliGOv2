@@ -8,37 +8,98 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Adapters.SuperAdminLogAdapter;
-import com.example.deligov2.DTO.Logs;
+import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.LogSuper;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class SuperAdminVistaLogEvent extends AppCompatActivity {
-    List<Logs> logs;
+    ArrayList<LogSuper> listalogsSuperPedido = new ArrayList<>();
+    ArrayList<LogSuper> listalogsSuperRest = new ArrayList<>();
+    ArrayList<LogSuper> lista = new ArrayList<>();
     private FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    Usuario usuario;
+    MaterialButton restaurantesButton, btPedidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        loadUserSa();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_admin_vista_log_event);
+        btPedidos = findViewById(R.id.bt_pedidos);
+        restaurantesButton = findViewById(R.id.bt_res);
+        RecyclerView recyclerView = findViewById(R.id.listLogs);
+        SuperAdminLogAdapter adapter = new SuperAdminLogAdapter();
+        adapter.setContext(this);
 
-        db = FirebaseFirestore.getInstance();
-        // Obtener los datos del intent anterior a este
-        Intent intent = getIntent();
-        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+        db.collection("Logs").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    LogSuper logSuper = document.toObject(LogSuper.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
+                        lista.add(logSuper);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setmLog(lista);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        btPedidos.setOnClickListener(view -> {
+            listalogsSuperPedido.clear();
+            for(int i=0;i<lista.size();i++){
+                if(lista.get(i).getTipo().equals("Pedido")){
+                    listalogsSuperPedido.add(lista.get(i));
+                }
+            }
+            adapter.setmLog(listalogsSuperPedido);
+            adapter.notifyDataSetChanged();
+            restaurantesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+            btPedidos.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+        });
+
+        restaurantesButton.setOnClickListener(view -> {
+            listalogsSuperRest.clear();
+            for(int i=0;i<lista.size();i++){
+                if(lista.get(i).getTipo().equals("Restaurante") || lista.get(i).getTipo().equals("Plato")){
+                    listalogsSuperRest.add(lista.get(i));
+                }
+            }
+            adapter.setmLog(listalogsSuperRest);
+            adapter.notifyDataSetChanged();
+            restaurantesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+            btPedidos.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
+        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -51,19 +112,19 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
 
                 if(item.getItemId()==R.id.restaurant){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminRestaurante.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminHomeActivity.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminPerfil.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
@@ -74,66 +135,65 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
             }
         });
 
-        MaterialButton btPedidos = findViewById(R.id.bt_pedidos);
-        btPedidos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminVistaLogEventRep.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        });
-
-        mostrarListaLogs();
-
     }
 
-    public void mostrarListaLogs() {
-        logs = new ArrayList<>();
-        db.collection("restaurantes").get()
-                .addOnSuccessListener(querySnapshot -> {
-                    if (!querySnapshot.isEmpty()) {
-                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                            String restaurantName = document.getString("nombre");
-                            String adminId = document.getString("admin");
-                            String restaurantId = document.getId();
+//    public void mostrarListaLogs() {
+//        logs = new ArrayList<>();
+//        db.collection("restaurantes").get()
+//                .addOnSuccessListener(querySnapshot -> {
+//                    if (!querySnapshot.isEmpty()) {
+//                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+//                            String restaurantName = document.getString("nombre");
+//                            String adminId = document.getString("admin");
+//                            String restaurantId = document.getId();
+//
+//                            obtenerDatosAdmin(db, adminId, restaurantName, restaurantId);
+//                        }
+//                    } else {
+//                        actualizarRecyclerView();
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    e.printStackTrace();
+//                });
+//    }
+//
+//    private void obtenerDatosAdmin(FirebaseFirestore db, String adminId, String restaurantName, String restaurantId) {
+//        db.collection("Usuarios").document(adminId).get()
+//                .addOnSuccessListener(adminSnapshot -> {
+//                    if (adminSnapshot.exists()) {
+//                        String adminName = adminSnapshot.getString("nombre");
+//                        String adminLastName = adminSnapshot.getString("apellido");
+//
+//                        String mensaje = "Se ha registrado el restaurante " + restaurantName +
+//                                " con el administrador " + adminName + " " + adminLastName + ".";
+//
+//                        logs.add(new Logs(restaurantId, mensaje, new Date()));
+//                        Log.d("FirestoreDebug", "restaurantId: " + restaurantId);
+//                        actualizarRecyclerView();
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    e.printStackTrace();
+//                });
+//    }
+//
+//    private void actualizarRecyclerView() {
+//        SuperAdminLogAdapter listAdapter = new SuperAdminLogAdapter(logs);
+//        RecyclerView recyclerView = findViewById(R.id.listLogs);
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(listAdapter);
+//    }
 
-                            obtenerDatosAdmin(db, adminId, restaurantName, restaurantId);
-                        }
-                    } else {
-                        actualizarRecyclerView();
+    public void loadUserSa(){
+        db.collection("Usuarios").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        usuario = documentSnapshot.toObject(Usuario.class);
                     }
                 })
-                .addOnFailureListener(e -> {
-                    e.printStackTrace();
-                });
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
     }
 
-    private void obtenerDatosAdmin(FirebaseFirestore db, String adminId, String restaurantName, String restaurantId) {
-        db.collection("Usuarios").document(adminId).get()
-                .addOnSuccessListener(adminSnapshot -> {
-                    if (adminSnapshot.exists()) {
-                        String adminName = adminSnapshot.getString("nombre");
-                        String adminLastName = adminSnapshot.getString("apellido");
-
-                        String mensaje = "Se ha registrado el restaurante " + restaurantName +
-                                " con el administrador " + adminName + " " + adminLastName + ".";
-
-                        logs.add(new Logs(restaurantId, mensaje, new Date()));
-                        Log.d("FirestoreDebug", "restaurantId: " + restaurantId);
-                        actualizarRecyclerView();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    e.printStackTrace();
-                });
-    }
-
-    private void actualizarRecyclerView() {
-        SuperAdminLogAdapter listAdapter = new SuperAdminLogAdapter(logs, this);
-        RecyclerView recyclerView = findViewById(R.id.listLogs);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(listAdapter);
-    }
 }

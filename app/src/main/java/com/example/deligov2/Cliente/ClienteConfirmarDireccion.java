@@ -19,9 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deligov2.DTO.Carrito;
+import com.example.deligov2.DTO.LogSuper;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.DTO.ReporteCliente;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -137,6 +139,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             carrito = documentSnapshot.toObject(Carrito.class);
+                            String idUwu = carrito.getIdRestaurante();
                             ArrayList<Integer> listaCantidadesUWU = carrito.getListaCantidades();
                             confirmarButton.setOnClickListener(view -> {
                                 Pedido pedido = new Pedido();
@@ -233,6 +236,29 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                             Log.e("Firestore", "Error al realizar la consulta", e);
                                         });
 
+                                db.collection("restaurantes").document(idUwu).get()
+                                        .addOnSuccessListener(documentSnapshot1 -> {
+                                            if (documentSnapshot1.exists()) {
+                                                Restaurante restaurante = documentSnapshot1.toObject(Restaurante.class);
+                                                LogSuper logSuper = new LogSuper();
+                                                logSuper.setInfo("El cliente "+usuario.getNombre()+" "+usuario.getApellido()+" ha realizado un pedido en el restaurante "+restaurante.getNombre());
+                                                logSuper.setFecha(Timestamp.now());
+                                                logSuper.setIdImage(usuario.getId());
+                                                logSuper.setTipo("Pedido");
+                                                db.collection("Logs").add(logSuper)
+                                                        .addOnSuccessListener(aVoid -> {
+                                                            Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
+
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                        });
+
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+
                                 pedido.setPreciosActuales(listaPrecios);
                                 pedido.setId(generarIdAleatorio());
                                 pedido.setListaCantidades(carrito.getListaCantidades());
@@ -242,6 +268,7 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 pedido.setCostoEnvio(carrito.getCostoEnvio());
                                 Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
                                 guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
+
                                 db.collection("Pedidos").document(pedido.getId())
                                         .set(pedido)
                                         .addOnSuccessListener(aVoid -> {
