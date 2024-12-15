@@ -232,21 +232,15 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
     }
 
     //Cambio vista
-    public void vistaRestaurantePlatillos(View view, Restaurante res, Usuario sa) {
-        Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
-        intent.putExtra("res",res);
-        intent.putExtra("sa",sa);
-        startActivity(intent);
-    }
+//    public void vistaRestaurantePlatillos(View view, Restaurante res, Usuario sa) {
+//        Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
+//        intent.putExtra("res",res);
+//        intent.putExtra("sa",sa);
+//        startActivity(intent);
+//    }
 
     public void vistaRestauranteHistorialVentas(View view, Restaurante res, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
-        intent.putExtra("res",res);
-        intent.putExtra("sa",sa);
-        startActivity(intent);
-    }
-    public void vistaRestauranteUbicacion(View view, Restaurante res, Usuario sa){
-        Intent intent = new Intent(this, SuperAdminRestauranteUbicacion.class);
         intent.putExtra("res",res);
         intent.putExtra("sa",sa);
         startActivity(intent);

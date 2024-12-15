@@ -154,23 +154,6 @@ public class SuperAdminResturanteHistorialVentas extends AppCompatActivity {
 
         Button btCarta = findViewById(R.id.bt_carta);
 
-        btCarta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaRestaurantePlatillos(v, resR,sa);
-            }
-        });
-
-        Button btUbicacion = findViewById(R.id.bt_ubicacion);
-
-        btUbicacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaRestauranteUbicacion(v, resR,sa);
-            }
-        });
-
-
     }
 
     //Cambio vista
@@ -181,18 +164,6 @@ public class SuperAdminResturanteHistorialVentas extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void vistaRestaurantePlatillos(View view, Restaurante res, Usuario sa) {
-        Intent intent = new Intent(this, SuperAdminRestaurantePlatillos.class);
-        intent.putExtra("res",res);
-        intent.putExtra("sa",sa);
-        startActivity(intent);
-    }
-    public void vistaRestauranteUbicacion(View view, Restaurante res, Usuario sa){
-        Intent intent = new Intent(this, SuperAdminRestauranteUbicacion.class);
-        intent.putExtra("res",res);
-        intent.putExtra("sa",sa);
-        startActivity(intent);
-    }
 
     private void mostrarDatosRestauranteFirebase(String resID){
         db.collection("restaurantes")

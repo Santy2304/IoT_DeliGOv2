@@ -133,13 +133,7 @@
             android:name=".SuperAdmin.SuperAdminVistaLogEvent"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestauranteUbicacion"
-            android:exported="false" />
-        <activity
             android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestauranteResumen"
-            android:exported="false" />
-        <activity
-            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminRestaurantePlatillos"
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminResturanteHistorialVentas"
@@ -163,13 +157,7 @@
             android:name=".SuperAdmin.Restaurantes.RegistrarAdministrador.SuperAdminRegistroAdminCorrect"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminPlatillosDescription"
-            android:exported="false" />
-        <activity
             android:name=".SuperAdmin.Restaurantes.SuperAdminRestaurante"
-            android:exported="false" />
-        <activity
-            android:name=".SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminHistorialVentasDetalles"
             android:exported="false" />
         <activity
             android:name=".SuperAdmin.Home.SuperAdminAdministrador"

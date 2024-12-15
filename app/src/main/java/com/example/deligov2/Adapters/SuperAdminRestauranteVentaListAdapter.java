@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Beans.PedidoPorRestaurante;
 import com.example.deligov2.R;
-import com.example.deligov2.SuperAdmin.Restaurantes.DetallesRestaurante.SuperAdminHistorialVentasDetalles;
 
 import java.util.List;
 
