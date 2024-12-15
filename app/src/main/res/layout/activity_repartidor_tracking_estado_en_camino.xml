@@ -189,7 +189,16 @@
                 </LinearLayout>
             </LinearLayout>
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/extended_fab"
+                android:id="@+id/Recoger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:layout_gravity="center_vertical"
+                android:text="Recogí pedido"
+                app:icon="@drawable/comida"/>
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/qr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -50,6 +51,8 @@ import com.google.android.libraries.navigation.RoutingOptions;
 import com.google.android.libraries.navigation.SimulationOptions;
 import com.google.android.libraries.navigation.SupportNavigationFragment;
 import com.google.android.libraries.navigation.Waypoint;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -70,7 +73,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     private Bundle mSavedInstanceState;
     private static final String KEY_JOURNEY_IN_PROGRESS = "journey_in_progress";
     private boolean mJourneyInProgress = false;
-
     private static final String TAG = RepartidorTrackingEstadoEnCamino.class.getSimpleName();
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
     private static final String API_KEY = "AIzaSyCZ6AXAM3lT9VfbdDfNTSxtk-cXe0n_nDA";
@@ -97,6 +99,7 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     private String idDestino = "";
     private String placeIdRestaurante = "";
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -122,6 +125,25 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             //Cargamos pedido
             ((TextView) findViewById(R.id.pedidoId)).setText("Pedido #" + pedidoSupreme.getId());
             ((TextView) findViewById(R.id.estado)).setText(pedidoSupreme.getEstado());
+            findViewById(R.id.Recoger).setOnClickListener(view -> {
+                updatePedido("En camino");
+                findViewById(R.id.Recoger).setVisibility(View.GONE);
+                findViewById(R.id.qr).setVisibility(View.VISIBLE);
+                //Hay q quitar la ruta
+                pedidoSupreme.setEstado("En camino");
+                navigateToPlace( mRoutingOptions);
+            });
+            findViewById(R.id.qr).setOnClickListener(view -> {
+                //Abrir camara para validar QR
+                startQRScanner();
+                pedidoSupreme.setEstado("Entregado");
+                navigateToPlace( mRoutingOptions);
+            });
+            if(pedidoSupreme.getEstado().equals("Listo")){
+                findViewById(R.id.qr).setVisibility(View.GONE);
+            }else if(pedidoSupreme.getEstado().equals("En camino")){
+                findViewById(R.id.Recoger).setVisibility(View.GONE);
+            }
             //Buscamos restaurante
             loadRestaturante(pedidoSupreme.getIdRestaurante(), () -> {
                 if (!ola.equals("segundaVez")) {
@@ -137,6 +159,16 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         });
         listenerUpdate();
         actualiza();
+        if (ContextCompat.checkSelfPermission(
+                this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
     }
 
     public void verSiguienteTracking(View view) {
@@ -158,21 +190,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     }
 
     private void initializeNavigationSdk() {
-        if (ContextCompat.checkSelfPermission(
-                this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-        if (!mLocationPermissionGranted) {
-            displayMessage(
-                    "Error loading Navigation SDK: " + "The user has not granted location permission.");
-            return;
-        }
         // Get a navigator.
         NavigationApi.getNavigator(
                 this,
@@ -227,10 +244,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Requests directions from the user's current location to a specific place (provided by the
-     * Google Places API).
-     */
     private void navigateToPlace(String placeId, RoutingOptions travelMode) {
         Waypoint destination;
         try {
@@ -286,21 +299,25 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                 });
     }
 
-
     private void navigateToPlace(RoutingOptions travelMode) {
-
+        if(pedidoSupreme.getEstado().equals("Entregado")){
+            findViewById(R.id.navigation_fragment).setVisibility(View.GONE);
+        }
         // Set up a waypoint for each place that we want to go to.
-        createWaypoint(idDestino, "Destino final");
-        createWaypoint(placeIdRestaurante, "Restaurante");
-        // If this journey is already in progress, no need to restart navigation.
-        // This can happen when the user rotates the device, or sends the app to the background.
+        mWaypoints.clear();
+        if(pedidoSupreme.getEstado().equals("Listo")){
+            createWaypoint(idDestino, "Destino final");
+            createWaypoint(placeIdRestaurante, "Restaurante");
+        }else if(pedidoSupreme.getEstado().equals("En camino")){
+            createWaypoint(idDestino, "Destino final");
+        }
+
         if (mSavedInstanceState != null
                 && mSavedInstanceState.containsKey(KEY_JOURNEY_IN_PROGRESS)
                 && mSavedInstanceState.getInt(KEY_JOURNEY_IN_PROGRESS) == 1) {
             return;
         }
 
-        // Create a future to await the result of the asynchronous navigator task.
         ListenableResultFuture<Navigator.RouteStatus> pendingRoute =
                 mNavigator.setDestinations(mWaypoints,  travelMode);
 
@@ -495,10 +512,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         });
     }
 
-
-
-
-
     //PARA ACTUALIZAR LOS DATOS DE POSICIÓN EN FIREBASE
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -538,7 +551,6 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     }
 
     //PERMISO
-
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -551,6 +563,58 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                     mLocationPermissionGranted = true;
                 }
             }
+        }
+    }
+
+    public void updatePedido(String nuevoEstado) {
+        // Obtén la referencia a la ubicación de la base de datos de Firebase
+        // Actualiza los datos en la ubicación especificada
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Crear un mapa con los datos de ubicación
+        Map<String, Object> locationData = new HashMap<>();
+        locationData.put("estado",nuevoEstado);
+        // Actualizar los datos en Firestore
+        db.collection("Pedidos").document(pedidoSupreme.getId())
+                .update(locationData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Ubicación actualizada con éxito");
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar la ubicación", e));
+    }
+
+
+    private void startQRScanner() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); // Formato QR
+        integrator.setPrompt("Escanea un código QR");                 // Mensaje en la cámara
+        integrator.setCameraId(0);                                   // Cámara trasera
+        integrator.setOrientationLocked(true);                       // Bloquear orientación
+        integrator.setBeepEnabled(true);                             // Activar sonido al escanear
+        integrator.initiateScan();                                   // Iniciar escáner
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Procesar el resultado del escaneo
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() != null) {
+                // Mostrar el resultado del escaneo
+                if(!result.getContents().equals(pedidoSupreme.getId())){
+                    Toast.makeText(this, "Código escaneado: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(this, "Código escaneado: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    updatePedido("Entregado");
+
+                }
+            } else {
+                // Si el escaneo fue cancelado
+                Toast.makeText(this, "Escaneo cancelado", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }
