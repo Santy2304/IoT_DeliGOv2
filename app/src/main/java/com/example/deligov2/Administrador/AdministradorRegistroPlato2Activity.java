@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deligov2.Administrador.Adapters.ImagesAdapter;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -33,6 +36,7 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
     private List<Uri> imageUris = new ArrayList<>();
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private FirebaseFirestore db;
     private Platillo plato;
 
     @Override
@@ -50,6 +54,7 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
         // Inicializar Firebase Storage
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        db = FirebaseFirestore.getInstance();
 
         // Capturar componentes de la vista
         btnUploadImage = findViewById(R.id.btnUploadImage);
@@ -67,6 +72,48 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
         // Botón para finalizar
         btnFinalize.setOnClickListener(view -> finalizeRegistration());
 
+        // Navegación por medio del bottom Navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_admin);
+        bottomNavigationView.setSelectedItemId(R.id.principal);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item ->  {
+
+            mostrarDialogoCancelar(() -> {
+
+                if(item.getItemId()==R.id.reports){
+                    Intent intentReportes = new Intent(AdministradorRegistroPlato2Activity.this, AdministradorReportesActivity.class);
+                    startActivity(intentReportes);
+                    //return true;
+                }else if(item.getItemId()==R.id.information){
+                    Intent intentInformation = new Intent(AdministradorRegistroPlato2Activity.this, AdministradorInfoRestauranteActivity.class);
+                    startActivity(intentInformation);
+                    //return true;
+                }else if(item.getItemId()==R.id.principal){
+                    Intent intentPrincipal = new Intent(AdministradorRegistroPlato2Activity.this, AdministradorRestauranteActivity.class);
+                    startActivity(intentPrincipal);
+                    //return true;
+                }
+            });
+            return false;
+        });
+
+    }
+
+    private void mostrarDialogoCancelar(Runnable accionConfirmada) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmar acción");
+        builder.setMessage("Se perderá el progreso. ¿Estás seguro de que deseas cancelar?");
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // Ejecutar la acción pasada como parámetro
+            if (accionConfirmada != null) {
+                accionConfirmada.run();
+            }
+        });
+        builder.setNegativeButton("Cancelar", (dialog, which) -> {
+            // Cerrar el diálogo
+            dialog.dismiss();
+        });
+        builder.show();
     }
 
     private void openFileChooser() {
@@ -102,16 +149,26 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
             Toast.makeText(this, "Debes subir al menos 2 imágenes", Toast.LENGTH_SHORT).show();
             return;
         }
+        db.collection("Platos").document(plato.getId()).set(plato)
+                .addOnSuccessListener(aVoid -> {
+                    // Mostrar un mensaje de éxito
+                    Toast.makeText(this, "Plato registrado con éxito", Toast.LENGTH_SHORT).show();
+                    // Subir las imágenes
+                    for (int i = 0; i < imageUris.size(); i++) {
+                        boolean isFirstImage = (i == 0);
+                        uploadImageToFirebase(imageUris.get(i), isFirstImage);
+                    }
 
-        // Subir las imágenes
-        for (int i = 0; i < imageUris.size(); i++) {
-            boolean isFirstImage = (i == 0);
-            uploadImageToFirebase(imageUris.get(i), isFirstImage);
-        }
-
-        Toast.makeText(this, "Imágenes subidas exitosamente", Toast.LENGTH_SHORT).show();
-        // Redirigir o finalizar actividad
-        finish();
+                    Toast.makeText(this, "Imágenes subidas exitosamente", Toast.LENGTH_SHORT).show();
+                    // Redirigir o finalizar actividad
+                    Intent intent = new Intent(this, AdministradorRegistroPlatoExitosoActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    // Mostrar un mensaje de error
+                    Toast.makeText(this, "Error al registrar el plato", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void uploadImageToFirebase(Uri imageUri, boolean isFirstImage) {
