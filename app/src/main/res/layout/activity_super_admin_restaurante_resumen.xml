@@ -40,11 +40,11 @@
                     android:layout_height="120dp"
                     android:onClick="verInfoRestaurante"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/bembos_logo" />
+               />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="5sp"
                     android:orientation="vertical">
@@ -54,13 +54,58 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="Bembos"
                         android:textColor="@color/light_green"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="Cantidad de pedidos: "
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/cantidadPedidos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="300"
+                            android:layout_marginStart="90dp"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="Total recaudado: "
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+                        <TextView
+                            android:id="@+id/recaudado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="S/300.00"
+                            android:layout_marginStart="90dp"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+<!--
                     <TextView
                         android:id="@+id/tv_horario"
                         android:layout_width="wrap_content"
@@ -69,6 +114,8 @@
                         android:fontFamily="sans-serif-condensed"
                         android:text="Horario de atención: "
                         android:textColor="@color/black" />
+               -->
+
                     <!--
                                     <TextView
                                         android:id="@+id/tv_categorias"
@@ -116,7 +163,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-
+<!--
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,7 +195,7 @@
                     app:icon="@drawable/shopping_cart_24px"
                     app:iconTint="@color/white" />
             </LinearLayout>
-
+-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -168,7 +215,7 @@
                     style="?attr/materialCardViewElevatedStyle"
                     android:layout_width="120dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="172dp"
                     android:layout_marginTop="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -184,7 +231,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/hamburguesa_royal" />
+                         />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -197,17 +244,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-condensed-medium"
-                                android:text="Hamburguesa Royal"
+                                android:text="No hay datos"
                                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                                android:textColor="@color/black" />
+                                android:textColor="@color/light_green" />
 
                             <TextView
-                                android:id="@+id/foodPrecio1"
+                                android:id="@+id/Cant1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:fontFamily="sans-serif-condensed-medium"
-                                android:text="S/12.00"
                                 android:textAppearance="?attr/textAppearanceBodyMedium"
                                 android:textColor="@color/black" />
                         </LinearLayout>
@@ -219,7 +265,7 @@
                 <com.google.android.material.card.MaterialCardView
                     style="?attr/materialCardViewElevatedStyle"
                     android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="172dp"
                     android:layout_marginTop="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -235,7 +281,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/hamburguesa_royal" />
+                             />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -248,17 +294,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-condensed-medium"
-                                android:text="Hamburguesa Royal"
+                                android:text="No hay datos"
                                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                                android:textColor="@color/black" />
+                                android:textColor="@color/light_green" />
 
                             <TextView
-                                android:id="@+id/foodPrecio2"
+                                android:id="@+id/Cant2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:fontFamily="sans-serif-condensed-medium"
-                                android:text="S/12.00"
                                 android:textAppearance="?attr/textAppearanceBodyMedium"
                                 android:textColor="@color/black" />
                         </LinearLayout>
@@ -278,7 +323,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="172dp"
                         android:orientation="vertical">
 
                         <ImageView
@@ -286,7 +331,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/hamburguesa_royal" />
+                            />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -299,17 +344,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-condensed-medium"
-                                android:text="Hamburguesa Royal"
+                                android:text="No hay datos"
                                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                                android:textColor="@color/black" />
+                                android:textColor="@color/light_green" />
 
                             <TextView
-                                android:id="@+id/foodPrecio3"
+                                android:id="@+id/Cant3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:fontFamily="sans-serif-condensed-medium"
-                                android:text="S/12.00"
                                 android:textAppearance="?attr/textAppearanceBodyMedium"
                                 android:textColor="@color/black" />
                         </LinearLayout>

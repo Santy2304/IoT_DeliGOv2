@@ -26,6 +26,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -36,40 +38,22 @@ public class SuperAdminRestaurante extends AppCompatActivity {
     List<Restaurante> restaurantes = new ArrayList<>();
     SuperAdminRestauranteListAdapter listAdapter;
     FirebaseFirestore db;
-
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    Usuario usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        loadUserSa();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_admin_restaurante);
-
-        //Firebase
-        db = FirebaseFirestore.getInstance();
-        // Obtener los datos del intent anterior a este
-        Intent intent = getIntent();
-        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
-
-
         //Para el buscador
         TextInputEditText searchInput;
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarRestaurante);
 
-        //Manejo del top app bar
-//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-//
-//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                if(item.getItemId()==R.id.log_event){
-//                    Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminVistaLogEvent.class);
-//                    startActivity(intent);
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        });
-
-        //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.restaurant);
@@ -80,19 +64,19 @@ public class SuperAdminRestaurante extends AppCompatActivity {
 
                 if(item.getItemId()==R.id.restaurant){
                     Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminRestaurante.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminHomeActivity.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminPerfil.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
@@ -108,7 +92,7 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         btAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vistaRegistroRestaurante1(sa);
+                vistaRegistroRestaurante1(usuario);
             }
         });
 
@@ -194,4 +178,14 @@ public class SuperAdminRestaurante extends AppCompatActivity {
         intent.putExtra("sa",sa);
         startActivity(intent);
     }
+    public void loadUserSa(){
+        db.collection("Usuarios").document(user.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        usuario = documentSnapshot.toObject(Usuario.class);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+    }
+
 }
