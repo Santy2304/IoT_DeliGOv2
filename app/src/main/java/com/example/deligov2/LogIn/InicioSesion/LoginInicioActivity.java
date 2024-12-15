@@ -111,40 +111,45 @@ public class LoginInicioActivity extends AppCompatActivity {
                                                 if (documentSnapshot.exists()) {
                                                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
                                                     assert usuario != null;
-                                                    if (usuario.getNumeroTelefono() != null) {
-                                                        if (usuario.getDireccion() != null) {
-                                                            if (usuario.getFotoUrl() != null) {
-                                                                if (usuario.getRol() != null) {
-                                                                    if(usuario.isEstado()){
-                                                                        if (usuario.getRol().equals("Cliente")) {
-                                                                            goCliente();
-                                                                        } else if (usuario.getRol().equals("Repartidor")) {
-                                                                            goRepartidor();
-                                                                        } else if (usuario.getRol().equals("Administrador")) {
-                                                                            goAdmin();
-                                                                        } else {
-                                                                            goSuper(usuario);
+                                                    if(usuario.getRol().equals("Administrador")){
+                                                        goAdmin();
+                                                    }else {
+                                                        if (usuario.getNumeroTelefono() != null) {
+                                                            if (usuario.getDireccion() != null) {
+                                                                if (usuario.getFotoUrl() != null) {
+                                                                    if (usuario.getRol() != null) {
+                                                                        if(usuario.isEstado()){
+                                                                            if (usuario.getRol().equals("Cliente")) {
+                                                                                goCliente();
+                                                                            } else if (usuario.getRol().equals("Repartidor")) {
+                                                                                goRepartidor();
+                                                                            } else if (usuario.getRol().equals("Administrador")) {
+                                                                                goAdmin();
+                                                                            } else {
+                                                                                goSuper(usuario);
+                                                                            }
+                                                                        }else{
+                                                                            //ESTAS BANEADO
+                                                                            showBannedUserAlert();
                                                                         }
-                                                                    }else{
-                                                                        //ESTAS BANEADO
-                                                                        showBannedUserAlert();
+                                                                    } else {
+                                                                        Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                                        startActivity(intent);
                                                                     }
                                                                 } else {
-                                                                    Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                                    Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
                                                                     startActivity(intent);
                                                                 }
                                                             } else {
-                                                                Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                                                Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
                                                                 startActivity(intent);
                                                             }
                                                         } else {
-                                                            Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                                            Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
                                                             startActivity(intent);
                                                         }
-                                                    } else {
-                                                        Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
-                                                        startActivity(intent);
                                                     }
+
                                                 }else{
                                                     guardarUsuarioEnBaseDeDatos(user);
                                                 }

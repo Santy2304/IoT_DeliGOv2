@@ -103,11 +103,13 @@ public class ClienteHomeActivity extends AppCompatActivity {
         notiButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ClienteNotificacionesActivity.class);
             startActivity(intent);
+            finish();
         });
 
         carritoButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, ClienteCarrito.class);
             startActivity(intent);
+            finish();
         });
 
         adapter.setContext(this);

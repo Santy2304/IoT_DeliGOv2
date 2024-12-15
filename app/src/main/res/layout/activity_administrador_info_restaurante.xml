@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Bembos"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Nombre"
         android:textColor="@color/black"
         android:textSize="25dp"
         android:textStyle="bold"
@@ -100,7 +100,6 @@
                     android:id="@+id/restName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_edit_24"
                     android:drawablePadding="10dp"
                     android:paddingStart="16dp"
                     android:paddingTop="6dp"
@@ -157,7 +156,7 @@
                     android:paddingEnd="16dp"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:paddingBottom="6dp"
-                    android:text="5:000 pm - 19:00 pm"
+                    android:text="5:00 pm - 19:00 pm"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 

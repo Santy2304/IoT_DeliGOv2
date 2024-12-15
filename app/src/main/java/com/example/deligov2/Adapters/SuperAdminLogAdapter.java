@@ -1,6 +1,7 @@
 package com.example.deligov2.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Beans.Logs;
 import com.example.deligov2.Beans.VentaPlatilloSA;
 import com.example.deligov2.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -59,7 +63,7 @@ public class SuperAdminLogAdapter extends RecyclerView.Adapter<SuperAdminLogAdap
         }
 
         public void bindData(final Logs log) {
-            tvId.setText("#"+log.getIdLog());
+            tvId.setText(" ");
 
             Date fecha = log.getFecha();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -69,7 +73,25 @@ public class SuperAdminLogAdapter extends RecyclerView.Adapter<SuperAdminLogAdap
             tvNote.setText(log.getInfo());
             tvLink.setVisibility(View.INVISIBLE);
 
-            iconImage.setImageResource(R.drawable.deligo);
+            String restaurantId = log.getIdLog();
+            Log.d("ADAPTERLOGGGGGG", "restaurantId: " + restaurantId);
+            // Cargar imagen desde Firebase Storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference()
+                    .child("restaurantes/" + restaurantId + "/logo.jpg");
+
+            storageRef.getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        Glide.with(iconImage.getContext())
+                                .load(uri)
+                                .placeholder(R.drawable.ic_loading)
+                                .error(R.drawable.ic_errorimg)
+                                .into(iconImage);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                        iconImage.setImageResource(R.drawable.ic_errorimg);
+                    });
 
         }
     }

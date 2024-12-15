@@ -55,7 +55,7 @@
             android:scaleType="centerCrop"
             android:onClick="showBottomSheetDialog"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-            app:srcCompat="@drawable/hineilll" />
+            />
 
 
         <LinearLayout

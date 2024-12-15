@@ -25,8 +25,10 @@ import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -47,31 +49,6 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
         Intent intent = getIntent();
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
-        //Manejo del top app bar
-//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-//
-//        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Esto de aquí te manda a la vista anterior
-//                onBackPressed();
-//            }
-//        });
-//
-//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                if(item.getItemId()==R.id.log_event){
-//                    Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminVistaLogEvent.class);
-//                    intent.putExtra("sa",sa);
-//                    startActivity(intent);
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        });
-
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -85,16 +62,19 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminRestaurante.class);
                     intent.putExtra("sa",sa);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminHomeActivity.class);
                     intent.putExtra("sa",sa);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminPerfil.class);
                     intent.putExtra("sa",sa);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;
@@ -103,79 +83,63 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
             }
         });
 
-        // Obtener los datos del intent anterior a este
-        String nameR = intent.getStringExtra("restaurante"); //por ahora solo fue enviado el nombre
-        Log.d("Evento log", "Nombre del restaurante: " + nameR);
+        MaterialButton btPedidos = findViewById(R.id.bt_pedidos);
+        btPedidos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminVistaLogEventRep.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
 
-        Administrador admin = (Administrador) intent.getSerializableExtra("admin");
+        mostrarListaLogs();
 
-        //Manejo de mostrar datos
-        mostrarListaLogs(nameR, admin);
-
-        //Manejo del side bar
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-//        FloatingActionButton btFiltro = findViewById(R.id.bt_filtro);
-
-//        btFiltro.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-//                    drawerLayout.closeDrawer(GravityCompat.END);
-//                } else {
-//                    drawerLayout.openDrawer(GravityCompat.END);
-//                }
-//            }
-//        });
-
-        // Manejar los botones dentro del sidebar
-//        NavigationView navigationView = findViewById(R.id.nav_view);
-//        Button btnLimpiar = navigationView.findViewById(R.id.btn_limpiar);
-//        Button btnMostrar = navigationView.findViewById(R.id.btn_mostrar);
-//
-//        btnLimpiar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CheckBox checkCliente = navigationView.findViewById(R.id.check_cliente);
-//                CheckBox checkRepartidor = navigationView.findViewById(R.id.check_repartidor);
-//                CheckBox checkAdministrador = navigationView.findViewById(R.id.check_administrador);
-//                CheckBox checkRegistros = navigationView.findViewById(R.id.check_registros);
-//                CheckBox checkPedidos = navigationView.findViewById(R.id.check_pedidos);
-//                CheckBox checkRechazos = navigationView.findViewById(R.id.check_rechazos);
-//
-//                checkCliente.setChecked(false);
-//                checkRepartidor.setChecked(false);
-//                checkAdministrador.setChecked(false);
-//                checkRegistros.setChecked(false);
-//                checkPedidos.setChecked(false);
-//                checkRechazos.setChecked(false);
-//            }
-//        });
-
-//        btnMostrar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //En el futuro irá la lógica para los filtros seleccionados
-//            }
-//        });
     }
 
-
-
-    public void mostrarListaLogs(String name, Administrador admin){
+    public void mostrarListaLogs() {
         logs = new ArrayList<>();
-        if(name != null){
-            logs.add(new Logs(6,"Se ha registrado el restaurante "+name+".", new Date()));
-        }
-        if( admin != null){
-            logs.add(new Logs(7,"Se ha asignado el administrador "+ admin.getNombre()+"al restaurante "+admin.getRestaurante(), new Date()));
-        }
-        logs.add(new Logs(5,"Un restaurante ha sido desahabilitado",new Date()));
-        logs.add(new Logs(4,"Un nuevo cliente se ha sido registrado",new Date()));
-        logs.add(new Logs(3,"Un nuevo restaurante ha sido registrado",new Date()));
-        logs.add(new Logs(2,"Se ha registrado un nuevo cliente ",new Date()));
-        logs.add(new Logs(1,"Se ha registrado un nuevo administrador",new Date()));
+        db.collection("restaurantes").get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            String restaurantName = document.getString("nombre");
+                            String adminId = document.getString("admin");
+                            String restaurantId = document.getId();
 
-        SuperAdminLogAdapter listAdapter = new SuperAdminLogAdapter(logs,this);
+                            obtenerDatosAdmin(db, adminId, restaurantName, restaurantId);
+                        }
+                    } else {
+                        actualizarRecyclerView();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
+    }
+
+    private void obtenerDatosAdmin(FirebaseFirestore db, String adminId, String restaurantName, String restaurantId) {
+        db.collection("Usuarios").document(adminId).get()
+                .addOnSuccessListener(adminSnapshot -> {
+                    if (adminSnapshot.exists()) {
+                        String adminName = adminSnapshot.getString("nombre");
+                        String adminLastName = adminSnapshot.getString("apellido");
+
+                        String mensaje = "Se ha registrado el restaurante " + restaurantName +
+                                " con el administrador " + adminName + " " + adminLastName + ".";
+
+                        logs.add(new Logs(restaurantId, mensaje, new Date()));
+                        Log.d("FirestoreDebug", "restaurantId: " + restaurantId);
+                        actualizarRecyclerView();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
+    }
+
+    private void actualizarRecyclerView() {
+        SuperAdminLogAdapter listAdapter = new SuperAdminLogAdapter(logs, this);
         RecyclerView recyclerView = findViewById(R.id.listLogs);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

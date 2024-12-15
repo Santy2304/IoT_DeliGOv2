@@ -29,6 +29,7 @@ import com.example.deligov2.SuperAdmin.Home.Perfiles.SuperAdminVistaPerfilClient
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -91,7 +92,12 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-
+        FloatingActionButton logButton = findViewById(R.id.logButton);
+        logButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
