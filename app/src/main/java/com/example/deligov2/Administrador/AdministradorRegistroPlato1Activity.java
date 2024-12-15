@@ -3,15 +3,19 @@ package com.example.deligov2.Administrador;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -97,20 +101,42 @@ public class AdministradorRegistroPlato1Activity extends AppCompatActivity {
             // Guardar el plato en la base de datos
             String platoId = generarId();
             plato.setId(platoId);
-            db.collection("Platos").document(platoId).set(plato)
-                    .addOnSuccessListener(aVoid -> {
-                        // Mostrar un mensaje de éxito
-                        Toast.makeText(this, "Plato registrado con éxito", Toast.LENGTH_SHORT).show();
-                        // Continuar a la siguiente actividad
-                        Intent intent = new Intent(this, AdministradorRegistroPlato2Activity.class);
-                        intent.putExtra("plato", plato); // Enviar el plato a la siguiente parte del registro
-                        startActivity(intent);
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        // Mostrar un mensaje de error
-                        Toast.makeText(this, "Error al registrar el plato", Toast.LENGTH_SHORT).show();
-                    });
+
+            // Continuar a la siguiente actividad
+            Intent intent = new Intent(this, AdministradorRegistroPlato2Activity.class);
+            intent.putExtra("plato", plato); // Enviar el plato a la siguiente parte del registro
+            startActivity(intent);
+            finish();
+        });
+
+        // Lógica del botón cancelar
+        btnCancelar.setOnClickListener(view -> {
+            mostrarDialogoCancelar(this::finish);
+        });
+
+        // Navegación por medio del bottom Navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_admin);
+        bottomNavigationView.setSelectedItemId(R.id.principal);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item ->  {
+
+            mostrarDialogoCancelar(() -> {
+
+                if(item.getItemId()==R.id.reports){
+                    Intent intentReportes = new Intent(AdministradorRegistroPlato1Activity.this, AdministradorReportesActivity.class);
+                    startActivity(intentReportes);
+                    //return true;
+                }else if(item.getItemId()==R.id.information){
+                    Intent intentInformation = new Intent(AdministradorRegistroPlato1Activity.this, AdministradorInfoRestauranteActivity.class);
+                    startActivity(intentInformation);
+                    //return true;
+                }else if(item.getItemId()==R.id.principal){
+                    Intent intentPrincipal = new Intent(AdministradorRegistroPlato1Activity.this, AdministradorRestauranteActivity.class);
+                    startActivity(intentPrincipal);
+                    //return true;
+                }
+            });
+            return false;
         });
 
     }
@@ -119,5 +145,22 @@ public class AdministradorRegistroPlato1Activity extends AppCompatActivity {
         String uuid = UUID.randomUUID().toString();
         String[] parts = uuid.split("-");
         return parts[0] + parts[1];
+    }
+
+    private void mostrarDialogoCancelar(Runnable accionConfirmada) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmar acción");
+        builder.setMessage("Se perderá el progreso. ¿Estás seguro de que deseas cancelar?");
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // Ejecutar la acción pasada como parámetro
+            if (accionConfirmada != null) {
+                accionConfirmada.run();
+            }
+        });
+        builder.setNegativeButton("Cancelar", (dialog, which) -> {
+            // Cerrar el diálogo
+            dialog.dismiss();
+        });
+        builder.show();
     }
 }

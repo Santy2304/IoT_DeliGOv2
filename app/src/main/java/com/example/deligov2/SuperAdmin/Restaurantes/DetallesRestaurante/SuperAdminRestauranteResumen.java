@@ -39,7 +39,6 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_restaurante_resumen);
 
         db = FirebaseFirestore.getInstance();
@@ -48,20 +47,20 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         Usuario sa = (Usuario) intent.getSerializableExtra("sa");
 
         //Para las estadísticas
-        BarChart chartGanancias = findViewById(R.id.chartGanancias);
-        BarChart chartVentas = findViewById(R.id.chartVentas);
+//        BarChart chartGanancias = findViewById(R.id.chartGanancias);
+//        BarChart chartVentas = findViewById(R.id.chartVentas);
 
         // Configura el gráfico de barras para las ganancias mensuales
-        chartGanancias.getDescription().setEnabled(false);
-        chartGanancias.getLegend().setEnabled(true);
-        chartGanancias.getAxisRight().setEnabled(false);
-        chartGanancias.getAxisLeft().setAxisMinimum(0f);
-
-// Configura el gráfico de barras para las ventas mensuales
-        chartVentas.getDescription().setEnabled(false);
-        chartVentas.getLegend().setEnabled(true);
-        chartVentas.getAxisRight().setEnabled(false);
-        chartVentas.getAxisLeft().setAxisMinimum(0f);
+//        chartGanancias.getDescription().setEnabled(false);
+//        chartGanancias.getLegend().setEnabled(true);
+//        chartGanancias.getAxisRight().setEnabled(false);
+//        chartGanancias.getAxisLeft().setAxisMinimum(0f);
+//
+//// Configura el gráfico de barras para las ventas mensuales
+//        chartVentas.getDescription().setEnabled(false);
+//        chartVentas.getLegend().setEnabled(true);
+//        chartVentas.getAxisRight().setEnabled(false);
+//        chartVentas.getAxisLeft().setAxisMinimum(0f);
 
 // Agrega datos al gráfico de barras para las ganancias mensuales
         ArrayList<BarEntry> entriesGanancias = new ArrayList<>();
@@ -94,19 +93,19 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         dataVentas.setValueTextSize(12f);
 
 // Asigna el conjunto de datos al gráfico de barras
-        chartGanancias.setData(dataGanancias);
-        chartVentas.setData(dataVentas);
-
-// Notifica al gráfico de barras que los datos han cambiado
-        chartGanancias.invalidate();
-        chartVentas.invalidate();
+//        chartGanancias.setData(dataGanancias);
+//        chartVentas.setData(dataVentas);
+//
+//// Notifica al gráfico de barras que los datos han cambiado
+//        chartGanancias.invalidate();
+//        chartVentas.invalidate();
 
         // Obtener las referencias para los datos
         tvRestaurante = findViewById(R.id.tv_restaurante);
-        tvHorario = findViewById(R.id.tv_horario);
-        tvCategorias = findViewById(R.id.tv_categorias);
-        tvAdminRes = findViewById(R.id.tv_adminRes);
-        tvEstado = findViewById(R.id.tv_estado);
+//        tvHorario = findViewById(R.id.tv_horario);
+//        tvCategorias = findViewById(R.id.tv_categorias);
+//        tvAdminRes = findViewById(R.id.tv_adminRes);
+//        tvEstado = findViewById(R.id.tv_estado);
 
         // Obtener los datos del intent anterior a este
         Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
@@ -114,29 +113,29 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 
 
         //Manejo del top app bar
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
-        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Esto de aquí te manda a la vista anterior
-                onBackPressed();
-            }
-        });
-
-        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.log_event){
-                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminVistaLogEvent.class);
-                    intent.putExtra("sa",sa);
-                    startActivity(intent);
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
+//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+//
+//        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Esto de aquí te manda a la vista anterior
+//                onBackPressed();
+//            }
+//        });
+//
+//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(@NonNull MenuItem item) {
+//                if(item.getItemId()==R.id.log_event){
+//                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminVistaLogEvent.class);
+//                    intent.putExtra("sa",sa);
+//                    startActivity(intent);
+//                    return true;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -170,32 +169,32 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         });
 
         //Manejo de los botones
-        Button btCarta = findViewById(R.id.bt_carta);
-
-        btCarta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaRestaurantePlatillos(v, resR,sa);
-            }
-        });
-
-        Button btVentas = findViewById(R.id.bt_ventas);
-
-        btVentas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaRestauranteHistorialVentas(v, resR,sa);
-            }
-        });
-
-        Button btUbicacion = findViewById(R.id.bt_ubicacion);
-
-        btUbicacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vistaRestauranteUbicacion(v, resR,sa);
-            }
-        });
+//        Button btCarta = findViewById(R.id.bt_carta);
+//
+//        btCarta.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                vistaRestaurantePlatillos(v, resR,sa);
+//            }
+//        });
+//
+//        Button btVentas = findViewById(R.id.bt_ventas);
+//
+//        btVentas.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                vistaRestauranteHistorialVentas(v, resR,sa);
+//            }
+//        });
+//
+//        Button btUbicacion = findViewById(R.id.bt_ubicacion);
+//
+//        btUbicacion.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                vistaRestauranteUbicacion(v, resR,sa);
+//            }
+//        });
 
 
         //Mostrar los datos

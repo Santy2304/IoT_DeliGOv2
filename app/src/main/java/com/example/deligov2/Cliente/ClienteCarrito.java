@@ -170,12 +170,12 @@ public class ClienteCarrito extends AppCompatActivity {
         returnRestaurant.setOnClickListener(view -> {
             List<Platillo> listaActualizadaPlatos = adapter.getListaPlatosCarrito();
             if(listaActualizadaPlatos.isEmpty()){
-                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+                Intent intent = new Intent(this,ClienteHomeActivity.class);
                 startActivity(intent);
             }else{
-                actualizarCarrito(new Intent(this,ClienteRestaurantActivity.class));
-//                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(this,ClienteRestaurantActivity.class);
+                intent.putExtra("idRestaurante",carrito.getIdRestaurante());
+                actualizarCarrito(intent);
 
             }
         });
