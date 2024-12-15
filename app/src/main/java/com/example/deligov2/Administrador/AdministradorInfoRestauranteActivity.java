@@ -28,7 +28,7 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private ImageView logoRestaurante, bannerRestaurante;
     private TextView nombreRestaurante;
-    private MaterialTextView nombre, horario, ubicacion;
+    private MaterialTextView /*nombre,*/ horario, ubicacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
         logoRestaurante = findViewById(R.id.logoRestaurante);
         bannerRestaurante = findViewById(R.id.bannerRestaurante);
         nombreRestaurante = findViewById(R.id.nombreRestaurante);
-        nombre = findViewById(R.id.restName);
+        //nombre = findViewById(R.id.restName);
         horario = findViewById(R.id.restTime);
         ubicacion = findViewById(R.id.ubicacion);
 
@@ -103,7 +103,7 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
                         String ubicacionRestaurante = documentSnapshot.getString("direccion");
                         // Cargar los datos en los elementos de la interfaz
                         nombreRestaurante.setText(nombreRestauranteStr);
-                        nombre.setText(nombreRestauranteStr);
+                        //nombre.setText(nombreRestauranteStr);
                         horario.setText(horarioRestaurante);
                         ubicacion.setText(ubicacionRestaurante);
                     } else {
