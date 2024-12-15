@@ -44,7 +44,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="5sp"
                     android:orientation="vertical">
@@ -53,6 +53,8 @@
                         android:id="@+id/tv_restaurante"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="Bembos"
                         android:textColor="@color/light_green"
@@ -77,6 +79,7 @@
                                         android:text="Categoría: "
                                         android:textColor="@color/black" />
                     -->
+                    <!--
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -109,7 +112,7 @@
                             android:text="Activado "
                             android:textColor="@color/light_green" />
                     </LinearLayout>
-
+-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -134,7 +137,7 @@
 
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/cantidadProductos"
+                    android:id="@+id/cantidadPedidos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="60dp"

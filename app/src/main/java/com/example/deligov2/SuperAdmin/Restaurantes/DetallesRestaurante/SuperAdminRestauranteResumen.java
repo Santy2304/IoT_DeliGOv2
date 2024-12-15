@@ -27,6 +27,9 @@ import com.example.deligov2.R;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -35,16 +38,42 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 
     private TextView tvRestaurante, tvHorario, tvCategorias, tvAdminRes, tvEstado;
     private FirebaseFirestore db;
-
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    Usuario usuario;
+    ExtendedFloatingActionButton monto, cantidad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        loadUserSa();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_admin_restaurante_resumen);
-
-        db = FirebaseFirestore.getInstance();
-        // Obtener los datos del intent anterior a este
         Intent intent = getIntent();
-        Usuario sa = (Usuario) intent.getSerializableExtra("sa");
+        Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
+        tvRestaurante = findViewById(R.id.tv_restaurante);
+        tvHorario = findViewById(R.id.tv_horario);
+//        tvAdminRes = findViewById(R.id.tv_adminRes);
+//        tvEstado = findViewById(R.id.tv_estado);
+        tvRestaurante.setText(resR.getNombre());
+        tvHorario.setText("Horario de Atención: "+resR.getHorario());
+        cantidad = findViewById(R.id.cantidadPedidos);
+        monto = findViewById(R.id.recaudado);
+        monto.setText("S/ %.2f"+resR.getMonto());
+        cantidad.setText(resR.getTotalPedidos());
+//        db.collection("Usuarios").document(resR.getAdmin()).get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        Usuario admin = documentSnapshot.toObject(Usuario.class);
+//                        tvAdminRes.setText(admin.getNombre()+" "+admin.getApellido());
+//
+//                    }
+//                })
+//                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+
+
 
         //Para las estadísticas
 //        BarChart chartGanancias = findViewById(R.id.chartGanancias);
@@ -100,42 +129,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 //        chartGanancias.invalidate();
 //        chartVentas.invalidate();
 
-        // Obtener las referencias para los datos
-        tvRestaurante = findViewById(R.id.tv_restaurante);
-//        tvHorario = findViewById(R.id.tv_horario);
-//        tvCategorias = findViewById(R.id.tv_categorias);
-//        tvAdminRes = findViewById(R.id.tv_adminRes);
-//        tvEstado = findViewById(R.id.tv_estado);
 
-        // Obtener los datos del intent anterior a este
-        Restaurante resR = (Restaurante) intent.getSerializableExtra("res");
-        Log.d("RESTAURANTE IDDDD RESUMEN", "OLA: "+resR.getId()+ resR.getAdmin());
-
-
-        //Manejo del top app bar
-//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-//
-//        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Esto de aquí te manda a la vista anterior
-//                onBackPressed();
-//            }
-//        });
-//
-//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                if(item.getItemId()==R.id.log_event){
-//                    Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminVistaLogEvent.class);
-//                    intent.putExtra("sa",sa);
-//                    startActivity(intent);
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        });
 
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -148,17 +142,17 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 
                 if(item.getItemId()==R.id.restaurant){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminRestaurante.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminHomeActivity.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminPerfil.class);
-                    intent.putExtra("sa",sa);
+                    intent.putExtra("sa",usuario);
                     startActivity(intent);
                     return true;
                 }else{
@@ -167,39 +161,6 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 
             }
         });
-
-        //Manejo de los botones
-//        Button btCarta = findViewById(R.id.bt_carta);
-//
-//        btCarta.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                vistaRestaurantePlatillos(v, resR,sa);
-//            }
-//        });
-//
-//        Button btVentas = findViewById(R.id.bt_ventas);
-//
-//        btVentas.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                vistaRestauranteHistorialVentas(v, resR,sa);
-//            }
-//        });
-//
-//        Button btUbicacion = findViewById(R.id.bt_ubicacion);
-//
-//        btUbicacion.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                vistaRestauranteUbicacion(v, resR,sa);
-//            }
-//        });
-
-
-        //Mostrar los datos
-        mostrarDatosRestauranteFirebase(resR.getId());
-
 
     }
 
@@ -224,60 +185,13 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void mostrarDatosRestauranteFirebase(String resID){
-        db.collection("restaurantes")
-                .document(resID)
-                .get()
+    public void loadUserSa(){
+        db.collection("Usuarios").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String nombreRestaurante = documentSnapshot.getString("nombre");
-                        String horario = documentSnapshot.getString("horario");
-                        String categorias = documentSnapshot.getString("categorias");
-                        String adminRes = documentSnapshot.getString("admin");
-
-                        Log.d("ID ADMINISTRADOR PT2", "OLA2" + adminRes);
-                        boolean estado = documentSnapshot.getBoolean("estado");
-
-                        tvRestaurante.setText(nombreRestaurante != null ? nombreRestaurante : "---");
-                        tvHorario.setText(horario != null ? "Horario de atención: " + horario : "---");
-                        tvCategorias.setText(categorias != null ? "Categorías: " + categorias : "---");
-
-                        if (estado) {
-                            tvEstado.setText("Activado");
-                            tvEstado.setTextColor(getResources().getColor(R.color.light_green));
-                        } else {
-                            tvEstado.setText("Desactivado");
-                            tvEstado.setTextColor(getResources().getColor(R.color.md_theme_error));
-                        }
-
-                        db.collection("Usuarios")
-                                .document(adminRes)
-                                .get()
-                                .addOnSuccessListener(documentSnapshotAdmin -> {
-                                    if (documentSnapshotAdmin.exists()) {
-                                        String adminNombre = documentSnapshotAdmin.getString("nombre");
-                                        String adminApellido = documentSnapshotAdmin.getString("apellido");
-                                        String adminCompleto = (adminNombre != null ? adminNombre : "---") +
-                                                " " + (adminApellido != null ? adminApellido : "---");
-                                        tvAdminRes.setText("Administrador: " + adminCompleto);
-                                    } else {
-                                        tvAdminRes.setText("Administrador no encontrado");
-                                    }
-                                })
-                                .addOnFailureListener(e -> {
-                                    tvAdminRes.setText("Error al obtener el administrador");
-                                    Log.e("Firestore", "Error al obtener el administrador: ", e);
-                                });
-
-                    } else {
-                        Log.d("Firestore", "El documento no existe.");
-                        tvRestaurante.setText("Restaurante no encontrado");
+                        usuario = documentSnapshot.toObject(Usuario.class);
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error al obtener los datos del restaurante: ", e);
-                    tvRestaurante.setText("Error al cargar datos");
-                });
-
+                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
     }
 }

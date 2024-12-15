@@ -31,9 +31,6 @@
             android:name=".Cliente.ClienteEdicionUbicacionActivity"
             android:exported="false" />
         <activity
-            android:name=".SuperAdmin.SuperAdminVistaLogEventRep"
-            android:exported="false" />
-        <activity
             android:name=".LogIn.Registro.LoginCrearCuentaEmailPassword"
             android:exported="false" />
         <activity
