@@ -70,6 +70,36 @@
                     android:textColor="@color/black" />
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/repartidorButton"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="@color/light_green"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="Repartidor"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                    <Button
+                        android:id="@+id/qrButton"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorCustomColor1Container_mediumContrast"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_marginStart="15dp"
+                        android:text="QR"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        />
+
+
+                </LinearLayout>
 
 
             </LinearLayout>

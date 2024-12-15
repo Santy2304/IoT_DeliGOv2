@@ -153,9 +153,17 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             });
             findViewById(R.id.qr).setOnClickListener(view -> {
                 //Abrir camara para validar QR
-                startQRScanner();
-                pedidoSupreme.setEstado("Entregado");
-                navigateToPlace( mRoutingOptions);
+                IntentIntegrator integrator =  new IntentIntegrator(this);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                integrator.setPrompt("Escanea el QR del cliente");
+                integrator.setCameraId(0);
+                integrator.setBeepEnabled(true);
+                integrator.setBarcodeImageEnabled(true);
+                integrator.initiateScan();
+//                updatePedido("Entregado");
+//                findViewById(R.id.Recoger).setVisibility(View.GONE);
+//                pedidoSupreme.setEstado("Entregado");
+//                navigateToPlace( mRoutingOptions);
             });
             if(pedidoSupreme.getEstado().equals("Listo")){
                 findViewById(R.id.qr).setVisibility(View.GONE);
@@ -603,43 +611,31 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     }
 
 
-    private void startQRScanner() {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE); // Formato QR
-        integrator.setPrompt("Escanea un código QR");                 // Mensaje en la cámara
-        integrator.setCameraId(0);                                   // Cámara trasera
-        integrator.setOrientationLocked(true);                       // Bloquear orientación
-        integrator.setBeepEnabled(true);                             // Activar sonido al escanear
-        integrator.initiateScan();                                   // Iniciar escáner
-    }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Procesar el resultado del escaneo
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() != null) {
-                // Mostrar el resultado del escaneo
-                if(!result.getContents().equals(pedidoSupreme.getId())){
-                    Toast.makeText(this, "Código escaneado: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    Intent intent  = new Intent(RepartidorTrackingEstadoEnCamino.this, RepartidorTrackingFinalizado.class);
-                    intent.putExtra("idPedido", result.getContents());
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(this, "Código escaneado: " + result.getContents(), Toast.LENGTH_LONG).show();
+    protected void onActivityResult(int requestCode , int resultCode ,@Nullable Intent data){
+        IntentResult result =  IntentIntegrator.parseActivityResult(requestCode , resultCode , data);
+        if(result != null){
+            if(result.getContents() == null){
+                Toast.makeText(this, "Cancelado" , Toast.LENGTH_LONG).show();
+                super.onActivityResult(requestCode , resultCode , data);
+            }else{
+                Toast.makeText(this, "Escaneado" + result.getContents() , Toast.LENGTH_LONG).show();
+                if(pedidoSupreme.getId().equals(result.getContents())){
+                    Intent intent =  new Intent(this , RepartidorTrackingFinalizado.class);
                     updatePedido("Entregado");
-                    Intent intent  = new Intent(RepartidorTrackingEstadoEnCamino.this, RepartidorTrackingFinalizado.class);
-                    intent.putExtra("idPedido", result.getContents());
+                    intent.putExtra("idPedido" , result.getContents());
                     startActivity(intent);
+                    finish();
+                }else{
+                    super.onActivityResult(requestCode , resultCode , data);
                 }
-            } else {
-                // Si el escaneo fue cancelado
-                Toast.makeText(this, "Escaneo cancelado", Toast.LENGTH_SHORT).show();
+
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        }else{
+            super.onActivityResult(requestCode , resultCode , data);
         }
     }
+
 }

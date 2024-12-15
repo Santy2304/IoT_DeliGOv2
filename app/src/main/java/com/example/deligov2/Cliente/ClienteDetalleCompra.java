@@ -1,5 +1,6 @@
 package com.example.deligov2.Cliente;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +46,7 @@ public class ClienteDetalleCompra extends AppCompatActivity {
     FirebaseUser user;
     Button verRepartidorButton;
     Button qrButton;
-    Button goBackButton;
+    FloatingActionButton goBackButton;
     ArrayList<Platillo> lista = new ArrayList<>();
     ArrayList<String> idsPlatos = new ArrayList<>();
     ArrayList<Integer> cantidades = new ArrayList<>();
@@ -54,6 +56,7 @@ public class ClienteDetalleCompra extends AppCompatActivity {
     Pedido pedido;
     TextView costoTotal, costoProductos, costoEnvio,dateText;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,12 +123,12 @@ public class ClienteDetalleCompra extends AppCompatActivity {
 
 
         goBackButton = findViewById(R.id.goBackButton);
-
+        verRepartidorButton = findViewById(R.id.repartidorButton);
         verRepartidorButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteVeRepartidor.class);
             startActivity(intent);
         });
-
+        qrButton =  findViewById(R.id.qrButton);
         qrButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteQR.class);
             startActivity(intent);

@@ -145,7 +145,10 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                         pedido = documentSnapshot.toObject(Pedido.class);
                         idsPlatos = pedido.getIdListaPlatos();
                         actualizarSliderSegunEstado(pedido.getEstado());
-
+                        if(pedido.getIdRepartidor() == null ){
+                            findViewById(R.id.esperando).setVisibility(View.VISIBLE);
+                            findViewById(R.id.map).setVisibility(View.GONE);
+                        }
                         cantidades = pedido.getListaCantidades();
                         listaPrecios = pedido.getPreciosActuales();
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
@@ -375,7 +378,21 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                         for (QueryDocumentSnapshot document : value) {
                             if(((document.toObject(Pedido.class)).getId()).equals(getIntent().getStringExtra("idOrder"))){
                                 pedidoSupreme = document.toObject(Pedido.class);
-                                runnable.run();
+                                if(pedidoSupreme.getEstado().equals("En Camino")){
+                                    marker1.remove();
+                                }
+                                if(pedidoSupreme.getEstado().equals("Entregado")){
+                                    Toast.makeText(this, "Pedido entregado", Toast.LENGTH_SHORT);
+                                    Intent intent = new Intent(this , ClienteHomeActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                if(pedidoSupreme.getIdRepartidor() != null){
+                                    findViewById(R.id.esperando).setVisibility(View.GONE);
+                                    findViewById(R.id.map).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.repartidorButton).setVisibility(View.VISIBLE);
+                                    runnable.run();
+                                }
                             }
                         }
                     }
