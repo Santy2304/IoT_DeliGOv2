@@ -39,14 +39,14 @@ public class SuperAdminRestauranteCartaAdapter  extends RecyclerView.Adapter<Sup
         tvPrice1.setText(String.format("S/ %.2f", carta.getPrecio()));
 
         ExtendedFloatingActionButton btViewPlato = holder.itemView.findViewById(R.id.bt_viewPlato);
-        btViewPlato.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, SuperAdminPlatillosDescription.class);
-                intent.putExtra("plato", carta);
-                context.startActivity(intent);
-            }
-        });
+//        btViewPlato.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, SuperAdminPlatillosDescription.class);
+//                intent.putExtra("plato", carta);
+//                context.startActivity(intent);
+//            }
+//        });
 
     }
 

@@ -66,15 +66,15 @@ public class SuperAdminRestauranteVentaListAdapter extends RecyclerView.Adapter<
 
             iconImage.setImageResource(R.drawable.bembos_logo);
 
-            tvLinkDetalle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(itemView.getContext(), SuperAdminHistorialVentasDetalles.class);
-                    //intent.putExtra("id_cliente", cliente.getId());
-                    itemView.getContext().startActivity(intent);
-                }
-            });
+//            tvLinkDetalle.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(itemView.getContext(), SuperAdminHistorialVentasDetalles.class);
+//                    //intent.putExtra("id_cliente", cliente.getId());
+//                    itemView.getContext().startActivity(intent);
+//                }
+//            });
         }
     }
 }
