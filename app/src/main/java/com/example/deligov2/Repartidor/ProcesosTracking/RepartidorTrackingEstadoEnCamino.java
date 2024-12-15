@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.DTO.LogSuper;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
@@ -33,6 +34,7 @@ import com.google.android.libraries.navigation.RoadSnappedLocationProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.BuildConfig;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -625,6 +627,28 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                 if(pedidoSupreme.getId().equals(result.getContents())){
                     Intent intent =  new Intent(this , RepartidorTrackingFinalizado.class);
                     updatePedido("Entregado");
+                    LogSuper logSuper = new LogSuper();
+                    logSuper.setFecha(Timestamp.now());
+                    logSuper.setTipo("Pedido");
+                    logSuper.setIdImage(pedidoSupreme.getIdUsuario());
+                    db.collection("restaurantes").document(pedidoSupreme.getIdRestaurante()).get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    Restaurante restaurante = documentSnapshot.toObject(Restaurante.class);
+                                    logSuper.setInfo("El cliente "+usuario.getNombre() + usuario.getApellido() +"ha recibido su pedido del restaurante "+restaurante.getNombre());
+                                    db.collection("Logs").add(logSuper)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
+
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(this, "Error al realizar el pedido: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            });
+
+                                }
+                            })
+                            .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
                     intent.putExtra("idPedido" , result.getContents());
                     startActivity(intent);
                     finish();
