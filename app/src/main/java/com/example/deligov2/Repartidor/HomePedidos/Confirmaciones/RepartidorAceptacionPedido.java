@@ -41,11 +41,14 @@ public class RepartidorAceptacionPedido extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repartidor_aceptacion_pedido);
-
+        String ola =  getIntent().getStringExtra("idPedido");
+        TextView textView = findViewById(R.id.texto);
+        textView.setText("Ahora quedas a cargo del pedido #" + ola);
     }
 
     public void verTrackingPedidoRepartidor(View view){
-        Intent intent = new Intent(RepartidorAceptacionPedido.this, RepartidorTrackingEstadoRecibido.class);
+        Intent intent = new Intent(RepartidorAceptacionPedido.this, RepartidorTrackingEstadoEnCamino.class);
+        intent.putExtra("idPedido", getIntent().getStringExtra("idPedido"));
         startActivity(intent);
     }
 

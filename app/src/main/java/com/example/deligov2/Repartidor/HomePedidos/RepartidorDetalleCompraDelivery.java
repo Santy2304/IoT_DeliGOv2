@@ -105,9 +105,10 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
 
     public void loadUser(Runnable runnable){
         db.collection("Usuarios")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (QueryDocumentSnapshot document : value) {
+                .get()
+                .addOnCompleteListener((task) -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
                                 usuario = document.toObject(Usuario.class);
                                 runnable.run();
@@ -118,9 +119,10 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
     }
     public void loadPedidos(String idPedido, Runnable run){
         db.collection("Pedidos")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (QueryDocumentSnapshot document : value) {
+                .get()
+                .addOnCompleteListener((task) -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             Pedido pedido = document.toObject(Pedido.class);
                             if(pedido.getId().equals(idPedido)){
                                 pedidoSupreme =  pedido;
@@ -135,9 +137,10 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
     public void obtenerPlatillos(ArrayList<String> listaIds, Runnable runnable){
         for (int i = 0 ; i < listaIds.size() ; i++){
             db.collection("Platos")
-                    .addSnapshotListener((value, error) -> {
-                        if (value != null) {
-                            for (QueryDocumentSnapshot document : value) {
+                    .get()
+                    .addOnCompleteListener((task) -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 Platillo plato = document.toObject(Platillo.class);
                                 if(listaIds.contains( plato.getId()) ){
                                     listaPlatillos.add(plato);
@@ -197,8 +200,10 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        aceptar(view.getContentDescription().toString(), user.getUid(), () -> {
-                                    startActivity(new Intent(RepartidorDetalleCompraDelivery.this, RepartidorAceptacionPedido.class));
+                        aceptar(getIntent().getStringExtra("pedido"), user.getUid(), () -> {
+                                 Intent intent=    new Intent(RepartidorDetalleCompraDelivery.this, RepartidorAceptacionPedido.class);
+                                    intent.putExtra("idPedido", getIntent().getStringExtra("pedido"));
+                                startActivity(intent);
                                 }, () -> {
                                     Intent intent = new Intent(RepartidorDetalleCompraDelivery.this, RepartidorCancelacionPedido.class);
                                     startActivity(intent);

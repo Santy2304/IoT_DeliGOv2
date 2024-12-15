@@ -538,16 +538,18 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
     private void updateLocationToFirebase(Location location) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Crear un mapa con los datos de ubicación
-        Map<String, Object> locationData = new HashMap<>();
-        locationData.put("latitudActualRepartidor",""+location.getLatitude());
-        locationData.put("longitudActualRepartidor", ""+location.getLongitude());
-        // Actualizar los datos en Firestore
-        db.collection("Pedidos").document(pedidoSupreme.getId())
-                .update(locationData)
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Ubicación actualizada con éxito"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar la ubicación", e));
+        if(pedidoSupreme  != null && !pedidoSupreme.getEstado().equals("Entregado")){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // Crear un mapa con los datos de ubicación
+            Map<String, Object> locationData = new HashMap<>();
+            locationData.put("latitudActualRepartidor",""+location.getLatitude());
+            locationData.put("longitudActualRepartidor", ""+location.getLongitude());
+            // Actualizar los datos en Firestore
+            db.collection("Pedidos").document(pedidoSupreme.getId())
+                    .update(locationData)
+                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Ubicación actualizada con éxito"))
+                    .addOnFailureListener(e -> Log.e("Firestore", "Error al actualizar la ubicación", e));
+        }
     }
 
     //PERMISO
