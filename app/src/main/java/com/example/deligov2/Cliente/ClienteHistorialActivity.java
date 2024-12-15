@@ -1,11 +1,13 @@
 package com.example.deligov2.Cliente;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Adapters.NotificacionesAdapter;
 import com.example.deligov2.Beans.Notificaciones;
@@ -27,10 +30,13 @@ import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,8 +50,11 @@ public class ClienteHistorialActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
     MaterialButton enCamino, Entregados;
     @Override
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_historial);
@@ -56,7 +65,7 @@ public class ClienteHistorialActivity extends AppCompatActivity {
         adapter.setContext(this);
         enCamino = findViewById(R.id.enCaminoButton);
         Entregados = findViewById(R.id.EntregadosButton);
-
+        storage = FirebaseStorage.getInstance();
         db.collection("Pedidos").addSnapshotListener((snapshot, error)->{
             if (error != null) {
                 Log.w("msg-test", "Listen failed.", error);
@@ -75,7 +84,18 @@ public class ClienteHistorialActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-
+        storage = FirebaseStorage.getInstance();
+        ShapeableImageView image = findViewById(R.id.imageView);
+        storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.xd)
+                    .into(image);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+        });
         adapter.setListaOrdenes(lista);
         RecyclerView recyclerView = findViewById(R.id.recicler);
         recyclerView.setAdapter(adapter);
@@ -120,14 +140,20 @@ public class ClienteHistorialActivity extends AppCompatActivity {
                 if(item.getItemId()==R.id.restaurant){
                     Intent intentRestaurant = new Intent(ClienteHistorialActivity.this, ClienteHomeActivity.class);
                     startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                     return true;
                 }else if(item.getItemId()==R.id.historial){
                     Intent intentPrincipal = new Intent(ClienteHistorialActivity.this, ClienteHistorialActivity.class);
                     startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intentProfile = new Intent(ClienteHistorialActivity.this, ClientePerfil.class);
                     startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                     return true;
                 }else{
                     return false;
@@ -176,5 +202,13 @@ public class ClienteHistorialActivity extends AppCompatActivity {
 
         }
 
+    }
+
+
+
+    public void verPerfil(View view){
+        Intent intent = new Intent(this, ClientePerfil.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

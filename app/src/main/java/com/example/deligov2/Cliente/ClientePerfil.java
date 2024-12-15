@@ -129,7 +129,11 @@ public class ClientePerfil extends AppCompatActivity {
                             if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
                                 usuario = document.toObject(Usuario.class);
                                 name.setText(usuario.getNombre());
-                                lastName.setText(usuario.getApellido());
+                                if(usuario.getApellido().equals("") || usuario.getApellido()==null){
+                                    lastName.setText("NoLastName");
+                                }else{
+                                    lastName.setText(usuario.getApellido());
+                                }
                                 email.setText(usuario.getCorreo());
                                 cellphone.setText(usuario.getNumeroTelefono());
                                 mainLocation.setText(usuario.getDireccion());
@@ -165,18 +169,20 @@ public class ClientePerfil extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 if(item.getItemId()==R.id.restaurant){
                     Intent intentRestaurant = new Intent(ClientePerfil.this, ClienteHomeActivity.class);
                     startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.historial){
                     Intent intentPrincipal = new Intent(ClientePerfil.this, ClienteHistorialActivity.class);
                     startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intentProfile = new Intent(ClientePerfil.this, ClientePerfil.class);
                     startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else{
                     return false;

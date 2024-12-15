@@ -2,6 +2,7 @@ package com.example.deligov2.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.Cliente.ClienteDetalleCompra;
+import com.example.deligov2.Cliente.ClienteHistorialActivity;
 import com.example.deligov2.DTO.Notificaciones;
 import com.example.deligov2.Cliente.ClienteTrackingActivity;
+import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -95,11 +101,34 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
             super(itemView);
             TextView button = itemView.findViewById(R.id.goToDetails);
             imageView = itemView.findViewById(R.id.imgMsg);
+            Pedido pedido = new Pedido();
             button.setOnClickListener(view -> {
-                Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
-                intent.putExtra("idCompra",notificaciones.getIdPedido());
-                itemView.getContext().startActivity(intent);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("Pedidos")
+                                .get()
+                        .addOnCompleteListener(task->{
+                            if(task.isSuccessful()){
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    Pedido pedido2 = document.toObject(Pedido.class);
+                                    Log.d("AYUDAAA" , "GAAAAAAAAAA");
+                                    if (pedido2.getId().equals(notificaciones.getIdPedido())){
+                                        if(pedido2.getEstado().equals("Entregado")){
+                                            Intent intent = new Intent(itemView.getContext(), ClienteDetalleCompra.class);
+                                            intent.putExtra("idOrder",notificaciones.getIdPedido());
+                                            itemView.getContext().startActivity(intent);
+                                        }else{
+                                            Intent intent = new Intent(itemView.getContext(), ClienteTrackingActivity.class);
+                                            intent.putExtra("idOrder",notificaciones.getIdPedido());
+                                            itemView.getContext().startActivity(intent);
+                                        }
+
+                                    }
+                                }
+                            }
+                        });
             });
         }
     }
+
+
 }

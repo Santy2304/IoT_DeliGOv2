@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -138,7 +140,6 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
         idPedido = getIntent().getStringExtra("idOrder");
         costoTotal = findViewById(R.id.costoTotal);
         dateText = findViewById(R.id.hourText);
-
         db.collection("Pedidos").document(idPedido).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -149,6 +150,15 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                             findViewById(R.id.esperando).setVisibility(View.VISIBLE);
                             findViewById(R.id.map).setVisibility(View.GONE);
                         }
+                        FirebaseStorage.getInstance().getReference().child("restaurantes/" + pedido.getIdRestaurante() + "/logo.jpg").getDownloadUrl().addOnSuccessListener(uri -> {
+                            Glide.with(ClienteTrackingActivity.this)
+                                    .load(uri)
+                                    .placeholder(R.drawable.user_icon)
+                                    .error(R.drawable.xd)
+                                    .into((ImageView) (findViewById(R.id.imageView6)));
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                        });
                         cantidades = pedido.getListaCantidades();
                         listaPrecios = pedido.getPreciosActuales();
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
@@ -364,6 +374,7 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                         for (QueryDocumentSnapshot document : value) {
                             if(((document.toObject(Restaurante.class)).getId()).equals(pedidoSupreme.getIdRestaurante())){
                                 restauranteSupreme = document.toObject(Restaurante.class);
+
                                 runnable.run();
                             }
                         }

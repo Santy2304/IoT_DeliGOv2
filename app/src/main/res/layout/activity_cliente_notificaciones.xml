@@ -36,13 +36,14 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView3"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:layout_marginStart="110dp"
                 android:layout_marginTop="15sp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                app:srcCompat="@drawable/hineilll" />
+                />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

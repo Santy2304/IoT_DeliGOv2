@@ -8,7 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.ClienteCarritoAdapter;
 import com.example.deligov2.Adapters.ClienteDetalleCompraAdapter;
 import com.example.deligov2.Beans.VentaPlatilloSA;
@@ -32,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +80,16 @@ public class ClienteDetalleCompra extends AppCompatActivity {
                         idsPlatos = pedido.getIdListaPlatos();
                         cantidades = pedido.getListaCantidades();
                         listaPrecios = pedido.getPreciosActuales();
+                        FirebaseStorage.getInstance().getReference().child("restaurantes/" + pedido.getIdRestaurante() + "/logo.jpg").getDownloadUrl().addOnSuccessListener(uri -> {
+                            Glide.with(ClienteDetalleCompra.this)
+                                    .load(uri)
+                                    .placeholder(R.drawable.user_icon)
+                                    .error(R.drawable.xd)
+                                    .into((ImageView) (findViewById(R.id.imageView6)));
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                        });
+
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
                             if (error != null) {
                                 Log.w("msg-test", "Listen failed.", error);
@@ -126,6 +140,7 @@ public class ClienteDetalleCompra extends AppCompatActivity {
         verRepartidorButton = findViewById(R.id.repartidorButton);
         verRepartidorButton.setOnClickListener(view -> {
             Intent intent = new Intent(this,ClienteVeRepartidor.class);
+            intent.putExtra("idOrder",getIntent().getStringExtra("idOrder"));
             startActivity(intent);
         });
         qrButton =  findViewById(R.id.qrButton);

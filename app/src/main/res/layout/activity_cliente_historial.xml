@@ -66,14 +66,16 @@
                 app:tint="@color/white" />
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView"
                 android:layout_width="0dp"
                 android:layout_height="50sp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="23sp"
                 android:layout_weight="0.9"
                 android:scaleType="centerCrop"
+                android:onClick="verPerfil"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                app:srcCompat="@drawable/hineilll" />
+               />
         </LinearLayout>
 
         <LinearLayout

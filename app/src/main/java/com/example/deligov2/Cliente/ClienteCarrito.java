@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.ClienteCarritoAdapter;
 import com.example.deligov2.Adapters.ClientePlatosAdapter;
 import com.example.deligov2.DTO.Carrito;
@@ -26,10 +27,13 @@ import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -41,11 +45,13 @@ import java.util.UUID;
 
 public class ClienteCarrito extends AppCompatActivity {
 
-    FirebaseFirestore db;
-    FloatingActionButton notiButton;
-    FloatingActionButton returnRestaurant;
-    Button orderButton;
-    Button vaciarButton;
+    private FirebaseFirestore db;
+    private FloatingActionButton notiButton;
+    private FloatingActionButton returnRestaurant;
+    private Button orderButton;
+    private Button vaciarButton;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     ArrayList<Platillo> lista = new ArrayList<>();
@@ -72,6 +78,21 @@ public class ClienteCarrito extends AppCompatActivity {
         restName = findViewById(R.id.restName);
         costoEnvio = Math.random() * 5 + 1;
         costoEnvioText.setText(String.format("S/%.2f", costoEnvio));
+
+        storage = FirebaseStorage.getInstance();
+
+        ShapeableImageView image = findViewById(R.id.shapeableImageView3);
+        storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.xd)
+                    .into(image);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+        });
+
 
         db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {

@@ -40,7 +40,7 @@
                 android:layout_height="105dp"
                 android:layout_marginStart="10dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bembos_logo" />
+                 />
 
 
             <LinearLayout
@@ -165,7 +165,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8sp"
+                    android:textStyle="bold"
                     android:layout_weight="1"
+                    android:textColor="@color/black"
                     android:fontFamily="sans-serif-condensed"
                     android:text="Productos: "
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
@@ -177,6 +179,8 @@
                     android:layout_marginTop="8sp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="S/8.00"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
             </LinearLayout>
@@ -196,6 +200,8 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-condensed"
                     android:text="Envío: "
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
                 <TextView
@@ -204,6 +210,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8sp"
                     android:fontFamily="sans-serif-condensed"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="S/2.00" />
             </LinearLayout>
 
@@ -222,6 +230,7 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-condensed"
                     android:text="Total: "
+                    android:textStyle="bold"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="@color/light_green" />
 
@@ -232,6 +241,7 @@
                     android:layout_marginTop="8sp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="S/10.00"
+                    android:textStyle="bold"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="@color/light_green" />
             </LinearLayout>

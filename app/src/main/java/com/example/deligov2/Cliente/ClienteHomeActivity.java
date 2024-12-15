@@ -1,28 +1,39 @@
 package com.example.deligov2.Cliente;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.RestaurantesClientesAdapter;
 import com.example.deligov2.DTO.Carrito;
 import com.example.deligov2.DTO.Restaurante;
+import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -36,30 +47,23 @@ public class ClienteHomeActivity extends AppCompatActivity {
     Carrito carrito;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
+    private FirebaseStorage storage ;
+    private StorageReference storageRef;
     RestaurantesClientesAdapter adapter;
     @Override
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         adapter = new RestaurantesClientesAdapter();
-        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
-            if (error != null) {
-                Log.w("msg-test", "Listen failed.", error);
-                return;
-            }
-            if (snapshot != null && !snapshot.isEmpty()) {
-                lista.clear();
-                for (DocumentSnapshot document : snapshot.getDocuments()) {
-                    Restaurante restaurante = document.toObject(Restaurante.class);
-                    Log.w("msg-test", "Listen failed "+ document.getId());
-                    lista.add(restaurante);
-                }
-                adapter.notifyDataSetChanged();
-            }
-        });
+        storage = FirebaseStorage.getInstance();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_home);
+
         db.collection("Carritos").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -67,6 +71,20 @@ public class ClienteHomeActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
+
+        storage = FirebaseStorage.getInstance();
+
+        ShapeableImageView image = findViewById(R.id.shapeableImageView3);
+        storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.xd)
+                    .into(image);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+        });
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -80,14 +98,20 @@ public class ClienteHomeActivity extends AppCompatActivity {
                 if(item.getItemId()==R.id.restaurant){
                     Intent intentRestaurant = new Intent(ClienteHomeActivity.this, ClienteHomeActivity.class);
                     startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                     return true;
                 }else if(item.getItemId()==R.id.historial){
                     Intent intentPrincipal = new Intent(ClienteHomeActivity.this, ClienteHistorialActivity.class);
                     startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intentProfile = new Intent(ClienteHomeActivity.this, ClientePerfil.class);
                     startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                     return true;
                 }else{
                     return false;
@@ -112,12 +136,45 @@ public class ClienteHomeActivity extends AppCompatActivity {
             finish();
         });
 
-        adapter.setContext(this);
-        adapter.setListaRestaurantes(lista);
+        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
+            if (error != null) {
+                Log.w("msg-test", "Listen failed.", error);
+                return;
+            }
+            if (snapshot != null && !snapshot.isEmpty()) {
+                lista.clear();
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                    Restaurante restaurante = document.toObject(Restaurante.class);
+                    Log.w("msg-test", "Listen failed "+ document.getId());
+                    lista.add(restaurante);
+                }
+                filter(( (TextInputEditText)findViewById(R.id.textInputLayout).findViewById(R.id.buscarCliente) ) .getText().toString());
+                adapter.setContext(this);
+                adapter.setListaRestaurantes(listaRestauranteFiltado);
 
-        RecyclerView recyclerView = findViewById(R.id.reciclerView);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ClienteHomeActivity.this));
+                RecyclerView recyclerView = findViewById(R.id.reciclerView);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(ClienteHomeActivity.this));
+
+                //Para el buscador
+                TextInputEditText searchInput;
+                searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarCliente);
+                searchInput.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        filter(s.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) { }
+                });
+
+            }
+        });
+
 
 
     }
@@ -143,6 +200,30 @@ public class ClienteHomeActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
 
         }
+    }
+    private ArrayList<Restaurante> listaRestauranteFiltado = new ArrayList<>();
+    public void filter(String text) {
+        listaRestauranteFiltado.clear();
+        if (text.equals("")  || text == null || text.isEmpty()) {
+            for (Restaurante r : lista) {
+                    listaRestauranteFiltado.add(r);
+
+            }
+        } else {
+            String filterPattern = text.toLowerCase().trim();
+            for (Restaurante r : lista) {
+                if (r.getNombre().toLowerCase().contains(filterPattern)) {
+                    listaRestauranteFiltado.add(r);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void verPerfil(View view){
+        Intent intentRestaurant = new Intent(ClienteHomeActivity.this, ClientePerfil.class);
+        startActivity(intentRestaurant);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
     }
 }
