@@ -15,6 +15,7 @@ public class Restaurante implements Serializable {
     private String fotoUrl;
     private String latitud;
     private String longitud;
+    private int totalPedidos;
     public String getFotoUrl() {
         return fotoUrl;
     }
@@ -101,5 +102,13 @@ public class Restaurante implements Serializable {
 
     public void setLongitud(String longitud) {
         this.longitud = longitud;
+    }
+
+    public int getTotalPedidos() {
+        return totalPedidos;
+    }
+
+    public void setTotalPedidos(int totalPedidos) {
+        this.totalPedidos = totalPedidos;
     }
 }

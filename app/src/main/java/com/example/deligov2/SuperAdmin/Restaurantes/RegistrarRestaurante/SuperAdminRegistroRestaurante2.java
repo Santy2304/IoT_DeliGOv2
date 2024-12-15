@@ -68,7 +68,6 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_registro_restaurante2);
 
         db = FirebaseFirestore.getInstance();

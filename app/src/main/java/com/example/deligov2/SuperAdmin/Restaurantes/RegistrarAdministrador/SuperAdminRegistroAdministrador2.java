@@ -50,8 +50,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+
 
 public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
     private MaterialTextView adminRestaurante;
@@ -322,7 +326,7 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
 
         // Credenciales para Firebase Authentication
         String email = admin.getCorreo();
-        String password = "D3L1G02X24"; //le puse una contra por defecto
+        String password = generarContrasenaAleatoria(8); // Contraseña de 8 caracteres
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -351,6 +355,7 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
                                                 .update("admin", idAdmin)
                                                 .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Campo admin actualizado correctamente para el restaurante con ID: " + resId))
                                                 .addOnFailureListener(e -> Log.w("Firestore", "Error al actualizar el campo admin del restaurante", e));
+
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.w("Firestore", "Error al registrar el admin en Firestore", e);
@@ -475,4 +480,24 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
             Log.w("Firebase Storage", "No se encontró una imagen para subir.");
         }
     }
+
+
+
+    private String generarContrasenaAleatoria(int longitud) {
+        if (longitud < 6) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres.");
+        }
+
+        final String caracteresPermitidos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder contraseña = new StringBuilder(longitud);
+
+        for (int i = 0; i < longitud; i++) {
+            int index = random.nextInt(caracteresPermitidos.length());
+            contraseña.append(caracteresPermitidos.charAt(index));
+        }
+
+        return contraseña.toString();
+    }
+
 }

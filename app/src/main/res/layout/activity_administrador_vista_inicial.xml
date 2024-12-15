@@ -74,7 +74,7 @@
                 android:layout_height="100dp"
                 android:onClick="verInfoRestaurante"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bembos_logo" />
+                 />
 
 
             <TextView
@@ -109,15 +109,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:hint="Buscar" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:backgroundTint="@color/light_green"
-            app:srcCompat="@drawable/filterpx"
-            app:tint="@color/white" />
 
 
         <androidx.recyclerview.widget.RecyclerView

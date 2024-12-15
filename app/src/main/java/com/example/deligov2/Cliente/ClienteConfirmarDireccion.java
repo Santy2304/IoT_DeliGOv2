@@ -245,6 +245,23 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                                 logSuper.setFecha(Timestamp.now());
                                                 logSuper.setIdImage(usuario.getId());
                                                 logSuper.setTipo("Pedido");
+                                                float totalGastado = 0;
+                                                for (int i = 0; i < listaCantidadesUWU.size(); i++) {
+                                                    int cantidadVendida = listaCantidadesUWU.get(i);
+                                                    totalGastado += cantidadVendida * listaPrecios.get(i);
+                                                }
+                                                db.collection("restaurantes").document(idUwu)
+                                                        .update(
+                                                                "monto", restaurante.getMonto()+totalGastado,
+                                                                "totalPedidos", restaurante.getTotalPedidos()+1
+                                                                )
+                                                        .addOnSuccessListener(aVoid -> {
+                                                            Log.d("Firestore", "Documento actualizado correctamente");
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            Log.e("Firestore", "Error al actualizar el documento", e);
+                                                        });
+
                                                 db.collection("Logs").add(logSuper)
                                                         .addOnSuccessListener(aVoid -> {
                                                             Toast.makeText(this, "Pedido realizado exitosamente", Toast.LENGTH_SHORT).show();
@@ -268,6 +285,9 @@ public class ClienteConfirmarDireccion extends AppCompatActivity implements OnMa
                                 pedido.setCostoEnvio(carrito.getCostoEnvio());
                                 Bitmap qrBitmap = generarQRCode(generarIdAleatorio());
                                 guardarQRCodeEnFirebase(qrBitmap, pedido.getId());
+
+
+
 
                                 db.collection("Pedidos").document(pedido.getId())
                                         .set(pedido)
