@@ -66,7 +66,7 @@ public class AdministradorReportesActivity extends AppCompatActivity {
                         }
                     });
 
-                    db.collection("ReportesClientes").addSnapshotListener((snapshot, error)->{
+                    db.collection("ReportesClientes").orderBy("cantidadPedidos", Query.Direction.DESCENDING).addSnapshotListener((snapshot, error)->{
                         if (error != null) {
                             Log.w("msg-test", "Listen failed.", error);
                             return;

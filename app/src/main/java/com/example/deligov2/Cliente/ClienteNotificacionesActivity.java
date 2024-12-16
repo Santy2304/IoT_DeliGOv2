@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ClienteNotificacionesActivity extends AppCompatActivity {
     FirebaseFirestore db;
@@ -63,14 +64,21 @@ public class ClienteNotificacionesActivity extends AppCompatActivity {
                     if (notificaciones.getIdCliente().equals(user.getUid())){
                         lista.add(notificaciones);
                     }
-
                 }
+
+                Collections.sort(lista, (p1, p2) -> {
+                    if (p1.getFecha() == null || p2.getFecha() == null) {
+                        return 0;
+                    }
+                    return p2.getFecha().compareTo(p1.getFecha());
+                });
+                adapter.setListaNotificaciones(lista);
                 adapter.notifyDataSetChanged();
             }
         });
         storage = FirebaseStorage.getInstance();
 
-         ShapeableImageView image = findViewById(R.id.shapeableImageView3);
+        ShapeableImageView image = findViewById(R.id.shapeableImageView3);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             Glide.with(this)

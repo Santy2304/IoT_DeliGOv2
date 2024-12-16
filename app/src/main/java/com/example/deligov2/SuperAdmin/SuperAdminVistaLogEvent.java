@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +70,14 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
                     Log.w("msg-test", "Listen failed "+ document.getId());
                         lista.add(logSuper);
                 }
+                Collections.sort(lista, (p1, p2) -> {
+                    if (p1.getFecha() == null || p2.getFecha() == null) {
+                        return 0; // Manejo de nulos
+                    }
+                    return p2.getFecha().compareTo(p1.getFecha()); // Orden descendente
+                });
+                adapter.setmLog(lista);
+
                 adapter.notifyDataSetChanged();
             }
         });

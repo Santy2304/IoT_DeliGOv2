@@ -40,6 +40,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ClienteHistorialActivity extends AppCompatActivity {
     FloatingActionButton notiButton;
@@ -81,6 +82,14 @@ public class ClienteHistorialActivity extends AppCompatActivity {
                     }
 
                 }
+                Collections.sort(lista, (p1, p2) -> {
+                    if (p1.getHora() == null || p2.getHora() == null) {
+                        return 0; // Manejo de nulos
+                    }
+                    return p2.getHora().compareTo(p1.getHora()); // Orden descendente
+                });
+
+                adapter.setListaOrdenes(lista);
                 adapter.notifyDataSetChanged();
             }
         });

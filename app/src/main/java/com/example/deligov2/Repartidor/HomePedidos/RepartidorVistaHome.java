@@ -41,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,6 +173,13 @@ public class RepartidorVistaHome extends AppCompatActivity {
                                 listaPedidos.add(pedido);
                             }
                         }
+                        Collections.sort(listaPedidos, (p1, p2) -> {
+                            if (p1.getHora() == null || p2.getHora() == null) {
+                                return 0; // Manejo de nulos
+                            }
+                            return p2.getHora().compareTo(p1.getHora()); // Orden descendente
+                        });
+                        adapter.setListaPedidosRepartidor(listaPedidos);
                         adapter.notifyDataSetChanged();
                         onsuccess.run();
                     }

@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -141,6 +142,19 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
                             pedidosPendientes.add(doc.toObject(Pedido.class));
                         }
                     }
+                    Collections.sort(pedidosEntregados, (p1, p2) -> {
+                        if (p1.getHora() == null || p2.getHora() == null) {
+                            return 0; // Manejo de nulos
+                        }
+                        return p2.getHora().compareTo(p1.getHora()); // Orden descendente
+                    });
+                    Collections.sort(pedidosPendientes, (p1, p2) -> {
+                        if (p1.getHora() == null || p2.getHora() == null) {
+                            return 0; // Manejo de nulos
+                        }
+                        return p2.getHora().compareTo(p1.getHora()); // Orden descendente
+                    });
+
                     // Configuramos lista por default
                     adapter.setContext(this);
                     adapter.setListaSolicitudes(pedidosPendientes);

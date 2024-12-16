@@ -87,6 +87,12 @@ public class RepartidorHistorial extends AppCompatActivity {
                         RepartidorHistorialPedidosAdapter adapter = new RepartidorHistorialPedidosAdapter();
                         adapter.setContext(this);
                         Collections.reverse(listaPedidos);
+                        Collections.sort(listaPedidos, (p1, p2) -> {
+                            if (p1.getHora() == null || p2.getHora() == null) {
+                                return 0; // Manejo de nulos
+                            }
+                            return p2.getHora().compareTo(p1.getHora()); // Orden descendente
+                        });
                         adapter.setLista(listaPedidos);
                         RecyclerView recyclerView = findViewById(R.id.lista);
                         recyclerView.setAdapter(adapter);
