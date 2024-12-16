@@ -49,11 +49,15 @@ public class AdministradorRestauranteAdapter extends RecyclerView.Adapter<Admini
         String rutaImagen = "restaurantes/" + plato.getIdRestaurante() + "/" + plato.getId() + "/plato.jpg";
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(rutaImagen);
 
-        Glide.with(context)
-                .load(storageReference)
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_errorimg)
-                .into(holder.imageViewPlato);
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(context)
+                    .load(uri)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_errorimg)
+                    .into(holder.imageViewPlato);
+        }).addOnFailureListener(e -> {
+           holder.imageViewPlato.setImageResource(R.drawable.ic_errorimg);
+        });
 
         // Cambiar el color del botón según la visibilidad
         if (plato.isVisibilidad()) {

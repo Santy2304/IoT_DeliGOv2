@@ -49,6 +49,8 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        recyclerView = findViewById(R.id.recyclerHistorialAdmin);
+
         // Obtener el id del usuario actual
         String idUsuario = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
@@ -69,14 +71,6 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
         MaterialButton entregadosButton = findViewById(R.id.entregadosButton);
         pendientesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
         entregadosButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
-
-        // Configuramos lista por default
-        adapter.setContext(this);
-        adapter.setListaSolicitudes(pedidosPendientes);
-
-        recyclerView = findViewById(R.id.recyclerHistorialAdmin);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Configuramos los botones
         pendientesButton.setOnClickListener(view -> {
@@ -132,27 +126,26 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
         // Cargamos la lista de pedidos pendientes
         db.collection("Pedidos")
                 .whereEqualTo("idRestaurante", idRestaurante)
-                .whereNotEqualTo("estado", "Entregado").get()
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     pedidosPendientes.clear();
-                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        Pedido pedido = document.toObject(Pedido.class);
-                        pedidosPendientes.add(pedido);
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al obtener pedidos pendientes", e));
-
-        // Cargar la lista de pedidos entregados
-        db.collection("Pedidos")
-                .whereEqualTo("idRestaurante", idRestaurante)
-                .whereEqualTo("estado", "Entregado").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
                     pedidosEntregados.clear();
-                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        Pedido pedido = document.toObject(Pedido.class);
-                        pedidosEntregados.add(pedido);
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        if ("Entregado".equals(doc.getString("estado"))) {
+                            pedidosEntregados.add(doc.toObject(Pedido.class));
+                        } else {
+                            pedidosPendientes.add(doc.toObject(Pedido.class));
+                        }
                     }
+                    // Configuramos lista por default
+                    adapter.setContext(this);
+                    adapter.setListaSolicitudes(pedidosPendientes);
+
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al obtener pedidos entregados", e));
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener pedidos", e);
+                });
     }
 }

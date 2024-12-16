@@ -35,9 +35,6 @@ android {
 
 dependencies {
 
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -57,6 +54,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
     implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.firebaseui:firebase-ui-storage:8.0.0'
     implementation "androidx.work:work-runtime:2.8.0"
 
 //Esto es para actualizar los datos de firebase

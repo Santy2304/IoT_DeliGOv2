@@ -151,12 +151,15 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
         StorageReference storageReference = storage.getReference(rutaLogo);
         ImageView imageRestaurante = findViewById(R.id.imageRestaurante);
 
-        Glide.with(this)
-                .load(storageReference)
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_errorimg)
-                .into(imageRestaurante);
-
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_errorimg)
+                    .into(imageRestaurante);
+        }).addOnFailureListener(e -> {
+           imageRestaurante.setImageResource(R.drawable.ic_errorimg);
+        });
         // Cargar la lista de platos del restaurante
         db.collection("Platos")
                 .whereEqualTo("idRestaurante", idRestaurante)

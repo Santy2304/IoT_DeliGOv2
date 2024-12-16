@@ -95,7 +95,7 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
 
     private void cargarInformacionRestaurante(String idRestaurante) {
         // Obtener los datos del restaurante de firestore
-        db.collection("Restaurantes").document(idRestaurante).get()
+        db.collection("restaurantes").document(idRestaurante).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String nombreRestauranteStr = documentSnapshot.getString("nombre");
@@ -119,16 +119,25 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
         StorageReference logoRef = storage.getReference(rutaLogo);
         StorageReference bannerRef = storage.getReference(rutaBanner);
 
-        Glide.with(this)
-                .load(logoRef)
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_errorimg)
-                .into(logoRestaurante);
+        logoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_errorimg)
+                    .into(logoRestaurante);
+        }).addOnFailureListener(e -> {
+            logoRestaurante.setImageResource(R.drawable.ic_errorimg);
+        });
 
-        Glide.with(this)
-                .load(bannerRef)
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_errorimg)
-                .into(bannerRestaurante);
+        bannerRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_errorimg)
+                    .into(bannerRestaurante);
+        }).addOnFailureListener(e -> {
+            bannerRestaurante.setImageResource(R.drawable.ic_errorimg);
+        });
+
     }
 }

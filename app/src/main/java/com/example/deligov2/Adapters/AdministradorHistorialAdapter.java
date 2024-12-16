@@ -57,11 +57,17 @@ public class AdministradorHistorialAdapter extends RecyclerView.Adapter<Administ
         ImageView imageView = holder.itemView.findViewById(R.id.img);
         String url = "restaurantes/" + s.getIdRestaurante() + "/logo.jpg";
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(url);
-        Glide.with(context)
-                .load(storageReference)
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_errorimg)
-                .into(imageView);
+
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(context)
+                    .load(uri)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_errorimg)
+                    .into(imageView);
+        }).addOnFailureListener(exception -> {
+            imageView.setImageResource(R.drawable.ic_errorimg);
+        });
+
     }
 
     public String convertirTimestampASoloFecha(Timestamp timestamp) {
