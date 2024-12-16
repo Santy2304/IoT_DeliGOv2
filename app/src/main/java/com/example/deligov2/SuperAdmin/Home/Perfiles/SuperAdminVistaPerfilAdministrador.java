@@ -1,5 +1,6 @@
 package com.example.deligov2.SuperAdmin.Home.Perfiles;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +66,6 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
                 }
             }
         });
-
-        //Llenamos los datos
         MaterialTextView nameView = findViewById(R.id.name);
         MaterialTextView restaurantView = findViewById(R.id.tv_restaurant);
         MaterialTextView dniView = findViewById(R.id.n_dni);
@@ -103,6 +103,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
         dniView.setText(usuario.getNumDocument());
         correoView.setText(usuario.getCorreo());
         ubicacionView.setText(usuario.getDireccion());
+        ((MaterialTextView)findViewById(R.id.ola) ). setText(usuario.getTipoDocumento());
         // Usa Glide para cargar la imagen de perfil
         /*
         Glide.with(this)

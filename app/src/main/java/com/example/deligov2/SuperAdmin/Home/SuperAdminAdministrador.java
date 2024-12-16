@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdminAdministrador extends AppCompatActivity {
-
     List<Usuario> admins = new ArrayList<>();
     private MaterialCardView cardAdmin;
     private GradientDrawable borderDrawable;

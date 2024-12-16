@@ -90,7 +90,7 @@
                 android:layout_weight="0.9"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                app:srcCompat="@drawable/hineilll" />
+                 />
         </LinearLayout>
 
         <LinearLayout
