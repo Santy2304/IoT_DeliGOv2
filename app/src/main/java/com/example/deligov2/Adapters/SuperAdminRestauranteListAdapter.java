@@ -101,7 +101,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
             if(strAdmin==null){
                 iconImage.setImageResource(R.drawable.bembos_logo);
                 iconBanner.setImageResource(R.drawable.bembos2);
-                tvGanancia.setText("S/"+ restaurante.getMonto());
+                tvGanancia.setText(String.format("S/ %.2f", restaurante.getMonto()));
                 tvNombre.setText(restaurante.getNombre());
                 btHabilitar.setVisibility(View.INVISIBLE);
                 //btDeshabilitar.setVisibility(View.INVISIBLE);
@@ -126,7 +126,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
                         .get()
                         .addOnSuccessListener(documentSnapshot -> {
                             //iconImage.setImageResource(R.drawable.bembos_logo);
-                            tvGanancia.setText("S/"+ restaurante.getMonto());
+                            tvGanancia.setText(String.format("S/ %.2f", restaurante.getMonto()));
                             tvNombre.setText(restaurante.getNombre());
                             btHabilitar.setVisibility(View.VISIBLE);
                             //btDeshabilitar.setVisibility(View.INVISIBLE);

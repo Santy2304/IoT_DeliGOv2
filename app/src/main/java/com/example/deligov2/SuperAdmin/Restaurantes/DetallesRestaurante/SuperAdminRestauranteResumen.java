@@ -34,6 +34,7 @@ import com.example.deligov2.R;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -96,7 +97,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         tvRestaurante.setText(resR.getNombre());
         cantidad = findViewById(R.id.cantidadPedidos);
         monto = findViewById(R.id.recaudado);
-        monto.setText("S/ %.2f"+resR.getMonto());
+        monto.setText(String.format("S/ %.2f", resR.getMonto()));
         cantidad.setText(resR.getTotalPedidos()+"");
 
         goBack = findViewById(R.id.goBack);
@@ -188,101 +189,60 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
 
     }
     private void generarGraficoPie(String restaurantId) {
-        // Lista para almacenar los platos válidos y su monto acumulado
-        Map<String, Double> platosConMontos = new HashMap<>();
+        List<PieEntry> entries = new ArrayList<>();
 
         // Paso 1: Obtener los platos relacionados al restaurante
         db.collection("Platos")
                 .whereEqualTo("idRestaurante", restaurantId)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    List<String> idsPlatos = new ArrayList<>();
-                    Map<String, String> nombresPlatos = new HashMap<>();
-
-                    Log.d("OLAALASAS", "PROBANDO"+restaurantId);
-
                     for (QueryDocumentSnapshot document : querySnapshot) {
-                        String idPlato = document.getId();
-                        String nombre = document.getString("nombre");
+                        String nombrePlato = document.getString("nombre");
+                        Double cantVentaTotal = document.getDouble("cantRecaudadoTotal");
 
-                        idsPlatos.add(idPlato);
-                        nombresPlatos.put(idPlato, nombre);
+                        if (nombrePlato != null && cantVentaTotal != null) {
+                            entries.add(new PieEntry(cantVentaTotal.floatValue(), nombrePlato));
+                        }
+                    }
+                    if (entries.isEmpty()) {
+                        Log.w("PieChart", "No hay datos para mostrar en el gráfico.");
+                        pieChart.setNoDataText("No hay datos disponibles");
+                        pieChart.setNoDataTextColor(Color.RED);
+                        pieChart.invalidate();
+                        return;
                     }
 
-                    Log.d("COntinuando", "PASO2");
-                    // Paso 2: Obtener los pedidos relacionados al restaurante
-                    db.collection("Pedidos")
-                            .whereEqualTo("idRestaurante", restaurantId)
-                            .get()
-                            .addOnSuccessListener(pedidosSnapshot -> {
-                                for (QueryDocumentSnapshot pedido : pedidosSnapshot) {
-                                    List<String> idListaPlatos = (List<String>) pedido.get("idListaPlatos");
-                                    List<Long> listaCantidades = (List<Long>) pedido.get("listaCantidades");
-                                    Log.d("Pedidos", "Lista Cantidades: " + listaCantidades);
-                                    List<Double> preciosActuales = (List<Double>) pedido.get("preciosActuales");
-                                    Log.d("Pedidos", "Precios Actuales: " + preciosActuales);
-
-                                    if (idListaPlatos != null && listaCantidades != null && preciosActuales != null) {
-                                        for (int i = 0; i < idListaPlatos.size(); i++) {
-                                            String idPlato = idListaPlatos.get(i);
-
-                                            if (idsPlatos.contains(idPlato)) {
-                                                double cantidad = listaCantidades.get(i).doubleValue();
-                                                double precio = preciosActuales.get(i);
-                                                double monto = cantidad*precio;
-
-                                                platosConMontos.put(idPlato, platosConMontos.getOrDefault(idPlato, 0.0) + monto);
-                                            }
-                                        }
-                                    }
-                                }
-                                Log.d("MontosGAAAAA", platosConMontos.toString());
-
-                                // Paso 3: Crear el gráfico con los datos procesados
-                                crearPieChart(platosConMontos, nombresPlatos);
-                            })
-                            .addOnFailureListener(e -> Log.e("Pedidos", "Error al obtener pedidos: ", e));
+                    crearPieChart(entries);
                 })
-                .addOnFailureListener(e -> Log.e("Platos", "Error al obtener platos: ", e));
+                .addOnFailureListener(e -> Log.e("Platos", "Error al obtener los platos: " + e.getMessage()));
     }
 
-    private void crearPieChart(Map<String, Double> platosConMontos, Map<String, String> nombresPlatos) {
-        List<PieEntry> entries = new ArrayList<>();
+    private void crearPieChart(List<PieEntry> entries) {
+        // Crear el conjunto de datos para el gráfico
+        PieDataSet dataSet = new PieDataSet(entries, " ");
+        dataSet.setColors(new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.GRAY});
+        dataSet.setValueTextSize(18f);
+        dataSet.setValueTextColor(Color.BLACK);
 
-        for (Map.Entry<String, Double> entry : platosConMontos.entrySet()) {
-            String idPlato = entry.getKey();
-            double monto = entry.getValue();
-            String nombrePlato = nombresPlatos.get(idPlato);
-
-            if (nombrePlato != null) {
-                entries.add(new PieEntry((float) monto, nombrePlato));
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return "S/ " + String.format("%.2f", value);
             }
-        }
-
-        if (entries.isEmpty()) {
-            Log.w("PieChart", "No hay datos para mostrar en el gráfico.");
-            pieChart.setNoDataText("No hay datos disponibles");
-            pieChart.setNoDataTextColor(Color.RED);
-            pieChart.invalidate();
-            return;
-        }
-
-        //Este es el PIE CHART
-        PieDataSet dataSet = new PieDataSet(entries, "Platos");
-        dataSet.setColors(new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA});
-        dataSet.setValueTextSize(12f);
+        });
 
         PieData pieData = new PieData(dataSet);
         pieChart.setData(pieData);
 
+        pieChart.setEntryLabelColor(Color.BLACK);
+
         Description description = new Description();
-        description.setText("Montos por Plato");
+        description.setText(" ");
         pieChart.setDescription(description);
 
-        //Esto es para refrescar el grafico
+        // Refrescar el gráfico
         pieChart.invalidate();
     }
-
 
     public void vistaRestauranteHistorialVentas(View view, Restaurante res, Usuario sa) {
         Intent intent = new Intent(this, SuperAdminResturanteHistorialVentas.class);
