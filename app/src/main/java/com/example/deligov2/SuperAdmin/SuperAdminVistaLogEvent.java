@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.ClienteHistorialAdapter;
 import com.example.deligov2.Adapters.SuperAdminLogAdapter;
 import com.example.deligov2.DTO.Carrito;
@@ -23,11 +24,14 @@ import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.example.deligov2.SuperAdmin.Restaurantes.SuperAdminRestaurante;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,9 +153,26 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
                     return false;
                 }
             }
+
+
+
         });
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference()
+                .child("users/" + "ClcUvl7d43Rz0aEqbLteSw22eH22" + "/profile.jpg");
 
+        storageRef.getDownloadUrl()
+                .addOnSuccessListener(uri -> {
+                    Glide.with(SuperAdminVistaLogEvent.this)
+                            .load(uri)
+                            .placeholder(R.drawable.ic_loading)
+                            .error(R.drawable.ic_errorimg)
+                            .into( (ShapeableImageView) findViewById(R.id.shapeableImageView3));
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                });
     }
 
 //    public void mostrarListaLogs() {

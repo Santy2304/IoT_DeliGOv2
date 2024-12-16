@@ -280,10 +280,11 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
         }
 
     }
-
+    private Integer count = 0 ;
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap){
         myMap = googleMap;
+        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(new Double("-12.0690993") ,  new Double("-77.07814119999999")), 15));
 
         myMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -293,6 +294,8 @@ public class SuperAdminRegistroRestaurante2 extends AppCompatActivity implements
                 }
                 currentMarker = myMap.addMarker(new MarkerOptions().position(latLng).title("Nueva ubicación"));
                 selectedLocation = latLng;
+
+                selectedLocation.toString();
                 myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                 Log.d("Ubicación seleccionada", "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude);

@@ -326,8 +326,9 @@ public class SuperAdminRegistroAdministrador2 extends AppCompatActivity {
         //Falta setear foto por defecto --> feat: ya está hecho
         admin.setNumeroTelefono("_");
         admin.setReferencia("_");
+        admin.setTipoDocumento("DNI");
         admin.setRol("Administrador");
-
+        admin.setFotoUrl("_");
         // Credenciales para Firebase Authentication
         String email = admin.getCorreo();
         String password = generarContrasenaAleatoria(8); // Contraseña de 8 caracteres

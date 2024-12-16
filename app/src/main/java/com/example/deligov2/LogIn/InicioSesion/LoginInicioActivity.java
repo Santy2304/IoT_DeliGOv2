@@ -182,6 +182,7 @@ public class LoginInicioActivity extends AppCompatActivity {
                     }
                 });
     }
+
     public void goCliente(){
         Intent intent = new Intent(this, ClienteHomeActivity.class);
         startActivity(intent);
@@ -482,6 +483,10 @@ public class LoginInicioActivity extends AppCompatActivity {
                                             .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
                                     Log.d("msg-test", "Firebase uid: " + user.getUid());
+                                }else{
+                                    user.sendEmailVerification().addOnCompleteListener(task1 -> {
+                                        Toast.makeText(this,"Se le ha enviado un correo para validar la cuenta",Toast.LENGTH_SHORT).show();
+                                    });
                                 }
                             });
                         }

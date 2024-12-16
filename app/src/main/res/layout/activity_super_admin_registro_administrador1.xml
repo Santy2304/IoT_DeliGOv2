@@ -125,9 +125,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-
                 android:entries="@array/elementos"
-                android:popupBackground="@drawable/spinner_border"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:spinnerMode="dropdown" />
 
 

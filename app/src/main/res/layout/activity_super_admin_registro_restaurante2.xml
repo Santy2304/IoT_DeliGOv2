@@ -67,6 +67,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-condensed-medium"
             android:background="@drawable/bg_search"
+            android:textColorHint="@color/black"
             android:iconifiedByDefault="false"
             android:queryHint="Buscar" />
 
