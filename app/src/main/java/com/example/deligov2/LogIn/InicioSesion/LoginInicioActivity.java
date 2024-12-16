@@ -234,99 +234,103 @@ public class LoginInicioActivity extends AppCompatActivity {
                                 if (documentSnapshot.exists()) {
                                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
                                     assert usuario != null;
-                                    if (usuario.getNumeroTelefono() != null) {
-                                        if (usuario.getDireccion() != null) {
-                                            if (usuario.getFotoUrl() != null) {
-                                                if (usuario.getRol() != null) {
-                                                    if(usuario.isEstado()){
-                                                        if (usuario.getRol().equals("Cliente")) {
-                                                            goCliente();
-                                                        } else if (usuario.getRol().equals("Repartidor")) {
-                                                            if(usuario.getAprobado().equals("Aceptado")){
-                                                                goRepartidor();
-                                                            }else if (usuario.getAprobado().equals("PorValidar")) {
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                                                                // Configura el título y el mensaje
-                                                                builder.setTitle("Esperar confirmación");
-                                                                builder.setMessage("Tu cuenta todavía no ha sido aceptada. Por favor, contacta al soporte para más información.");
+                                    if(usuario.getRol().equals("Administrador") && usuario.isEstado()){
+                                        goAdmin();
+                                    }else{
+                                        if (usuario.getNumeroTelefono() != null) {
+                                            if (usuario.getDireccion() != null) {
+                                                if (usuario.getFotoUrl() != null) {
+                                                    if (usuario.getRol() != null) {
+                                                        if(usuario.isEstado()){
+                                                            if (usuario.getRol().equals("Cliente")) {
+                                                                goCliente();
+                                                            } else if (usuario.getRol().equals("Repartidor")) {
+                                                                if(usuario.getAprobado().equals("Aceptado")){
+                                                                    goRepartidor();
+                                                                }else if (usuario.getAprobado().equals("PorValidar")) {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                                                    // Configura el título y el mensaje
+                                                                    builder.setTitle("Esperar confirmación");
+                                                                    builder.setMessage("Tu cuenta todavía no ha sido aceptada. Por favor, contacta al soporte para más información.");
 
-                                                                // Botón para cerrar el diálogo
-                                                                builder.setPositiveButton("Aceptar", (dialog, which) -> {
-                                                                    // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
-                                                                    dialog.dismiss();
+                                                                    // Botón para cerrar el diálogo
+                                                                    builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                                                                        // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
+                                                                        dialog.dismiss();
 
-                                                                });
+                                                                    });
 
-                                                                // Botón adicional (opcional), como "Contacto"
-                                                                builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
-                                                                    // Redirige al usuario a un soporte externo (correo, página, etc.)
-                                                                    Intent intent = new Intent(Intent.ACTION_SENDTO);
-                                                                    intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
-                                                                    startActivity(Intent.createChooser(intent, "Contactar Soporte"));
-                                                                });
+                                                                    // Botón adicional (opcional), como "Contacto"
+                                                                    builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
+                                                                        // Redirige al usuario a un soporte externo (correo, página, etc.)
+                                                                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                                                        intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
+                                                                        startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+                                                                    });
 
-                                                                // Crear y mostrar el diálogo
-                                                                AlertDialog dialog = builder.create();
-                                                                dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
-                                                                dialog.show();
-                                                                AuthUI.getInstance().signOut(this)
-                                                                        .addOnCompleteListener(task1 -> {
-
-                                                                        });
-                                                            }else if(usuario.getAprobado().equals("Rechazado")){
-                                                                AuthUI.getInstance().signOut(this)
-                                                                        .addOnCompleteListener(task1 -> {
-                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                                                                            // Configura el título y el mensaje
-                                                                            builder.setTitle("RECHAZADO");
-                                                                            builder.setMessage("Tu cuenta fue rechazada de esta página . Por favor, contacta al soporte para más información.");
-
-                                                                            // Botón para cerrar el diálogo
-                                                                            builder.setPositiveButton("Aceptar", (dialog, which) -> {
-                                                                                // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
-                                                                                dialog.dismiss();
+                                                                    // Crear y mostrar el diálogo
+                                                                    AlertDialog dialog = builder.create();
+                                                                    dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
+                                                                    dialog.show();
+                                                                    AuthUI.getInstance().signOut(this)
+                                                                            .addOnCompleteListener(task1 -> {
 
                                                                             });
+                                                                }else if(usuario.getAprobado().equals("Rechazado")){
+                                                                    AuthUI.getInstance().signOut(this)
+                                                                            .addOnCompleteListener(task1 -> {
+                                                                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                                                                // Configura el título y el mensaje
+                                                                                builder.setTitle("RECHAZADO");
+                                                                                builder.setMessage("Tu cuenta fue rechazada de esta página . Por favor, contacta al soporte para más información.");
 
-                                                                            // Botón adicional (opcional), como "Contacto"
-                                                                            builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
-                                                                                // Redirige al usuario a un soporte externo (correo, página, etc.)
-                                                                                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                                                                                intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
-                                                                                startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+                                                                                // Botón para cerrar el diálogo
+                                                                                builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                                                                                    // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
+                                                                                    dialog.dismiss();
+
+                                                                                });
+
+                                                                                // Botón adicional (opcional), como "Contacto"
+                                                                                builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
+                                                                                    // Redirige al usuario a un soporte externo (correo, página, etc.)
+                                                                                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                                                                    intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
+                                                                                    startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+                                                                                });
+
+                                                                                // Crear y mostrar el diálogo
+                                                                                AlertDialog dialog = builder.create();
+                                                                                dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
+                                                                                dialog.show();
                                                                             });
+                                                                }                                                        } else if (usuario.getRol().equals("Administrador")) {
+                                                                //update de su id con su uid
 
-                                                                            // Crear y mostrar el diálogo
-                                                                            AlertDialog dialog = builder.create();
-                                                                            dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
-                                                                            dialog.show();
-                                                                        });
-                                                            }                                                        } else if (usuario.getRol().equals("Administrador")) {
-                                                            //update de su id con su uid
-
-                                                            goAdmin();
-                                                        } else {
-                                                            goSuper(usuario);
+                                                                goAdmin();
+                                                            } else {
+                                                                goSuper(usuario);
+                                                            }
+                                                        }else{
+                                                            //ESTAS BANEADO
+                                                            showBannedUserAlert();
                                                         }
-                                                    }else{
-                                                        //ESTAS BANEADO
-                                                        showBannedUserAlert();
+                                                    } else {
+                                                        Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                        startActivity(intent);
                                                     }
                                                 } else {
-                                                    Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                    Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
                                                     startActivity(intent);
                                                 }
                                             } else {
-                                                Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                                Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
                                                 startActivity(intent);
                                             }
                                         } else {
-                                            Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                            Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
                                             startActivity(intent);
                                         }
-                                    } else {
-                                        Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
-                                        startActivity(intent);
                                     }
                                 }
                             })
@@ -376,98 +380,102 @@ public class LoginInicioActivity extends AppCompatActivity {
                                                 if (documentSnapshot.exists()) {
                                                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
                                                     assert usuario != null;
-                                                    if (usuario.getNumeroTelefono() != null) {
-                                                        if (usuario.getDireccion() != null) {
-                                                            if (usuario.getFotoUrl() != null) {
-                                                                if (usuario.getRol() != null) {
-                                                                    if(usuario.isEstado()){
-                                                                        if (usuario.getRol().equals("Cliente")) {
-                                                                            goCliente();
-                                                                        } else if (usuario.getRol().equals("Repartidor")) {
-                                                                            if(usuario.getAprobado().equals("Aceptado")){
-                                                                                goRepartidor();
-                                                                            }else if (usuario.getAprobado().equals("PorValidar")) {
-                                                                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                                                                                // Configura el título y el mensaje
-                                                                                builder.setTitle("Esperar confirmación");
-                                                                                builder.setMessage("Tu cuenta todavía no ha sido aceptada. Por favor, contacta al soporte para más información.");
+                                                    if(usuario.getRol().equals("Administrador") && usuario.isEstado()){
+                                                        goAdmin();
+                                                    }else {
+                                                        if (usuario.getNumeroTelefono() != null) {
+                                                            if (usuario.getDireccion() != null) {
+                                                                if (usuario.getFotoUrl() != null) {
+                                                                    if (usuario.getRol() != null) {
+                                                                        if(usuario.isEstado()){
+                                                                            if (usuario.getRol().equals("Cliente")) {
+                                                                                goCliente();
+                                                                            } else if (usuario.getRol().equals("Repartidor")) {
+                                                                                if(usuario.getAprobado().equals("Aceptado")){
+                                                                                    goRepartidor();
+                                                                                }else if (usuario.getAprobado().equals("PorValidar")) {
+                                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                                                                    // Configura el título y el mensaje
+                                                                                    builder.setTitle("Esperar confirmación");
+                                                                                    builder.setMessage("Tu cuenta todavía no ha sido aceptada. Por favor, contacta al soporte para más información.");
 
-                                                                                // Botón para cerrar el diálogo
-                                                                                builder.setPositiveButton("Aceptar", (dialog, which) -> {
-                                                                                    // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
-                                                                                    dialog.dismiss();
+                                                                                    // Botón para cerrar el diálogo
+                                                                                    builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                                                                                        // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
+                                                                                        dialog.dismiss();
 
-                                                                                });
+                                                                                    });
 
-                                                                                // Botón adicional (opcional), como "Contacto"
-                                                                                builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
-                                                                                    // Redirige al usuario a un soporte externo (correo, página, etc.)
-                                                                                    Intent intent = new Intent(Intent.ACTION_SENDTO);
-                                                                                    intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
-                                                                                    startActivity(Intent.createChooser(intent, "Contactar Soporte"));
-                                                                                });
+                                                                                    // Botón adicional (opcional), como "Contacto"
+                                                                                    builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
+                                                                                        // Redirige al usuario a un soporte externo (correo, página, etc.)
+                                                                                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                                                                        intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
+                                                                                        startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+                                                                                    });
 
-                                                                                // Crear y mostrar el diálogo
-                                                                                AlertDialog dialog = builder.create();
-                                                                                dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
-                                                                                dialog.show();
-                                                                                AuthUI.getInstance().signOut(this)
-                                                                                        .addOnCompleteListener(task1 -> {
-
-                                                                                        });
-                                                                            }else if(usuario.getAprobado().equals("Rechazado")){
-                                                                                AuthUI.getInstance().signOut(this)
-                                                                                        .addOnCompleteListener(task1 -> {
-                                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                                                                                            // Configura el título y el mensaje
-                                                                                            builder.setTitle("RECHAZADO");
-                                                                                            builder.setMessage("Tu cuenta fue rechazada de esta página . Por favor, contacta al soporte para más información.");
-
-                                                                                            // Botón para cerrar el diálogo
-                                                                                            builder.setPositiveButton("Aceptar", (dialog, which) -> {
-                                                                                                // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
-                                                                                                dialog.dismiss();
+                                                                                    // Crear y mostrar el diálogo
+                                                                                    AlertDialog dialog = builder.create();
+                                                                                    dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
+                                                                                    dialog.show();
+                                                                                    AuthUI.getInstance().signOut(this)
+                                                                                            .addOnCompleteListener(task1 -> {
 
                                                                                             });
+                                                                                }else if(usuario.getAprobado().equals("Rechazado")){
+                                                                                    AuthUI.getInstance().signOut(this)
+                                                                                            .addOnCompleteListener(task1 -> {
+                                                                                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                                                                                // Configura el título y el mensaje
+                                                                                                builder.setTitle("RECHAZADO");
+                                                                                                builder.setMessage("Tu cuenta fue rechazada de esta página . Por favor, contacta al soporte para más información.");
 
-                                                                                            // Botón adicional (opcional), como "Contacto"
-                                                                                            builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
-                                                                                                // Redirige al usuario a un soporte externo (correo, página, etc.)
-                                                                                                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                                                                                                intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
-                                                                                                startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+                                                                                                // Botón para cerrar el diálogo
+                                                                                                builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                                                                                                    // Opcional: Cierra la aplicación o redirige al usuario a la pantalla de soporte
+                                                                                                    dialog.dismiss();
+
+                                                                                                });
+
+                                                                                                // Botón adicional (opcional), como "Contacto"
+                                                                                                builder.setNegativeButton("Contactar Soporte", (dialog, which) -> {
+                                                                                                    // Redirige al usuario a un soporte externo (correo, página, etc.)
+                                                                                                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                                                                                    intent.setData(Uri.parse("mailto:hineill.cespedes@pucp.edu.pe"));
+                                                                                                    startActivity(Intent.createChooser(intent, "Contactar Soporte"));
+                                                                                                });
+
+                                                                                                // Crear y mostrar el diálogo
+                                                                                                AlertDialog dialog = builder.create();
+                                                                                                dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
+                                                                                                dialog.show();
                                                                                             });
-
-                                                                                            // Crear y mostrar el diálogo
-                                                                                            AlertDialog dialog = builder.create();
-                                                                                            dialog.setCancelable(false); // Evita que el usuario lo cierre sin interactuar
-                                                                                            dialog.show();
-                                                                                        });
+                                                                                }
+                                                                            } else if (usuario.getRol().equals("Administrador")) {
+                                                                                goAdmin();
+                                                                            } else {
+                                                                                goSuper(usuario);
                                                                             }
-                                                                        } else if (usuario.getRol().equals("Administrador")) {
-                                                                            goAdmin();
-                                                                        } else {
-                                                                            goSuper(usuario);
+                                                                        }else{
+                                                                            //ESTAS BANEADO
+                                                                            showBannedUserAlert();
                                                                         }
-                                                                    }else{
-                                                                        //ESTAS BANEADO
-                                                                        showBannedUserAlert();
+                                                                    } else {
+                                                                        Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                                        startActivity(intent);
                                                                     }
                                                                 } else {
-                                                                    Intent intent = new Intent(this, LoginCrearCuentaCuartoPaso.class);
+                                                                    Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
                                                                     startActivity(intent);
                                                                 }
                                                             } else {
-                                                                Intent intent = new Intent(this, LoginCrearCuentaTercerPaso.class);
+                                                                Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
                                                                 startActivity(intent);
                                                             }
                                                         } else {
-                                                            Intent intent = new Intent(this, LoginCrearCuentaSegundoPaso.class);
+                                                            Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
                                                             startActivity(intent);
                                                         }
-                                                    } else {
-                                                        Intent intent = new Intent(this, LoginCrearCuentaPrimerPaso.class);
-                                                        startActivity(intent);
                                                     }
                                                 }
                                             })

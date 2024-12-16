@@ -39,7 +39,6 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_vista_perfil_cliente);
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -107,6 +106,7 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
         // Inicialización de vistas
         MaterialTextView nameTextView = findViewById(R.id.name);
         MaterialTextView dniTextView = findViewById(R.id.n_dni);
+        MaterialTextView doc = findViewById(R.id.doc);
         MaterialTextView correoTextView = findViewById(R.id.correo);
         MaterialTextView ubicacionTextView = findViewById(R.id.tv_ubicacion);
         ImageView perfilImageView = findViewById(R.id.imgSAperfil);
@@ -116,6 +116,7 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
             nameTextView.setText(clienteDetail.getNombre());
             dniTextView.setText(clienteDetail.getNumDocument());
             correoTextView.setText(clienteDetail.getCorreo());
+            doc.setText(clienteDetail.getTipoDocumento());
             ubicacionTextView.setText(clienteDetail.getDireccion());
             ((MaterialTextView) findViewById(R.id.doc)) .setText(clienteDetail.getTipoDocumento());
             // Descargar y mostrar la imagen de perfil desde Firebase Storage

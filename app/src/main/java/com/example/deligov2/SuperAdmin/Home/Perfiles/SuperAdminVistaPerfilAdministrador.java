@@ -35,7 +35,6 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_vista_perfil_administrador);
         db = FirebaseFirestore.getInstance();
         // Obtener los datos del intent anterior a este
@@ -70,7 +69,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
         MaterialTextView restaurantView = findViewById(R.id.tv_restaurant);
         MaterialTextView dniView = findViewById(R.id.n_dni);
         MaterialTextView correoView = findViewById(R.id.correo);
-        MaterialTextView ubicacionView = findViewById(R.id.tv_ubicacion);
+//        MaterialTextView ubicacionView = findViewById(R.id.tv_ubicacion);
         ImageView profileImageView = findViewById(R.id.imgSAperfil);
 
         // Simula un usuario para el ejemplo (puedes obtener este objeto desde un Intent, Firebase, etc.)
@@ -102,7 +101,7 @@ public class SuperAdminVistaPerfilAdministrador extends AppCompatActivity {
 
         dniView.setText(usuario.getNumDocument());
         correoView.setText(usuario.getCorreo());
-        ubicacionView.setText(usuario.getDireccion());
+//        ubicacionView.setText(usuario.getDireccion());
         ((MaterialTextView)findViewById(R.id.ola) ). setText(usuario.getTipoDocumento());
         // Usa Glide para cargar la imagen de perfil
         /*

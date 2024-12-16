@@ -45,7 +45,7 @@ public class SuperAdminPerfil extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS = 100;
     private FirebaseFirestore db;
 
-    private MaterialTextView nombre,apellido, numDni,correo;
+    private MaterialTextView nombre,apellido, numDni,correo,tel;
     private ImageView imagen;
 
     @Override
@@ -63,11 +63,12 @@ public class SuperAdminPerfil extends AppCompatActivity {
 
          */
         nombre = findViewById(R.id.name);
-        apellido = findViewById(R.id.apellido);
+//        apellido = findViewById(R.id.apellido);
         numDni = findViewById(R.id.n_dni);
         correo = findViewById(R.id.correo);
         imagen = findViewById(R.id.imgSAperfil);
 
+        tel = findViewById(R.id.tel);
 
         // Cargar imagen desde Firebase Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -97,11 +98,13 @@ public class SuperAdminPerfil extends AppCompatActivity {
                         String apellidoUsuario = documentSnapshot.getString("apellido");
                         String dniUsuario = documentSnapshot.getString("numDocument");
                         String correoUsuario = documentSnapshot.getString("correo");
+                        String telefono = documentSnapshot.getString("numeroTelefono");
 
-                        nombre.setText(nombreUsuario != null ? nombreUsuario : "---");
-                        apellido.setText(apellidoUsuario != null ? apellidoUsuario : "---");
+                        nombre.setText(nombreUsuario + " "+apellidoUsuario != null ? nombreUsuario : "---");
+//                        apellido.setText(apellidoUsuario != null ? apellidoUsuario : "---");
                         numDni.setText(dniUsuario != null ? dniUsuario : "---");
                         correo.setText(correoUsuario != null ? correoUsuario : "---");
+                        tel.setText(telefono);
                     } else {
                         Log.d("Firestore", "No se encontró el usuario con ID: " +"ClcUvl7d43Rz0aEqbLteSw22eH22") ;
                     }

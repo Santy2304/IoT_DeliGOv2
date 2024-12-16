@@ -30,7 +30,6 @@ public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_super_admin_vista_perfil_repartidor);
         db = FirebaseFirestore.getInstance();
         Usuario repartidor = (Usuario) getIntent().getSerializableExtra("repatidor_detail");
@@ -87,10 +86,12 @@ public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
 
         //Llenar datos de la vista
         MaterialTextView name = findViewById(R.id.name);
+        MaterialTextView doc = findViewById(R.id.doc);
         MaterialTextView nDni = findViewById(R.id.n_dni);
         MaterialTextView correo =  findViewById(R.id.correo);
         MaterialTextView ubicacion = findViewById(R.id.tv_ubicacion);
         name.setText(repartidor.getNombre());
+        doc.setText(repartidor.getTipoDocumento());
         nDni.setText(repartidor.getNumDocument());
         correo.setText(repartidor.getCorreo());
         ubicacion.setText(repartidor.getDireccion());

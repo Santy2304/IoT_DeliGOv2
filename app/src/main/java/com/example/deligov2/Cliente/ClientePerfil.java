@@ -117,7 +117,7 @@ public class ClientePerfil extends AppCompatActivity {
         );
 
         name= findViewById(R.id.name);
-        lastName= findViewById(R.id.lastName);
+//        lastName= findViewById(R.id.lastName);
         email= findViewById(R.id.email);
         cellphone= findViewById(R.id.cellphone);
         mainLocation= findViewById(R.id.editLocation);
@@ -128,12 +128,12 @@ public class ClientePerfil extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : value) {
                             if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
                                 usuario = document.toObject(Usuario.class);
-                                name.setText(usuario.getNombre());
-                                if(usuario.getApellido().equals("") || usuario.getApellido()==null){
-                                    lastName.setText("NoLastName");
-                                }else{
-                                    lastName.setText(usuario.getApellido());
-                                }
+                                name.setText(usuario.getNombre()+" "+usuario.getApellido());
+//                                if(usuario.getApellido().equals("") || usuario.getApellido()==null){
+//                                    lastName.setText("NoLastName");
+//                                }else{
+//                                    lastName.setText(usuario.getApellido());
+//                                }
                                 email.setText(usuario.getCorreo());
                                 cellphone.setText(usuario.getNumeroTelefono());
                                 mainLocation.setText(usuario.getDireccion());
