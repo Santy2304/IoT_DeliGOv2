@@ -104,6 +104,7 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         goBack.setOnClickListener(view -> {
             Intent intent1 = new Intent(this,SuperAdminRestaurante.class);
             startActivity(intent1);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
         StorageReference storageReference = storage.getReference().child("restaurantes/"+resR.getId()+"/logo.jpg");

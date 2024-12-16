@@ -103,6 +103,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="6sp"
             android:hint="Buscar"
+            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="23dp"
             app:boxCornerRadiusBottomStart="23dp"
             app:boxCornerRadiusTopEnd="23dp"
@@ -113,6 +114,7 @@
                 android:id="@+id/buscarRestaurante"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:maxHeight="48dp"
                 android:minHeight="40dp"
                 android:padding="8dp" />
