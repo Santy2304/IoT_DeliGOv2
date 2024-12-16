@@ -114,6 +114,10 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
                     Intent intentPrincipal = new Intent(AdministradorHistorialActivity.this, AdministradorRestauranteActivity.class);
                     startActivity(intentPrincipal);
                     return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(AdministradorHistorialActivity.this, AdministradorPerfilActivity.class);
+                    startActivity(intentProfile);
+                    return true;
                 }else{
                     return false;
                 }

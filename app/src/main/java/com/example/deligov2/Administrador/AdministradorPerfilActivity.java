@@ -211,7 +211,7 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(bottomSheetView);
 
         LinearLayout btnGallery = bottomSheetView.findViewById(R.id.btn_gallery);
-        LinearLayout btnCamera = bottomSheetView.findViewById(R.id.btn_camera);
+        //LinearLayout btnCamera = bottomSheetView.findViewById(R.id.btn_camera);
         LinearLayout btnCancel = bottomSheetView.findViewById(R.id.btn_cancel);
 
         btnGallery.setOnClickListener(v -> {
@@ -220,7 +220,7 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
             bottomSheetDialog.dismiss();
         });
 
-        btnCamera.setOnClickListener(v -> {
+        /*btnCamera.setOnClickListener(v -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             try {
                 File photoFile = createImageFile();
@@ -231,7 +231,7 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             bottomSheetDialog.dismiss();
-        });
+        });*/
 
         btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.show();
@@ -242,7 +242,7 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
         return true;
     }
 
-    private void openCamera() {
+    /*private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile;
         try {
@@ -253,7 +253,7 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
