@@ -77,21 +77,6 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         TextInputEditText searchInput;
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarCliente);
 
-        //Manejo del top app bar
-//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-//
-//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                if(item.getItemId()==R.id.log_event){
-//                    Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);
-//                    startActivity(intent);
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        });
         FloatingActionButton logButton = findViewById(R.id.logButton);
         logButton.setOnClickListener(v -> {
             Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);
@@ -146,7 +131,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listAdapter.filter(s.toString());
+                buscarUsuarios(s.toString());
             }
 
             @Override
@@ -167,12 +152,13 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
                 .whereEqualTo("rol", "Cliente")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    clientes.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Usuario cliente = doc.toObject(Usuario.class);
                         clientes.add(cliente);
                     }
 
-                    listAdapter.setClientes(clientes);
+                    //listAdapter.setClientes(clientes);
                     listAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
@@ -195,6 +181,33 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
                 // Aquí puedes detectar los eventos de clic
             }
         });
+    }
+
+    public void buscarUsuarios(String query) {
+        if (query.isEmpty()) {
+            mostrarListaClientes();
+            return;
+        }
+
+        db.collection("Usuarios")
+                .whereGreaterThanOrEqualTo("nombre", query)
+                .whereLessThanOrEqualTo("nombre", query + "\uf8ff")
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null) {
+                        Log.w("msg-test", "Listen failed.", error);
+                        return;
+                    }
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        clientes.clear();
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                            Usuario cliente = document.toObject(Usuario.class);
+                            if (cliente != null) {
+                                clientes.add(cliente);
+                            }
+                        }
+                        listAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     //Cambio vista

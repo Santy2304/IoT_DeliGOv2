@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.SuperAdminAdministradorListAdapter;
+import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
@@ -76,20 +77,6 @@ public class SuperAdminAdministrador extends AppCompatActivity {
         //Para el buscador
         TextInputEditText searchInput;
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarAdmin);
-        //Manejo del top app bar
-//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                if(item.getItemId()==R.id.log_event){
-//                    Intent intent = new Intent(SuperAdminAdministrador.this, SuperAdminVistaLogEvent.class);
-//                    startActivity(intent);
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        });
 
         FloatingActionButton logButton = findViewById(R.id.logButton);
         logButton.setOnClickListener(v -> {
@@ -150,7 +137,7 @@ public class SuperAdminAdministrador extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listAdapter.filter(s.toString());}
+                buscarUsuarios(s.toString());}
             @Override
             public void afterTextChanged(Editable s) { }
         });
@@ -171,11 +158,38 @@ public class SuperAdminAdministrador extends AppCompatActivity {
                         Usuario admin = doc.toObject(Usuario.class);
                         admins.add(admin);
                     }
-                    listAdapter.setAdmin(admins);
+                    //listAdapter.setAdmin(admins);
                     listAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error al obtener repartidores: ", e);
+                });
+    }
+
+    public void buscarUsuarios(String query) {
+        if (query.isEmpty()) {
+            mostrarListaAdmins();
+            return;
+        }
+
+        db.collection("Usuarios")
+                .whereGreaterThanOrEqualTo("nombre", query)
+                .whereLessThanOrEqualTo("nombre", query + "\uf8ff")
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null) {
+                        Log.w("msg-test", "Listen failed.", error);
+                        return;
+                    }
+                    if (snapshot != null && !snapshot.isEmpty()) {
+                        admins.clear();
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+                            Usuario admin = document.toObject(Usuario.class);
+                            if (admin != null) {
+                                admins.add(admin);
+                            }
+                        }
+                        listAdapter.notifyDataSetChanged();
+                    }
                 });
     }
     public void vistaPanelRepartidor() {

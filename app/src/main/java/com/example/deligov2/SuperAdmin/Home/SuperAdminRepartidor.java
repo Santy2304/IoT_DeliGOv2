@@ -60,6 +60,7 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();        // Obtener los datos del intent anterior a este
         loadUser();
+        mostrarListaRepartidores();
         ImageView admin = findViewById(R.id.imgAdmin);
         ImageView cliente = findViewById(R.id.imgCostumer);
         admin.setOnClickListener(v -> {
@@ -71,20 +72,7 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         //Para el buscador
         TextInputEditText searchInput;
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarRepartidor);
-        //Manejo del top app bar
-//        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-//        topAppBar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                if(item.getItemId()==R.id.log_event){
-//                    Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminVistaLogEvent.class);
-//                    startActivity(intent);
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        });
+
         FloatingActionButton logButton = findViewById(R.id.logButton);
         logButton.setOnClickListener(v -> {
             Intent intent = new Intent(SuperAdminRepartidor.this, SuperAdminVistaLogEvent.class);
@@ -127,7 +115,7 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
-        mostrarListaRepartidores();
+
         //Manejo del buscador
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,7 +132,6 @@ public class SuperAdminRepartidor extends AppCompatActivity {
     }
 
     public void mostrarListaRepartidores(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         listAdapter = new SuperAdminRepartidorListAdapter(repartidores,this);
         RecyclerView recyclerView = findViewById(R.id.listRepartidor);
         recyclerView.setHasFixedSize(true);
@@ -154,13 +141,14 @@ public class SuperAdminRepartidor extends AppCompatActivity {
                 .whereEqualTo("rol", "Repartidor")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    repartidores.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Usuario repartidor = doc.toObject(Usuario.class);
                         if(repartidor.getRol().equals("Repartidor")){
                             repartidores.add(repartidor);
                         }
                     }
-                    listAdapter.setRepartidor(repartidores);
+                    //listAdapter.setRepartidor(repartidores);
                     listAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
@@ -179,8 +167,8 @@ public class SuperAdminRepartidor extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
     public void buscarRepartidor(String query) {
-        List<Usuario> repartidores2 = new ArrayList<>();
-        SuperAdminRepartidorListAdapter listAdapter2 = new SuperAdminRepartidorListAdapter(repartidores2,this);
+        //List<Usuario> repartidores2 = new ArrayList<>();
+        SuperAdminRepartidorListAdapter listAdapter2 = new SuperAdminRepartidorListAdapter(repartidores,this);
         RecyclerView recyclerView = findViewById(R.id.listRepartidor);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -198,11 +186,11 @@ public class SuperAdminRepartidor extends AppCompatActivity {
                         return;
                     }
                     if (snapshot != null && !snapshot.isEmpty()) {
-                        repartidores2.clear();
+                        repartidores.clear();
                         for (DocumentSnapshot document : snapshot.getDocuments()) {
                             Usuario repartidor = document.toObject(Usuario.class);
                             if (repartidor != null) {
-                                repartidores2.add(repartidor);}}
+                                repartidores.add(repartidor);}}
                         //listAdapter.setRepartidor(repartidores);
                         listAdapter2.notifyDataSetChanged();
                     }
