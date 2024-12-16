@@ -23,6 +23,7 @@ import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +39,7 @@ public class ClienteVeRepartidor extends AppCompatActivity {
     private FirebaseStorage storage ;
     private StorageReference storageRef;
     FloatingActionButton backButton;
+    MaterialTextView name, email, phone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -48,6 +50,9 @@ public class ClienteVeRepartidor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_ve_repartidor);
         String idPedido = getIntent().getStringExtra("idOrder");
+        name =findViewById(R.id.NombreRepartidor);
+        email = findViewById(R.id.email);
+        phone = findViewById(R.id.telefono);
         backButton = findViewById(R.id.salirRepartidor);
         backButton.setOnClickListener(view -> {
             onBackPressed();
@@ -77,18 +82,13 @@ public class ClienteVeRepartidor extends AppCompatActivity {
 
             }
         });
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         loadPedido(()->{
             loadRepartidor(()-> {
                 Log.d("", "");
-                ((TextView)findViewById(R.id.NombreRepartidor)).setText(repartidor.getNombre());
-                ((TextView)findViewById(R.id.apellidos)).setText(repartidor.getApellido());
-                ((TextView)findViewById(R.id.DNI)).setText(repartidor.getNumDocument());
-                ((TextView)findViewById(R.id.telefono)).setText(repartidor.getNumeroTelefono());
+                name.setText(repartidor.getNombre() + " " + repartidor.getApellido());
+                phone.setText(repartidor.getNumeroTelefono());
+                email.setText(repartidor.getCorreo());
                 ShapeableImageView image = findViewById(R.id.shapeableImageView);
                 storageRef = storage.getReference().child("users/" + repartidor.getId() + "/profile.jpg");
                 storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
