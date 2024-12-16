@@ -84,13 +84,13 @@ public class LoginCrearCuentaTercerPaso extends AppCompatActivity {
 
         // Configurar el botón de elegir foto
         btnElegirFoto.setOnClickListener(v -> {
-            String[] opciones = {"Tomar foto", "Seleccionar de la galería"};
+            String[] opciones = {"Seleccionar de la galería"};
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
             builder.setTitle("Elige una opción")
                     .setItems(opciones, (dialog, which) -> {
                         if (which == 0) { // Tomar foto
-                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            cameraLauncher.launch(cameraIntent);
+                            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            galleryLauncher.launch(galleryIntent);
                         } else if (which == 1) { // Seleccionar de la galería
                             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             galleryLauncher.launch(galleryIntent);

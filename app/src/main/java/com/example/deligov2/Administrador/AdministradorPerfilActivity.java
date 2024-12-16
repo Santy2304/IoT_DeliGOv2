@@ -52,7 +52,7 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private ShapeableImageView fotoPerfil;
     private FloatingActionButton logoutButton;
-    private MaterialTextView nombre, apellido, restaurante, correo;
+    private MaterialTextView nombre, apellido, restaurante, correo, doc;
     private ActivityResultLauncher<Intent> galleryLauncher, cameraLauncher;
     private Uri imageUri;
     private String userId;
@@ -69,9 +69,11 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
 
         // Obtener referencias a los elementos de la interfaz de usuario
         fotoPerfil = findViewById(R.id.imgPerfil);
+        doc = findViewById(R.id.numDoc);
+
         logoutButton = findViewById(R.id.bt_exit);
         nombre = findViewById(R.id.name);
-        apellido = findViewById(R.id.apellido);
+//        apellido = findViewById(R.id.apellido);
         restaurante = findViewById(R.id.restaurante);
         correo = findViewById(R.id.correo);
 
@@ -163,11 +165,12 @@ public class AdministradorPerfilActivity extends AppCompatActivity {
                         String nombreStr = documentSnapshot.getString("nombre");
                         String apellidoStr = documentSnapshot.getString("apellido");
                         String correoStr = documentSnapshot.getString("correo");
-
+                        String docu = documentSnapshot.getString("numDocument");
                         // Cargar los datos en los elementos de la interfaz de usuario
-                        nombre.setText(nombreStr);
-                        apellido.setText(apellidoStr);
+                        nombre.setText(nombreStr + " " +apellidoStr);
+//                        apellido.setText(apellidoStr);
                         correo.setText(correoStr);
+                        doc.setText(docu);
                         cargarImagenPerfil(userId);
 
                         String idRestaurante = documentSnapshot.getString("restaurante");
