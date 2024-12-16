@@ -1,7 +1,11 @@
 package com.example.deligov2.LogIn.InicioSesion;
+
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +13,8 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -42,6 +48,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 public class LoginInicioActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     FirebaseFirestore db;
@@ -59,7 +66,14 @@ public class LoginInicioActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_inicio);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        REQUEST_CODE_POST_NOTIFICATIONS);
+            }
+        }
         redireccion();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // Obtén el ID del cliente desde google-services.json
@@ -546,5 +560,18 @@ public class LoginInicioActivity extends AppCompatActivity {
                 .addOnCompleteListener(task1 -> {
 
                 });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso otorgado
+                Log.d("Permiso", "Permiso de notificaciones concedido.");
+            } else {
+                // Permiso denegado
+                Log.d("Permiso", "Permiso de notificaciones denegado.");
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import static android.Manifest.permission.POST_NOTIFICATIONS;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -296,29 +297,69 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         Pedido pedidoActualizado = documentSnapshot.toObject(Pedido.class);
                         if (pedidoActualizado != null) {
+
+                            if(pedidoActualizado.getIdRepartidor()!=null && pedidoActualizado.getEstado().equals("Listo")){
+                                enviarNotificacion("Se encontro un repartidor","Un repartidor ha aceptado tu pedido y se dirige al restaurante.");
+                            }
+
+                            if(pedidoActualizado.getEstado().equals("En camino")){
+                                enviarNotificacion("Tu pedido está en camino","Tu pedido ha sido recogido por un repartidor y esta en camino.");
+                            }else if (pedidoActualizado.getEstado().equals("Entregado")){
+                                enviarNotificacion("Tu pedido ha sido entregado","Confirmamos que el proceso de tu pedido ha concluido y ha sido entregado.");
+
+                            }
+
                             actualizarSliderSegunEstado(pedidoActualizado.getEstado());
                         }
                     }
                 });
     }
 
+    private void enviarNotificacion(String titulo, String mensaje) {
+        // Notification channel ID
+        String channelId = "pedido_channel";
+        String channelName = "Estado del Pedido";
+        int notificationId = 1; // Unique ID for the notification
+
+
+        Intent intent = new Intent(this, ClienteTrackingActivity.class);
+        intent.putExtra("idOrder", idPedido);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
 
 
-    public void verPerfil(View view){
-        Intent intent = new Intent(this, ClientePerfil.class);
-        startActivity(intent);
+        // Create the NotificationManager
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // For Android 8.0 (Oreo) and above, create a notification channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Notificaciones de seguimiento del pedido");
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.deligo)
+                .setContentTitle(titulo)
+                .setContentText(mensaje)
+                .setContentIntent(pendingIntent) // Asociar el PendingIntent
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true); // Automatically dismiss the notification when tapped
+
+        // Show the notification
+        notificationManager.notify(notificationId, builder.build());
     }
 
-    public void verHistorial(View view){
-        Intent intent = new Intent(this, ClienteHistorialActivity.class);
-        startActivity(intent);
-    }
 
-    public void verHome(View view){
-        Intent intent = new Intent(this, ClienteHomeActivity.class);
-        startActivity(intent);
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cliente_menu, menu);
