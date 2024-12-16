@@ -51,7 +51,7 @@
                 app:tint="@color/white" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView3"
+                android:id="@+id/perfilImageView"
                 android:layout_width="0dp"
                 android:layout_height="50sp"
                 android:layout_marginStart="5dp"
@@ -99,6 +99,20 @@
                 android:text="Entregados"
                 android:textSize="13sp"
                 app:backgroundTint="@color/md_theme_secondary" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bt_exit"
+                style="?attr/floatingActionButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:backgroundTint="@color/light_yellow"
+                app:srcCompat="@drawable/baseline_history_24" />-->
 
         </LinearLayout>
 

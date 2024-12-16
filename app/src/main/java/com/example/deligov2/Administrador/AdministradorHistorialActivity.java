@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.AdministradorDetalleCompraAdapter;
 import com.example.deligov2.Adapters.AdministradorHistorialAdapter;
 import com.example.deligov2.Beans.DetalleCompra;
@@ -20,10 +21,12 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +37,7 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
 
     List<Pedido> pedidosPendientes = new ArrayList<>();
     List<Pedido> pedidosEntregados = new ArrayList<>();
+    List<Pedido> pedidos = new ArrayList<>();
     FirebaseFirestore db;
     FirebaseAuth auth;
     FirebaseStorage storage;
@@ -52,6 +56,13 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerHistorialAdmin);
 
+        // Elemento imagen perfil
+        ShapeableImageView perfilImageView = findViewById(R.id.perfilImageView);
+        perfilImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdministradorPerfilActivity.class);
+            startActivity(intent);
+        });
+
         // Obtener el id del usuario actual
         String idUsuario = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
@@ -59,6 +70,18 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
         db.collection("Usuarios").document(idUsuario).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
+                        // Cargar imagen de perfil
+                        String rutaPerfil = "users/" + idUsuario + "/profile.jpg";
+                        StorageReference storageReference = storage.getReference(rutaPerfil);
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            Glide.with(this)
+                                    .load(uri)
+                                    .placeholder(R.drawable.camara_icon)
+                                    .error(R.drawable.ic_errorimg)
+                                    .into(perfilImageView);
+                        }).addOnFailureListener(e -> {
+                            perfilImageView.setImageResource(R.drawable.camara_icon);
+                        });
                         String idRestaurante = documentSnapshot.getString("restaurante");
                         cargarHistorial(idRestaurante);
                     } else {
@@ -70,7 +93,7 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
         // Obtener los componentes de la interfaz
         MaterialButton pendientesButton = findViewById(R.id.pendientesButton);
         MaterialButton entregadosButton = findViewById(R.id.entregadosButton);
-        pendientesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
+        pendientesButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
         entregadosButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
 
         // Configuramos los botones
@@ -133,15 +156,23 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
                 .whereEqualTo("idRestaurante", idRestaurante)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    pedidos.clear();
                     pedidosPendientes.clear();
                     pedidosEntregados.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        pedidos.add(doc.toObject(Pedido.class));
                         if ("Entregado".equals(doc.getString("estado"))) {
                             pedidosEntregados.add(doc.toObject(Pedido.class));
                         } else {
                             pedidosPendientes.add(doc.toObject(Pedido.class));
                         }
                     }
+                    Collections.sort(pedidos, (p1, p2) -> {
+                        if (p1.getHora() == null || p2.getHora() == null) {
+                            return 0; // Manejo de nulos
+                        }
+                        return p2.getHora().compareTo(p1.getHora()); // Orden descendente
+                    });
                     Collections.sort(pedidosEntregados, (p1, p2) -> {
                         if (p1.getHora() == null || p2.getHora() == null) {
                             return 0; // Manejo de nulos
@@ -157,7 +188,7 @@ public class AdministradorHistorialActivity extends AppCompatActivity {
 
                     // Configuramos lista por default
                     adapter.setContext(this);
-                    adapter.setListaSolicitudes(pedidosPendientes);
+                    adapter.setListaSolicitudes(pedidos);
 
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));

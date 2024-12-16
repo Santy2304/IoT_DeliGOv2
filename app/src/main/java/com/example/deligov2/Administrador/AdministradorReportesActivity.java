@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.AdministradorReporteClientesAdapter;
 import com.example.deligov2.Adapters.AdministradorReporteComidaAdapter;
 import com.example.deligov2.DTO.ReporteCliente;
@@ -20,11 +21,14 @@ import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -43,11 +47,38 @@ public class AdministradorReportesActivity extends AppCompatActivity {
     ArrayList<ReporteCliente> reporteClientes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_administrador_reporte_clientes);
+        reporteClienteButton = findViewById(R.id.clientesButton);
+        reporteComidaButton = findViewById(R.id.comidaButton);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerReporteClientes);
+
+        // Elemento imagen perfil
+        ShapeableImageView perfilImageView = findViewById(R.id.perfilImageView);
+        perfilImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdministradorPerfilActivity.class);
+            startActivity(intent);
+        });
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         db.collection("Usuarios").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
+                    // Cargar imagen de perfil
+                    String rutaPerfil = "users/" + user.getUid() + "/profile.jpg";
+                    StorageReference storageReference = storage.getReference(rutaPerfil);
+                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Glide.with(this)
+                                .load(uri)
+                                .placeholder(R.drawable.camara_icon)
+                                .error(R.drawable.ic_errorimg)
+                                .into(perfilImageView);
+                    }).addOnFailureListener(e -> {
+                        perfilImageView.setImageResource(R.drawable.camara_icon);
+                    });
                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
                     assert usuario != null : "Usuario no creado en DB";
                     idRestaurante = usuario.getRestaurante();
@@ -61,8 +92,12 @@ public class AdministradorReportesActivity extends AppCompatActivity {
                                 if (platillo.getIdRestaurante().equals(idRestaurante)){
                                     listaPlatillo.add(platillo);
                                 }
-
                             }
+                            // Setear vista por defecto (reporte de platos)
+                            adapterComida.setListaReportes(listaPlatillo);
+                            adapterComida.setContext(this);
+                            recyclerView.setAdapter(adapterComida);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(this));
                         }
                     });
 
@@ -95,18 +130,11 @@ public class AdministradorReportesActivity extends AppCompatActivity {
                 });
 
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_administrador_reporte_clientes);
-        reporteClienteButton = findViewById(R.id.clientesButton);
-        reporteComidaButton = findViewById(R.id.comidaButton);
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerReporteClientes);
-
         // Setear vista por defecto (reporte de platos)
-        adapterComida.setListaReportes(listaPlatillo);
+        /*adapterComida.setListaReportes(listaPlatillo);
         adapterComida.setContext(this);
         recyclerView.setAdapter(adapterComida);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));*/
         reporteComidaButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.light_green));
         reporteClienteButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.dark_green));
 

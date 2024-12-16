@@ -20,6 +20,7 @@ import com.example.deligov2.DTO.Platillo;
 import com.example.deligov2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,6 +45,7 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
         // Inicializar instancias de firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
 
         // Obtener el UUID del usuario logueado
         String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
@@ -79,10 +81,29 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
             }
         });
 
+        // Elemento imagen perfil
+        ShapeableImageView perfilImageView = findViewById(R.id.perfilImageView);
+        perfilImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdministradorPerfilActivity.class);
+            startActivity(intent);
+        });
+
         // Cargar el usuario desde firestore para obtener el ID del restaurante al que pertenece
         db.collection("Usuarios").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
+                        // Cargar imagen de perfil
+                        String rutaPerfil = "users/" + userId + "/profile.jpg";
+                        StorageReference storageReference = storage.getReference(rutaPerfil);
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            Glide.with(this)
+                                    .load(uri)
+                                    .placeholder(R.drawable.camara_icon)
+                                    .error(R.drawable.ic_errorimg)
+                                    .into(perfilImageView);
+                        }).addOnFailureListener(e -> {
+                            perfilImageView.setImageResource(R.drawable.camara_icon);
+                        });
                         String idRestaurante = documentSnapshot.getString("restaurante"); // Atributo "restaurante" para obtener idRestaurante
                         cargarDatosRestaurante(idRestaurante); // Llama al método para cargar los datos de la vista (banner y listado)
                     } else {
