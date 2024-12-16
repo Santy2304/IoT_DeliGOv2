@@ -61,7 +61,7 @@
             android:textAlignment="center"
             android:backgroundTint="@color/light_green"
             android:gravity="center"
-            android:text="Volver a la lista de pedidos"
+            android:text="Volver home"
             android:textColor="@color/white"
             android:onClick="verListaPrincipal"
             app:layout_constraintBottom_toBottomOf="parent"

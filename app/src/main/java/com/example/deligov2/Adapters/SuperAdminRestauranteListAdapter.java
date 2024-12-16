@@ -99,8 +99,7 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
             String strAdmin = restaurante.getAdmin();
 
             if(strAdmin==null){
-                iconImage.setImageResource(R.drawable.bembos_logo);
-                iconBanner.setImageResource(R.drawable.bembos2);
+
                 tvGanancia.setText(String.format("S/ %.2f", restaurante.getMonto()));
                 tvNombre.setText(restaurante.getNombre());
                 btHabilitar.setVisibility(View.INVISIBLE);
@@ -114,9 +113,45 @@ public class SuperAdminRestauranteListAdapter extends RecyclerView.Adapter<Super
 
                         Intent intent = new Intent(itemView.getContext(), SuperAdminRegistroAdministrador1.class);
                         //intent.putExtra("id_cliente", cliente.getId());
+                        intent.putExtra("nr1" , restaurante);
                         itemView.getContext().startActivity(intent);
                     }
                 });
+
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference()
+                        .child("restaurantes/" + restaurante.getId() + "/logo.jpg");
+
+                storageRef.getDownloadUrl()
+                        .addOnSuccessListener(uri -> {
+                            Glide.with(iconImage.getContext())
+                                    .load(uri)
+                                    .placeholder(R.drawable.ic_loading)
+                                    .error(R.drawable.ic_errorimg)
+                                    .into(iconImage);
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                            iconImage.setImageResource(R.drawable.ic_errorimg);
+                        });
+
+                // Cargar banner desde Firebase Storage
+                FirebaseStorage storageB = FirebaseStorage.getInstance();
+                StorageReference storageRefb = storageB.getReference()
+                        .child("restaurantes/" + restaurante.getId() + "/banner.jpg");
+
+                storageRefb.getDownloadUrl()
+                        .addOnSuccessListener(uri -> {
+                            Glide.with(iconBanner.getContext())
+                                    .load(uri)
+                                    .placeholder(R.drawable.ic_loading)
+                                    .error(R.drawable.ic_errorimg)
+                                    .into(iconBanner);
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                            iconBanner.setImageResource(R.drawable.ic_errorimg);
+                        });
 
             }else{
 

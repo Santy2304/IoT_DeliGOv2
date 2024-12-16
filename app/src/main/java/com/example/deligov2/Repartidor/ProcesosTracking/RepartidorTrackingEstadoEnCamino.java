@@ -366,8 +366,8 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
         // Set up a waypoint for each place that we want to go to.
         mWaypoints.clear();
         if(pedidoSupreme.getEstado().equals("Listo")){
-            createWaypoint(idDestino, "Destino final");
             createWaypoint(placeIdRestaurante, "Restaurante");
+            createWaypoint(idDestino, "Destino final");
         }else if(pedidoSupreme.getEstado().equals("En Camino")){
             createWaypoint(idDestino, "Destino final");
         }
@@ -534,6 +534,20 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : value) {
                             if (((document.toObject(Pedido.class)).getId()).equals(getIntent().getStringExtra("idPedido"))) {
                                 pedidoSupreme = document.toObject(Pedido.class);
+                                db.collection("Usuarios")
+                                        .get()
+                                        .addOnCompleteListener((task) -> {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot d : task.getResult()) {
+                                                    if (((d.toObject(Usuario.class)).getId()).equals(pedidoSupreme.getIdUsuario())) {
+                                                        Usuario cliente = d.toObject(Usuario.class);
+                                                        ( (TextView) findViewById(R.id.nombreCliente)  ).setText(cliente.getNombre());
+                                                        ( (TextView) findViewById(R.id.celularCliente)  ).setText(cliente.getNumeroTelefono());
+                                                        ( (TextView) findViewById(R.id.direccionCliente)  ).setText(cliente.getDireccion());
+                                                    }
+                                                }
+                                            }
+                                        });
                             }
                         }
                         runnable.run();

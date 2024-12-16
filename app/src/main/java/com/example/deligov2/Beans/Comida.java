@@ -7,6 +7,7 @@ public class Comida implements Serializable {
     private String nombreComida;
     private Integer cantidad;
     private String idRestaurante;
+    private String precioActual;
 
     public String getIdComida() {
         return idComida;
@@ -46,5 +47,13 @@ public class Comida implements Serializable {
         this.cantidad = cantidad;
     }
     public Comida() {
+    }
+
+    public String getPrecioActual() {
+        return precioActual;
+    }
+
+    public void setPrecioActual(String precioActual) {
+        this.precioActual = precioActual;
     }
 }

@@ -38,19 +38,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12sp"
                     android:text="Hamburguesa Simple"
-                    android:textColor="@color/black"
+                    android:textColor="@color/light_green"
                     android:textSize="20sp"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/cantidad_comida"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20sp"
+                    android:layout_height="25sp"
+                    android:layout_marginTop="5sp"
                     android:text="5 unidades"
                     android:layout_marginStart="12dp"
-                    android:textColor="@color/light_green"
-                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/PrecioUnidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25sp"
+                    android:layout_marginTop="1sp"
+                    android:text=""
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/black"
                     />
             </LinearLayout>
 

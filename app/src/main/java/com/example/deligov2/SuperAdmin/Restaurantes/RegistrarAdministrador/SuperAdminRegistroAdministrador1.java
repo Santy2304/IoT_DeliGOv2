@@ -178,8 +178,6 @@ public class SuperAdminRegistroAdministrador1 extends AppCompatActivity {
                 apellidoLayout.setError(null);
                 dniLayout.setError(null);
                 vistaRegistroAdmin2(resR,name,apellido,dni);
-
-
             }
         });
 
