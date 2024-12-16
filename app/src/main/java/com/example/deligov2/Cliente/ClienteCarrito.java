@@ -76,7 +76,7 @@ public class ClienteCarrito extends AppCompatActivity {
         costoEnvioText = findViewById(R.id.costoEnvio);
         costoProductosText = findViewById(R.id.precioProdcutos);
         restName = findViewById(R.id.restName);
-        costoEnvio = Math.random() * 5 + 1;
+        costoEnvio = Math.floor(Math.random() * 5 + 1);
         costoEnvioText.setText(String.format("S/%.2f", costoEnvio));
 
         storage = FirebaseStorage.getInstance();

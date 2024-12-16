@@ -41,7 +41,7 @@ public class RepartidorPedidosAdapter extends RecyclerView.Adapter<RepartidorPed
             TextView state = holder. itemView.findViewById(R.id.statePedido);
             state.setText("Estado: " + e.getEstado());
             TextView price = holder.itemView.findViewById(R.id.pricesPedidos);
-            price.setText("Precio : S/."+ e.getCostoEnvio() );
+            price.setText(String.format("Precio: S/ %.2f", e.getCostoEnvio()));
             FloatingActionButton button = holder.itemView.findViewById(R.id.mapa2);
             button.setContentDescription(e.getId());
             FloatingActionButton button2 = holder.itemView.findViewById(R.id.detalles);
