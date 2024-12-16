@@ -166,15 +166,18 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminRestaurante.class);
                     intent.putExtra("sa",usuario);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminHomeActivity.class);
                     intent.putExtra("sa",usuario);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminPerfil.class);
                     intent.putExtra("sa",usuario);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                     return true;
                 }else{

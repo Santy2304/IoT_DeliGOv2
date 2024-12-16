@@ -77,6 +77,7 @@ public class SuperAdminHomeActivity extends AppCompatActivity {
         TextInputEditText searchInput;
         searchInput = findViewById(R.id.textInputLayout).findViewById(R.id.buscarCliente);
 
+        //Para el log
         FloatingActionButton logButton = findViewById(R.id.logButton);
         logButton.setOnClickListener(v -> {
             Intent intent = new Intent(SuperAdminHomeActivity.this, SuperAdminVistaLogEvent.class);

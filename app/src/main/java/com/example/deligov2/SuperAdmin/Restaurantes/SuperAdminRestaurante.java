@@ -87,6 +87,7 @@ public class SuperAdminRestaurante extends AppCompatActivity {
             }
         });
 
+
         FloatingActionButton btAgregar = findViewById(R.id.bt_agregar);
 
         btAgregar.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +97,13 @@ public class SuperAdminRestaurante extends AppCompatActivity {
             }
         });
 
-
+//Para el log
+        FloatingActionButton logButton = findViewById(R.id.logButton);
+        logButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SuperAdminRestaurante.this, SuperAdminVistaLogEvent.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        });
 
         //Manejo del buscador
         searchInput.addTextChangedListener(new TextWatcher() {
