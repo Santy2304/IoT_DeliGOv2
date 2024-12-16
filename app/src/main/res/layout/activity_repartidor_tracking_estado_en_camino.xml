@@ -45,6 +45,8 @@
                 android:textStyle="bold" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/noti_button"
+                android:clickable="false"
+                android:visibility="invisible"
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +67,7 @@
                 android:onClick="verRepartidorTrackingEstadoEnPreparacion"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                app:srcCompat="@drawable/hineilll" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -233,5 +235,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/cliente_menu" />
+        app:menu="@menu/repartidor_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

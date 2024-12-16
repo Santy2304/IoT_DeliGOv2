@@ -4,10 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deligov2.Adapters.RepartidorPedidosAdapter;
+import com.example.deligov2.Beans.Repartidor;
 import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
@@ -26,6 +30,7 @@ import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAcep
 import com.example.deligov2.Repartidor.RepartidorHistorial;
 import com.example.deligov2.Repartidor.RepartidorNotificaciones;
 import com.example.deligov2.Repartidor.ProcesosTracking.RepartidorTrackingEstadoEnCamino;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,7 +62,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
     private RepartidorPedidosAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         adapter = new RepartidorPedidosAdapter();
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -67,7 +71,6 @@ public class RepartidorVistaHome extends AppCompatActivity {
         setContentView(R.layout.activity_repartidor_vista_home);
         listaPedidos =  new ArrayList<Pedido>();
         adapter.setContext(this);
-
         loadUser(()->{
             validarRepartidorDisponible(()->{
                 //Exito
@@ -98,6 +101,35 @@ public class RepartidorVistaHome extends AppCompatActivity {
                     }
                 }
             });
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.ordenes);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.ordenes) {
+                    Intent intentRestaurant = new Intent(RepartidorVistaHome.this, RepartidorVistaHome.class);
+                    startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.historial) {
+                    Intent intentPrincipal = new Intent(RepartidorVistaHome.this, RepartidorHistorial.class);
+                    startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.perfil) {
+                    Intent intentProfile = new Intent(RepartidorVistaHome.this, PerfilRepartidor.class);
+                    startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
         });
     }
 
@@ -308,5 +340,29 @@ public class RepartidorVistaHome extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isActivityVisible = false; // La actividad ya no está visible
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.repartidor_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.ordenes){
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        } else if (item.getItemId()==R.id.historial) {
+            startActivity(new Intent(this, RepartidorHistorial.class));
+            return true;
+        } else if (item.getItemId()==R.id.perfil) {
+            startActivity(new Intent(this, PerfilRepartidor.class));
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
+
+        }
     }
 }

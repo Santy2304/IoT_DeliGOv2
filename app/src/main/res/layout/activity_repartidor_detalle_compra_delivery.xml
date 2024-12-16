@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/cliente_menu" />
+        app:menu="@menu/repartidor_menu" />
 
 
     <ImageView
@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/bembos2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:onClick="retroceder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +44,6 @@
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/bembos_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

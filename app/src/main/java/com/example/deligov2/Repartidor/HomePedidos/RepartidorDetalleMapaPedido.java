@@ -9,6 +9,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,8 @@ import com.example.deligov2.DTO.Pedido;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
+import com.example.deligov2.Repartidor.PerfilRepartidor;
+import com.example.deligov2.Repartidor.RepartidorHistorial;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +39,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -100,6 +105,35 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
                     //
                 }
             });
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.ordenes);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.ordenes) {
+                    Intent intentRestaurant = new Intent(RepartidorDetalleMapaPedido.this, RepartidorVistaHome.class);
+                    startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.historial) {
+                    Intent intentPrincipal = new Intent(RepartidorDetalleMapaPedido.this, RepartidorHistorial.class);
+                    startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.perfil) {
+                    Intent intentProfile = new Intent(RepartidorDetalleMapaPedido.this, PerfilRepartidor.class);
+                    startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
         });
     }
     public void retroceder(View view){
@@ -280,10 +314,31 @@ private Restaurante restauranteSupreme;
         if (listenerRegistrationPedido != null) {
             listenerRegistrationPedido.remove();
         }
-        if (mapFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(mapFragment).commitAllowingStateLoss();
-        }
+
         isValido =  false;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.repartidor_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.ordenes){
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        } else if (item.getItemId()==R.id.historial) {
+            startActivity(new Intent(this, RepartidorHistorial.class));
+            return true;
+        } else if (item.getItemId()==R.id.perfil) {
+            startActivity(new Intent(this, PerfilRepartidor.class));
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 }

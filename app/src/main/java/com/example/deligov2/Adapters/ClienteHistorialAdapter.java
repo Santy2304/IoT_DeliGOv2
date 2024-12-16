@@ -50,21 +50,16 @@ public class ClienteHistorialAdapter extends RecyclerView.Adapter<ClienteHistori
     public void onBindViewHolder(@NonNull HistorialViewHolder holder, int position) {
         Pedido o = listaOrdenes.get(position);
         holder.ordenes = o;
-
         TextView textViewOrder = holder.itemView.findViewById(R.id.idOrder);
         textViewOrder.setText("#"+o.getId());
-
         Timestamp timestamp = o.getHora();
         Date date = timestamp.toDate();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String fechaFormateada = dateFormat.format(date);
-
         TextView textViewHorario = holder.itemView.findViewById(R.id.fechaHistorial);
         textViewHorario.setText(fechaFormateada);
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference().child("restaurantes/"+o.getIdRestaurante()+"/logo.jpg");
-
         storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
             Glide.with(holder.itemView.getContext())
                     .load(uri)

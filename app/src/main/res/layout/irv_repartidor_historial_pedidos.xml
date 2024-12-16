@@ -26,7 +26,6 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="130sp"
-            app:srcCompat="@drawable/bembos_logo"
             android:scaleType="centerCrop"
             />
         <LinearLayout
@@ -84,8 +83,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
             android:onClick="verDetalleMapaPedido"
-            app:backgroundTint="@color/light_yellow"
-            app:srcCompat="@drawable/mapa_icon_icon"
+            app:backgroundTint="@color/gmm_blue"
+            app:srcCompat="@drawable/deliveryyyy_icon"
             app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

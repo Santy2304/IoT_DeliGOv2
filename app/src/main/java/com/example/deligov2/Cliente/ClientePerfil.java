@@ -214,7 +214,6 @@ public class ClientePerfil extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
 
         }
-
     }
     public void editPhoneNumber(View view ){
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
@@ -261,9 +260,7 @@ public class ClientePerfil extends AppCompatActivity {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_edit_photo, null);
         bottomSheetDialog.setContentView(bottomSheetView);
-
         LinearLayout btnGallery = bottomSheetView.findViewById(R.id.btn_gallery);
-        LinearLayout btnCamera = bottomSheetView.findViewById(R.id.btn_camera);
         LinearLayout btnCancel = bottomSheetView.findViewById(R.id.btn_cancel);
 
         btnGallery.setOnClickListener(v -> {
@@ -272,40 +269,14 @@ public class ClientePerfil extends AppCompatActivity {
             bottomSheetDialog.dismiss();
         });
 
-        btnCamera.setOnClickListener(v -> {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            try {
-                File photoFile = createImageFile();
-                imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                cameraLauncher.launch(cameraIntent);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            bottomSheetDialog.dismiss();
-        });
 
         btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.show();
     }
 
-    private boolean checkCameraPermission() {
 
-        return true;
-    }
 
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile;
-        try {
-            photoFile = createImageFile();
-            imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraLauncher.launch(cameraIntent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void editarUbicacion(View view) {
         Intent intent = new Intent(this, ClienteEdicionUbicacionActivity.class);
