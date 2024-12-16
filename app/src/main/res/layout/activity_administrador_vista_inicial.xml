@@ -102,20 +102,20 @@
 
         </LinearLayout>
 
-        <com.google.android.material.search.SearchBar
+        <!--<com.google.android.material.search.SearchBar
             android:id="@+id/search_bar"
             android:layout_width="380sp"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:hint="Buscar" />
+            android:hint="Buscar" />-->
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerRestauranteAdmin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="40dp" />
 
 
     </LinearLayout>

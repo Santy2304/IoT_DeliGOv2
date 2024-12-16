@@ -137,7 +137,6 @@
                     android:id="@+id/restTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_edit_24"
                     android:drawablePadding="10dp"
                     android:paddingStart="16dp"
                     android:paddingTop="6dp"
