@@ -97,7 +97,8 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         tvRestaurante.setText(resR.getNombre());
         cantidad = findViewById(R.id.cantidadPedidos);
         monto = findViewById(R.id.recaudado);
-        monto.setText(String.format("S/ %.2f", resR.getMonto()));
+        monto.setText(String.format("S/ %.2f",
+                resR.getMonto()));
         cantidad.setText(resR.getTotalPedidos()+"");
 
         goBack = findViewById(R.id.goBack);

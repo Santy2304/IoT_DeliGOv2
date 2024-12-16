@@ -15,7 +15,6 @@
         android:layout_marginTop="50dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
@@ -54,6 +53,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="back"
             app:srcCompat="@drawable/arrow_back_24px" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -311,7 +311,6 @@
                     android:id="@+id/mainLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/read_more_24px"
                     android:drawablePadding="10dp"
                     android:paddingStart="16dp"
                     android:paddingTop="6dp"

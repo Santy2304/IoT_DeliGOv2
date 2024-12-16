@@ -6,9 +6,11 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Editar número de teléfono"
+        android:fontFamily="sans-serif-condensed-medium"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -18,14 +20,15 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/hint"
         android:hint="Nuevo número de teléfono">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/bottom_edit_cellphone"
             android:layout_width="match_parent"
+            android:fontFamily="sans-serif-condensed-medium"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:maxLength="10"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 

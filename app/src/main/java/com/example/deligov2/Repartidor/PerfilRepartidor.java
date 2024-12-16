@@ -1,6 +1,7 @@
 package com.example.deligov2.Repartidor;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -62,8 +64,8 @@ public class PerfilRepartidor extends AppCompatActivity {
     private StorageReference storageRef;
     MaterialTextView name, lastName, email, cellphone,mainLocation;
     private ActivityResultLauncher<Intent> galleryLauncher;
-    private ActivityResultLauncher<Intent> cameraLauncher;
     private Uri imageUri;
+    ShapeableImageView image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -72,7 +74,8 @@ public class PerfilRepartidor extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_repartidor);
-        ShapeableImageView image = findViewById(R.id.shapeableImageView);
+
+        image = findViewById(R.id.shapeableImageView);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
         // Usa Glide para cargar la imagen
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -91,6 +94,22 @@ public class PerfilRepartidor extends AppCompatActivity {
         cellphone= findViewById(R.id.cellphone);
         mainLocation= findViewById(R.id.mainLocation);
         //editCellphone = findViewById(R.id.edit_cellphone);
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            imageUri = selectedImageUri;
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .placeholder(R.drawable.user_icon)
+                                    .into(image);
+                            uploadImageToFirebase();
+                        }
+                    }
+                }
+        );
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.perfil);
@@ -121,6 +140,7 @@ public class PerfilRepartidor extends AppCompatActivity {
         });
         loadUser();
     }
+
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -216,23 +236,26 @@ public class PerfilRepartidor extends AppCompatActivity {
         return true;
     }
 
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile;
-        try {
-            photoFile = createImageFile();
-            imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraLauncher.launch(cameraIntent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile("IMG_" + timeStamp, ".jpg", storageDir);
+    }
+
+    private void uploadImageToFirebase() {
+        if (imageUri != null) {
+            StorageReference profileRef = storageRef;
+            profileRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> profileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Glide.with(this)
+                                .load(uri)
+                                .placeholder(R.drawable.user_icon)
+                                .into((ShapeableImageView) findViewById(R.id.shapeableImageView));
+                        Toast.makeText(this, "Imagen actualizada", Toast.LENGTH_SHORT).show();
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show());
+        }
     }
 
 

@@ -32,24 +32,6 @@ import java.util.Objects;
 
 public class AdministradorRestauranteActivity extends AppCompatActivity {
 
-    /*ArrayList<Plato> lista;
-    String[] nombresPlatos = {
-            "Hamburguesa Royal",
-            "Americana",
-            "Tocino con Queso",
-            "La Peruana",
-            "Cheese",
-            "Vegano"
-
-    };
-    float[] Precios  = {
-            8,
-            13,
-            11,
-            15,
-            12,
-            9
-    };*/
     FirebaseAuth auth;
     FirebaseFirestore db;
     FirebaseStorage storage;
@@ -59,13 +41,6 @@ public class AdministradorRestauranteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador_vista_inicial);
 
-        /*lista = new ArrayList<>();
-        for (int i=0;i<6;i++){
-            Plato plato = new Plato();
-            plato.setNombre(nombresPlatos[i]);
-            plato.setPrecio(Precios[i]);
-            lista.add(plato);
-        }*/
         // Inicializar instancias de firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
