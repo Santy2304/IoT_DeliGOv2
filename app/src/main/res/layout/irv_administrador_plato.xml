@@ -23,7 +23,6 @@
                 android:id="@+id/imagenPlato"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:onClick="vistaUnPlato"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/hamburguesa_royal" />
 
