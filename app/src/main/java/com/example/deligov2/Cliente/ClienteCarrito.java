@@ -101,14 +101,6 @@ public class ClienteCarrito extends AppCompatActivity {
                         idsPlatos = carrito.getIdListaPlatos();
                         cantidades = carrito.getListaCantidades();
 
-                        db.collection("restaurantes").document(carrito.getIdRestaurante()).get()
-                                .addOnSuccessListener(documentSnapshot1 -> {
-                                    if (documentSnapshot1.exists()) {
-                                        Restaurante restaurante = documentSnapshot1.toObject(Restaurante.class);
-                                        restName.setText("Restaurante: "+restaurante.getNombre());
-                                    }
-                                })
-                                .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
                         db.collection("Platos").addSnapshotListener((snapshot, error)->{
                             if (error != null) {
