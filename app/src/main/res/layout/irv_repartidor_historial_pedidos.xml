@@ -45,6 +45,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/id_estado_pedido"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,6 +58,7 @@
 
             <TextView
                 android:id="@+id/id_fecha_pedido"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
@@ -74,6 +76,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="Costo delivery:S/.12.00"
                 android:textColor="@color/light_green"
+                android:textStyle="bold"
                 android:textSize="14sp"
                 />
         </LinearLayout>

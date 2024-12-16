@@ -43,6 +43,8 @@ public class RepartidorDetalleComidaAdapter extends RecyclerView.Adapter<Reparti
         holder.elemento = e;
         TextView nombreComida = holder.itemView.findViewById(R.id.nombreComida);
         TextView cantidad = holder.itemView.findViewById(R.id.cantidad_comida);
+        TextView precioUnidad = holder.itemView.findViewById(R.id.PrecioUnidad);
+        precioUnidad.setText("Precio unidad: " + e.getPrecioActual());
         nombreComida.setText(e.getNombreComida());
         cantidad.setText( e.getCantidad() + " Unidades");
         FirebaseStorage storage = FirebaseStorage.getInstance();

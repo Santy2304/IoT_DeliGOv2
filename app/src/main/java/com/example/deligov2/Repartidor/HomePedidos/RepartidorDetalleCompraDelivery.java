@@ -80,8 +80,8 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
             loadPedidos(getIntent().getStringExtra("pedido") , ()->{
                 ((TextView)findViewById(R.id.idPedido)).setText("#"+pedidoSupreme.getId());
                 ((MaterialButton)findViewById(R.id.btn_estado)).setText(pedidoSupreme.getEstado());
-                ((TextView)findViewById(R.id.direccion)).setText(pedidoSupreme.getDireccion());
-                ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + 20);
+                ((TextView)findViewById(R.id.direccion)).setText("Destino : "+pedidoSupreme.getDireccion());
+                ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + pedidoSupreme.getCostoEnvio());
                 ((ExtendedFloatingActionButton)findViewById(R.id.btn_aceptar)).setContentDescription(pedidoSupreme.getId());
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference fileRef = storage.getReference().child("restaurantes/"+pedidoSupreme.getIdRestaurante()+"/logo.jpg");
@@ -114,7 +114,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 obtenerPlatillos(pedidoSupreme.getIdListaPlatos(), ()->{
                     RepartidorDetalleComidaAdapter adapter = new RepartidorDetalleComidaAdapter();
                     adapter.setContext(this);
-                    adapter.setLista(convertComida(pedidoSupreme.getIdListaPlatos() , devolverPlatos(pedidoSupreme.getIdListaPlatos()) ,  pedidoSupreme.getListaCantidades()));
+                    adapter.setLista(convertComida(pedidoSupreme.getIdListaPlatos() , devolverPlatos(pedidoSupreme.getIdListaPlatos()) ,  pedidoSupreme.getListaCantidades() , pedidoSupreme.getPreciosActuales()));
                     RecyclerView recyclerView = findViewById(R.id.lista);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -242,13 +242,14 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
         }
         return nuevo;
     }
-    public List<Comida> convertComida(ArrayList<String> listaIds, ArrayList<String> idComidas , ArrayList<Integer> listaCantidades){
+    public List<Comida> convertComida(ArrayList<String> listaIds, ArrayList<String> idComidas , ArrayList<Integer> listaCantidades , ArrayList<Float> preciosActuales){
         List<Comida> lista = new ArrayList<>();
         for (int i = 0 ; i < listaCantidades.size() ;  i++){
             Comida comida = new Comida();
             comida.setNombreComida(idComidas.get(i));
             comida.setCantidad(listaCantidades.get(i));
             comida.setIdComida(listaIds.get(i));
+            comida.setPrecioActual((preciosActuales.get(i)).toString());
             comida.setIdRestaurante(pedidoSupreme.getIdRestaurante());
             lista.add(comida);
         }

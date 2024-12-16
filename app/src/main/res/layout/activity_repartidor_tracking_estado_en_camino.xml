@@ -136,6 +136,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/direccionCliente"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
@@ -159,9 +160,9 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/nombreCliente"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hineill Céspedes"
                         android:textColor="@color/black"
                         android:fontFamily="sans-serif-condensed"
                         android:textSize="15sp" />
@@ -182,9 +183,9 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/celularCliente"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="920821483"
                         android:fontFamily="sans-serif-condensed"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -194,10 +195,10 @@
                 android:id="@+id/Recoger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-6dp"
+                android:layout_marginStart="-10dp"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:layout_gravity="center_vertical"
-                android:text="Recogí pedido"
+                android:text="Recojer"
                 app:icon="@drawable/comida"/>
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/qr"

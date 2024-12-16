@@ -39,7 +39,7 @@ public class RepartidorTrackingFinalizado extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_repartidor_tracking_finalizado);
         String idPedido = getIntent().getStringExtra("idPedido");
-        ((TextView)findViewById(R.id.texto)).setText("Pedido #"+idPedido +  "Terminado");
+        ((TextView)findViewById(R.id.texto)).setText("Pedido #"+idPedido +  " Terminado");
 
     }
 
