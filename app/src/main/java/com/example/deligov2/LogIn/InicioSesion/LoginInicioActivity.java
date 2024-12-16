@@ -30,6 +30,7 @@ import com.example.deligov2.LogIn.Registro.LoginCrearCuentaSegundoPaso;
 import com.example.deligov2.LogIn.Registro.LoginCrearCuentaTercerPaso;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.HomePedidos.RepartidorVistaHome;
+import com.example.deligov2.Repartidor.RepartidorHistorial;
 import com.example.deligov2.SuperAdmin.Home.SuperAdminHomeActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -187,7 +188,7 @@ public class LoginInicioActivity extends AppCompatActivity {
         finish();
     }
     public void goRepartidor(){
-        Intent intent = new Intent(this, RepartidorVistaHome.class);
+        Intent intent = new Intent(this, RepartidorHistorial.class);
         startActivity(intent);
         finish();
     }

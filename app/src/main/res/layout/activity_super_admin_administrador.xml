@@ -68,7 +68,7 @@
             android:layout_weight="0.9"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-            app:srcCompat="@drawable/hineilll" />
+             />
     </LinearLayout>
 
     <LinearLayout
@@ -190,6 +190,7 @@
             android:layout_marginEnd="6sp"
             android:layout_marginTop="10dp"
             android:hint="Buscar"
+            android:textColorHint="@color/black"
             app:boxCornerRadiusTopStart="23dp"
             app:boxCornerRadiusTopEnd="23dp"
             app:boxCornerRadiusBottomStart="23dp"
@@ -200,6 +201,7 @@
                 android:id="@+id/buscarAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:minHeight="40dp"
                 android:maxHeight="48dp"
                 android:padding="8dp"/>

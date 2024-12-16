@@ -104,36 +104,44 @@ public class SuperAdminVistaLogEvent extends AppCompatActivity {
         //Manejo del botton_navbar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        //bottomNavigationView.setSelectedItemId(R.id.restaurant);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
 
-                if(item.getItemId()==R.id.restaurant){
-                    Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminRestaurante.class);
-                    intent.putExtra("sa",usuario);
+                if (item.getItemId() == R.id.restaurant) {
+                    intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminRestaurante.class);
+                    intent.putExtra("sa", usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+                    bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
                     return true;
-                }else if(item.getItemId()==R.id.principal){
-                    Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminHomeActivity.class);
-                    intent.putExtra("sa",usuario);
+
+                } else if (item.getItemId() == R.id.principal) {
+                    intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminHomeActivity.class);
+                    intent.putExtra("sa", usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+                    bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
                     return true;
-                }else if(item.getItemId()==R.id.profile){
-                    Intent intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminPerfil.class);
-                    intent.putExtra("sa",usuario);
+
+                } else if (item.getItemId() == R.id.profile) {
+                    intent = new Intent(SuperAdminVistaLogEvent.this, SuperAdminPerfil.class);
+                    intent.putExtra("sa", usuario);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+                    bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
                     return true;
-                }else{
+
+                } else {
                     return false;
                 }
-
             }
         });
+
 
     }
 

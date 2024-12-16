@@ -6,11 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.RepartidorDetalleComidaAdapter;
 import com.example.deligov2.Beans.Comida;
 import com.example.deligov2.Beans.PedidoRepartidor;
@@ -27,6 +32,9 @@ import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
+import com.example.deligov2.Repartidor.PerfilRepartidor;
+import com.example.deligov2.Repartidor.RepartidorHistorial;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -75,6 +83,28 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 ((TextView)findViewById(R.id.direccion)).setText(pedidoSupreme.getDireccion());
                 ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + 20);
                 ((ExtendedFloatingActionButton)findViewById(R.id.btn_aceptar)).setContentDescription(pedidoSupreme.getId());
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference fileRef = storage.getReference().child("restaurantes/"+pedidoSupreme.getIdRestaurante()+"/logo.jpg");
+                fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    Glide.with(RepartidorDetalleCompraDelivery.this)
+                            .load(uri)
+                            .placeholder(R.drawable.camara_icon)
+                            .error(R.drawable.camara_icon)
+                            .into((ImageView) findViewById(R.id.logo));
+                }).addOnFailureListener(error -> {
+
+                });
+
+                fileRef = storage.getReference().child("restaurantes/"+pedidoSupreme.getIdRestaurante()+"/banner.jpg");
+                fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    Glide.with(RepartidorDetalleCompraDelivery.this)
+                            .load(uri)
+                            .placeholder(R.drawable.camara_icon)
+                            .error(R.drawable.camara_icon)
+                            .into((ImageView) findViewById(R.id.imageView5));
+                }).addOnFailureListener(error -> {
+
+                });
 
                 Float sum =  new Float(0);
                 for(Integer j =0 ; j<pedidoSupreme.getIdListaPlatos().size(); j++){
@@ -94,6 +124,53 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
 
             });
         });
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.ordenes);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.ordenes) {
+                    Intent intentRestaurant = new Intent(RepartidorDetalleCompraDelivery.this, RepartidorVistaHome.class);
+                    startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.historial) {
+                    Intent intentPrincipal = new Intent(RepartidorDetalleCompraDelivery.this, RepartidorHistorial.class);
+                    startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.perfil) {
+                    Intent intentProfile = new Intent(RepartidorDetalleCompraDelivery.this, PerfilRepartidor.class);
+                    startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
+        });
+
+        if(getIntent().getStringExtra("detailOnly") != null){
+            findViewById(R.id.btn_aceptar).setVisibility(View.GONE);
+        }
+        if(getIntent().getStringExtra("detailOnly") != null){
+            ((FloatingActionButton)findViewById(R.id.atras)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent  = new Intent(RepartidorDetalleCompraDelivery.this , RepartidorHistorial.class);
+                    startActivity(intent);
+                }
+            });
+        }else {
+            ((FloatingActionButton)findViewById(R.id.atras)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent  = new Intent(RepartidorDetalleCompraDelivery.this , RepartidorVistaHome.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     public void retroceder(View view) {
@@ -221,4 +298,27 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 .setCancelable(true)
                 .show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.repartidor_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.ordenes){
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        } else if (item.getItemId()==R.id.historial) {
+            startActivity(new Intent(this, RepartidorHistorial.class));
+            return true;
+        } else if (item.getItemId()==R.id.perfil) {
+            startActivity(new Intent(this, PerfilRepartidor.class));
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

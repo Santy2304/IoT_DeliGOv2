@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.deligov2.Adapters.SuperAdminAdministradorListAdapter;
 import com.example.deligov2.DTO.Restaurante;
 import com.example.deligov2.DTO.Usuario;
@@ -29,6 +30,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdminAdministrador extends AppCompatActivity {
-
     List<Usuario> admins = new ArrayList<>();
     private MaterialCardView cardAdmin;
     private GradientDrawable borderDrawable;
@@ -113,6 +114,28 @@ public class SuperAdminAdministrador extends AppCompatActivity {
 
             }
         });
+        //Cambiar foto Hineill fachero
+        ShapeableImageView shapeableImageView = findViewById(R.id.shapeableImageView3);
+
+        String userId = "ClcUvl7d43Rz0aEqbLteSw22eH22";
+        String imagePath = "users/" + userId + "/profile.jpg";
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child(imagePath);
+
+        storageRef.getDownloadUrl()
+                .addOnSuccessListener(uri -> {
+                    Glide.with(this)
+                            .load(uri)
+                            .placeholder(R.drawable.ic_loading)
+                            .error(R.drawable.ic_errorimg)
+                            .into(shapeableImageView);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseStorage", "Error al cargar la imagen: ", e);
+                    shapeableImageView.setImageResource(R.drawable.ic_errorimg);
+                });
+
         //Efectos
         cardAdmin = findViewById(R.id.materialCardViewAdmin);
         ObjectAnimator animator = ObjectAnimator.ofFloat(cardAdmin, "translationX", 0f, 10f);

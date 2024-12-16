@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/cliente_menu" />
+        app:menu="@menu/repartidor_menu" />
 
     <LinearLayout
         android:id="@+id/padre"

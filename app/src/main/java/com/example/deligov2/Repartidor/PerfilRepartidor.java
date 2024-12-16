@@ -1,18 +1,24 @@
 package com.example.deligov2.Repartidor;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -20,12 +26,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.deligov2.Cliente.ClienteHistorialActivity;
+import com.example.deligov2.Cliente.ClienteHomeActivity;
+import com.example.deligov2.Cliente.ClientePerfil;
+import com.example.deligov2.Cliente.ClienteRestaurantActivity;
 import com.example.deligov2.DTO.Usuario;
 import com.example.deligov2.LogIn.InicioSesion.LoginInicioActivity;
 import com.example.deligov2.LogIn.LoginPrimeraVista;
 import com.example.deligov2.R;
+import com.example.deligov2.Repartidor.HomePedidos.RepartidorVistaHome;
 import com.example.deligov2.SuperAdmin.SuperAdminPerfil;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -52,8 +64,8 @@ public class PerfilRepartidor extends AppCompatActivity {
     private StorageReference storageRef;
     MaterialTextView name, lastName, email, cellphone,mainLocation;
     private ActivityResultLauncher<Intent> galleryLauncher;
-    private ActivityResultLauncher<Intent> cameraLauncher;
     private Uri imageUri;
+    ShapeableImageView image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -63,7 +75,7 @@ public class PerfilRepartidor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_repartidor);
 
-        ShapeableImageView image = findViewById(R.id.shapeableImageView);
+        image = findViewById(R.id.shapeableImageView);
         storageRef = storage.getReference().child("users/" + user.getUid() + "/profile.jpg");
         // Usa Glide para cargar la imagen
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -82,9 +94,53 @@ public class PerfilRepartidor extends AppCompatActivity {
         cellphone= findViewById(R.id.cellphone);
         mainLocation= findViewById(R.id.mainLocation);
         //editCellphone = findViewById(R.id.edit_cellphone);
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            imageUri = selectedImageUri;
+                            Glide.with(this)
+                                    .load(imageUri)
+                                    .placeholder(R.drawable.user_icon)
+                                    .into(image);
+                            uploadImageToFirebase();
+                        }
+                    }
+                }
+        );
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        bottomNavigationView.setSelectedItemId(R.id.perfil);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId()==R.id.ordenes){
+                    Intent intentRestaurant = new Intent(PerfilRepartidor.this, RepartidorVistaHome.class);
+                    startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                }else if(item.getItemId()==R.id.historial){
+                    Intent intentPrincipal = new Intent(PerfilRepartidor.this, RepartidorHistorial.class);
+                    startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                }else if(item.getItemId()==R.id.perfil){
+                    Intent intentProfile = new Intent(PerfilRepartidor.this, PerfilRepartidor.class);
+                    startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
         loadUser();
     }
+
     public void loadUser(){
         db.collection("Usuarios")
                 .addSnapshotListener((value, error) -> {
@@ -93,7 +149,11 @@ public class PerfilRepartidor extends AppCompatActivity {
                             if(((document.toObject(Usuario.class)).getId()).equals(user.getUid())){
                                 usuario = document.toObject(Usuario.class);
                                 name.setText(usuario.getNombre());
-                                lastName.setText(usuario.getApellido());
+                                if(usuario.getApellido().equals("")  ||  usuario.getApellido() == null  ){
+                                    lastName.setText("NoLastName");
+                                }else{
+                                    lastName.setText(usuario.getApellido());
+                                }
                                 email.setText(usuario.getCorreo());
                                 cellphone.setText(usuario.getNumeroTelefono());
                                 mainLocation.setText(usuario.getDireccion());
@@ -154,27 +214,19 @@ public class PerfilRepartidor extends AppCompatActivity {
                 });
     }
 
-
-
     @SuppressLint("MissingInflatedId")
     public void showBottomSheetDialog(View view) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_edit_photo, null);
         bottomSheetDialog.setContentView(bottomSheetView);
         LinearLayout btnGallery = bottomSheetView.findViewById(R.id.btn_gallery);
-        LinearLayout btnCamera = bottomSheetView.findViewById(R.id.btn_camera);
         LinearLayout btnCancel = bottomSheetView.findViewById(R.id.btn_cancel);
         btnGallery.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             galleryLauncher.launch(intent);
             bottomSheetDialog.dismiss();
         });
-        btnCamera.setOnClickListener(v -> {
-            if (checkCameraPermission()) {
-                openCamera();
-                bottomSheetDialog.dismiss();
-            }
-        });
+
         btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.show();
     }
@@ -184,22 +236,52 @@ public class PerfilRepartidor extends AppCompatActivity {
         return true;
     }
 
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile;
-        try {
-            photoFile = createImageFile();
-            imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraLauncher.launch(cameraIntent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile("IMG_" + timeStamp, ".jpg", storageDir);
     }
+
+    private void uploadImageToFirebase() {
+        if (imageUri != null) {
+            StorageReference profileRef = storageRef;
+            profileRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> profileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Glide.with(this)
+                                .load(uri)
+                                .placeholder(R.drawable.user_icon)
+                                .into((ShapeableImageView) findViewById(R.id.shapeableImageView));
+                        Toast.makeText(this, "Imagen actualizada", Toast.LENGTH_SHORT).show();
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.repartidor_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId()==R.id.ordenes){
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        } else if (item.getItemId()==R.id.historial) {
+            startActivity(new Intent(this, RepartidorHistorial.class));
+            return true;
+        } else if (item.getItemId()==R.id.perfil) {
+            startActivity(new Intent(this, PerfilRepartidor.class));
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
 }

@@ -8,7 +8,7 @@
 
     <com.google.android.material.card.MaterialCardView
         style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="400sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundGravity="center_horizontal"
         android:layout_marginTop="12dp"
@@ -26,7 +26,6 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="130sp"
-            app:srcCompat="@drawable/bembos_logo"
             android:scaleType="centerCrop"
             />
         <LinearLayout
@@ -60,6 +59,7 @@
                 android:id="@+id/id_fecha_pedido"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
                 android:layout_marginTop="2dp"
                 android:text="Fecha: 12/12/2024"
                 android:textColor="@color/black"
@@ -84,8 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
             android:onClick="verDetalleMapaPedido"
-            app:backgroundTint="@color/light_yellow"
-            app:srcCompat="@drawable/mapa_icon_icon"
+            app:backgroundTint="@color/gmm_blue"
+            app:srcCompat="@drawable/deliveryyyy_icon"
             app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

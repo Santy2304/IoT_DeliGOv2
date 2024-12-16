@@ -1,5 +1,6 @@
 package com.example.deligov2.SuperAdmin.Home.Perfiles;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
     private FirebaseFirestore db;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +94,7 @@ public class SuperAdminVistaPerfilRepartidor extends AppCompatActivity {
         nDni.setText(repartidor.getNumDocument());
         correo.setText(repartidor.getCorreo());
         ubicacion.setText(repartidor.getDireccion());
+        ( (MaterialTextView)findViewById(R.id.doc)).setText(repartidor.getTipoDocumento());
         findViewById(R.id.imgSAperfil);
         Glide.with(this) // Context o View
                 .load(repartidor.getFotoUrl()) // URL o URI de la imagen

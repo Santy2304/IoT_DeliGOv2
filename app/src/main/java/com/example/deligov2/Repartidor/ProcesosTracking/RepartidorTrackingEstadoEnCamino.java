@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,12 +27,15 @@ import com.example.deligov2.R;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorAceptacionPedido;
 import com.example.deligov2.Repartidor.HomePedidos.Confirmaciones.RepartidorCancelacionPedido;
 import com.example.deligov2.Repartidor.HomePedidos.RepartidorVistaHome;
+import com.example.deligov2.Repartidor.PerfilRepartidor;
+import com.example.deligov2.Repartidor.RepartidorHistorial;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.libraries.navigation.RoadSnappedLocationProvider;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.BuildConfig;
@@ -197,6 +202,33 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.historial);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.ordenes) {
+                    Intent intentRestaurant = new Intent(RepartidorTrackingEstadoEnCamino.this, RepartidorVistaHome.class);
+                    startActivity(intentRestaurant);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.historial) {
+                    Intent intentPrincipal = new Intent(RepartidorTrackingEstadoEnCamino.this, RepartidorHistorial.class);
+                    startActivity(intentPrincipal);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else if (item.getItemId() == R.id.perfil) {
+                    Intent intentProfile = new Intent(RepartidorTrackingEstadoEnCamino.this, PerfilRepartidor.class);
+                    startActivity(intentProfile);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
+        });
     }
 
     public void verSiguienteTracking(View view) {
@@ -626,6 +658,7 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
                 Toast.makeText(this, "Escaneado" + result.getContents() , Toast.LENGTH_LONG).show();
                 if(pedidoSupreme.getId().equals(result.getContents())){
                     Intent intent =  new Intent(this , RepartidorTrackingFinalizado.class);
+                    mNavigator.stopGuidance();
                     updatePedido("Entregado");
                     LogSuper logSuper = new LogSuper();
                     logSuper.setFecha(Timestamp.now());
@@ -661,5 +694,25 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
             super.onActivityResult(requestCode , resultCode , data);
         }
     }
-
+    //BOTONES
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.repartidor_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.ordenes){
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        } else if (item.getItemId()==R.id.historial) {
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        } else if (item.getItemId()==R.id.perfil) {
+            startActivity(new Intent(this, RepartidorVistaHome.class));
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }

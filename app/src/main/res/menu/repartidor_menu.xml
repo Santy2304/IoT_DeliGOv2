@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ordenes"
+        android:enabled="true"
+        android:background="@drawable/button_menu_item"
+        android:iconTintMode="multiply"
+        android:icon="@drawable/receipt_long"
+        android:title="Ordenes"
+        />
+
+    <item
+        android:id="@+id/historial"
+        android:enabled="true"
+        android:background="@drawable/button_menu_item"
+        android:icon="@drawable/track"
+        android:title="Trackings"
+        />
+
+    <item
+        android:id="@+id/perfil"
+        android:enabled="true"
+        android:background="@drawable/button_menu_item"
+        android:icon="@drawable/iconoperfil"
+        android:title="Perfil"
+        />
+</menu>

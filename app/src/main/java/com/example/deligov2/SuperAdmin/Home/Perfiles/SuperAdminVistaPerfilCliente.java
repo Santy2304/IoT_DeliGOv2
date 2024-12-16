@@ -117,7 +117,7 @@ public class SuperAdminVistaPerfilCliente extends AppCompatActivity {
             dniTextView.setText(clienteDetail.getNumDocument());
             correoTextView.setText(clienteDetail.getCorreo());
             ubicacionTextView.setText(clienteDetail.getDireccion());
-
+            ((MaterialTextView) findViewById(R.id.doc)) .setText(clienteDetail.getTipoDocumento());
             // Descargar y mostrar la imagen de perfil desde Firebase Storage
             Glide.with(this)
                     .load(clienteDetail.getFotoUrl())

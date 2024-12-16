@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/cliente_menu" />
+        app:menu="@menu/repartidor_menu" />
 
     <LinearLayout
         android:id="@+id/padre"
@@ -45,6 +45,8 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/noti_button"
+                android:visibility="invisible"
+                android:clickable="false"
                 style="?attr/floatingActionButtonSmallStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,15 +72,6 @@
         </LinearLayout>
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            style="?attr/floatingActionButtonSmallStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="right"
-            android:backgroundTint="@color/light_green"
-            app:srcCompat="@drawable/filterpx"
-            app:tint="@color/white" />
 
 
 

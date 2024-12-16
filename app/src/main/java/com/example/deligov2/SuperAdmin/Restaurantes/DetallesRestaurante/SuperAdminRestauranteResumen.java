@@ -97,13 +97,15 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
         tvRestaurante.setText(resR.getNombre());
         cantidad = findViewById(R.id.cantidadPedidos);
         monto = findViewById(R.id.recaudado);
-        monto.setText(String.format("S/ %.2f", resR.getMonto()));
+        monto.setText(String.format("S/ %.2f",
+                resR.getMonto()));
         cantidad.setText(resR.getTotalPedidos()+"");
 
         goBack = findViewById(R.id.goBack);
         goBack.setOnClickListener(view -> {
             Intent intent1 = new Intent(this,SuperAdminRestaurante.class);
             startActivity(intent1);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
         StorageReference storageReference = storage.getReference().child("restaurantes/"+resR.getId()+"/logo.jpg");
@@ -166,15 +168,18 @@ public class SuperAdminRestauranteResumen extends AppCompatActivity {
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminRestaurante.class);
                     intent.putExtra("sa",usuario);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }else if(item.getItemId()==R.id.principal){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminHomeActivity.class);
                     intent.putExtra("sa",usuario);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                     return true;
                 }else if(item.getItemId()==R.id.profile){
                     Intent intent = new Intent(SuperAdminRestauranteResumen.this, SuperAdminPerfil.class);
                     intent.putExtra("sa",usuario);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                     return true;
                 }else{

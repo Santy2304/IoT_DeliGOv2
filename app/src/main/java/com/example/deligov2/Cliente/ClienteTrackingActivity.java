@@ -162,14 +162,10 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                         });
                         cantidades = pedido.getListaCantidades();
                         listaPrecios = pedido.getPreciosActuales();
-                        db.collection("Platos").addSnapshotListener((snapshot, error)->{
-                            if (error != null) {
-                                Log.w("msg-test", "Listen failed.", error);
-                                return;
-                            }
-                            if (snapshot != null && !snapshot.isEmpty()) {
+                        db.collection("Platos").get().addOnCompleteListener(task ->{
+                            if (task.isSuccessful()) {
                                 lista.clear();
-                                for (DocumentSnapshot document : snapshot.getDocuments()) {
+                                for (DocumentSnapshot document : task.getResult()) {
                                     Platillo platillo = document.toObject(Platillo.class);
                                     Log.w("msg-test", "Listen failed "+ document.getId());
                                     if (idsPlatos.contains(platillo.getId())){
@@ -439,7 +435,7 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                                     startActivity(intent);
                                     finish();
                                 }
-                                if(pedidoSupreme.getIdRepartidor() != null){
+                                if(pedidoSupreme.getLatitudActualRepartidor() != null){
                                     findViewById(R.id.esperando).setVisibility(View.GONE);
                                     findViewById(R.id.map).setVisibility(View.VISIBLE);
                                     findViewById(R.id.repartidorButton).setVisibility(View.VISIBLE);
