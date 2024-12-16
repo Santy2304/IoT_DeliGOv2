@@ -88,7 +88,7 @@ public class ClienteRestaurantActivity extends AppCompatActivity {
                 for (DocumentSnapshot document : snapshot.getDocuments()) {
                     Platillo platillo = document.toObject(Platillo.class);
                     Log.w("msg-test", "Listen failed "+ document.getId());
-                    if (platillo.getIdRestaurante().equals(idRestaurante)){
+                    if (platillo.getIdRestaurante().equals(idRestaurante) && platillo.isVisibilidad()){
                         lista.add(platillo);
                     }
 

@@ -36,14 +36,14 @@ public class LoginVistaInicialApp extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login_vista_inicial_app);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                        REQUEST_CODE_POST_NOTIFICATIONS);
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+//                        REQUEST_CODE_POST_NOTIFICATIONS);
+//            }
+//        }
         //Add animations
         Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.desplazamiento_arriba);
         Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.desplazamiento_abajo);
@@ -64,18 +64,18 @@ public class LoginVistaInicialApp extends AppCompatActivity {
         }, 4000);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permiso otorgado
-                Log.d("Permiso", "Permiso de notificaciones concedido.");
-            } else {
-                // Permiso denegado
-                Log.d("Permiso", "Permiso de notificaciones denegado.");
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Permiso otorgado
+//                Log.d("Permiso", "Permiso de notificaciones concedido.");
+//            } else {
+//                // Permiso denegado
+//                Log.d("Permiso", "Permiso de notificaciones denegado.");
+//            }
+//        }
+//    }
 
 }
