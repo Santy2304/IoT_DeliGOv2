@@ -106,7 +106,7 @@ public class LoginCrearCuentaPrimerPaso extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
+                this,R.style.greenPicker,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     String formattedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
                     birthdayField.setText(formattedDate);

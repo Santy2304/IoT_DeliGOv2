@@ -53,7 +53,7 @@ public class ContadorWorker extends Worker {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error al buscar usuario", e));
 
         try {
-            int tiempoParte1 = (new Random().nextInt(21) + 20) * 1000;
+            int tiempoParte1 = (new Random().nextInt(21) + 10) * 1000;
             Log.d("PedidoWorker", "Esperando " + tiempoParte1 / 1000 + " segundos para la primera parte.");
             Thread.sleep(tiempoParte1);
 
@@ -74,7 +74,7 @@ public class ContadorWorker extends Worker {
                     .addOnFailureListener(e -> {
                     });
 
-            int tiempoParte2 = (new Random().nextInt(21) + 20) * 1000;
+            int tiempoParte2 = (new Random().nextInt(21) + 10) * 1000;
             Log.d("PedidoWorker", "Esperando " + tiempoParte2 / 1000 + " segundos para la segunda parte.");
             Thread.sleep(tiempoParte2);
 

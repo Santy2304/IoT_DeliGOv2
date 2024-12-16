@@ -137,7 +137,6 @@
 
                 <TextView
                     android:id="@+id/direccion"
-                    android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed-medium"
@@ -149,8 +148,8 @@
                     android:id="@id/ola"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:textSize="16sp"
                     android:text="Precio por delivery: s/.100.00"
                     android:textAlignment="center"
                     android:textColor="@color/light_green" />
@@ -161,6 +160,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:text="Costo: S/.120.00"
+                    android:layout_marginTop="4dp"
                     android:textAlignment="center"
                     android:textColor="@color/black" />
 

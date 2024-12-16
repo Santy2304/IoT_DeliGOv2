@@ -427,7 +427,9 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                             if(((document.toObject(Pedido.class)).getId()).equals(getIntent().getStringExtra("idOrder"))){
                                 pedidoSupreme = document.toObject(Pedido.class);
                                 if(pedidoSupreme.getEstado().equals("En Camino")){
-                                    marker1.remove();
+                                    if(marker1!=null){
+                                        marker1.remove();
+                                    }
                                 }
                                 if(pedidoSupreme.getEstado().equals("Entregado")){
                                     Toast.makeText(this, "Pedido entregado", Toast.LENGTH_SHORT);

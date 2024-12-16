@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -50,6 +51,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
     private FirebaseStorage storage ;
     private StorageReference storageRef;
     RestaurantesClientesAdapter adapter;
+    ListenerRegistration ola ;
     @Override
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,7 @@ public class ClienteHomeActivity extends AppCompatActivity {
             finish();
         });
 
-        db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
+        ola = db.collection("restaurantes").addSnapshotListener((snapshot, error)->{
             if (error != null) {
                 Log.w("msg-test", "Listen failed.", error);
                 return;
@@ -224,6 +226,11 @@ public class ClienteHomeActivity extends AppCompatActivity {
         Intent intentRestaurant = new Intent(ClienteHomeActivity.this, ClientePerfil.class);
         startActivity(intentRestaurant);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ola.remove();
     }
 }

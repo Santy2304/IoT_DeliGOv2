@@ -156,9 +156,10 @@ public class ClienteVeRepartidor extends AppCompatActivity {
     private Pedido pedido;
     public void loadRepartidor(Runnable runnable){
         db.collection("Usuarios")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (QueryDocumentSnapshot document : value) {
+                .get()
+                .addOnCompleteListener((task) -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             if(((document.toObject(Usuario.class)).getId()).equals(pedidoSupreme.getIdRepartidor())){
                                 repartidor = document.toObject(Usuario.class);
                                 runnable.run();
@@ -170,9 +171,10 @@ public class ClienteVeRepartidor extends AppCompatActivity {
     private Pedido pedidoSupreme;
     public void loadPedido(Runnable runnable){
         db.collection("Pedidos")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (QueryDocumentSnapshot document : value) {
+                .get()
+                .addOnCompleteListener((task) -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             if(((document.toObject(Pedido.class)).getId()).equals(getIntent().getStringExtra("idOrder"))){
                                 pedidoSupreme = document.toObject(Pedido.class);
                                 runnable.run();
