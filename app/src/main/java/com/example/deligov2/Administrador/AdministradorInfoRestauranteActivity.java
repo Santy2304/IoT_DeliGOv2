@@ -84,6 +84,10 @@ public class AdministradorInfoRestauranteActivity extends AppCompatActivity {
                     Intent intentPrincipal = new Intent(AdministradorInfoRestauranteActivity.this, AdministradorRestauranteActivity.class);
                     startActivity(intentPrincipal);
                     return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(AdministradorInfoRestauranteActivity.this, AdministradorPerfilActivity.class);
+                    startActivity(intentProfile);
+                    return true;
                 }else{
                     return false;
                 }

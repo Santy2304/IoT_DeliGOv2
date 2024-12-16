@@ -160,6 +160,10 @@ public class AdministradorReportesActivity extends AppCompatActivity {
                     Intent intentPrincipal = new Intent(AdministradorReportesActivity.this, AdministradorRestauranteActivity.class);
                     startActivity(intentPrincipal);
                     return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(AdministradorReportesActivity.this, AdministradorPerfilActivity.class);
+                    startActivity(intentProfile);
+                    return true;
                 }else{
                     return false;
                 }

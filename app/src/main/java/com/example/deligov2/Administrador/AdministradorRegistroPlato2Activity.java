@@ -95,6 +95,10 @@ public class AdministradorRegistroPlato2Activity extends AppCompatActivity {
                     Intent intentPrincipal = new Intent(AdministradorRegistroPlato2Activity.this, AdministradorRestauranteActivity.class);
                     startActivity(intentPrincipal);
                     //return true;
+                }else if(item.getItemId()==R.id.profile){
+                    Intent intentProfile = new Intent(AdministradorRegistroPlato2Activity.this, AdministradorPerfilActivity.class);
+                    startActivity(intentProfile);
+                    //return true;
                 }
             });
             return false;
