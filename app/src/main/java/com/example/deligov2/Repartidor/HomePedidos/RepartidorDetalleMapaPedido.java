@@ -90,7 +90,7 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
                     TextView destinoFinal = findViewById(R.id.destinoFinal);
                     destinoFinal.setText( pedidoSupreme.getDireccion());
                     try {
-                        if (getIntent().getStringExtra("flag").equals("historial")) {
+                        if (getIntent().getStringExtra("flag")!= null && !getIntent().getStringExtra("flag").equals("")  && getIntent().getStringExtra("flag").equals("historial")) {
                             //ocultamos el boton
                             findViewById(R.id.btn_aceptar).setVisibility(View.INVISIBLE);
                             findViewById(R.id.btn_aceptar).setClickable(false);
@@ -171,7 +171,7 @@ public class RepartidorDetalleMapaPedido extends AppCompatActivity implements On
                     if(task.isSuccessful()){
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Pedido pedido = document.toObject(Pedido.class);
-                            if(pedido.getId().equals(idPedido)){
+                            if( pedido.getId() !=null && pedido.getId().equals(idPedido)){
                                 pedidoSupreme =  pedido;
                                 if(isValido){
                                     run.run();
@@ -260,10 +260,13 @@ private Restaurante restauranteSupreme;
                 .addOnCompleteListener((task) -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            if(((document.toObject(Restaurante.class)).getId()).equals(pedidoSupreme.getIdRestaurante())){
-                                restauranteSupreme = document.toObject(Restaurante.class);
-                                runnable.run();
+                            if(pedidoSupreme != null){
+                                if(((document.toObject(Restaurante.class)).getId()).equals(pedidoSupreme.getIdRestaurante())){
+                                    restauranteSupreme = document.toObject(Restaurante.class);
+                                    runnable.run();
+                                }
                             }
+
                         }
                     }
                 });

@@ -556,17 +556,20 @@ public class RepartidorTrackingEstadoEnCamino extends AppCompatActivity {
     }
 
     public void loadRestaturante(String idRestaurante, Runnable runnable) {
-        db.collection("restaurantes")
-                .addSnapshotListener((value, error) -> {
-                    if (value != null) {
-                        for (QueryDocumentSnapshot document : value) {
-                            if (((document.toObject(Restaurante.class)).getId()).equals(idRestaurante)) {
-                                restauranteSupreme = document.toObject(Restaurante.class);
+        if(idRestaurante != null && !idRestaurante.equals("")){
+            db.collection("restaurantes")
+                    .addSnapshotListener((value, error) -> {
+                        if (value != null) {
+                            for (QueryDocumentSnapshot document : value) {
+                                Restaurante res  = document.toObject(Restaurante.class);
+                                if ( res.getId() != null && (res.getId()).equals(idRestaurante)) {
+                                    restauranteSupreme = document.toObject(Restaurante.class);
+                                }
                             }
+                            runnable.run();
                         }
-                        runnable.run();
-                    }
-                });
+                    });
+        }
     }
 
     //Capta cambios
