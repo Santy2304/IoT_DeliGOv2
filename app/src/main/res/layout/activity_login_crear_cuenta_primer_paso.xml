@@ -51,7 +51,7 @@
                 android:layout_gravity="center_horizontal"
                 android:entries="@array/docs"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:spinnerMode="dialog" />
+                android:spinnerMode="dropdown" />
 
 
             <!--app:startIconDrawable="@drawable/group_24px"-->
