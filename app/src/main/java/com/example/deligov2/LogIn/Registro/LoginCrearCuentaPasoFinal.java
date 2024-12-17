@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
+
 public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -40,6 +42,9 @@ public class LoginCrearCuentaPasoFinal extends AppCompatActivity {
         if(usuario.getRol().equals("Cliente")){
             Carrito carrito = new Carrito();
             carrito.setIdUsuario(user.getUid());
+            carrito.setIdRestaurante("");
+            carrito.setIdListaPlatos(new ArrayList<>());
+            carrito.setListaCantidades(new ArrayList<>());
             db.collection("Carritos")
                     .document(usuario.getId())
                     .set(carrito)

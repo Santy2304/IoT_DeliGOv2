@@ -68,7 +68,7 @@
                 android:onClick="verPerfil"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                app:srcCompat="@drawable/hineilll" />
+                 />
         </LinearLayout>
 
 

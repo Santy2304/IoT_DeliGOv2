@@ -81,7 +81,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 ((TextView)findViewById(R.id.idPedido)).setText("#"+pedidoSupreme.getId());
                 ((MaterialButton)findViewById(R.id.btn_estado)).setText(pedidoSupreme.getEstado());
                 ((TextView)findViewById(R.id.direccion)).setText("Destino : "+pedidoSupreme.getDireccion());
-                ((TextView)findViewById(R.id.ola)).setText("Precio por delivery: " + pedidoSupreme.getCostoEnvio());
+                ((TextView)findViewById(R.id.ola)).setText( String.format("Precio por delivery: %.2f" , pedidoSupreme.getCostoEnvio()));
                 ((ExtendedFloatingActionButton)findViewById(R.id.btn_aceptar)).setContentDescription(pedidoSupreme.getId());
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference fileRef = storage.getReference().child("restaurantes/"+pedidoSupreme.getIdRestaurante()+"/logo.jpg");
@@ -110,7 +110,7 @@ public class RepartidorDetalleCompraDelivery extends AppCompatActivity {
                 for(Integer j =0 ; j<pedidoSupreme.getIdListaPlatos().size(); j++){
                     sum = sum +  pedidoSupreme.getPreciosActuales().get(j) * pedidoSupreme.getListaCantidades().get(j);
                 }
-                ((TextView)findViewById(R.id.id_costo)).setText("Costo: " + sum);
+                ((TextView)findViewById(R.id.id_costo)).setText(String.format("Costo: %.2f" , sum));
                 obtenerPlatillos(pedidoSupreme.getIdListaPlatos(), ()->{
                     RepartidorDetalleComidaAdapter adapter = new RepartidorDetalleComidaAdapter();
                     adapter.setContext(this);

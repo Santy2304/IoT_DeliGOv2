@@ -66,7 +66,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:clickable="false"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:backgroundTint="@color/light_green"
                 android:contentDescription="Notificaciones"
                 android:onClick="verNotificacionesRepartidor"

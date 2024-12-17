@@ -50,7 +50,7 @@ public class RepartidorHistorialPedidosAdapter extends RecyclerView.Adapter<Repa
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String fechaFormateada = dateFormat.format(e.getHora().toDate());
         date.setText("Fecha : " +fechaFormateada);
-        price.setText("Costo delivery : S/."  + e.getCostoEnvio());
+        price.setText(String.format("Costo delivery : S/.%.2f"  , e.getCostoEnvio()));
         //Ocultamos un lugar
         holder.itemView.setContentDescription(e.getId());
         FirebaseStorage storage = FirebaseStorage.getInstance();
