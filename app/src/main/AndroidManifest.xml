@@ -55,7 +55,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDuXiWeYB_ZQNkarlXUNhQdshsVjNU7yYI" />
+            android:value="AIzaSyAzmqB2KRM55h-Cq4S4biMmv4NaPQ2XPbs" />
 
         <activity
             android:name=".NotiActivity"

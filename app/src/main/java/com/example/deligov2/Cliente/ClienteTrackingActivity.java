@@ -409,9 +409,9 @@ public class ClienteTrackingActivity extends AppCompatActivity implements OnMapR
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         for (QueryDocumentSnapshot document : value) {
-                            if(((document.toObject(Restaurante.class)).getId()).equals(pedidoSupreme.getIdRestaurante())){
+                            Restaurante restssss   = document.toObject(Restaurante.class);
+                            if(restssss.getId() !=null && (restssss.getId()).equals(pedidoSupreme.getIdRestaurante())){
                                 restauranteSupreme = document.toObject(Restaurante.class);
-
                                 runnable.run();
                             }
                         }
